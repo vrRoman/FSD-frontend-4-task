@@ -1,22 +1,21 @@
-const path = require('path')
-const webpack = require('webpack')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
+const path = require('path');
+const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
 
   entry: {
-    'index': '@index.ts',
+    index: '@/index.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'slider.js'
+    filename: 'slider.js',
   },
 
   module: {
@@ -27,26 +26,31 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+            presets: ['babel-preset-env'],
+          },
+        },
       },
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        loader: {
+        use: {
           loader: 'babel-loader',
           options: {
             presets: [
-              '@babel/preset-env',
-              '@babel/preset-typescript'
-            ]
-          }
-        }
+              'babel-preset-env',
+              '@babel/preset-typescript',
+            ],
+          },
+        },
+      },
+      {
+        test: /test\.js$/,
+        use: 'mocha-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.css/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.s[ac]ss$/i,
@@ -55,15 +59,15 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader,
             options: {
               hmr: true,
-              reloadAll: true
-            }
+              reloadAll: true,
+            },
           },
           'css-loader',
           'resolve-url-loader',
-          'sass-loader'
+          'sass-loader',
         ],
       },
-    ]
+    ],
   },
 
   plugins: [
@@ -71,18 +75,18 @@ module.exports = {
 
     new webpack.ProvidePlugin({
       $: 'jquery',
-      jQuery: 'jquery'
-    })
+      jQuery: 'jquery',
+    }),
   ],
 
   devServer: {
     contentBase: path.join(__dirname, 'tests'),
     compress: true,
     port: 9000,
-    hot: true
+    hot: true,
   },
 
   optimization: {
-    minimize: false
-  }
-}
+    minimize: false,
+  },
+};
