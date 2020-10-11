@@ -1,0 +1,14 @@
+.idea
+.vscode
+
+node_modules
+dist
+
+*.log
+npm-debug.log*
+
+Thumbs.db
+Desktop.ini
+.DS_Store*
+ehthumbs.db
+Icon?
