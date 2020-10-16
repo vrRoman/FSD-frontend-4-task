@@ -8,6 +8,7 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
+    extensions: ['.ts', '.js'],
   },
 
   entry: {
@@ -33,20 +34,7 @@ module.exports = {
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              'babel-preset-env',
-              '@babel/preset-typescript',
-            ],
-          },
-        },
-      },
-      {
-        test: /test\.ts$/,
-        use: 'mocha-loader',
-        exclude: /node_modules/,
+        use: ['babel-loader', 'ts-loader'],
       },
       {
         test: /\.css/,
