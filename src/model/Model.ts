@@ -1,6 +1,6 @@
 type Value = [number, number] | number
 
-interface Options {
+interface ModelOptions {
   value: Value
   range: boolean
   stepSize: number
@@ -9,7 +9,6 @@ interface Options {
 }
 
 interface IModel {
-  value: Value
   range: boolean
   stepSize: number
   max: number
@@ -18,16 +17,17 @@ interface IModel {
   changeValue(newValue: Value): Value
   addStepsToValue(numOfSteps: number, valueNumber: 0 | 1): Value
   checkAndFixValue(): Value
+  getValue(): Value
 }
 
 export default class Model implements IModel {
-  value: Value
+  private value: Value
   range: boolean
   stepSize: number
   max: number
   min: number
 
-  constructor(options: Options) {
+  constructor(options: ModelOptions) {
     this.max = options.max;
     this.min = options.min;
 
@@ -133,6 +133,10 @@ export default class Model implements IModel {
       }
     }
 
+    return this.value;
+  }
+
+  getValue(): Value {
     return this.value;
   }
 }

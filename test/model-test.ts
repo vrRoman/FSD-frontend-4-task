@@ -24,7 +24,7 @@ describe('model', () => {
       max: 10,
     });
 
-    assert.strictEqual(modelFalseRange.value, 10);
+    assert.strictEqual(modelFalseRange.getValue(), 10);
 
     const model = new Model({
       value: [60, -100],
