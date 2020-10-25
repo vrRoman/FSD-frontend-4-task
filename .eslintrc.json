@@ -18,6 +18,7 @@
     "rules": {
         "import/extensions": "off",
         "no-trailing-spaces": "off",
+        "no-underscore-dangle": "off",
         "lines-between-class-members": "off",
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": [

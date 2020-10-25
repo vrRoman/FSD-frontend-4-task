@@ -22,7 +22,7 @@ interface IModel {
 
 export default class Model implements IModel {
   private value: Value
-  range: boolean
+  readonly range: boolean
   stepSize: number
   max: number
   min: number
@@ -137,6 +137,9 @@ export default class Model implements IModel {
   }
 
   getValue(): Value {
-    return this.value;
+    if (typeof this.value === 'number') {
+      return this.value;
+    }
+    return [...this.value];
   }
 }
