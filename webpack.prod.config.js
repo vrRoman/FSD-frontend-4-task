@@ -4,6 +4,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  mode: 'production',
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -66,13 +68,6 @@ module.exports = {
       jQuery: 'jquery',
     }),
   ],
-
-  devServer: {
-    contentBase: path.join(__dirname, 'tests'),
-    compress: true,
-    port: 9000,
-    hot: true,
-  },
 
   optimization: {
     minimize: false,
