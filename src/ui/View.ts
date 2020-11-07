@@ -20,6 +20,9 @@ export default class View {
   getSlider(): Element {
     return this._slider;
   }
+  getParent(): Element {
+    return this._parent;
+  }
 
   draw(): void {
     this._parent.appendChild(this._slider);

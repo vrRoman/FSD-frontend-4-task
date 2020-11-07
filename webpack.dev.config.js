@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
-
+  devtool: 'inline-source-map',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -67,6 +67,10 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
     }),
+
+    new MiniCssExtractPlugin({
+      fileName: 'style.css',
+    }),
   ],
 
   devServer: {
@@ -79,6 +83,4 @@ module.exports = {
   optimization: {
     minimize: false,
   },
-
-  devtool: 'inline-source-map',
 };

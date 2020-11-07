@@ -67,6 +67,10 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
     }),
+
+    new MiniCssExtractPlugin({
+      fileName: 'style.css',
+    }),
   ],
 
   optimization: {
