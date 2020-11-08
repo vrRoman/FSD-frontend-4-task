@@ -17,6 +17,8 @@ beforeEach(() => {
   viewOptions = {
     length: '100%',
     tooltip: false,
+    stepsInfo: false,
+    valueInfo: false,
     vertical: false,
   };
   model = new Model(modelOptions);
@@ -45,6 +47,7 @@ describe('View is created and has methods', () => {
     expect(view.createTooltip()).toEqual(view.getTooltip()!);
   });
   it('remove tooltip and getTooltip returns undefined', () => {
+    expect(view.createTooltip()).toBeDefined();
     view.removeTooltip();
     expect(view.getTooltip()).toBe(undefined);
   });
@@ -67,5 +70,27 @@ describe('View is created and has methods', () => {
 
   it('changeVertical', () => {
     expect(view.changeVertical(true)).toBe(true);
+  });
+
+  it('create steps info under slider without parameters', () => {
+    expect(view.createStepsInfo()).toEqual(view.getStepsInfo());
+  });
+  it('change stepsInfoSettings to number and create steps info', () => {
+    view.changeStepsInfoSettings(5);
+  });
+  it('change stepsInfoSettings to array and create steps info', () => {
+    view.changeStepsInfoSettings(['start', 0.25, 'half', 0.75, 'end']);
+  });
+  it('remove steps info', () => {
+    view.removeStepsInfo();
+    expect(view.getStepsInfo()).toBe(undefined);
+  });
+
+  it('create valueInfo', () => {
+    expect(view.createValueInfo()).toBeDefined();
+  });
+  it('remove valueInfo', () => {
+    view.removeValueInfo();
+    expect(view.getValueInfo()).toBe(undefined);
   });
 });

@@ -3,6 +3,8 @@ import { IModel } from '../model/Model';
 export interface ViewOptions {
   length: string
   tooltip: boolean
+  stepsInfo: boolean | Array<number | string> | number
+  valueInfo: boolean
   vertical: boolean
 }
 
@@ -13,6 +15,10 @@ export interface IView {
   createThumb(): HTMLElement
   createTooltip(): HTMLElement
   removeTooltip(): void
+  createStepsInfo(): HTMLElement
+  removeStepsInfo(): void
+  createValueInfo(): HTMLElement
+  removeValueInfo(): void
   getModel(): IModel
   getSlider(): HTMLElement
   getThumb(): HTMLElement
@@ -33,6 +39,7 @@ export default class View implements IView {
   private _tooltip: HTMLElement | undefined
   private _length: string
   vertical: boolean
+  stepsInfoSettings: boolean | Array<number | string> | number
 
   constructor(model: IModel, viewOptions: ViewOptions, parent: Element) {
     this._model = model;
@@ -40,6 +47,7 @@ export default class View implements IView {
     this._length = viewOptions.length;
 
     this.vertical = viewOptions.vertical;
+    this.stepsInfoSettings = viewOptions.stepsInfo;
 
     this._parent = parent;
     this._slider = this.createSlider();
@@ -88,9 +96,11 @@ export default class View implements IView {
     if (!this.vertical) {
       this.getSlider().style.width = this._length;
       this.getSlider().style.height = '';
+      this.getSlider().classList.remove('slider-reverse');
     } else {
       this.getSlider().style.height = this._length;
       this.getSlider().style.width = '';
+      this.getSlider().classList.add('slider-reverse');
     }
     return this.vertical;
   }
@@ -101,10 +111,13 @@ export default class View implements IView {
 
   createSlider(): HTMLElement {
     const slider = document.createElement('div');
+    slider.classList.add('slider');
+
     if (!this.vertical) {
       slider.style.width = this._length;
     } else {
       slider.style.height = this._length;
+      slider.classList.add('slider-reverse');
     }
 
     slider.style.position = 'relative';
@@ -118,6 +131,7 @@ export default class View implements IView {
     this.getSlider().appendChild(thumb);
     return thumb;
   }
+
   createTooltip(): HTMLElement {
     const tooltip = document.createElement('div');
     this.getThumb().appendChild(tooltip);

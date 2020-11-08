@@ -1,4 +1,12 @@
-body {
-  background: #000
+.slider {
+  background-color: #e5e5e5;
+  margin: 10px 5px;
 }
 
+
+.slider:not(.slider-reverse) {
+  height: 5px;
+}
+.slider.slider-reverse {
+  width: 5px;
+}
