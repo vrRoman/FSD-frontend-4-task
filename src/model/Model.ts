@@ -1,6 +1,6 @@
 type Value = [number, number] | number
 
-interface ModelOptions {
+export interface ModelOptions {
   value: Value
   range: boolean
   stepSize: number
@@ -8,7 +8,7 @@ interface ModelOptions {
   min: number
 }
 
-interface IModel {
+export interface IModel {
   range: boolean
   stepSize: number
   max: number

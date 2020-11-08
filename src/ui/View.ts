@@ -1,20 +1,36 @@
-interface ViewOptions {
-  stepSize: number
+import { IModel } from '../model/Model';
+
+export interface ViewOptions {
+  length: string
+  tooltip: boolean
   vertical: boolean
 }
 
-export default class View {
+export interface IView {
+  vertical: boolean
+  init(): void
+  getSlider(): Element
+  getParent(): Element
+}
+
+export default class View implements IView {
+  private _model: IModel
+
   private _parent: Element
   private _slider: Element
   private _length: number
-  stepSize: number
+  vertical: boolean
 
-  constructor(parent: Element, options: ViewOptions) {
+  constructor(model: IModel, viewOptions: ViewOptions, parent: Element) {
+    this._model = model;
+
+    this.vertical = viewOptions.vertical;
+
     this._slider = document.createElement('div');
     this._parent = parent;
-    this._length = options.vertical ? parent.clientHeight : parent.clientWidth;
+    this._length = this.vertical ? parent.clientHeight : parent.clientWidth;
 
-    this.stepSize = options.stepSize;
+    this.init();
   }
 
   getSlider(): Element {
@@ -24,7 +40,7 @@ export default class View {
     return this._parent;
   }
 
-  draw(): void {
+  init(): void {
     this._parent.appendChild(this._slider);
   }
 }
