@@ -9,20 +9,22 @@ export interface ModelOptions {
 }
 
 export interface IModel {
-  range: boolean
   stepSize: number
   max: number
   min: number
 
-  changeValue(newValue: Value): Value
+  setValue(newValue: Value): Value
+  setRange(newRange: boolean): boolean
   addStepsToValue(numOfSteps: number, valueNumber: 0 | 1): Value
   checkAndFixValue(): Value
   getValue(): Value
+  getRange(): boolean
+  getMaxDiapason(): number
 }
 
 export default class Model implements IModel {
   private value: Value
-  readonly range: boolean
+  private range: boolean
   stepSize: number
   max: number
   min: number
@@ -72,7 +74,7 @@ export default class Model implements IModel {
   // Если значение - число, а новое - массив, то берется первое число массива.
   // Если значение - массив, а новое - число, то значение = массиву с двумя
   // одинаковыми значениями.
-  changeValue(newValue: Value): Value {
+  setValue(newValue: Value): Value {
     if (typeof this.value === 'number') {
       if (typeof newValue === 'number') {
         this.value = newValue;
@@ -88,6 +90,11 @@ export default class Model implements IModel {
     this.checkAndFixValue();
 
     return this.value;
+  }
+  setRange(newRange: boolean): boolean {
+    this.range = newRange;
+    this.checkAndFixValue();
+    return this.range;
   }
 
   // Добавляет указанное количество шагов к нужному значению(если не
@@ -141,5 +148,11 @@ export default class Model implements IModel {
       return this.value;
     }
     return [...this.value];
+  }
+  getRange(): boolean {
+    return this.range;
+  }
+  getMaxDiapason(): number {
+    return this.max - this.min;
   }
 }

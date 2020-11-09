@@ -63,16 +63,16 @@ describe('model', () => {
       min: 0,
       max: 15,
     });
-    expect(model.changeValue(10)).toEqual([10, 10]);
+    expect(model.setValue(10)).toEqual([10, 10]);
 
-    expect(model.changeValue([10, 15])).toEqual([10, 15]);
+    expect(model.setValue([10, 15])).toEqual([10, 15]);
 
-    expect(model.changeValue([10, -10])).toEqual([0, 10]);
+    expect(model.setValue([10, -10])).toEqual([0, 10]);
 
-    model.changeValue([12, 14]);
+    model.setValue([12, 14]);
     expect(model.addStepsToValue(10)).toEqual([12, 15]);
 
-    model.changeValue([-100, 14]);
+    model.setValue([-100, 14]);
     expect(model.addStepsToValue(10, 0)).toEqual([10, 14]);
   });
 });

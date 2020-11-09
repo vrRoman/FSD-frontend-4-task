@@ -16,7 +16,9 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "no-multiple-empty-lines": "off",
         "import/prefer-default-export": "off",
+        "no-plusplus": "off",
         "import/extensions": "off",
         "no-trailing-spaces": "off",
         "no-underscore-dangle": "off",

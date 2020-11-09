@@ -1,3 +1,5 @@
+// добавить в changelength изменение thumb
+
 import { IModel } from '../model/Model';
 
 export interface ViewOptions {
@@ -9,9 +11,15 @@ export interface ViewOptions {
 }
 
 export interface IView {
-  init(): void
+  sliderClass: string
+  sliderVerticalClass: string
+  barClass: string
+  thumbClass: string
+
   createSlider(): HTMLElement
-  createThumb(): HTMLElement
+
+  createBar(): HTMLElement
+  createThumb(): HTMLElement | Array<HTMLElement>
 
   createTooltip(): HTMLElement
   removeTooltip(): void
@@ -25,7 +33,10 @@ export interface IView {
   getModel(): IModel
   getParent(): Element
   getSlider(): HTMLElement
-  getThumb(): HTMLElement
+
+  getBar(): HTMLElement
+  getThumb(): HTMLElement | Array<HTMLElement>
+  getThumbPosition(): number | number[]
 
   getTooltip(): HTMLElement | undefined
 
@@ -35,7 +46,7 @@ export interface IView {
   getStepsInfoSettings(): boolean | Array<number | string> | number
 
   getValueInfo(): HTMLElement | undefined
-  
+
   getLength(): number
   getStepLength(): number
   getVertical(): boolean
@@ -45,11 +56,16 @@ export interface IView {
 }
 
 export default class View implements IView {
-  private _model: IModel
+  sliderClass: string
+  sliderVerticalClass: string
+  barClass: string
+  thumbClass: string
 
+  private _model: IModel
   private _parent: Element
   private _slider: HTMLElement
-  private _thumb: HTMLElement
+  private _bar: HTMLElement
+  private _thumb: HTMLElement | Array<HTMLElement>
   private _tooltip: HTMLElement | undefined
   private _stepsInfo: HTMLElement | undefined
   private _valueInfo: HTMLElement | undefined
@@ -58,6 +74,11 @@ export default class View implements IView {
   private _stepsInfoSettings: boolean | Array<number | string> | number
 
   constructor(model: IModel, viewOptions: ViewOptions, parent: Element) {
+    this.sliderClass = 'slider';
+    this.sliderVerticalClass = 'slider_vertical';
+    this.barClass = 'slider__bar';
+    this.thumbClass = 'slider__thumb';
+
     this._model = model;
 
     this._length = viewOptions.length;
@@ -67,20 +88,17 @@ export default class View implements IView {
 
     this._parent = parent;
     this._slider = this.createSlider();
+    this._bar = this.createBar();
     this._thumb = this.createThumb();
     this._tooltip = viewOptions.tooltip ? this.createTooltip() : undefined;
     this._stepsInfo = viewOptions.stepsInfo ? this.createStepsInfo() : undefined;
     this._valueInfo = viewOptions.valueInfo ? this.createValueInfo() : undefined;
-
-    this.init();
   }
 
-  init(): void {
-    this._parent.appendChild(this._slider);
-  }
+
 
   getModel(): IModel {
-    return { ...this._model };
+    return this._model;
   }
   getSlider(): HTMLElement {
     return this._slider;
@@ -88,7 +106,10 @@ export default class View implements IView {
   getParent(): Element {
     return this._parent;
   }
-  getThumb(): HTMLElement {
+  getBar(): HTMLElement {
+    return this._bar;
+  }
+  getThumb(): HTMLElement | Array<HTMLElement> {
     return this._thumb;
   }
   getTooltip(): HTMLElement | undefined {
@@ -100,9 +121,8 @@ export default class View implements IView {
   getValueInfo(): HTMLElement | undefined {
     return this._valueInfo;
   }
-
   getLength(): number {
-    return +this.getSlider().clientWidth;
+    return +this.getBar().clientWidth;
   }
   getVertical(): boolean {
     return this._vertical;
@@ -115,14 +135,30 @@ export default class View implements IView {
       / this.getModel().stepSize;
     return this.getLength() / numOfSteps;
   }
+  getThumbPosition(): number | number[] {
+    const value = this.getModel().getValue();
+    let thumbPosition;
+    // value === 'number' при range = false
+    if (typeof value === 'number') {
+      thumbPosition = (this.getLength() / this.getModel().getMaxDiapason()) * value;
+    } else {
+      thumbPosition = [
+        (this.getLength() / this.getModel().getMaxDiapason()) * value[0],
+        (this.getLength() / this.getModel().getMaxDiapason()) * value[1],
+      ];
+    }
+
+    return thumbPosition;
+  }
+
 
   // Изменяет длину слайдера, меняет значения ширины / высоты слайдера
   changeLength(newLength: string): number {
     this._length = newLength;
     if (!this._vertical) {
-      this.getSlider().style.width = this._length;
+      this.getBar().style.width = this._length;
     } else {
-      this.getSlider().style.height = this._length;
+      this.getBar().style.height = this._length;
     }
     return this.getLength();
   }
@@ -131,17 +167,17 @@ export default class View implements IView {
   changeVertical(newVertical: boolean): boolean {
     this._vertical = newVertical;
     if (!this._vertical) {
-      this.getSlider().style.width = this._length;
-      this.getSlider().style.height = '';
-      this.getSlider().classList.remove('slider-reverse');
+      this.getBar().style.width = this._length;
+      this.getBar().style.height = '';
+      this.getSlider().classList.remove(this.sliderVerticalClass);
       if (this._stepsInfo) {
         this._stepsInfo.style.width = '100%';
         this._stepsInfo.style.height = '';
       }
     } else {
-      this.getSlider().style.height = this._length;
-      this.getSlider().style.width = '';
-      this.getSlider().classList.add('slider-reverse');
+      this.getBar().style.height = this._length;
+      this.getBar().style.width = '';
+      this.getSlider().classList.add(this.sliderVerticalClass);
       if (this._stepsInfo) {
         this._stepsInfo.style.height = '100%';
         this._stepsInfo.style.width = '';
@@ -150,31 +186,79 @@ export default class View implements IView {
     return this._vertical;
   }
 
+
+
+
+
+
+
+
   createSlider(): HTMLElement {
     const slider = document.createElement('div');
-    slider.classList.add('slider');
+    slider.classList.add(this.sliderClass);
 
-    if (!this._vertical) {
-      slider.style.width = this._length;
-    } else {
-      slider.style.height = this._length;
-      slider.classList.add('slider_reverse');
-    }
-
-    slider.style.position = 'relative';
+    this._parent.appendChild(slider);
 
     return slider;
   }
-  createThumb(): HTMLElement {
-    const thumb = document.createElement('div');
-    thumb.style.position = 'absolute';
+  createBar(): HTMLElement {
+    const bar = document.createElement('div');
+    bar.classList.add(this.barClass);
+    bar.style.position = 'relative';
 
-    this.getSlider().appendChild(thumb);
-    return thumb;
+    if (!this._vertical) {
+      bar.style.width = this._length;
+    } else {
+      bar.style.height = this._length;
+      bar.classList.add(this.sliderVerticalClass);
+    }
+
+    this.getSlider().appendChild(bar);
+    return bar;
   }
+  createThumb(): HTMLElement | Array<HTMLElement> {
+    const thumbPosition = this.getThumbPosition();
+
+    // thumbPosition === 'number' при range = false
+    if (typeof thumbPosition === 'number') {
+      const thumb = document.createElement('div');
+
+      thumb.classList.add(this.thumbClass);
+      thumb.style.position = 'absolute';
+
+      if (this.getVertical()) {
+        thumb.style.top = `${thumbPosition}px`;
+      } else {
+        thumb.style.left = `${thumbPosition}px`;
+      }
+
+      this._thumb = thumb;
+      this.getBar().appendChild(thumb);
+    } else {
+      this._thumb = [];
+      for (let i = 0; i <= 1; i++) {
+        const thumb = document.createElement('div');
+        thumb.classList.add(this.thumbClass);
+        thumb.style.position = 'absolute';
+        thumb.dataset.number = String(i);
+
+        if (this.getVertical()) {
+          thumb.style.top = `${thumbPosition[i]}px`;
+        } else {
+          thumb.style.left = `${thumbPosition[i]}px`;
+        }
+
+        this._thumb.push(thumb);
+        this.getBar().appendChild(thumb);
+      }
+    }
+    return this._thumb;
+  }
+
 
   createTooltip(): HTMLElement {
     const tooltip = document.createElement('div');
+    // @ts-ignore
     this.getThumb().appendChild(tooltip);
 
     this._tooltip = tooltip;

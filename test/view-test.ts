@@ -8,14 +8,14 @@ let view: IView;
 
 beforeEach(() => {
   modelOptions = {
-    value: 0,
-    range: false,
+    value: [5, 15],
+    range: true,
     stepSize: 1,
     min: 0,
     max: 20,
   };
   viewOptions = {
-    length: '100%',
+    length: '200px',
     tooltip: false,
     stepsInfo: false,
     valueInfo: false,
@@ -53,13 +53,13 @@ describe('View is created and has methods', () => {
   });
 
   it('getModel', () => {
-    expect(view.getModel()).toEqual({ ...model });
+    expect(view.getModel()).toEqual(model);
   });
   it('getLength', () => {
-    expect(view.getLength()).toBe(+view.getSlider().clientWidth);
+    expect(view.getLength()).toBe(+view.getBar().clientWidth);
   });
   it('changeLength', () => {
-    expect(view.changeLength('100px')).toBe(+view.getSlider().clientWidth);
+    expect(view.changeLength('100px')).toBe(+view.getBar().clientWidth);
   });
   it('getStepLength', () => {
     expect(view.getStepLength()).toBe(
