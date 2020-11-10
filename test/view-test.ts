@@ -8,8 +8,8 @@ let view: IView;
 
 beforeEach(() => {
   modelOptions = {
-    value: [5, 15],
-    range: true,
+    value: 2,
+    range: false,
     stepSize: 1,
     min: 0,
     max: 20,

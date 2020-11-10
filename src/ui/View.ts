@@ -226,14 +226,15 @@ export default class View implements IView {
       thumb.classList.add(this.thumbClass);
       thumb.style.position = 'absolute';
 
+      this.getBar().appendChild(thumb);
+
       if (this.getVertical()) {
-        thumb.style.top = `${thumbPosition}px`;
+        thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
       } else {
-        thumb.style.left = `${thumbPosition}px`;
+        thumb.style.left = `${thumbPosition - thumb.offsetWidth / 2}px`;
       }
 
       this._thumb = thumb;
-      this.getBar().appendChild(thumb);
     } else {
       this._thumb = [];
       for (let i = 0; i <= 1; i++) {
@@ -242,14 +243,15 @@ export default class View implements IView {
         thumb.style.position = 'absolute';
         thumb.dataset.number = String(i);
 
+        this.getBar().appendChild(thumb);
+
         if (this.getVertical()) {
-          thumb.style.top = `${thumbPosition[i]}px`;
+          thumb.style.top = `${thumbPosition[i] - thumb.offsetHeight / 2}px`;
         } else {
-          thumb.style.left = `${thumbPosition[i]}px`;
+          thumb.style.left = `${thumbPosition[i] - thumb.offsetWidth / 2}px`;
         }
 
         this._thumb.push(thumb);
-        this.getBar().appendChild(thumb);
       }
     }
     return this._thumb;
