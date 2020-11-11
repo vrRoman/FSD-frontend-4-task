@@ -4,7 +4,7 @@
   color: rgba(0, 0, 0, 0.5);
   line-height: 12px;
   position: relative;
-  margin: 35px 5px;
+  margin: 60px 15px;
 
   &__bar {
     background-color: #e5e5e5;
@@ -27,23 +27,20 @@
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
     div {
       position: absolute;
-      top: calc(-100% - 5px);
-      background-color: rgba(151, 231, 230, 0.2);
+      background-color: rgb(224, 248, 248);
       padding: 2px;
     }
   }
 
   &__steps-info {
     color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
   }
 
   &__value-info {
     position: absolute;
-    left: 0;
-    top: -15px;
   }
 }
 
@@ -58,9 +55,17 @@
   .slider__thumb {
     top: -2.5px;
   }
+  .slider__tooltip {
+    top: calc(-100% - 5px);
+    justify-content: center;
+  }
   .slider__steps-info {
     height: 12px;
     padding-top: 10px;
+  }
+  .slider__value-info {
+    left: 0;
+    top: -30px;
   }
 }
 .slider.slider_vertical {
@@ -73,8 +78,16 @@
   .slider__thumb {
     left: -2.5px;
   }
+  .slider__tooltip {
+    right: calc(-100% - 5px);
+    align-items: center;
+  }
   .slider__steps-info {
     width: 12px;
     padding-left: 10px;
+  }
+  .slider__value-info {
+    left: 40px;
+    top: 0
   }
 }

@@ -47,8 +47,6 @@ export interface IView {
   getTooltip(): HTMLElement | Array<HTMLElement> | undefined
 
   getStepsInfo(): HTMLElement | undefined
-  changeStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number)
-    : HTMLElement | undefined
   getStepsInfoSettings(): boolean | Array<number | string> | number
 
   getValueInfo(): HTMLElement | undefined
@@ -59,6 +57,8 @@ export interface IView {
 
   changeLength(newLength: string): number
   changeVertical(newVertical: boolean): boolean
+  changeStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number)
+    : HTMLElement | undefined
 }
 
 export default class View implements IView {
@@ -142,6 +142,9 @@ export default class View implements IView {
     return this._valueInfo;
   }
   getLength(): number {
+    if (this.getVertical()) {
+      return +this.getBar().clientHeight;
+    }
     return +this.getBar().clientWidth;
   }
   getVertical(): boolean {
@@ -175,40 +178,126 @@ export default class View implements IView {
   // Изменяет длину слайдера, меняет значения ширины / высоты слайдера
   changeLength(newLength: string): number {
     this._length = newLength;
-    if (!this._vertical) {
-      this.getBar().style.width = this._length;
-    } else {
+
+    if (this.getVertical()) {
       this.getBar().style.height = this._length;
+    } else {
+      this.getBar().style.width = this._length;
     }
+
+    const thumbPosition = this.getThumbPosition();
+    const thumb = this.getThumb();
+    const progressBar = this.getProgressBar();
+    const stepsInfo = this.getStepsInfo();
+
+    if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
+      if (this.getVertical()) {
+        thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
+      } else {
+        thumb.style.left = `${thumbPosition - thumb.offsetWidth / 2}px`;
+      }
+    } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
+      for (let i = 0; i <= 1; i++) {
+        if (this.getVertical()) {
+          thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+        } else {
+          thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetWidth / 2}px`;
+        }
+      }
+    }
+
+    if (typeof thumbPosition === 'number') {
+      if (this.getVertical()) {
+        progressBar.style.height = `${thumbPosition}px`;
+      } else {
+        progressBar.style.width = `${thumbPosition}px`;
+      }
+    } else {
+      if (this.getVertical()) {
+        progressBar.style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
+        progressBar.style.top = `${thumbPosition[0]}px`;
+      } else {
+        progressBar.style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
+        progressBar.style.left = `${thumbPosition[0]}px`;
+      }
+    }
+
+    if (stepsInfo) {
+      stepsInfo.remove();
+      this.createStepsInfo();
+    }
+
     return this.getLength();
   }
-  // Изменяет направление слайдера, меняет местами значения ширины и высоты
-  // слайдера, информации о шагах
+
   changeVertical(newVertical: boolean): boolean {
     this._vertical = newVertical;
+
+    const stepsInfo = this.getStepsInfo();
+
     if (!this._vertical) {
       this.getBar().style.width = this._length;
       this.getBar().style.height = '';
       this.getSlider().classList.remove(this.sliderVerticalClass);
-      if (this._stepsInfo) {
-        this._stepsInfo.style.width = '100%';
-        this._stepsInfo.style.height = '';
+      const thumb = this.getThumb();
+      const thumbPosition = this.getThumbPosition();
+      const progressBar = this.getProgressBar();
+
+      if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
+        thumb.style.top = '';
+        thumb.style.left = `${thumbPosition - thumb.offsetHeight / 2}px`;
+
+        progressBar.style.width = `${thumbPosition}px`;
+        progressBar.style.height = '';
+        progressBar.style.left = '0';
+        progressBar.style.top = '';
+      } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
+        for (let i = 0; i <= 1; i++) {
+          thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+          thumb[i].style.top = '';
+
+          progressBar.style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
+          progressBar.style.height = '';
+          progressBar.style.left = `${thumbPosition[0]}px`;
+          progressBar.style.top = '';
+        }
       }
     } else {
       this.getBar().style.height = this._length;
       this.getBar().style.width = '';
       this.getSlider().classList.add(this.sliderVerticalClass);
-      if (this._stepsInfo) {
-        this._stepsInfo.style.height = '100%';
-        this._stepsInfo.style.width = '';
+      const thumb = this.getThumb();
+      const thumbPosition = this.getThumbPosition();
+      const progressBar = this.getProgressBar();
+
+      if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
+        thumb.style.left = '';
+        thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
+
+        progressBar.style.height = `${thumbPosition}px`;
+        progressBar.style.width = '';
+        progressBar.style.top = '0';
+        progressBar.style.left = '';
+      } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
+        for (let i = 0; i <= 1; i++) {
+          thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+          thumb[i].style.left = '';
+
+          progressBar.style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
+          progressBar.style.width = '';
+          progressBar.style.top = `${thumbPosition[0]}px`;
+          progressBar.style.left = '';
+        }
       }
     }
+
+    if (stepsInfo) {
+      stepsInfo.remove();
+      this.createStepsInfo();
+    }
+
     return this._vertical;
   }
-
-
-
-
 
 
 
@@ -216,6 +305,10 @@ export default class View implements IView {
   createSlider(): HTMLElement {
     const slider = document.createElement('div');
     slider.classList.add(this.sliderClass);
+
+    if (this.getVertical()) {
+      slider.classList.add(this.sliderVerticalClass);
+    }
 
     this._parent.appendChild(slider);
 
@@ -230,7 +323,6 @@ export default class View implements IView {
       bar.style.width = this._length;
     } else {
       bar.style.height = this._length;
-      bar.classList.add(this.sliderVerticalClass);
     }
 
     this.getSlider().appendChild(bar);
@@ -388,10 +480,15 @@ export default class View implements IView {
 
     for (let i = 0; i < numOfSteps; i++) {
       const stepElem = document.createElement('div');
+      const position = (this.getLength() / (numOfSteps - 1)) * i;
       stepElem.innerText = `${steps[i]}`;
       stepElem.style.position = 'absolute';
       stepsInfo.appendChild(stepElem);
-      stepElem.style.left = `${((this.getLength() / (numOfSteps - 1)) * i) - stepElem.clientWidth / 2}px`;
+      if (this.getVertical()) {
+        stepElem.style.top = `${position - stepElem.clientHeight / 2}px`;
+      } else {
+        stepElem.style.left = `${position - stepElem.clientWidth / 2}px`;
+      }
     }
 
     this._stepsInfo = stepsInfo;
@@ -432,6 +529,7 @@ export default class View implements IView {
   removeValueInfo(): void {
     if (this._valueInfo) {
       this._valueInfo.remove();
+      this._valueInfo = undefined;
     }
   }
 }

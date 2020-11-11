@@ -8,7 +8,7 @@ let view: IView;
 
 beforeEach(() => {
   modelOptions = {
-    value: [5, 123],
+    value: [2, 15],
     range: true,
     stepSize: 1,
     min: 0,
@@ -18,7 +18,7 @@ beforeEach(() => {
     length: '200px',
     tooltip: false,
     stepsInfo: false,
-    valueInfo: true,
+    valueInfo: false,
     vertical: false,
   };
   model = new Model(modelOptions);
@@ -82,8 +82,8 @@ describe('View is created and has methods', () => {
     expect(view.getStepsInfo()).toBe(undefined);
   });
 
-  // it('remove valueInfo', () => {
-  //   view.removeValueInfo();
-  //   expect(view.getValueInfo()).toBe(undefined);
-  // });
+  it('remove valueInfo', () => {
+    view.removeValueInfo();
+    expect(view.getValueInfo()).toBe(undefined);
+  });
 });
