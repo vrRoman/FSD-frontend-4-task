@@ -71,10 +71,6 @@ describe('View is created and has methods', () => {
   it('changeVertical', () => {
     expect(view.changeVertical(true)).toBe(true);
   });
-
-  it('create steps info under slider without parameters', () => {
-    expect(view.createStepsInfo()).toBeDefined();
-  });
   it('change stepsInfoSettings to number and create steps info', () => {
     view.changeStepsInfoSettings(5);
   });

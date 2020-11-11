@@ -17,6 +17,7 @@ export interface IView {
   progressBarClass: string
   thumbClass: string
   tooltipClass: string
+  stepsInfoClass: string
 
   createSlider(): HTMLElement
 
@@ -66,6 +67,7 @@ export default class View implements IView {
   progressBarClass: string
   thumbClass: string
   tooltipClass: string
+  stepsInfoClass: string
 
   private _model: IModel
   private _parent: Element
@@ -87,6 +89,7 @@ export default class View implements IView {
     this.progressBarClass = 'slider__progress-bar';
     this.thumbClass = 'slider__thumb';
     this.tooltipClass = 'slider__tooltip';
+    this.stepsInfoClass = 'slider__steps-info';
 
     this._model = model;
 
@@ -344,26 +347,58 @@ export default class View implements IView {
 
     this._tooltip = undefined;
   }
+  
   createStepsInfo(): HTMLElement | undefined {
     const stepsInfo = document.createElement('div');
-    stepsInfo.classList.add('slider-steps-info');
-    if (this._stepsInfoSettings) {
-      // длина как слайдер
-      // if (!this.vertical) {
-      //   stepsInfo.style.width = '100%';
-      // } else {
-      //   stepsInfo.style.height = '100%';
-      // }
-    } else {
+    const stepsInfoSettings = this.getStepsInfoSettings();
+
+    this.getBar().appendChild(stepsInfo);
+
+    if (!stepsInfoSettings) {
       this._stepsInfoSettings = true;
     }
+    stepsInfo.classList.add(this.stepsInfoClass);
+    stepsInfo.style.position = 'relative';
+    if (this.getVertical()) {
+      stepsInfo.style.height = `${this.getLength()}px`;
+    } else {
+      stepsInfo.style.width = `${this.getLength()}px`;
+    }
 
-    this.getParent().appendChild(stepsInfo);
+    let numOfSteps: number = 5;
+    let steps: Array<number | string> = [];
+
+    if (typeof stepsInfoSettings === 'number' || stepsInfoSettings === true) {
+      if (typeof stepsInfoSettings === 'number') {
+        numOfSteps = stepsInfoSettings;
+      }
+
+      for (let i = 0; i < numOfSteps; i++) {
+        steps.push(
+          this.getModel().min + ((this.getModel().getMaxDiapason() / (numOfSteps - 1)) * i),
+        );
+      }
+    } else if (Array.isArray(stepsInfoSettings)) {
+      numOfSteps = stepsInfoSettings.length;
+      steps = stepsInfoSettings;
+    }
+
+    for (let i = 0; i < numOfSteps; i++) {
+      const stepElem = document.createElement('div');
+      stepElem.innerText = `${steps[i]}`;
+      stepElem.style.position = 'absolute';
+      stepsInfo.appendChild(stepElem);
+      stepElem.style.left = `${((this.getLength() / (numOfSteps - 1)) * i) - stepElem.clientWidth / 2}px`;
+    }
+
+    this._stepsInfo = stepsInfo;
     return stepsInfo;
   }
-  removeStepsInfo() {
-    if (this._stepsInfo) {
-      this._stepsInfo.remove();
+  removeStepsInfo(): void {
+    const stepsInfo = this.getStepsInfo();
+    if (stepsInfo) {
+      stepsInfo.remove();
+      this._stepsInfo = undefined;
     }
   }
   changeStepsInfoSettings(newStepsInfoSettings

@@ -33,6 +33,13 @@
       padding: 2px;
     }
   }
+
+  &__steps-info {
+    font-family: sans-serif;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.5);
+    line-height: 12px;
+  }
 }
 
 
@@ -46,6 +53,10 @@
   .slider__thumb {
     top: -2.5px;
   }
+  .slider__steps-info {
+    height: 12px;
+    padding-top: 10px;
+  }
 }
 .slider.slider_vertical {
   .slider__bar {
@@ -56,5 +67,9 @@
   }
   .slider__thumb {
     left: -2.5px;
+  }
+  .slider__steps-info {
+    width: 12px;
+    padding-left: 10px;
   }
 }
