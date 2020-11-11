@@ -18,6 +18,7 @@ export interface IView {
   thumbClass: string
   tooltipClass: string
   stepsInfoClass: string
+  valueInfoClass: string
 
   createSlider(): HTMLElement
 
@@ -68,6 +69,7 @@ export default class View implements IView {
   thumbClass: string
   tooltipClass: string
   stepsInfoClass: string
+  valueInfoClass: string
 
   private _model: IModel
   private _parent: Element
@@ -90,6 +92,7 @@ export default class View implements IView {
     this.thumbClass = 'slider__thumb';
     this.tooltipClass = 'slider__tooltip';
     this.stepsInfoClass = 'slider__steps-info';
+    this.valueInfoClass = 'slider__value-info';
 
     this._model = model;
 
@@ -402,8 +405,7 @@ export default class View implements IView {
     }
   }
   changeStepsInfoSettings(newStepsInfoSettings
-                            : boolean | Array<number | string> | number)
-    : HTMLElement | undefined {
+                            : boolean | Array<number | string> | number): HTMLElement | undefined {
     this._stepsInfoSettings = newStepsInfoSettings;
 
     this.removeStepsInfo();
@@ -412,7 +414,19 @@ export default class View implements IView {
 
   createValueInfo(): HTMLElement {
     const valueInfo = document.createElement('div');
-    this.getParent().appendChild(valueInfo);
+    const value = this.getModel().getValue();
+
+    valueInfo.classList.add(this.valueInfoClass);
+
+    this.getSlider().appendChild(valueInfo);
+
+    if (typeof value === 'number') {
+      valueInfo.innerText = `${value}`;
+    } else {
+      valueInfo.innerText = `${value[0]} - ${value[1]}`;
+    }
+
+    this._valueInfo = valueInfo;
     return valueInfo;
   }
   removeValueInfo(): void {
