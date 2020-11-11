@@ -16,6 +16,7 @@ export interface IView {
   barClass: string
   progressBarClass: string
   thumbClass: string
+  tooltipClass: string
 
   createSlider(): HTMLElement
 
@@ -23,7 +24,7 @@ export interface IView {
   createProgressBar(): HTMLElement
   createThumb(): HTMLElement | Array<HTMLElement>
 
-  createTooltip(): HTMLElement
+  createTooltip(): HTMLElement | Array<HTMLElement> | undefined
   removeTooltip(): void
 
   createStepsInfo(): HTMLElement | undefined
@@ -41,7 +42,7 @@ export interface IView {
   getThumb(): HTMLElement | Array<HTMLElement>
   getThumbPosition(): number | number[]
 
-  getTooltip(): HTMLElement | undefined
+  getTooltip(): HTMLElement | Array<HTMLElement> | undefined
 
   getStepsInfo(): HTMLElement | undefined
   changeStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number)
@@ -64,6 +65,7 @@ export default class View implements IView {
   barClass: string
   progressBarClass: string
   thumbClass: string
+  tooltipClass: string
 
   private _model: IModel
   private _parent: Element
@@ -71,7 +73,7 @@ export default class View implements IView {
   private _bar: HTMLElement
   private _progressBar: HTMLElement
   private _thumb: HTMLElement | Array<HTMLElement>
-  private _tooltip: HTMLElement | undefined
+  private _tooltip: HTMLElement | Array<HTMLElement> | undefined
   private _stepsInfo: HTMLElement | undefined
   private _valueInfo: HTMLElement | undefined
   private _length: string
@@ -84,6 +86,7 @@ export default class View implements IView {
     this.barClass = 'slider__bar';
     this.progressBarClass = 'slider__progress-bar';
     this.thumbClass = 'slider__thumb';
+    this.tooltipClass = 'slider__tooltip';
 
     this._model = model;
 
@@ -123,7 +126,7 @@ export default class View implements IView {
   getThumb(): HTMLElement | Array<HTMLElement> {
     return this._thumb;
   }
-  getTooltip(): HTMLElement | undefined {
+  getTooltip(): HTMLElement | Array<HTMLElement> | undefined {
     return this._tooltip;
   }
   getStepsInfo(): HTMLElement | undefined {
@@ -298,19 +301,48 @@ export default class View implements IView {
   }
 
 
-  createTooltip(): HTMLElement {
-    const tooltip = document.createElement('div');
-    // @ts-ignore
-    this.getThumb().appendChild(tooltip);
+  createTooltip(): HTMLElement | Array<HTMLElement> | undefined {
+    const thumb = this.getThumb();
+    const value = this.getModel().getValue();
 
-    this._tooltip = tooltip;
+    if (Array.isArray(thumb)) {
+      this._tooltip = [];
+      for (let i = 0; i <= 1; i++) {
+        const tooltip = document.createElement('div');
+        tooltip.classList.add(this.tooltipClass);
+
+        if (Array.isArray(value)) {
+          tooltip.innerHTML = `<div>${value[i]}</div>`;
+        }
+
+        thumb[i].appendChild(tooltip);
+        this._tooltip.push(tooltip);
+      }
+    } else {
+      const tooltip = document.createElement('div');
+      tooltip.classList.add(this.tooltipClass);
+
+      if (!Array.isArray(value)) {
+        tooltip.innerHTML = `<div>${value}</div>`;
+      }
+
+      thumb.appendChild(tooltip);
+      this._tooltip = tooltip;
+    }
     return this._tooltip;
   }
   removeTooltip(): void {
-    if (this.getTooltip()) {
-      this.getTooltip()!.remove();
-      this._tooltip = undefined;
+    const tooltip = this.getTooltip();
+
+    if (Array.isArray(tooltip)) {
+      for (let i = 0; i <= 1; i++) {
+        tooltip[i].remove();
+      }
+    } else if (tooltip) {
+      tooltip.remove();
     }
+
+    this._tooltip = undefined;
   }
   createStepsInfo(): HTMLElement | undefined {
     const stepsInfo = document.createElement('div');

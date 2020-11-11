@@ -44,7 +44,7 @@ describe('View is created and has methods', () => {
     expect(view.getTooltip()).toBe(undefined);
   });
   it('create tooltip and getTooltip returns this tooltip', () => {
-    expect(view.createTooltip()).toEqual(view.getTooltip()!);
+    expect(view.createTooltip()).toEqual(view.getTooltip());
   });
   it('remove tooltip and getTooltip returns undefined', () => {
     expect(view.createTooltip()).toBeDefined();
