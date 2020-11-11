@@ -14,11 +14,13 @@ export interface IView {
   sliderClass: string
   sliderVerticalClass: string
   barClass: string
+  progressBarClass: string
   thumbClass: string
 
   createSlider(): HTMLElement
 
   createBar(): HTMLElement
+  createProgressBar(): HTMLElement
   createThumb(): HTMLElement | Array<HTMLElement>
 
   createTooltip(): HTMLElement
@@ -35,6 +37,7 @@ export interface IView {
   getSlider(): HTMLElement
 
   getBar(): HTMLElement
+  getProgressBar(): HTMLElement
   getThumb(): HTMLElement | Array<HTMLElement>
   getThumbPosition(): number | number[]
 
@@ -59,12 +62,14 @@ export default class View implements IView {
   sliderClass: string
   sliderVerticalClass: string
   barClass: string
+  progressBarClass: string
   thumbClass: string
 
   private _model: IModel
   private _parent: Element
   private _slider: HTMLElement
   private _bar: HTMLElement
+  private _progressBar: HTMLElement
   private _thumb: HTMLElement | Array<HTMLElement>
   private _tooltip: HTMLElement | undefined
   private _stepsInfo: HTMLElement | undefined
@@ -77,6 +82,7 @@ export default class View implements IView {
     this.sliderClass = 'slider';
     this.sliderVerticalClass = 'slider_vertical';
     this.barClass = 'slider__bar';
+    this.progressBarClass = 'slider__progress-bar';
     this.thumbClass = 'slider__thumb';
 
     this._model = model;
@@ -89,6 +95,7 @@ export default class View implements IView {
     this._parent = parent;
     this._slider = this.createSlider();
     this._bar = this.createBar();
+    this._progressBar = this.createProgressBar();
     this._thumb = this.createThumb();
     this._tooltip = viewOptions.tooltip ? this.createTooltip() : undefined;
     this._stepsInfo = viewOptions.stepsInfo ? this.createStepsInfo() : undefined;
@@ -109,6 +116,10 @@ export default class View implements IView {
   getBar(): HTMLElement {
     return this._bar;
   }
+  getProgressBar(): HTMLElement {
+    return this._progressBar;
+  }
+
   getThumb(): HTMLElement | Array<HTMLElement> {
     return this._thumb;
   }
@@ -215,6 +226,35 @@ export default class View implements IView {
 
     this.getSlider().appendChild(bar);
     return bar;
+  }
+  createProgressBar(): HTMLElement {
+    const progressBar = document.createElement('div');
+    const thumbPosition = this.getThumbPosition();
+
+    progressBar.classList.add(this.progressBarClass);
+    progressBar.style.position = 'absolute';
+
+    if (typeof thumbPosition === 'number') {
+      if (this.getVertical()) {
+        progressBar.style.height = `${thumbPosition}px`;
+        progressBar.style.top = '0';
+      } else {
+        progressBar.style.width = `${thumbPosition}px`;
+        progressBar.style.left = '0';
+      }
+    } else {
+      if (this.getVertical()) {
+        progressBar.style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
+        progressBar.style.top = `${thumbPosition[0]}px`;
+      } else {
+        progressBar.style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
+        progressBar.style.left = `${thumbPosition[0]}px`;
+      }
+    }
+
+    this.getBar().appendChild(progressBar);
+    this._progressBar = progressBar;
+    return progressBar;
   }
   createThumb(): HTMLElement | Array<HTMLElement> {
     const thumbPosition = this.getThumbPosition();

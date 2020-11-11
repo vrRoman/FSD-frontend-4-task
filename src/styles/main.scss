@@ -4,6 +4,11 @@
     margin: 10px 5px;
   }
 
+  &__progress-bar {
+    background-color: #a1e3ea;
+    opacity: 0.5;
+  }
+
   &__thumb {
     width: 10px;
     height: 10px;
@@ -17,6 +22,9 @@
   .slider__bar {
     height: 5px;
   }
+  .slider__progress-bar {
+    height: 100%;
+  }
   .slider__thumb {
     top: -2.5px;
   }
@@ -24,6 +32,9 @@
 .slider.slider_vertical {
   .slider__bar {
     width: 5px;
+  }
+  .slider__progress-bar {
+    width: 100%;
   }
   .slider__thumb {
     left: -2.5px;
