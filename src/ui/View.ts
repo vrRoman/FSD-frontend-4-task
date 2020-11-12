@@ -1,5 +1,3 @@
-// добавить в changelength изменение thumb
-
 import { IModel } from '../model/Model';
 
 export interface ViewOptions {
@@ -8,6 +6,16 @@ export interface ViewOptions {
   stepsInfo: boolean | Array<number | string> | number
   valueInfo: boolean
   vertical: boolean
+
+  sliderClass?: string
+  sliderVerticalClass?: string
+  barClass?: string
+  progressBarClass?: string
+  thumbClass?: string
+  tooltipClass?: string
+  stepsInfoClass?: string
+  valueInfoClass?: string
+
 }
 
 export interface IView {
@@ -85,14 +93,14 @@ export default class View implements IView {
   private _stepsInfoSettings: boolean | Array<number | string> | number
 
   constructor(model: IModel, viewOptions: ViewOptions, parent: Element) {
-    this.sliderClass = 'slider';
-    this.sliderVerticalClass = 'slider_vertical';
-    this.barClass = 'slider__bar';
-    this.progressBarClass = 'slider__progress-bar';
-    this.thumbClass = 'slider__thumb';
-    this.tooltipClass = 'slider__tooltip';
-    this.stepsInfoClass = 'slider__steps-info';
-    this.valueInfoClass = 'slider__value-info';
+    this.sliderClass = viewOptions.sliderClass ? viewOptions.sliderClass : 'slider';
+    this.sliderVerticalClass = viewOptions.sliderVerticalClass ? viewOptions.sliderVerticalClass : 'slider_vertical';
+    this.barClass = viewOptions.barClass ? viewOptions.barClass : 'slider__bar';
+    this.progressBarClass = viewOptions.progressBarClass ? viewOptions.progressBarClass : 'slider__progress-bar';
+    this.thumbClass = viewOptions.thumbClass ? viewOptions.thumbClass : 'slider__thumb';
+    this.tooltipClass = viewOptions.tooltipClass ? viewOptions.tooltipClass : 'slider__tooltip';
+    this.stepsInfoClass = viewOptions.stepsInfoClass ? viewOptions.stepsInfoClass : 'slider__steps-info';
+    this.valueInfoClass = viewOptions.valueInfoClass ? viewOptions.valueInfoClass : 'slider__value-info';
 
     this._model = model;
 
