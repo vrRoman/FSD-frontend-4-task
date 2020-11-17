@@ -15,7 +15,7 @@ export interface IModel {
 
   setValue(newValue: Value): Value
   setRange(newRange: boolean): boolean
-  addStepsToValue(numOfSteps: number, valueNumber: 0 | 1): Value
+  addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1): Value
   checkAndFixValue(): Value
   getValue(): Value
   getRange(): boolean

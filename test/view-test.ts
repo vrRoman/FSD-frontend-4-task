@@ -1,31 +1,38 @@
 import View, { IView, ViewOptions } from '../src/ui/View';
 import Model, { IModel, ModelOptions } from '../src/model/Model';
+import Controller, { ControllerOptions, IController } from '../src/ui/Controller';
 
 let modelOptions: ModelOptions;
 let viewOptions: ViewOptions;
+let controllerOptions: ControllerOptions;
 let model: IModel;
 let view: IView;
+let controller: IController;
 
-beforeEach(() => {
-  modelOptions = {
-    value: [2, 15],
-    range: true,
-    stepSize: 1,
-    min: 0,
-    max: 20,
-  };
-  viewOptions = {
-    length: '200px',
-    tooltip: false,
-    stepsInfo: false,
-    valueInfo: false,
-    vertical: false,
-  };
-  model = new Model(modelOptions);
-  view = new View(model, viewOptions, document.body);
-});
+describe('View methods', () => {
+  beforeEach(() => {
+    modelOptions = {
+      value: [2, 15],
+      range: true,
+      stepSize: 2,
+      min: 0,
+      max: 20,
+    };
+    viewOptions = {
+      length: '200px',
+      tooltip: false,
+      stepsInfo: false,
+      valueInfo: false,
+      vertical: false,
+    };
+    controllerOptions = {
+      updateOnMove: false,
+    };
+    model = new Model(modelOptions);
+    view = new View(model, viewOptions, document.body);
+    controller = new Controller(model, view, controllerOptions);
+  });
 
-describe('View is created and has methods', () => {
   it('created', () => {
     expect(view).toBeDefined();
   });
@@ -60,12 +67,6 @@ describe('View is created and has methods', () => {
   });
   it('changeLength', () => {
     expect(view.changeLength('100px')).toBe(+view.getBar().clientWidth);
-  });
-  it('getStepLength', () => {
-    expect(view.getStepLength()).toBe(
-      view.getLength()
-      / ((view.getModel().max - view.getModel().min) / view.getModel().stepSize),
-    );
   });
 
   it('changeVertical', () => {

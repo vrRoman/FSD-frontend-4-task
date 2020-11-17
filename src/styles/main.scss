@@ -20,6 +20,11 @@
     height: 10px;
     border-radius: 50%;
     background-color: #a1e3ea;
+    box-sizing: border-box;
+    top: 0
+  }
+  &__thumb_active {
+    border: 1px solid #8cc7cd;
   }
 
   &__tooltip {

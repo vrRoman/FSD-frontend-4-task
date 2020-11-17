@@ -12,10 +12,10 @@ export interface ViewOptions {
   barClass?: string
   progressBarClass?: string
   thumbClass?: string
+  activeThumbClass?: string
   tooltipClass?: string
   stepsInfoClass?: string
   valueInfoClass?: string
-
 }
 
 export interface IView {
@@ -24,6 +24,7 @@ export interface IView {
   barClass: string
   progressBarClass: string
   thumbClass: string
+  activeThumbClass: string
   tooltipClass: string
   stepsInfoClass: string
   valueInfoClass: string
@@ -60,7 +61,6 @@ export interface IView {
   getValueInfo(): HTMLElement | undefined
 
   getLength(): number
-  getStepLength(): number
   getVertical(): boolean
 
   changeLength(newLength: string): number
@@ -75,11 +75,12 @@ export default class View implements IView {
   barClass: string
   progressBarClass: string
   thumbClass: string
+  activeThumbClass: string
   tooltipClass: string
   stepsInfoClass: string
   valueInfoClass: string
 
-  private _model: IModel
+  private readonly _model: IModel
   private _parent: Element
   private _slider: HTMLElement
   private _bar: HTMLElement
@@ -98,6 +99,7 @@ export default class View implements IView {
     this.barClass = viewOptions.barClass ? viewOptions.barClass : 'slider__bar';
     this.progressBarClass = viewOptions.progressBarClass ? viewOptions.progressBarClass : 'slider__progress-bar';
     this.thumbClass = viewOptions.thumbClass ? viewOptions.thumbClass : 'slider__thumb';
+    this.activeThumbClass = viewOptions.activeThumbClass ? viewOptions.activeThumbClass : 'slider__thumb_active';
     this.tooltipClass = viewOptions.tooltipClass ? viewOptions.tooltipClass : 'slider__tooltip';
     this.stepsInfoClass = viewOptions.stepsInfoClass ? viewOptions.stepsInfoClass : 'slider__steps-info';
     this.valueInfoClass = viewOptions.valueInfoClass ? viewOptions.valueInfoClass : 'slider__value-info';
@@ -161,11 +163,6 @@ export default class View implements IView {
   getStepsInfoSettings(): boolean | Array<number | string> | number {
     return this._stepsInfoSettings;
   }
-  getStepLength(): number {
-    const numOfSteps = (this.getModel().max - this.getModel().min)
-      / this.getModel().stepSize;
-    return this.getLength() / numOfSteps;
-  }
   getThumbPosition(): number | number[] {
     const value = this.getModel().getValue();
     let thumbPosition;
@@ -205,7 +202,7 @@ export default class View implements IView {
         thumb.style.left = `${thumbPosition - thumb.offsetWidth / 2}px`;
       }
     } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
-      for (let i = 0; i <= 1; i++) {
+      for (let i = 0; i <= 1; i += 1) {
         if (this.getVertical()) {
           thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
         } else {
@@ -260,7 +257,7 @@ export default class View implements IView {
         progressBar.style.left = '0';
         progressBar.style.top = '';
       } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
-        for (let i = 0; i <= 1; i++) {
+        for (let i = 0; i <= 1; i += 1) {
           thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
           thumb[i].style.top = '';
 
@@ -287,7 +284,7 @@ export default class View implements IView {
         progressBar.style.top = '0';
         progressBar.style.left = '';
       } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
-        for (let i = 0; i <= 1; i++) {
+        for (let i = 0; i <= 1; i += 1) {
           thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
           thumb[i].style.left = '';
 
@@ -386,7 +383,7 @@ export default class View implements IView {
       this._thumb = thumb;
     } else {
       this._thumb = [];
-      for (let i = 0; i <= 1; i++) {
+      for (let i = 0; i <= 1; i += 1) {
         const thumb = document.createElement('div');
         thumb.classList.add(this.thumbClass);
         thumb.style.position = 'absolute';
@@ -413,7 +410,7 @@ export default class View implements IView {
 
     if (Array.isArray(thumb)) {
       this._tooltip = [];
-      for (let i = 0; i <= 1; i++) {
+      for (let i = 0; i <= 1; i += 1) {
         const tooltip = document.createElement('div');
         tooltip.classList.add(this.tooltipClass);
 
@@ -441,7 +438,7 @@ export default class View implements IView {
     const tooltip = this.getTooltip();
 
     if (Array.isArray(tooltip)) {
-      for (let i = 0; i <= 1; i++) {
+      for (let i = 0; i <= 1; i += 1) {
         tooltip[i].remove();
       }
     } else if (tooltip) {
@@ -476,7 +473,7 @@ export default class View implements IView {
         numOfSteps = stepsInfoSettings;
       }
 
-      for (let i = 0; i < numOfSteps; i++) {
+      for (let i = 0; i < numOfSteps; i += 1) {
         steps.push(
           this.getModel().min + ((this.getModel().getMaxDiapason() / (numOfSteps - 1)) * i),
         );
@@ -486,7 +483,7 @@ export default class View implements IView {
       steps = stepsInfoSettings;
     }
 
-    for (let i = 0; i < numOfSteps; i++) {
+    for (let i = 0; i < numOfSteps; i += 1) {
       const stepElem = document.createElement('div');
       const position = (this.getLength() / (numOfSteps - 1)) * i;
       stepElem.innerText = `${steps[i]}`;
