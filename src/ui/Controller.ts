@@ -152,6 +152,10 @@ export default class Controller implements IController {
       } else {
         this._model.addStepsToValue(numOfSteps);
       }
+
+      if (this.onChange) {
+        this.onChange();
+      }
     }
   }
 
