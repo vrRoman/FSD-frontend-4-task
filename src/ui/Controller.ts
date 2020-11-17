@@ -3,15 +3,18 @@ import { IView } from './View';
 
 
 export interface ControllerOptions {
-  updateOnMove: boolean
+  useKeyboard: boolean
   onChange?: Function
 }
 
 export interface IController {
-  getActiveThumb(): HTMLElement
+  getActiveThumb(): HTMLElement | undefined
   removeActiveThumb(): void
   getStepLength(): number
+  addKeyboardListener(): void
+  removeKeyboardListener(): void
 
+  useKeyboard: boolean
   onChange: Function | undefined
 }
 
@@ -19,11 +22,11 @@ export interface IController {
 export default class Controller implements IController {
   private _model: IModel;
   private _view: IView;
-  private _activeThumb: HTMLElement | null;
+  private _activeThumb: HTMLElement | undefined;
   private _clientX: number;
   private _clientY: number;
 
-  updateOnMove: boolean
+  useKeyboard: boolean
 
   onChange: Function | undefined
 
@@ -35,9 +38,9 @@ export default class Controller implements IController {
     this._clientX = 0;
     this._clientY = 0;
 
-    this.updateOnMove = controllerOptions.updateOnMove;
+    this.useKeyboard = controllerOptions.useKeyboard;
 
-    this._activeThumb = this.getActiveThumb();
+    this._activeThumb = undefined;
 
     this.onChange = controllerOptions.onChange;
 
@@ -45,6 +48,7 @@ export default class Controller implements IController {
     this.thumbOnUp = this.thumbOnUp.bind(this);
     this.thumbOnMove = this.thumbOnMove.bind(this);
     this.removeActiveThumb = this.removeActiveThumb.bind(this);
+    this.onKeydown = this.onKeydown.bind(this);
 
     const thumb = this._view.getThumb();
     if (Array.isArray(thumb)) {
@@ -54,23 +58,36 @@ export default class Controller implements IController {
     } else {
       thumb.addEventListener('mousedown', this.thumbOnDown);
     }
+
+    if (this.useKeyboard) {
+      this.addKeyboardListener();
+    }
   }
 
-  getActiveThumb(): HTMLElement {
-    if (!this._activeThumb) {
-      const thumb = this._view.getThumb();
-      if (Array.isArray(thumb)) {
-        [, this._activeThumb] = thumb;
-      } else {
-        this._activeThumb = thumb;
-      }
+  addKeyboardListener(): void {
+    document.addEventListener('keydown', this.onKeydown);
+  }
+  removeKeyboardListener() {
+    document.removeEventListener('keydown', this.onKeydown);
+  }
+
+  private onKeydown(evt: KeyboardEvent): void {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
+      || evt.key === 'KeyD' || evt.key === 'KeyS') {
+      this.addStepsToActiveThumb(1);
+    } else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
+      || evt.key === 'KeyA' || evt.key === 'KeyW') {
+      this.addStepsToActiveThumb(-1);
     }
+  }
+
+  getActiveThumb(): HTMLElement | undefined {
     return this._activeThumb;
   }
   removeActiveThumb(): void {
     if (this._activeThumb) {
       this._activeThumb.classList.remove(this._view.activeThumbClass);
-      this._activeThumb = null;
+      this._activeThumb = undefined;
     }
   }
 

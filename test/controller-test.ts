@@ -26,7 +26,7 @@ describe('Controller', () => {
       vertical: false,
     };
     controllerOptions = {
-      updateOnMove: false,
+      useKeyboard: true,
     };
     model = new Model(modelOptions);
     view = new View(model, viewOptions, document.body);
