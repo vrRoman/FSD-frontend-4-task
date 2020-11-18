@@ -104,6 +104,15 @@ export default class Model implements IModel {
       this.value += numOfSteps * this.stepSize;
     } else {
       this.value[valueNumber] += numOfSteps * this.stepSize;
+      if (valueNumber === 1) {
+        if (this.value[valueNumber] < this.value[0]) {
+          [this.value[valueNumber]] = this.value;
+        }
+      } else {
+        if (this.value[valueNumber] > this.value[1]) {
+          [, this.value[valueNumber]] = this.value;
+        }
+      }
     }
 
     this.checkAndFixValue();

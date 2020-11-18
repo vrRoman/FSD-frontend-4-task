@@ -33,6 +33,7 @@ export interface IView {
 
   createBar(): HTMLElement
   createProgressBar(): HTMLElement
+  updateProgressBar(): void
   createThumb(): HTMLElement | Array<HTMLElement>
 
   createTooltip(): HTMLElement | Array<HTMLElement> | undefined
@@ -335,32 +336,37 @@ export default class View implements IView {
   }
   createProgressBar(): HTMLElement {
     const progressBar = document.createElement('div');
-    const thumbPosition = this.getThumbPosition();
+    this.getBar().appendChild(progressBar);
 
     progressBar.classList.add(this.progressBarClass);
     progressBar.style.position = 'absolute';
 
+    this._progressBar = progressBar;
+
+    this.updateProgressBar();
+
+    return progressBar;
+  }
+  updateProgressBar(): void {
+    const thumbPosition = this.getThumbPosition();
+
     if (typeof thumbPosition === 'number') {
       if (this.getVertical()) {
-        progressBar.style.height = `${thumbPosition}px`;
-        progressBar.style.top = '0';
+        this.getProgressBar().style.height = `${thumbPosition}px`;
+        this.getProgressBar().style.top = '0';
       } else {
-        progressBar.style.width = `${thumbPosition}px`;
-        progressBar.style.left = '0';
+        this.getProgressBar().style.width = `${thumbPosition}px`;
+        this.getProgressBar().style.left = '0';
       }
     } else {
       if (this.getVertical()) {
-        progressBar.style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
-        progressBar.style.top = `${thumbPosition[0]}px`;
+        this.getProgressBar().style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
+        this.getProgressBar().style.top = `${thumbPosition[0]}px`;
       } else {
-        progressBar.style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
-        progressBar.style.left = `${thumbPosition[0]}px`;
+        this.getProgressBar().style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
+        this.getProgressBar().style.left = `${thumbPosition[0]}px`;
       }
     }
-
-    this.getBar().appendChild(progressBar);
-    this._progressBar = progressBar;
-    return progressBar;
   }
   createThumb(): HTMLElement | Array<HTMLElement> {
     const thumbPosition = this.getThumbPosition();
@@ -458,7 +464,7 @@ export default class View implements IView {
       this._stepsInfoSettings = true;
     }
     stepsInfo.classList.add(this.stepsInfoClass);
-    stepsInfo.style.position = 'relative';
+
     if (this.getVertical()) {
       stepsInfo.style.height = `${this.getLength()}px`;
     } else {

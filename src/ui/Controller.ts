@@ -62,6 +62,43 @@ export default class Controller implements IController {
     if (this.useKeyboard) {
       this.addKeyboardListener();
     }
+
+    this.addStepsInfoInteractivity();
+  }
+
+  private addStepsInfoInteractivity(): void {
+    const stepsInfo = this._view.getStepsInfo();
+    if (stepsInfo) {
+      const stepElems = Array.from(stepsInfo.children) as HTMLElement[];
+      for (let i = 0; i < stepElems.length; i += 1) {
+        stepElems[i].addEventListener('mousedown', (evt) => {
+          evt.preventDefault();
+          evt.stopPropagation();
+
+          if (!this._activeThumb) {
+            const thumb = this._view.getThumb();
+            if (Array.isArray(thumb)) {
+              [, this._activeThumb] = thumb;
+              const zIndex: number = window.getComputedStyle(thumb[0]).zIndex === 'auto'
+                ? 0 : +window.getComputedStyle(thumb[0]).zIndex;
+              this._activeThumb.style.zIndex = String(zIndex + 1);
+            } else {
+              this._activeThumb = thumb;
+            }
+          }
+
+          const stepValue = (
+              parseFloat(stepElems[i].style.left) + stepElems[i].offsetWidth / 2
+            ) / (this.getStepLength() / this._model.stepSize);
+          const thumbValue = (
+              parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
+            ) / (this.getStepLength() / this._model.stepSize);
+
+          this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.stepSize);
+          this.removeActiveThumb();
+        });
+      }
+    }
   }
 
   addKeyboardListener(): void {
@@ -130,13 +167,18 @@ export default class Controller implements IController {
 
       const offset: number = this.getStepLength() * numOfSteps;
       const pos: number = parseFloat(this._activeThumb.style[leftOrTop]) + offset;
+      let stepsToAdd: number = numOfSteps;
       if (pos <= maxPos) {
         if (pos >= minPos) {
           this._activeThumb.style[leftOrTop] = `${pos}px`;
         } else {
+          stepsToAdd = (minPos - parseFloat(this._activeThumb.style[leftOrTop]))
+            / this.getStepLength();
           this._activeThumb.style[leftOrTop] = `${minPos}px`;
         }
       } else {
+        stepsToAdd = (maxPos - parseFloat(this._activeThumb.style[leftOrTop]))
+          / this.getStepLength();
         this._activeThumb.style[leftOrTop] = `${maxPos}px`;
       }
 
@@ -148,10 +190,12 @@ export default class Controller implements IController {
         } else {
           valueNum = 1;
         }
-        this._model.addStepsToValue(numOfSteps, valueNum);
+        this._model.addStepsToValue(stepsToAdd, valueNum);
       } else {
-        this._model.addStepsToValue(numOfSteps);
+        this._model.addStepsToValue(stepsToAdd);
       }
+
+      this._view.updateProgressBar();
 
       if (this.onChange) {
         this.onChange();
@@ -171,6 +215,7 @@ export default class Controller implements IController {
     if (target) {
       if (this._activeThumb) {
         this._activeThumb.classList.remove(this._view.activeThumbClass);
+        this._activeThumb.style.zIndex = '';
       }
 
       this._activeThumb = target;
@@ -196,6 +241,19 @@ export default class Controller implements IController {
   private thumbOnUp() {
     document.removeEventListener('mousemove', this.thumbOnMove);
     document.removeEventListener('mouseup', this.thumbOnUp);
+
+    const thumb = this._view.getThumb();
+    if (Array.isArray(thumb) && this._activeThumb) {
+      if (this._activeThumb.isEqualNode(thumb[0])) {
+        const zIndex: number = window.getComputedStyle(thumb[1]).zIndex === 'auto'
+          ? 0 : +window.getComputedStyle(thumb[1]).zIndex;
+        this._activeThumb.style.zIndex = String(zIndex + 1);
+      } else {
+        const zIndex: number = window.getComputedStyle(thumb[0]).zIndex === 'auto'
+          ? 0 : +window.getComputedStyle(thumb[0]).zIndex;
+        this._activeThumb.style.zIndex = String(zIndex + 1);
+      }
+    }
 
     document.addEventListener('mouseup', this.removeActiveThumb);
   }

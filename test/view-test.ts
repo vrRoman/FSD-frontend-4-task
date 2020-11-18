@@ -14,14 +14,14 @@ describe('View methods', () => {
     modelOptions = {
       value: [2, 15],
       range: true,
-      stepSize: 2,
+      stepSize: 1,
       min: 0,
       max: 20,
     };
     viewOptions = {
       length: '200px',
       tooltip: false,
-      stepsInfo: false,
+      stepsInfo: true,
       valueInfo: false,
       vertical: false,
     };
