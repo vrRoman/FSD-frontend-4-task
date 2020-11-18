@@ -19,7 +19,7 @@ describe('Controller', () => {
       max: 20,
     };
     viewOptions = {
-      length: '200px',
+      length: '100%',
       tooltip: false,
       stepsInfo: false,
       valueInfo: false,

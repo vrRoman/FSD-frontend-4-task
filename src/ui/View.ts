@@ -154,9 +154,9 @@ export default class View implements IView {
   }
   getLength(): number {
     if (this.getVertical()) {
-      return +this.getBar().clientHeight;
+      return +this.getBar().offsetHeight;
     }
-    return +this.getBar().clientWidth;
+    return +this.getBar().offsetWidth;
   }
   getVertical(): boolean {
     return this._vertical;
@@ -481,7 +481,8 @@ export default class View implements IView {
 
       for (let i = 0; i < numOfSteps; i += 1) {
         steps.push(
-          this.getModel().min + ((this.getModel().getMaxDiapason() / (numOfSteps - 1)) * i),
+          this.getModel().min
+          + +((this.getModel().getMaxDiapason() / (numOfSteps - 1)) * i).toFixed(3),
         );
       }
     } else if (Array.isArray(stepsInfoSettings)) {
@@ -496,9 +497,9 @@ export default class View implements IView {
       stepElem.style.position = 'absolute';
       stepsInfo.appendChild(stepElem);
       if (this.getVertical()) {
-        stepElem.style.top = `${position - stepElem.clientHeight / 2}px`;
+        stepElem.style.top = `${position - stepElem.offsetHeight / 2}px`;
       } else {
-        stepElem.style.left = `${position - stepElem.clientWidth / 2}px`;
+        stepElem.style.left = `${position - stepElem.offsetWidth / 2}px`;
       }
     }
 

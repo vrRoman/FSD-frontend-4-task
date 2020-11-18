@@ -110,10 +110,10 @@ export default class Controller implements IController {
 
   private onKeydown(evt: KeyboardEvent): void {
     if (evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
-      || evt.key === 'KeyD' || evt.key === 'KeyS') {
+      || evt.key === 'd' || evt.key === 's') {
       this.addStepsToActiveThumb(1);
     } else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
-      || evt.key === 'KeyA' || evt.key === 'KeyW') {
+      || evt.key === 'a' || evt.key === 'w') {
       this.addStepsToActiveThumb(-1);
     }
   }
