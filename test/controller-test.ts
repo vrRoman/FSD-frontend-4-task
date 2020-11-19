@@ -24,6 +24,7 @@ describe('Controller', () => {
       stepsInfo: false,
       valueInfo: false,
       vertical: false,
+      responsive: true,
     };
     controllerOptions = {
       useKeyboard: true,

@@ -24,6 +24,7 @@ describe('View methods', () => {
       stepsInfo: true,
       valueInfo: false,
       vertical: false,
+      responsive: true,
     };
     controllerOptions = {
       useKeyboard: true,

@@ -5,7 +5,6 @@
   line-height: 12px;
   position: relative;
   margin: 60px 15px;
-  width: 50vw;
 
   &__bar {
     background-color: #e5e5e5;
@@ -52,6 +51,8 @@
 
 
 .slider:not(.slider_vertical) {
+  width: 50vw;
+
   .slider__bar {
     height: 5px;
   }
@@ -75,6 +76,8 @@
   }
 }
 .slider.slider_vertical {
+  height: 50vw;
+
   .slider__bar {
     width: 5px;
   }

@@ -6,6 +6,7 @@ export interface ViewOptions {
   stepsInfo: boolean | Array<number | string> | number
   valueInfo: boolean
   vertical: boolean
+  responsive: boolean
 
   sliderClass?: string
   sliderVerticalClass?: string
@@ -29,17 +30,22 @@ export interface IView {
   stepsInfoClass: string
   valueInfoClass: string
 
+  getResponsive(): boolean
+  changeResponsive(newResponsive: boolean): boolean
+
   createSlider(): HTMLElement
 
   createBar(): HTMLElement
   createProgressBar(): HTMLElement
   updateProgressBar(): void
   createThumb(): HTMLElement | Array<HTMLElement>
+  updateThumb(): void
 
   createTooltip(): HTMLElement | Array<HTMLElement> | undefined
   removeTooltip(): void
 
   createStepsInfo(): HTMLElement | undefined
+  updateStepsInfo(): void
   removeStepsInfo(): void
 
   createValueInfo(): HTMLElement
@@ -81,6 +87,8 @@ export default class View implements IView {
   stepsInfoClass: string
   valueInfoClass: string
 
+  private _responsive: boolean
+  private _lastLength: number
   private readonly _model: IModel
   private _parent: Element
   private _slider: HTMLElement
@@ -109,6 +117,8 @@ export default class View implements IView {
 
     this._length = viewOptions.length;
 
+    this._responsive = viewOptions.responsive;
+
     this._vertical = viewOptions.vertical;
     this._stepsInfoSettings = viewOptions.stepsInfo;
 
@@ -120,8 +130,37 @@ export default class View implements IView {
     this._tooltip = viewOptions.tooltip ? this.createTooltip() : undefined;
     this._stepsInfo = viewOptions.stepsInfo ? this.createStepsInfo() : undefined;
     this._valueInfo = viewOptions.valueInfo ? this.createValueInfo() : undefined;
+
+    this.onWindowResize = this.onWindowResize.bind(this);
+
+    this._lastLength = this.getLength();
+    if (this._responsive) {
+      window.addEventListener('resize', this.onWindowResize);
+    }
   }
 
+  getResponsive(): boolean {
+    return this._responsive;
+  }
+  changeResponsive(newResponsive: boolean): boolean {
+    if (this._responsive !== newResponsive) {
+      if (newResponsive) {
+        window.addEventListener('resize', this.onWindowResize);
+      } else {
+        window.removeEventListener('resize', this.onWindowResize);
+      }
+    }
+    return this.getResponsive();
+  }
+  private onWindowResize(): void {
+    if (this.getLength() !== this._lastLength) {
+      this.updateProgressBar();
+      this.updateThumb();
+      this.updateStepsInfo();
+
+      this._lastLength = this.getLength();
+    }
+  }
 
 
   getModel(): IModel {
@@ -191,47 +230,11 @@ export default class View implements IView {
       this.getBar().style.width = this._length;
     }
 
-    const thumbPosition = this.getThumbPosition();
-    const thumb = this.getThumb();
-    const progressBar = this.getProgressBar();
-    const stepsInfo = this.getStepsInfo();
+    this.updateThumb();
 
-    if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
-      if (this.getVertical()) {
-        thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
-      } else {
-        thumb.style.left = `${thumbPosition - thumb.offsetWidth / 2}px`;
-      }
-    } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
-      for (let i = 0; i <= 1; i += 1) {
-        if (this.getVertical()) {
-          thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
-        } else {
-          thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetWidth / 2}px`;
-        }
-      }
-    }
+    this.updateProgressBar();
 
-    if (typeof thumbPosition === 'number') {
-      if (this.getVertical()) {
-        progressBar.style.height = `${thumbPosition}px`;
-      } else {
-        progressBar.style.width = `${thumbPosition}px`;
-      }
-    } else {
-      if (this.getVertical()) {
-        progressBar.style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
-        progressBar.style.top = `${thumbPosition[0]}px`;
-      } else {
-        progressBar.style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
-        progressBar.style.left = `${thumbPosition[0]}px`;
-      }
-    }
-
-    if (stepsInfo) {
-      stepsInfo.remove();
-      this.createStepsInfo();
-    }
+    this.updateStepsInfo();
 
     return this.getLength();
   }
@@ -408,6 +411,27 @@ export default class View implements IView {
     }
     return this._thumb;
   }
+  updateThumb() {
+    const thumbPosition = this.getThumbPosition();
+    const thumb = this.getThumb();
+
+    if (typeof thumbPosition === 'number' && !Array.isArray(thumb)) {
+      if (this.getVertical()) {
+        thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
+      } else {
+        thumb.style.left = `${thumbPosition - thumb.offsetWidth / 2}px`;
+      }
+    } else if (Array.isArray(thumbPosition) && Array.isArray(thumb)) {
+      for (let i = 0; i <= 1; i += 1) {
+        if (this.getVertical()) {
+          thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+        } else {
+          thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetWidth / 2}px`;
+        }
+      }
+    }
+  }
+
 
 
   createTooltip(): HTMLElement | Array<HTMLElement> | undefined {
@@ -506,6 +530,24 @@ export default class View implements IView {
     this._stepsInfo = stepsInfo;
     return stepsInfo;
   }
+  updateStepsInfo() {
+    const stepsInfo = this.getStepsInfo();
+
+    if (stepsInfo) {
+      const stepElems = Array.from(stepsInfo.children) as HTMLElement[];
+
+      for (let i = 0; i < stepElems.length; i += 1) {
+        const position = (this.getLength() / (stepElems.length - 1)) * i;
+
+        if (this.getVertical()) {
+          stepElems[i].style.top = `${position - stepElems[i].offsetHeight / 2}px`;
+        } else {
+          stepElems[i].style.left = `${position - stepElems[i].offsetWidth / 2}px`;
+        }
+      }
+    }
+  }
+
   removeStepsInfo(): void {
     const stepsInfo = this.getStepsInfo();
     if (stepsInfo) {
