@@ -40,7 +40,7 @@ describe('Controller', () => {
   it('getStepLength', () => {
     expect(controller.getStepLength()).toBe(
       view.getLength()
-      / ((model.max - model.min) / model.stepSize),
+      / ((model.getMax() - model.getMin()) / model.getStepSize()),
     );
   });
 });

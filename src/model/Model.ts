@@ -9,25 +9,27 @@ export interface ModelOptions {
 }
 
 export interface IModel {
-  stepSize: number
-  max: number
-  min: number
-
   setValue(newValue: Value): Value
   setRange(newRange: boolean): boolean
+  setStepSize(newStepSize: number): number
   addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1): Value
   checkAndFixValue(): Value
+  checkAndFixStepSize(): number
+  checkAndFixMinMax(): number[]
   getValue(): Value
   getRange(): boolean
+  getStepSize(): number
+  getMin(): number
+  getMax(): number
   getMaxDiapason(): number
 }
 
 export default class Model implements IModel {
   private value: Value
   private range: boolean
-  stepSize: number
-  max: number
-  min: number
+  private stepSize: number
+  private max: number
+  private min: number
 
   constructor(options: ModelOptions) {
     this.max = options.max;
@@ -35,66 +37,36 @@ export default class Model implements IModel {
 
     this.value = options.value;
 
-    // Если макс. значение > мин., то поменять местами.
-    if (this.max < this.min) {
-      [this.max, this.min] = [this.min, this.max];
-    }
+    this.checkAndFixMinMax();
 
-    // Если значение - одно число и это диапазон, то значение становится
-    // массивом с двумя одинаковыми значениями.
-    // Если значение - массив и это не диапазон, то значением становится
-    // первый элемент массива.
     this.range = options.range;
-    if (this.range) {
-      if (typeof this.value === 'number') {
-        this.value = [this.value, this.value];
-      }
-    } else if (Array.isArray(this.value)) {
-      [this.value] = this.value;
-    }
 
-    // Если это диапазон и первое значение больше второго, поменять их местами.
-    // Если значения больше максимального, то
-    // приравнять с максимальным, и наоборот для минимального.
     this.checkAndFixValue();
 
-    // Если размер шага <= 0, то он равен 1.
-    // Если размер шага > наибольшего диапазона значений, то он равняется
-    // разнице максимального значения и минимального.
     this.stepSize = options.stepSize;
-    if (this.stepSize <= 0) {
-      this.stepSize = 1;
-    }
-    if (this.stepSize > this.max - this.min) {
-      this.stepSize = this.max - this.min;
-    }
+    this.checkAndFixStepSize();
   }
 
-  // Изменяет текущее значение.
-  // Если значение - число, а новое - массив, то берется первое число массива.
-  // Если значение - массив, а новое - число, то значение = массиву с двумя
-  // одинаковыми значениями.
+  // Изменяет текущее значение и вызывает checkAndFixValue
   setValue(newValue: Value): Value {
-    if (typeof this.value === 'number') {
-      if (typeof newValue === 'number') {
-        this.value = newValue;
-      } else {
-        [this.value] = newValue;
-      }
-    } else if (typeof newValue !== 'number') {
-      this.value = newValue;
-    } else {
-      this.value = [newValue, newValue];
-    }
+    this.value = newValue;
 
     this.checkAndFixValue();
 
     return this.value;
   }
+  // Меняет range и вызывает checkAndFixValue
   setRange(newRange: boolean): boolean {
     this.range = newRange;
     this.checkAndFixValue();
     return this.range;
+  }
+  // Меняет stepSize и вызывает checkAndFixStepSize
+  setStepSize(newStepSize: number): number {
+    this.stepSize = newStepSize;
+    this.checkAndFixStepSize();
+
+    return this.stepSize;
   }
 
   // Добавляет указанное количество шагов к нужному значению(если не
@@ -116,14 +88,25 @@ export default class Model implements IModel {
     }
 
     this.checkAndFixValue();
-
     return this.value;
   }
 
+  // Если значение - одно число и это диапазон, то значение становится
+  // массивом с двумя одинаковыми значениями.
+  // Если значение - массив и это не диапазон, то значением становится
+  // первый элемент массива.
   // Если это диапазон и первое значение больше второго, поменять их местами.
   // Если значения больше максимального, то
   // приравнять с максимальным, и наоборот для минимального.
   checkAndFixValue(): Value {
+    if (this.range) {
+      if (typeof this.value === 'number') {
+        this.value = [this.value, this.value];
+      }
+    } else if (Array.isArray(this.value)) {
+      [this.value] = this.value;
+    }
+
     if (typeof this.value !== 'number') {
       if (this.value[0] > this.value[1]) {
         this.value = [this.value[1], this.value[0]];
@@ -152,6 +135,30 @@ export default class Model implements IModel {
     return this.value;
   }
 
+  // Если размер шага <= 0, то он равен 1.
+  // Если размер шага > наибольшего диапазона значений, то он равняется
+  // разнице максимального значения и минимального.
+  checkAndFixStepSize(): number {
+    if (this.stepSize < 0) {
+      this.stepSize = 1;
+    }
+    if (this.stepSize > this.max - this.min) {
+      this.stepSize = this.max - this.min;
+    }
+
+    return this.stepSize;
+  }
+
+  // Если макс. значение > мин., то поменять местами.
+  checkAndFixMinMax(): number[] {
+    if (this.max < this.min) {
+      [this.max, this.min] = [this.min, this.max];
+    }
+
+    return [this.min, this.max];
+  }
+
+
   getValue(): Value {
     if (typeof this.value === 'number') {
       return this.value;
@@ -161,7 +168,17 @@ export default class Model implements IModel {
   getRange(): boolean {
     return this.range;
   }
+  getMin(): number {
+    return this.min;
+  }
+  getMax(): number {
+    return this.max;
+  }
+  // Возвращает max - min
   getMaxDiapason(): number {
     return this.max - this.min;
+  }
+  getStepSize(): number {
+    return this.stepSize;
   }
 }

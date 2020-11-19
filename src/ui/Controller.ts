@@ -89,12 +89,12 @@ export default class Controller implements IController {
 
           const stepValue = (
               parseFloat(stepElems[i].style.left) + stepElems[i].offsetWidth / 2
-            ) / (this.getStepLength() / this._model.stepSize);
+            ) / (this.getStepLength() / this._model.getStepSize());
           const thumbValue = (
               parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
-            ) / (this.getStepLength() / this._model.stepSize);
+            ) / (this.getStepLength() / this._model.getStepSize());
 
-          this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.stepSize);
+          this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.getStepSize());
           this.removeActiveThumb();
         });
       }
@@ -129,8 +129,8 @@ export default class Controller implements IController {
   }
 
   getStepLength(): number {
-    const numOfSteps = (this._model.max - this._model.min)
-      / this._model.stepSize;
+    const numOfSteps = (this._model.getMax() - this._model.getMin())
+      / this._model.getStepSize();
     return this._view.getLength() / numOfSteps;
   }
 

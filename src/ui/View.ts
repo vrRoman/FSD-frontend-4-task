@@ -505,7 +505,7 @@ export default class View implements IView {
 
       for (let i = 0; i < numOfSteps; i += 1) {
         steps.push(
-          this.getModel().min
+          this.getModel().getMin()
           + +((this.getModel().getMaxDiapason() / (numOfSteps - 1)) * i).toFixed(3),
         );
       }
