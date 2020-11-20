@@ -134,7 +134,6 @@ export default class Controller implements IController {
   // thumbOnMove, thumbOnUp и убирает слушатель
   // document-mouseup-removeActiveThumb
   private thumbOnDown(evt: MouseEvent): void {
-    // vertical ?
     evt.preventDefault();
     evt.stopPropagation();
 

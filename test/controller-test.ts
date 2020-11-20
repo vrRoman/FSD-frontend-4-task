@@ -7,7 +7,7 @@ import Controller, { IController, ControllerOptions } from '../src/ui/Controller
 
 const defaultModelOptions: ModelOptions = {
   value: 0,
-  range: true,
+  range: false,
   stepSize: 1,
   min: 0,
   max: 10,
@@ -91,9 +91,11 @@ describe('Controller methods', () => {
     console.log('SetActiveThumb range false: ', view.getSlider());
     expect(controller.getActiveThumb()).toBeDefined();
 
+    model = new Model(defaultModelOptions);
+    model.setRange(true);
     view = new View(model, defaultViewOptions, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
-    controller.setActiveThumb(0);
+    controller.setActiveThumb();
     console.log('SetActiveThumb with range true', view.getSlider());
     expect(controller.getActiveThumb()).toBeDefined();
   });
@@ -160,5 +162,17 @@ describe('Controller with different options in model and view', () => {
       responsive: true,
     }, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
+  });
+
+  it('onChange', () => {
+    model = new Model(defaultModelOptions);
+    view = new View(model, defaultViewOptions, document.body);
+    controller = new Controller(model, view, {
+      ...defaultControllerOptions,
+      onChange: () => {
+        console.log(model.getValue());
+      },
+    });
+    console.log('onChange: ', view.getSlider());
   });
 });

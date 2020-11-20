@@ -544,12 +544,13 @@ export default class View implements IView {
   // Если stepsInfoSettings заданы как false, то переназначает на true
   createStepsInfo(): HTMLElement | undefined {
     const stepsInfo = document.createElement('div');
-    const stepsInfoSettings = this.getStepsInfoSettings();
+    let stepsInfoSettings = this.getStepsInfoSettings();
 
     this.getBar().appendChild(stepsInfo);
 
     if (!stepsInfoSettings) {
       this._stepsInfoSettings = true;
+      stepsInfoSettings = this.getStepsInfoSettings();
     }
     if (Array.isArray(this.stepsInfoClass)) {
       stepsInfo.classList.add(...this.stepsInfoClass);
