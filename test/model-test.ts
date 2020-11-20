@@ -35,7 +35,7 @@ describe('model get methods and props', () => {
 });
 
 
-describe('value, stepSize, min/max checking', () => {
+describe('Model value, stepSize, min/max checking', () => {
   it('value is array when range = true', () => {
     const options: ModelOptions = {
       ...defaultOptions,

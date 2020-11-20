@@ -1,3 +1,5 @@
+// Многие тесты для controller будут проверяться в браузере
+
 import View, { IView, ViewOptions } from '../src/ui/View';
 import Model, { IModel, ModelOptions } from '../src/model/Model';
 import Controller, { IController, ControllerOptions } from '../src/ui/Controller';
@@ -8,7 +10,7 @@ let controllerOptions: ControllerOptions;
 let model: IModel;
 let view: IView;
 let controller: IController;
-
+//еще добавить при смене размера и responsive
 describe('Controller', () => {
   beforeEach(() => {
     modelOptions = {

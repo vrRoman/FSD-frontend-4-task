@@ -48,6 +48,12 @@
                 "max-len": "off",
                 "semi": "off"
             }
+        },
+        {
+            "files": ["test/**/*.ts"],
+            "rules": {
+                "no-console": "off"
+            }
         }
     ]
 }

@@ -50,9 +50,12 @@
 }
 
 
-.slider:not(.slider_vertical) {
-  width: 50vw;
+.slider.slider_without-controller {
+  opacity: .4;
+}
 
+
+.slider:not(.slider_vertical) {
   .slider__bar {
     height: 5px;
   }
@@ -76,8 +79,6 @@
   }
 }
 .slider.slider_vertical {
-  height: 50vw;
-
   .slider__bar {
     width: 5px;
   }

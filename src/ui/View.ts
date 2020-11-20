@@ -1,37 +1,46 @@
 import { IModel } from '../model/Model';
 
 export interface ViewOptions {
+  // Длина слайдера(в любых единицах измерения)
   length: string
+  // Наличие подсказки у ползунков
   tooltip: boolean
+  // Наличие шкалы значений
+  // False - отсутствует
+  // True - показывает 5 чисел в шкале значений
+  // Number - показывает number чисел в шкале значений
+  // Array - показывает array.length значений(любых) по порядку в шкале значений
   stepsInfo: boolean | Array<number | string> | number
+  // Элемент с текущим значением
   valueInfo: boolean
+  // Вертикальный слайдер
   vertical: boolean
+  // Отзывчивость слайдера. Рекомендуется отключать(false), если length задана в
+  // статических ед. измерения(например, px)
   responsive: boolean
 
-  sliderClass?: string
-  sliderVerticalClass?: string
-  barClass?: string
-  progressBarClass?: string
-  thumbClass?: string
-  activeThumbClass?: string
-  tooltipClass?: string
-  stepsInfoClass?: string
-  valueInfoClass?: string
+  // Классы элементов слайдера
+  sliderClass?: string | string[]
+  sliderVerticalClass?: string | string[]
+  barClass?: string | string[]
+  progressBarClass?: string | string[]
+  thumbClass?: string | string[]
+  activeThumbClass?: string | string[]
+  tooltipClass?: string | string[]
+  stepsInfoClass?: string | string[]
+  valueInfoClass?: string | string[]
 }
 
 export interface IView {
-  sliderClass: string
-  sliderVerticalClass: string
-  barClass: string
-  progressBarClass: string
-  thumbClass: string
-  activeThumbClass: string
-  tooltipClass: string
-  stepsInfoClass: string
-  valueInfoClass: string
-
-  getResponsive(): boolean
-  changeResponsive(newResponsive: boolean): boolean
+  sliderClass: string | string[]
+  sliderVerticalClass: string | string[]
+  barClass: string | string[]
+  progressBarClass: string | string[]
+  thumbClass: string | string[]
+  activeThumbClass: string | string[]
+  tooltipClass: string | string[]
+  stepsInfoClass: string | string[]
+  valueInfoClass: string | string[]
 
   createSlider(): HTMLElement
 
@@ -51,7 +60,6 @@ export interface IView {
   createValueInfo(): HTMLElement
   removeValueInfo(): void
 
-  getModel(): IModel
   getParent(): Element
   getSlider(): HTMLElement
 
@@ -67,9 +75,11 @@ export interface IView {
 
   getValueInfo(): HTMLElement | undefined
 
+  getResponsive(): boolean
   getLength(): number
   getVertical(): boolean
 
+  changeResponsive(newResponsive: boolean): boolean
   changeLength(newLength: string): number
   changeVertical(newVertical: boolean): boolean
   changeStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number)
@@ -77,15 +87,15 @@ export interface IView {
 }
 
 export default class View implements IView {
-  sliderClass: string
-  sliderVerticalClass: string
-  barClass: string
-  progressBarClass: string
-  thumbClass: string
-  activeThumbClass: string
-  tooltipClass: string
-  stepsInfoClass: string
-  valueInfoClass: string
+  sliderClass: string | string[]
+  sliderVerticalClass: string | string[]
+  barClass: string | string[]
+  progressBarClass: string | string[]
+  thumbClass: string | string[]
+  activeThumbClass: string | string[]
+  tooltipClass: string | string[]
+  stepsInfoClass: string | string[]
+  valueInfoClass: string | string[]
 
   private _responsive: boolean
   private _lastLength: number
@@ -139,9 +149,12 @@ export default class View implements IView {
     }
   }
 
+  // Возвращает значение responsive
   getResponsive(): boolean {
     return this._responsive;
   }
+  // Изменяет значение responsive, добавляет/убирает слушатели window resize
+  // Возвращает новое значение responsive
   changeResponsive(newResponsive: boolean): boolean {
     if (this._responsive !== newResponsive) {
       if (newResponsive) {
@@ -149,9 +162,11 @@ export default class View implements IView {
       } else {
         window.removeEventListener('resize', this.onWindowResize);
       }
+      this._responsive = newResponsive;
     }
     return this.getResponsive();
   }
+  // Используется в слушателях window-resize
   private onWindowResize(): void {
     if (this.getLength() !== this._lastLength) {
       this.updateProgressBar();
@@ -162,8 +177,7 @@ export default class View implements IView {
     }
   }
 
-
-  getModel(): IModel {
+  private getModel(): IModel {
     return this._model;
   }
   getSlider(): HTMLElement {
@@ -178,7 +192,6 @@ export default class View implements IView {
   getProgressBar(): HTMLElement {
     return this._progressBar;
   }
-
   getThumb(): HTMLElement | Array<HTMLElement> {
     return this._thumb;
   }
@@ -191,6 +204,8 @@ export default class View implements IView {
   getValueInfo(): HTMLElement | undefined {
     return this._valueInfo;
   }
+
+  // Возвращает длину слайдер-бара в px
   getLength(): number {
     if (this.getVertical()) {
       return +this.getBar().offsetHeight;
@@ -200,9 +215,11 @@ export default class View implements IView {
   getVertical(): boolean {
     return this._vertical;
   }
+  // Возвращает заданные настройки stepsInfo
   getStepsInfoSettings(): boolean | Array<number | string> | number {
     return this._stepsInfoSettings;
   }
+  // Возвращает нужное положение ползунка(ов), исходя из значений модели
   getThumbPosition(): number | number[] {
     const value = this.getModel().getValue();
     let thumbPosition;
@@ -220,7 +237,8 @@ export default class View implements IView {
   }
 
 
-  // Изменяет длину слайдера, меняет значения ширины / высоты слайдера
+  // Изменяет ширину/высоту слайдера, обновляет положение элементов
+  // слайдера, возвращает новую длину
   changeLength(newLength: string): number {
     this._length = newLength;
 
@@ -239,6 +257,7 @@ export default class View implements IView {
     return this.getLength();
   }
 
+  // Меняет положение всех элементов на новое значение vertical и возвращает его
   changeVertical(newVertical: boolean): boolean {
     this._vertical = newVertical;
 
@@ -247,7 +266,11 @@ export default class View implements IView {
     if (!this._vertical) {
       this.getBar().style.width = this._length;
       this.getBar().style.height = '';
-      this.getSlider().classList.remove(this.sliderVerticalClass);
+      if (Array.isArray(this.sliderVerticalClass)) {
+        this.getSlider().classList.remove(...this.sliderVerticalClass);
+      } else {
+        this.getSlider().classList.remove(this.sliderVerticalClass);
+      }
       const thumb = this.getThumb();
       const thumbPosition = this.getThumbPosition();
       const progressBar = this.getProgressBar();
@@ -274,7 +297,11 @@ export default class View implements IView {
     } else {
       this.getBar().style.height = this._length;
       this.getBar().style.width = '';
-      this.getSlider().classList.add(this.sliderVerticalClass);
+      if (Array.isArray(this.sliderVerticalClass)) {
+        this.getSlider().classList.add(...this.sliderVerticalClass);
+      } else {
+        this.getSlider().classList.add(this.sliderVerticalClass);
+      }
       const thumb = this.getThumb();
       const thumbPosition = this.getThumbPosition();
       const progressBar = this.getProgressBar();
@@ -308,24 +335,35 @@ export default class View implements IView {
     return this._vertical;
   }
 
-
-
-
+  // Создает и возвращает слайдер в this._parent
   createSlider(): HTMLElement {
     const slider = document.createElement('div');
-    slider.classList.add(this.sliderClass);
+    if (Array.isArray(this.sliderClass)) {
+      slider.classList.add(...this.sliderClass);
+    } else {
+      slider.classList.add(this.sliderClass);
+    }
 
     if (this.getVertical()) {
-      slider.classList.add(this.sliderVerticalClass);
+      if (Array.isArray(this.sliderVerticalClass)) {
+        slider.classList.add(...this.sliderVerticalClass);
+      } else {
+        slider.classList.add(this.sliderVerticalClass);
+      }
     }
 
     this._parent.appendChild(slider);
 
     return slider;
   }
+  // Создает и возвращает бар в this._slider
   createBar(): HTMLElement {
     const bar = document.createElement('div');
-    bar.classList.add(this.barClass);
+    if (Array.isArray(this.barClass)) {
+      bar.classList.add(...this.barClass);
+    } else {
+      bar.classList.add(this.barClass);
+    }
     bar.style.position = 'relative';
 
     if (!this._vertical) {
@@ -337,11 +375,16 @@ export default class View implements IView {
     this.getSlider().appendChild(bar);
     return bar;
   }
+  // Создает и возвращает прогресс-бар в баре
   createProgressBar(): HTMLElement {
     const progressBar = document.createElement('div');
     this.getBar().appendChild(progressBar);
 
-    progressBar.classList.add(this.progressBarClass);
+    if (Array.isArray(this.progressBarClass)) {
+      progressBar.classList.add(...this.progressBarClass);
+    } else {
+      progressBar.classList.add(this.progressBarClass);
+    }
     progressBar.style.position = 'absolute';
 
     this._progressBar = progressBar;
@@ -350,6 +393,7 @@ export default class View implements IView {
 
     return progressBar;
   }
+  // Обновляет положение прогресс-бара
   updateProgressBar(): void {
     const thumbPosition = this.getThumbPosition();
 
@@ -371,6 +415,7 @@ export default class View implements IView {
       }
     }
   }
+  // Создает и возвращает ползунок(ки) в баре
   createThumb(): HTMLElement | Array<HTMLElement> {
     const thumbPosition = this.getThumbPosition();
 
@@ -378,7 +423,11 @@ export default class View implements IView {
     if (typeof thumbPosition === 'number') {
       const thumb = document.createElement('div');
 
-      thumb.classList.add(this.thumbClass);
+      if (Array.isArray(this.thumbClass)) {
+        thumb.classList.add(...this.thumbClass);
+      } else {
+        thumb.classList.add(this.thumbClass);
+      }
       thumb.style.position = 'absolute';
 
       this.getBar().appendChild(thumb);
@@ -394,7 +443,11 @@ export default class View implements IView {
       this._thumb = [];
       for (let i = 0; i <= 1; i += 1) {
         const thumb = document.createElement('div');
-        thumb.classList.add(this.thumbClass);
+        if (Array.isArray(this.thumbClass)) {
+          thumb.classList.add(...this.thumbClass);
+        } else {
+          thumb.classList.add(this.thumbClass);
+        }
         thumb.style.position = 'absolute';
         thumb.dataset.number = String(i);
 
@@ -411,6 +464,7 @@ export default class View implements IView {
     }
     return this._thumb;
   }
+  // Обновляет положение ползунков
   updateThumb() {
     const thumbPosition = this.getThumbPosition();
     const thumb = this.getThumb();
@@ -432,8 +486,7 @@ export default class View implements IView {
     }
   }
 
-
-
+  // Создает и возвращает подсказки в ползунках
   createTooltip(): HTMLElement | Array<HTMLElement> | undefined {
     const thumb = this.getThumb();
     const value = this.getModel().getValue();
@@ -442,7 +495,11 @@ export default class View implements IView {
       this._tooltip = [];
       for (let i = 0; i <= 1; i += 1) {
         const tooltip = document.createElement('div');
-        tooltip.classList.add(this.tooltipClass);
+        if (Array.isArray(this.tooltipClass)) {
+          tooltip.classList.add(...this.tooltipClass);
+        } else {
+          tooltip.classList.add(this.tooltipClass);
+        }
 
         if (Array.isArray(value)) {
           tooltip.innerHTML = `<div>${value[i]}</div>`;
@@ -453,7 +510,11 @@ export default class View implements IView {
       }
     } else {
       const tooltip = document.createElement('div');
-      tooltip.classList.add(this.tooltipClass);
+      if (Array.isArray(this.tooltipClass)) {
+        tooltip.classList.add(...this.tooltipClass);
+      } else {
+        tooltip.classList.add(this.tooltipClass);
+      }
 
       if (!Array.isArray(value)) {
         tooltip.innerHTML = `<div>${value}</div>`;
@@ -464,6 +525,7 @@ export default class View implements IView {
     }
     return this._tooltip;
   }
+  // Удаляет подсказки
   removeTooltip(): void {
     const tooltip = this.getTooltip();
 
@@ -477,7 +539,9 @@ export default class View implements IView {
 
     this._tooltip = undefined;
   }
-  
+
+  // Создает шкалу значений в зависимости от текущих настроек stepsInfo.
+  // Если stepsInfoSettings заданы как false, то переназначает на true
   createStepsInfo(): HTMLElement | undefined {
     const stepsInfo = document.createElement('div');
     const stepsInfoSettings = this.getStepsInfoSettings();
@@ -487,7 +551,11 @@ export default class View implements IView {
     if (!stepsInfoSettings) {
       this._stepsInfoSettings = true;
     }
-    stepsInfo.classList.add(this.stepsInfoClass);
+    if (Array.isArray(this.stepsInfoClass)) {
+      stepsInfo.classList.add(...this.stepsInfoClass);
+    } else {
+      stepsInfo.classList.add(this.stepsInfoClass);
+    }
 
     if (this.getVertical()) {
       stepsInfo.style.height = `${this.getLength()}px`;
@@ -530,6 +598,7 @@ export default class View implements IView {
     this._stepsInfo = stepsInfo;
     return stepsInfo;
   }
+  // Обновляет положение элементов шкалы значений
   updateStepsInfo() {
     const stepsInfo = this.getStepsInfo();
 
@@ -547,7 +616,7 @@ export default class View implements IView {
       }
     }
   }
-
+  // Удаляет шкалу значений
   removeStepsInfo(): void {
     const stepsInfo = this.getStepsInfo();
     if (stepsInfo) {
@@ -555,6 +624,7 @@ export default class View implements IView {
       this._stepsInfo = undefined;
     }
   }
+  // Меняет настройки шкалы значений и обновляет ее
   changeStepsInfoSettings(newStepsInfoSettings
                             : boolean | Array<number | string> | number): HTMLElement | undefined {
     this._stepsInfoSettings = newStepsInfoSettings;
@@ -563,11 +633,17 @@ export default class View implements IView {
     return this.createStepsInfo();
   }
 
+  // Создает элемент с текущим значением. По умолчанию, если range=false, то
+  // указывается просто model.value, иначе записывается в виде value[0] - value[1]
   createValueInfo(): HTMLElement {
     const valueInfo = document.createElement('div');
     const value = this.getModel().getValue();
 
-    valueInfo.classList.add(this.valueInfoClass);
+    if (Array.isArray(this.valueInfoClass)) {
+      valueInfo.classList.add(...this.valueInfoClass);
+    } else {
+      valueInfo.classList.add(this.valueInfoClass);
+    }
 
     this.getSlider().appendChild(valueInfo);
 
@@ -580,6 +656,7 @@ export default class View implements IView {
     this._valueInfo = valueInfo;
     return valueInfo;
   }
+  // Удаляет элемент со значением
   removeValueInfo(): void {
     if (this._valueInfo) {
       this._valueInfo.remove();

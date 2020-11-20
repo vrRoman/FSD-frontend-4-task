@@ -1,7 +1,7 @@
 import { IModel } from '../model/Model';
 import { IView } from './View';
 
-
+// добавить interactiveStepsInfo в options
 export interface ControllerOptions {
   useKeyboard: boolean
   onChange?: Function
@@ -123,7 +123,11 @@ export default class Controller implements IController {
   }
   removeActiveThumb(): void {
     if (this._activeThumb) {
-      this._activeThumb.classList.remove(this._view.activeThumbClass);
+      if (Array.isArray(this._view.activeThumbClass)) {
+        this._activeThumb.classList.remove(...this._view.activeThumbClass);
+      } else {
+        this._activeThumb.classList.remove(this._view.activeThumbClass);
+      }
       this._activeThumb = undefined;
     }
   }
@@ -214,7 +218,11 @@ export default class Controller implements IController {
     const target = <HTMLElement>evt.currentTarget;
     if (target) {
       if (this._activeThumb) {
-        this._activeThumb.classList.remove(this._view.activeThumbClass);
+        if (Array.isArray(this._view.activeThumbClass)) {
+          this._activeThumb.classList.remove(...this._view.activeThumbClass);
+        } else {
+          this._activeThumb.classList.remove(this._view.activeThumbClass);
+        }
         this._activeThumb.style.zIndex = '';
       }
 
@@ -228,7 +236,11 @@ export default class Controller implements IController {
         + this._view.getBar().getBoundingClientRect().left
         + this._activeThumb.offsetWidth / 2;
 
-      this._activeThumb.classList.add(this._view.activeThumbClass);
+      if (Array.isArray(this._view.activeThumbClass)) {
+        this._activeThumb.classList.add(...this._view.activeThumbClass);
+      } else {
+        this._activeThumb.classList.add(this._view.activeThumbClass);
+      }
     }
 
 
