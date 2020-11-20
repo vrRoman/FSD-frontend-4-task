@@ -114,48 +114,51 @@ describe('Controller methods', () => {
   });
 });
 
+describe('Controller with different options in model and view', () => {
+  let model: IModel;
+  let view: IView;
+  let controller: IController;
 
-
-
-// let modelOptions: ModelOptions;
-// let viewOptions: ViewOptions;
-// let controllerOptions: ControllerOptions;
-// let model: IModel;
-// let view: IView;
-// let controller: IController;
-// //еще добавить при смене размера и responsive
-// describe('Controller', () => {
-//   beforeEach(() => {
-//     modelOptions = {
-//       value: 2,
-//       range: false,
-//       stepSize: 2,
-//       min: 0,
-//       max: 20,
-//     };
-//     viewOptions = {
-//       length: '100%',
-//       tooltip: false,
-//       stepsInfo: false,
-//       valueInfo: false,
-//       vertical: false,
-//       responsive: true,
-//     };
-//     controllerOptions = {
-//       useKeyboard: true,
-//     };
-//     model = new Model(modelOptions);
-//     view = new View(model, viewOptions, document.body);
-//     controller = new Controller(model, view, controllerOptions);
-//   });
-//
-//   it('initialized', () => {
-//     expect(controller).toBeDefined();
-//   });
-//   it('getStepLength', () => {
-//     expect(controller.getStepLength()).toBe(
-//       view.getLength()
-//       / ((model.getMax() - model.getMin()) / model.getStepSize()),
-//     );
-//   });
-// });
+  it('View all true, vertical=false and responsive with %', () => {
+    model = new Model(defaultModelOptions);
+    view = new View(model, {
+      length: '80%',
+      vertical: false,
+      tooltip: true,
+      stepsInfo: true,
+      valueInfo: true,
+      responsive: true,
+    }, document.body);
+    controller = new Controller(model, view, defaultControllerOptions);
+  });
+  it('View all true, vertical=false and responsive with vh', () => {
+    model = new Model(defaultModelOptions);
+    view = new View(model, {
+      length: '30vh',
+      vertical: true,
+      tooltip: true,
+      stepsInfo: true,
+      valueInfo: true,
+      responsive: true,
+    }, document.body);
+    controller = new Controller(model, view, defaultControllerOptions);
+  });
+  it('model range true, stepSize', () => {
+    model = new Model({
+      value: [2, 8.25],
+      range: true,
+      stepSize: 3.5,
+      min: 0,
+      max: 12,
+    });
+    view = new View(model, {
+      length: '80%',
+      vertical: false,
+      tooltip: true,
+      stepsInfo: true,
+      valueInfo: true,
+      responsive: true,
+    }, document.body);
+    controller = new Controller(model, view, defaultControllerOptions);
+  });
+});
