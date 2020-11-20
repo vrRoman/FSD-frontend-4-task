@@ -1,20 +1,33 @@
 import { IModel } from '../model/Model';
 import { IView } from './View';
 
-// добавить interactiveStepsInfo в options
+
 export interface ControllerOptions {
+  // Если true, то при нажатии стрелок и ad активный ползунок будет перемещаться
   useKeyboard: boolean
+  // Если true, то шкала значений будет кликабельна и активный
+  // ползунок(если range=true, по умолчанию = thumb[1]) будет
+  // перемещаться на соответствующее значение
+  interactiveStepsInfo: boolean
+  // Будет выполняться при любом передвижении ползунка
   onChange?: Function
 }
 
 export interface IController {
   getActiveThumb(): HTMLElement | undefined
+  setActiveThumb(numOfThumb?: number): HTMLElement
   removeActiveThumb(): void
+
   getStepLength(): number
+  getUseKeyboard(): boolean
+  getInteractiveStepsInfo(): boolean
+
+  addStepsInfoInteractivity(): void
+  removeStepsInfoInteractivity(): void
+
   addKeyboardListener(): void
   removeKeyboardListener(): void
 
-  useKeyboard: boolean
   onChange: Function | undefined
 }
 
@@ -26,7 +39,8 @@ export default class Controller implements IController {
   private _clientX: number;
   private _clientY: number;
 
-  useKeyboard: boolean
+  private useKeyboard: boolean
+  private interactiveStepsInfo: boolean
 
   onChange: Function | undefined
 
@@ -39,6 +53,7 @@ export default class Controller implements IController {
     this._clientY = 0;
 
     this.useKeyboard = controllerOptions.useKeyboard;
+    this.interactiveStepsInfo = controllerOptions.interactiveStepsInfo;
 
     this._activeThumb = undefined;
 
@@ -49,6 +64,7 @@ export default class Controller implements IController {
     this.thumbOnMove = this.thumbOnMove.bind(this);
     this.removeActiveThumb = this.removeActiveThumb.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
+    this.stepElemOnDown = this.stepElemOnDown.bind(this);
 
     const thumb = this._view.getThumb();
     if (Array.isArray(thumb)) {
@@ -66,61 +82,7 @@ export default class Controller implements IController {
     this.addStepsInfoInteractivity();
   }
 
-  private addStepsInfoInteractivity(): void {
-    const stepsInfo = this._view.getStepsInfo();
-    if (stepsInfo) {
-      const stepElems = Array.from(stepsInfo.children) as HTMLElement[];
-      for (let i = 0; i < stepElems.length; i += 1) {
-        stepElems[i].addEventListener('mousedown', (evt) => {
-          evt.preventDefault();
-          evt.stopPropagation();
-
-          if (!this._activeThumb) {
-            const thumb = this._view.getThumb();
-            if (Array.isArray(thumb)) {
-              [, this._activeThumb] = thumb;
-              const zIndex: number = window.getComputedStyle(thumb[0]).zIndex === 'auto'
-                ? 0 : +window.getComputedStyle(thumb[0]).zIndex;
-              this._activeThumb.style.zIndex = String(zIndex + 1);
-            } else {
-              this._activeThumb = thumb;
-            }
-          }
-
-          const stepValue = (
-              parseFloat(stepElems[i].style.left) + stepElems[i].offsetWidth / 2
-            ) / (this.getStepLength() / this._model.getStepSize());
-          const thumbValue = (
-              parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
-            ) / (this.getStepLength() / this._model.getStepSize());
-
-          this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.getStepSize());
-          this.removeActiveThumb();
-        });
-      }
-    }
-  }
-
-  addKeyboardListener(): void {
-    document.addEventListener('keydown', this.onKeydown);
-  }
-  removeKeyboardListener() {
-    document.removeEventListener('keydown', this.onKeydown);
-  }
-
-  private onKeydown(evt: KeyboardEvent): void {
-    if (evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
-      || evt.key === 'd' || evt.key === 's') {
-      this.addStepsToActiveThumb(1);
-    } else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
-      || evt.key === 'a' || evt.key === 'w') {
-      this.addStepsToActiveThumb(-1);
-    }
-  }
-
-  getActiveThumb(): HTMLElement | undefined {
-    return this._activeThumb;
-  }
+  // Убирает класс активного ползунка и _activeThumb = undefined
   removeActiveThumb(): void {
     if (this._activeThumb) {
       if (Array.isArray(this._view.activeThumbClass)) {
@@ -132,12 +94,181 @@ export default class Controller implements IController {
     }
   }
 
+  // Убирает предыдущий активный ползунок, добавляет класс новому
+  // _activeThumb, увеличивает z-index нового активного ползунка
+  setActiveThumb(numOfThumb: number = 1): HTMLElement {
+    const thumb = this._view.getThumb();
+
+    this.removeActiveThumb();
+
+    if (Array.isArray(thumb)) {
+      this._activeThumb = thumb[numOfThumb];
+    } else {
+      this._activeThumb = thumb;
+    }
+
+    if (Array.isArray(this._view.activeThumbClass)) {
+      this._activeThumb.classList.add(...this._view.activeThumbClass);
+    } else {
+      this._activeThumb.classList.add(this._view.activeThumbClass);
+    }
+
+    if (Array.isArray(thumb) && this._activeThumb) {
+      if (this._activeThumb.isEqualNode(thumb[0])) {
+        const zIndex: number = window.getComputedStyle(thumb[1]).zIndex === 'auto'
+          ? 0 : +window.getComputedStyle(thumb[1]).zIndex;
+        this._activeThumb.style.zIndex = String(zIndex + 1);
+      } else {
+        const zIndex: number = window.getComputedStyle(thumb[0]).zIndex === 'auto'
+          ? 0 : +window.getComputedStyle(thumb[0]).zIndex;
+        this._activeThumb.style.zIndex = String(zIndex + 1);
+      }
+    }
+
+    return this._activeThumb;
+  }
+
+
+  // При нажатии на ползунок убирает z-index предыдущего активного ползунка,
+  // перезаписывает activeThumb, _clientX/Y, добавляет обработчики
+  // thumbOnMove, thumbOnUp и убирает слушатель
+  // document-mouseup-removeActiveThumb
+  private thumbOnDown(evt: MouseEvent): void {
+    // vertical ?
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    const target = <HTMLElement>evt.currentTarget;
+    if (target) {
+      if (this._activeThumb) {
+        this._activeThumb.style.zIndex = '';
+      }
+      this.setActiveThumb(target.dataset.number ? +target.dataset.number : undefined);
+
+      // Тут возможно this._clientX/Y = evt.clientX/Y, но я сделал так,
+      // чтобы положение курсора все время было в середине thumb. Т.е.
+      // определение прошлого положения курсора зависит не от самого
+      // курсора, а от thumb(аналогично в thumbOnMove)
+      if (this._activeThumb) {
+        this._clientX = parseFloat(this._activeThumb.style.left)
+          + this._view.getBar().getBoundingClientRect().left
+          + this._activeThumb.offsetWidth / 2;
+
+        this._clientY = parseFloat(this._activeThumb.style.top)
+          + this._view.getBar().getBoundingClientRect().top
+          + this._activeThumb.offsetHeight / 2;
+      }
+    }
+
+    document.addEventListener('mousemove', this.thumbOnMove);
+    document.addEventListener('mouseup', this.thumbOnUp);
+
+    document.removeEventListener('mouseup', this.removeActiveThumb);
+  }
+
+  // При отжатии кнопки после ползунка убирает обработчики thumbOnMove и
+  // thumbOnUp, добавляет слушатель document-mouseup, который убирает
+  // активный тамб при клике в любое место документа
+  private thumbOnUp() {
+    document.removeEventListener('mousemove', this.thumbOnMove);
+    document.removeEventListener('mouseup', this.thumbOnUp);
+    document.addEventListener('mouseup', this.removeActiveThumb);
+  }
+
+  // Возвращает значение useKeyboard
+  getUseKeyboard(): boolean {
+    return this.useKeyboard;
+  }
+  // Возвращает значение interactiveStepsInfo
+  getInteractiveStepsInfo(): boolean {
+    return this.interactiveStepsInfo;
+  }
+
+  // Добавляет stepElemOnDown при клике на элементы шкалы значений и
+  // interactiveStepsInfo = true
+  addStepsInfoInteractivity(): void {
+    const stepsInfo = this._view.getStepsInfo();
+    if (stepsInfo) {
+      const stepElems = Array.from(stepsInfo.children) as HTMLElement[];
+      for (let i = 0; i < stepElems.length; i += 1) {
+        stepElems[i].addEventListener('mousedown', this.stepElemOnDown);
+      }
+      this.interactiveStepsInfo = true;
+    }
+  }
+  // Убирает слушатель клика у элементов шкалы значений и
+  // interactiveStepsInfo = false
+  removeStepsInfoInteractivity(): void {
+    const stepsInfo = this._view.getStepsInfo();
+    if (stepsInfo) {
+      const stepElems = Array.from(stepsInfo.children) as HTMLElement[];
+      for (let i = 0; i < stepElems.length; i += 1) {
+        stepElems[i].removeEventListener('mousedown', this.stepElemOnDown);
+      }
+      this.interactiveStepsInfo = false;
+    }
+  }
+
+  // При клике на элементы шкалы значений вызывает addStepsToActiveThumb и
+  // убирает активный ползунок
+  private stepElemOnDown(evt: MouseEvent): void {
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    const stepElem = <HTMLElement>evt.currentTarget;
+
+    if (!this._activeThumb) {
+      this.setActiveThumb();
+    }
+
+    if (this._activeThumb) {
+      const stepValue = (
+        parseFloat(stepElem.style.left) + stepElem.offsetWidth / 2
+      ) / (this.getStepLength() / this._model.getStepSize());
+      const thumbValue = (
+        parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
+      ) / (this.getStepLength() / this._model.getStepSize());
+
+      this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.getStepSize());
+      this.removeActiveThumb();
+    }
+  }
+
+  // Добавить обработчик onKeydown и useKeyboard = true
+  addKeyboardListener(): void {
+    document.addEventListener('keydown', this.onKeydown);
+    this.useKeyboard = true;
+  }
+  // Убирает слушатель клавиатуры и useKeyboard = false
+  removeKeyboardListener() {
+    document.removeEventListener('keydown', this.onKeydown);
+    this.useKeyboard = false;
+  }
+
+  // При нажатии клавиш wasd и стрелок вызывается addStepsToActiveThumb(1/-1)
+  private onKeydown(evt: KeyboardEvent): void {
+    if (evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
+      || evt.key === 'd' || evt.key === 's') {
+      this.addStepsToActiveThumb(1);
+    } else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
+      || evt.key === 'a' || evt.key === 'w') {
+      this.addStepsToActiveThumb(-1);
+    }
+  }
+
+  // Получить активный ползунок
+  getActiveThumb(): HTMLElement | undefined {
+    return this._activeThumb;
+  }
+
+  // Получить длину шага
   getStepLength(): number {
     const numOfSteps = (this._model.getMax() - this._model.getMin())
       / this._model.getStepSize();
     return this._view.getLength() / numOfSteps;
   }
 
+  // Перемещает ползунок на numOfSteps шагов и передает значение в model
   private addStepsToActiveThumb(numOfSteps = 1): void {
     if (this._activeThumb) {
       const thumb = this._view.getThumb();
@@ -207,69 +338,8 @@ export default class Controller implements IController {
     }
   }
 
-  // При нажатии на thumb перезаписывает activeThumb и добавляет обработчик
-  // thumbOnMove при движении мыши
-  private thumbOnDown(evt: MouseEvent): void {
-    evt.preventDefault();
-    evt.stopPropagation();
-
-    this._clientY = evt.clientY;
-
-    const target = <HTMLElement>evt.currentTarget;
-    if (target) {
-      if (this._activeThumb) {
-        if (Array.isArray(this._view.activeThumbClass)) {
-          this._activeThumb.classList.remove(...this._view.activeThumbClass);
-        } else {
-          this._activeThumb.classList.remove(this._view.activeThumbClass);
-        }
-        this._activeThumb.style.zIndex = '';
-      }
-
-      this._activeThumb = target;
-
-      // Тут возможно this._clientX = evt.clientX, но я сделал так,
-      // чтобы положение курсора все время было в середине thumb. Т.е.
-      // определение прошлого положения курсора зависит не от самого
-      // курсора, а от thumb(аналогично в thumbOnMove и при vertical)
-      this._clientX = parseFloat(this._activeThumb.style.left)
-        + this._view.getBar().getBoundingClientRect().left
-        + this._activeThumb.offsetWidth / 2;
-
-      if (Array.isArray(this._view.activeThumbClass)) {
-        this._activeThumb.classList.add(...this._view.activeThumbClass);
-      } else {
-        this._activeThumb.classList.add(this._view.activeThumbClass);
-      }
-    }
-
-
-    document.addEventListener('mousemove', this.thumbOnMove);
-    document.addEventListener('mouseup', this.thumbOnUp);
-
-    document.removeEventListener('mouseup', this.removeActiveThumb);
-  }
-
-  private thumbOnUp() {
-    document.removeEventListener('mousemove', this.thumbOnMove);
-    document.removeEventListener('mouseup', this.thumbOnUp);
-
-    const thumb = this._view.getThumb();
-    if (Array.isArray(thumb) && this._activeThumb) {
-      if (this._activeThumb.isEqualNode(thumb[0])) {
-        const zIndex: number = window.getComputedStyle(thumb[1]).zIndex === 'auto'
-          ? 0 : +window.getComputedStyle(thumb[1]).zIndex;
-        this._activeThumb.style.zIndex = String(zIndex + 1);
-      } else {
-        const zIndex: number = window.getComputedStyle(thumb[0]).zIndex === 'auto'
-          ? 0 : +window.getComputedStyle(thumb[0]).zIndex;
-        this._activeThumb.style.zIndex = String(zIndex + 1);
-      }
-    }
-
-    document.addEventListener('mouseup', this.removeActiveThumb);
-  }
-
+  // При перемещении мыши вызывается addStepsToActiveThumb с numOfSteps,
+  // зависящим от смещения мыши и перезаписывается this._client(X/Y)
   private thumbOnMove(evt: MouseEvent) {
     if (this._activeThumb) {
       if (this._view.getVertical()) {
@@ -277,7 +347,6 @@ export default class Controller implements IController {
           const numOfSteps = Math.trunc((evt.clientY - this._clientY) / this.getStepLength());
           this.addStepsToActiveThumb(numOfSteps);
 
-          // Перезаписываем this._client(X/Y) (смотреть 157 строчку)
           this._clientY = parseFloat(this._activeThumb.style.top)
             + this._view.getBar().getBoundingClientRect().top
             + this._activeThumb.offsetHeight / 2;
