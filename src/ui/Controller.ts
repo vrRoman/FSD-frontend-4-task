@@ -1,4 +1,4 @@
-import { IModel } from '../model/Model';
+import { IModel, ObserverAction } from '../model/Model';
 import { IView } from './View';
 
 
@@ -14,8 +14,10 @@ export interface ControllerOptions {
 }
 
 export interface IController {
+  addThumbListener() : void
+
   getActiveThumb(): HTMLElement | undefined
-  setActiveThumb(numOfThumb?: number): HTMLElement
+  setActiveThumb(numOfThumb?: number): void
   removeActiveThumb(): void
 
   getStepLength(): number
@@ -29,6 +31,8 @@ export interface IController {
   removeKeyboardListener(): void
 
   onChange: Function | undefined
+
+  update(action: ObserverAction): void
 }
 
 
@@ -66,20 +70,57 @@ export default class Controller implements IController {
     this.onKeydown = this.onKeydown.bind(this);
     this.stepElemOnDown = this.stepElemOnDown.bind(this);
 
-    const thumb = this._view.getThumb();
-    if (Array.isArray(thumb)) {
-      for (let i = 0; i <= 1; i += 1) {
-        thumb[i].addEventListener('mousedown', this.thumbOnDown);
-      }
-    } else {
-      thumb.addEventListener('mousedown', this.thumbOnDown);
-    }
+    this.addThumbListener();
 
     if (this.useKeyboard) {
       this.addKeyboardListener();
     }
 
     this.addStepsInfoInteractivity();
+
+    this._model.subscribe(this);
+  }
+
+  // В зависимости от changes обновляет view
+  update(action: ObserverAction): void {
+    switch (action.type) {
+      case 'UPDATE_VALUE':
+        this._view.updateThumb();
+        this._view.updateValueInfo();
+        this._view.updateProgressBar();
+        this._view.updateTooltip();
+        break;
+
+      case 'UPDATE_RANGE':
+        this._view.removeThumb();
+        this._view.createThumb();
+        this.addThumbListener();
+        this._view.updateProgressBar();
+        this._view.updateValueInfo();
+        this._view.updateTooltip();
+        break;
+
+      default:
+        this._view.removeThumb();
+        this._view.createThumb();
+        this._view.updateProgressBar();
+        this._view.updateValueInfo();
+        this._view.updateTooltip();
+    }
+  }
+
+  // Добавляет thumbOnDown к ползунку(ам)
+  addThumbListener(): void {
+    const thumb = this._view.getThumb();
+    if (Array.isArray(thumb)) {
+      for (let i = 0; i <= 1; i += 1) {
+        thumb[i].addEventListener('mousedown', this.thumbOnDown);
+      }
+    } else {
+      if (thumb) {
+        thumb.addEventListener('mousedown', this.thumbOnDown);
+      }
+    }
   }
 
   // Убирает класс активного ползунка и _activeThumb = undefined
@@ -96,36 +137,36 @@ export default class Controller implements IController {
 
   // Убирает предыдущий активный ползунок, добавляет класс новому
   // _activeThumb, увеличивает z-index нового активного ползунка
-  setActiveThumb(numOfThumb: number = 1): HTMLElement {
+  setActiveThumb(numOfThumb: number = 1): void {
     const thumb = this._view.getThumb();
 
-    this.removeActiveThumb();
+    if (thumb) {
+      this.removeActiveThumb();
 
-    if (Array.isArray(thumb)) {
-      this._activeThumb = thumb[numOfThumb];
-    } else {
-      this._activeThumb = thumb;
-    }
-
-    if (Array.isArray(this._view.activeThumbClass)) {
-      this._activeThumb.classList.add(...this._view.activeThumbClass);
-    } else {
-      this._activeThumb.classList.add(this._view.activeThumbClass);
-    }
-
-    if (Array.isArray(thumb) && this._activeThumb) {
-      if (this._activeThumb.isEqualNode(thumb[0])) {
-        const zIndex: number = window.getComputedStyle(thumb[1]).zIndex === 'auto'
-          ? 0 : +window.getComputedStyle(thumb[1]).zIndex;
-        this._activeThumb.style.zIndex = String(zIndex + 1);
+      if (Array.isArray(thumb)) {
+        this._activeThumb = thumb[numOfThumb];
       } else {
-        const zIndex: number = window.getComputedStyle(thumb[0]).zIndex === 'auto'
-          ? 0 : +window.getComputedStyle(thumb[0]).zIndex;
-        this._activeThumb.style.zIndex = String(zIndex + 1);
+        this._activeThumb = thumb;
+      }
+
+      if (Array.isArray(this._view.activeThumbClass)) {
+        this._activeThumb.classList.add(...this._view.activeThumbClass);
+      } else {
+        this._activeThumb.classList.add(this._view.activeThumbClass);
+      }
+
+      if (Array.isArray(thumb) && this._activeThumb) {
+        if (this._activeThumb.isEqualNode(thumb[0])) {
+          const zIndex: number = window.getComputedStyle(thumb[1]).zIndex === 'auto'
+            ? 0 : +window.getComputedStyle(thumb[1]).zIndex;
+          this._activeThumb.style.zIndex = String(zIndex + 1);
+        } else {
+          const zIndex: number = window.getComputedStyle(thumb[0]).zIndex === 'auto'
+            ? 0 : +window.getComputedStyle(thumb[0]).zIndex;
+          this._activeThumb.style.zIndex = String(zIndex + 1);
+        }
       }
     }
-
-    return this._activeThumb;
   }
 
 
@@ -329,7 +370,7 @@ export default class Controller implements IController {
         this._model.addStepsToValue(stepsToAdd);
       }
 
-      this._view.updateProgressBar();
+      // this._view.updateProgressBar();
 
       if (this.onChange) {
         this.onChange();

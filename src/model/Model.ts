@@ -1,5 +1,9 @@
 type Value = [number, number] | number
 
+export interface ObserverAction {
+  type: 'UPDATE_VALUE' | 'UPDATE_RANGE'
+}
+
 export interface ModelOptions {
   value: Value
   range: boolean
@@ -22,6 +26,10 @@ export interface IModel {
   getMin(): number
   getMax(): number
   getMaxDiapason(): number
+
+  subscribe(observer: Object): void
+  unsubscribe(observer: Object): void
+  notify(action: ObserverAction): void
 }
 
 export default class Model implements IModel {
@@ -31,7 +39,11 @@ export default class Model implements IModel {
   private max: number
   private min: number
 
+  private observers: Array<any>
+
   constructor(options: ModelOptions) {
+    this.observers = [];
+
     this.max = options.max;
     this.min = options.min;
 
@@ -47,11 +59,31 @@ export default class Model implements IModel {
     this.checkAndFixStepSize();
   }
 
+  // Подписывает на обновления модели
+  subscribe(observer: Object) {
+    this.observers.push(observer);
+  }
+  // Убирает подписку
+  unsubscribe(observer: Object) {
+    this.observers.filter((obs) => obs !== observer);
+  }
+  // Вызывает у всех подписчиков метод update
+  notify(action: ObserverAction) {
+    this.observers.forEach((observer) => {
+      observer.update(action);
+    });
+  }
+
+
   // Изменяет текущее значение и вызывает checkAndFixValue
   setValue(newValue: Value): Value {
     this.value = newValue;
 
     this.checkAndFixValue();
+
+    this.notify({
+      type: 'UPDATE_VALUE',
+    });
 
     return this.value;
   }
@@ -59,6 +91,11 @@ export default class Model implements IModel {
   setRange(newRange: boolean): boolean {
     this.range = newRange;
     this.checkAndFixValue();
+
+    this.notify({
+      type: 'UPDATE_RANGE',
+    });
+
     return this.range;
   }
   // Меняет stepSize и вызывает checkAndFixStepSize
@@ -88,6 +125,11 @@ export default class Model implements IModel {
     }
 
     this.checkAndFixValue();
+
+    this.notify({
+      type: 'UPDATE_VALUE',
+    });
+
     return this.value;
   }
 

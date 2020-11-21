@@ -1,4 +1,6 @@
 import Model, { IModel, ModelOptions } from '../src/model/Model';
+import View, { IView, ViewOptions } from '../src/ui/View';
+import Controller, { IController, ControllerOptions } from '../src/ui/Controller';
 
 const defaultOptions = {
   value: 0,
@@ -191,5 +193,48 @@ describe('model props change', () => {
     model.setValue([1, 4]);
     model.addStepsToValue(-5, 1);
     expect(model.getValue()).toEqual([1, 1]);
+  });
+});
+
+describe('Model change range and value with Observer', () => {
+  let model: IModel;
+  let view: IView;
+  let controller: IController;
+
+  beforeEach(() => {
+    const defaultViewOptions: ViewOptions = {
+      length: '200px',
+      tooltip: false,
+      stepsInfo: false,
+      valueInfo: false,
+      vertical: false,
+      responsive: false,
+    };
+    const defaultControllerOptions: ControllerOptions = {
+      useKeyboard: true,
+      interactiveStepsInfo: true,
+    };
+    model = new Model(defaultOptions);
+    view = new View(model, defaultViewOptions, document.body);
+    controller = new Controller(model, view, defaultControllerOptions);
+  });
+
+  it('Change value, range=false', () => {
+    model.setValue(4);
+    console.log('Changed value to 4, range=false', view.getSlider());
+  });
+  it('Change range to true', () => {
+    model.setRange(true);
+    console.log('Changed range to true', view.getSlider());
+  });
+  it('Change range to false', () => {
+    model.setRange(true);
+    model.setRange(false);
+    console.log('Changed range to false', view.getSlider());
+  });
+  it('Changed value when range true', () => {
+    model.setRange(true);
+    model.setValue([4, 9.5]);
+    console.log('Changed value to [4, 9.5], range=true', view.getSlider());
   });
 });

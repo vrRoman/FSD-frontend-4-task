@@ -106,10 +106,13 @@ describe('Controller methods', () => {
     console.log('RemoveActiveThumb range false: ', view.getSlider());
     expect(controller.getActiveThumb()).toBe(undefined);
 
-
+    model = new Model({
+      ...defaultModelOptions,
+      range: true,
+    });
     view = new View(model, defaultViewOptions, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
-    controller.setActiveThumb(0);
+    controller.setActiveThumb();
     controller.removeActiveThumb();
     console.log('RemoveActiveThumb with range true', view.getSlider());
     expect(controller.getActiveThumb()).toBe(undefined);

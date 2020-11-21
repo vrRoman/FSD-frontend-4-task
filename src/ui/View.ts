@@ -49,8 +49,10 @@ export interface IView {
   updateProgressBar(): void
   createThumb(): HTMLElement | Array<HTMLElement>
   updateThumb(): void
+  removeThumb(): void
 
   createTooltip(): HTMLElement | Array<HTMLElement> | undefined
+  updateTooltip(): void
   removeTooltip(): void
 
   createStepsInfo(): HTMLElement | undefined
@@ -58,6 +60,7 @@ export interface IView {
   removeStepsInfo(): void
 
   createValueInfo(): HTMLElement
+  updateValueInfo(): void
   removeValueInfo(): void
 
   getParent(): Element
@@ -65,7 +68,7 @@ export interface IView {
 
   getBar(): HTMLElement
   getProgressBar(): HTMLElement
-  getThumb(): HTMLElement | Array<HTMLElement>
+  getThumb(): HTMLElement | Array<HTMLElement> | undefined
   getThumbPosition(): number | number[]
 
   getTooltip(): HTMLElement | Array<HTMLElement> | undefined
@@ -104,7 +107,7 @@ export default class View implements IView {
   private _slider: HTMLElement
   private _bar: HTMLElement
   private _progressBar: HTMLElement
-  private _thumb: HTMLElement | Array<HTMLElement>
+  private _thumb: HTMLElement | Array<HTMLElement> | undefined
   private _tooltip: HTMLElement | Array<HTMLElement> | undefined
   private _stepsInfo: HTMLElement | undefined
   private _valueInfo: HTMLElement | undefined
@@ -192,7 +195,7 @@ export default class View implements IView {
   getProgressBar(): HTMLElement {
     return this._progressBar;
   }
-  getThumb(): HTMLElement | Array<HTMLElement> {
+  getThumb(): HTMLElement | Array<HTMLElement> | undefined {
     return this._thumb;
   }
   getTooltip(): HTMLElement | Array<HTMLElement> | undefined {
@@ -275,7 +278,7 @@ export default class View implements IView {
       const thumbPosition = this.getThumbPosition();
       const progressBar = this.getProgressBar();
 
-      if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
+      if (thumb && !Array.isArray(thumb) && typeof thumbPosition === 'number') {
         thumb.style.top = '';
         thumb.style.left = `${thumbPosition - thumb.offsetHeight / 2}px`;
 
@@ -306,7 +309,7 @@ export default class View implements IView {
       const thumbPosition = this.getThumbPosition();
       const progressBar = this.getProgressBar();
 
-      if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
+      if (thumb && !Array.isArray(thumb) && typeof thumbPosition === 'number') {
         thumb.style.left = '';
         thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
 
@@ -469,7 +472,7 @@ export default class View implements IView {
     const thumbPosition = this.getThumbPosition();
     const thumb = this.getThumb();
 
-    if (typeof thumbPosition === 'number' && !Array.isArray(thumb)) {
+    if (typeof thumbPosition === 'number' && !Array.isArray(thumb) && thumb) {
       if (this.getVertical()) {
         thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
       } else {
@@ -484,6 +487,22 @@ export default class View implements IView {
         }
       }
     }
+  }
+  // Удаляет ползунок(ки)
+  removeThumb() {
+    const thumb = this.getThumb();
+
+    if (thumb) {
+      if (Array.isArray(thumb)) {
+        thumb.forEach((thumbElem) => {
+          thumbElem.remove();
+        });
+      } else {
+        thumb.remove();
+      }
+    }
+
+    this._thumb = undefined;
   }
 
   // Создает и возвращает подсказки в ползунках
@@ -502,7 +521,7 @@ export default class View implements IView {
         }
 
         if (Array.isArray(value)) {
-          tooltip.innerHTML = `<div>${value[i]}</div>`;
+          tooltip.innerHTML = `<div>${+(value[i]).toFixed(3)}</div>`;
         }
 
         thumb[i].appendChild(tooltip);
@@ -517,13 +536,32 @@ export default class View implements IView {
       }
 
       if (!Array.isArray(value)) {
-        tooltip.innerHTML = `<div>${value}</div>`;
+        tooltip.innerHTML = `<div>${+(value).toFixed(3)}</div>`;
       }
 
-      thumb.appendChild(tooltip);
+      if (thumb) thumb.appendChild(tooltip);
+
       this._tooltip = tooltip;
     }
     return this._tooltip;
+  }
+  // Обновляет значение в подсказках
+  updateTooltip() {
+    const tooltip = this.getTooltip();
+    const value = this.getModel().getValue();
+    if (tooltip) {
+      if (Array.isArray(tooltip)) {
+        if (Array.isArray(value)) {
+          for (let i = 0; i <= 1; i += 1) {
+            tooltip[i].innerHTML = `<div>${+(value[i]).toFixed(3)}</div>`;
+          }
+        }
+      } else {
+        if (!Array.isArray(value)) {
+          tooltip.innerHTML = `<div>${+(value).toFixed(3)}</div>`;
+        }
+      }
+    }
   }
   // Удаляет подсказки
   removeTooltip(): void {
@@ -649,13 +687,25 @@ export default class View implements IView {
     this.getSlider().appendChild(valueInfo);
 
     if (typeof value === 'number') {
-      valueInfo.innerText = `${value}`;
+      valueInfo.innerText = `${+(value).toFixed()}`;
     } else {
-      valueInfo.innerText = `${value[0]} - ${value[1]}`;
+      valueInfo.innerText = `${+(value[0]).toFixed()} - ${+(value[1]).toFixed()}`;
     }
 
     this._valueInfo = valueInfo;
     return valueInfo;
+  }
+  // Обновляет значение в valueInfo
+  updateValueInfo() {
+    const valueInfo = this.getValueInfo();
+    const value = this.getModel().getValue();
+    if (valueInfo) {
+      if (typeof value === 'number') {
+        valueInfo.innerText = `${+(value).toFixed()}`;
+      } else {
+        valueInfo.innerText = `${+(value[0]).toFixed()} - ${+(value[1]).toFixed()}`;
+      }
+    }
   }
   // Удаляет элемент со значением
   removeValueInfo(): void {
