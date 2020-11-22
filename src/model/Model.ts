@@ -1,36 +1,6 @@
-type Value = [number, number] | number
+import { ModelOptions, SliderOptions } from '../interfaces/options';
+import { IModel, ObserverAction, Value } from '../interfaces/modelTypesAndInterfaces';
 
-export interface ObserverAction {
-  type: 'UPDATE_VALUE' | 'UPDATE_RANGE'
-}
-
-export interface ModelOptions {
-  value: Value
-  range: boolean
-  stepSize: number
-  max: number
-  min: number
-}
-
-export interface IModel {
-  setValue(newValue: Value): Value
-  setRange(newRange: boolean): boolean
-  setStepSize(newStepSize: number): number
-  addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1): Value
-  checkAndFixValue(): Value
-  checkAndFixStepSize(): number
-  checkAndFixMinMax(): number[]
-  getValue(): Value
-  getRange(): boolean
-  getStepSize(): number
-  getMin(): number
-  getMax(): number
-  getMaxDiapason(): number
-
-  subscribe(observer: Object): void
-  unsubscribe(observer: Object): void
-  notify(action: ObserverAction): void
-}
 
 export default class Model implements IModel {
   private value: Value
@@ -41,7 +11,7 @@ export default class Model implements IModel {
 
   private observers: Array<any>
 
-  constructor(options: ModelOptions) {
+  constructor(options: ModelOptions | SliderOptions) {
     this.observers = [];
 
     this.max = options.max;

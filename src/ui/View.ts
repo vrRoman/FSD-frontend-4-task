@@ -1,93 +1,6 @@
-import { IModel } from '../model/Model';
-
-export interface ViewOptions {
-  // Длина слайдера(в любых единицах измерения)
-  length: string
-  // Наличие подсказки у ползунков
-  tooltip: boolean
-  // Наличие шкалы значений
-  // False - отсутствует
-  // True - показывает 5 чисел в шкале значений
-  // Number - показывает number чисел в шкале значений
-  // Array - показывает array.length значений(любых) по порядку в шкале значений
-  stepsInfo: boolean | Array<number | string> | number
-  // Элемент с текущим значением
-  valueInfo: boolean
-  // Вертикальный слайдер
-  vertical: boolean
-  // Отзывчивость слайдера. Рекомендуется отключать(false), если length задана в
-  // статических ед. измерения(например, px)
-  responsive: boolean
-
-  // Классы элементов слайдера
-  sliderClass?: string | string[]
-  sliderVerticalClass?: string | string[]
-  barClass?: string | string[]
-  progressBarClass?: string | string[]
-  thumbClass?: string | string[]
-  activeThumbClass?: string | string[]
-  tooltipClass?: string | string[]
-  stepsInfoClass?: string | string[]
-  valueInfoClass?: string | string[]
-}
-
-export interface IView {
-  sliderClass: string | string[]
-  sliderVerticalClass: string | string[]
-  barClass: string | string[]
-  progressBarClass: string | string[]
-  thumbClass: string | string[]
-  activeThumbClass: string | string[]
-  tooltipClass: string | string[]
-  stepsInfoClass: string | string[]
-  valueInfoClass: string | string[]
-
-  createSlider(): HTMLElement
-
-  createBar(): HTMLElement
-  createProgressBar(): HTMLElement
-  updateProgressBar(): void
-  createThumb(): HTMLElement | Array<HTMLElement>
-  updateThumb(): void
-  removeThumb(): void
-
-  createTooltip(): HTMLElement | Array<HTMLElement> | undefined
-  updateTooltip(): void
-  removeTooltip(): void
-
-  createStepsInfo(): HTMLElement | undefined
-  updateStepsInfo(): void
-  removeStepsInfo(): void
-
-  createValueInfo(): HTMLElement
-  updateValueInfo(): void
-  removeValueInfo(): void
-
-  getParent(): Element
-  getSlider(): HTMLElement
-
-  getBar(): HTMLElement
-  getProgressBar(): HTMLElement
-  getThumb(): HTMLElement | Array<HTMLElement> | undefined
-  getThumbPosition(): number | number[]
-
-  getTooltip(): HTMLElement | Array<HTMLElement> | undefined
-
-  getStepsInfo(): HTMLElement | undefined
-  getStepsInfoSettings(): boolean | Array<number | string> | number
-
-  getValueInfo(): HTMLElement | undefined
-
-  getResponsive(): boolean
-  getLength(): number
-  getVertical(): boolean
-
-  changeResponsive(newResponsive: boolean): boolean
-  changeLength(newLength: string): number
-  changeVertical(newVertical: boolean): boolean
-  changeStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number)
-    : HTMLElement | undefined
-}
+import { IModel } from '../interfaces/modelTypesAndInterfaces';
+import { SliderOptions, ViewOptions } from '../interfaces/options';
+import { IView } from '../interfaces/viewInterfaces';
 
 export default class View implements IView {
   sliderClass: string | string[]
@@ -115,7 +28,7 @@ export default class View implements IView {
   private _vertical: boolean
   private _stepsInfoSettings: boolean | Array<number | string> | number
 
-  constructor(model: IModel, viewOptions: ViewOptions, parent: Element) {
+  constructor(model: IModel, viewOptions: ViewOptions | SliderOptions, parent: Element) {
     this.sliderClass = viewOptions.sliderClass ? viewOptions.sliderClass : 'slider';
     this.sliderVerticalClass = viewOptions.sliderVerticalClass ? viewOptions.sliderVerticalClass : 'slider_vertical';
     this.barClass = viewOptions.barClass ? viewOptions.barClass : 'slider__bar';

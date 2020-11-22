@@ -1,39 +1,7 @@
-import { IModel, ObserverAction } from '../model/Model';
-import { IView } from './View';
-
-
-export interface ControllerOptions {
-  // Если true, то при нажатии стрелок и ad активный ползунок будет перемещаться
-  useKeyboard: boolean
-  // Если true, то шкала значений будет кликабельна и активный
-  // ползунок(если range=true, по умолчанию = thumb[1]) будет
-  // перемещаться на соответствующее значение
-  interactiveStepsInfo: boolean
-  // Будет выполняться при любом передвижении ползунка
-  onChange?: Function
-}
-
-export interface IController {
-  addThumbListener() : void
-
-  getActiveThumb(): HTMLElement | undefined
-  setActiveThumb(numOfThumb?: number): void
-  removeActiveThumb(): void
-
-  getStepLength(): number
-  getUseKeyboard(): boolean
-  getInteractiveStepsInfo(): boolean
-
-  addStepsInfoInteractivity(): void
-  removeStepsInfoInteractivity(): void
-
-  addKeyboardListener(): void
-  removeKeyboardListener(): void
-
-  onChange: Function | undefined
-
-  update(action: ObserverAction): void
-}
+import { IModel, ObserverAction } from '../interfaces/modelTypesAndInterfaces';
+import { IView } from '../interfaces/viewInterfaces';
+import { IController } from '../interfaces/controllerInterfaces';
+import { ControllerOptions, SliderOptions } from '../interfaces/options';
 
 
 export default class Controller implements IController {
@@ -49,7 +17,7 @@ export default class Controller implements IController {
   onChange: Function | undefined
 
 
-  constructor(model: IModel, view: IView, controllerOptions: ControllerOptions) {
+  constructor(model: IModel, view: IView, controllerOptions: ControllerOptions | SliderOptions) {
     this._model = model;
     this._view = view;
 

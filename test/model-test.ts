@@ -1,6 +1,10 @@
-import Model, { IModel, ModelOptions } from '../src/model/Model';
-import View, { IView, ViewOptions } from '../src/ui/View';
-import Controller, { IController, ControllerOptions } from '../src/ui/Controller';
+import Model from '../src/model/Model';
+import View from '../src/ui/View';
+import Controller from '../src/ui/Controller';
+import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
+import { IView } from '../src/interfaces/viewInterfaces';
+import { IController } from '../src/interfaces/controllerInterfaces';
+import { ControllerOptions, ViewOptions, ModelOptions } from '../src/interfaces/options';
 
 const defaultOptions = {
   value: 0,

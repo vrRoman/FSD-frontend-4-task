@@ -1,7 +1,10 @@
 // Многие тесты для view будут проверяться в браузере
 
-import View, { IView, ViewOptions } from '../src/ui/View';
-import Model, { IModel, ModelOptions } from '../src/model/Model';
+import Model from '../src/model/Model';
+import View from '../src/ui/View';
+import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
+import { IView } from '../src/interfaces/viewInterfaces';
+import { ViewOptions, ModelOptions } from '../src/interfaces/options';
 
 const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',
