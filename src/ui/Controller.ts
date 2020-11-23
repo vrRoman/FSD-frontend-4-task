@@ -44,7 +44,9 @@ export default class Controller implements IController {
       this.addKeyboardListener();
     }
 
-    this.addStepsInfoInteractivity();
+    if (this.interactiveStepsInfo) {
+      this.addStepsInfoInteractivity();
+    }
 
     this._model.subscribe(this);
   }
