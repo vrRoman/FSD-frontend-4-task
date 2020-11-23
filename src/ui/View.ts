@@ -585,7 +585,10 @@ export default class View implements IView {
     this._stepsInfoSettings = newStepsInfoSettings;
 
     this.removeStepsInfo();
-    return this.createStepsInfo();
+    if (this._stepsInfoSettings) {
+      this.createStepsInfo();
+    }
+    return this.getStepsInfo();
   }
 
   // Создает элемент с текущим значением. По умолчанию, если range=false, то

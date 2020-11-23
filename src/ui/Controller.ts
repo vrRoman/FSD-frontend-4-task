@@ -74,6 +74,9 @@ export default class Controller implements IController {
         this._view.updateThumb();
         this._view.removeStepsInfo();
         this._view.createStepsInfo();
+        if (this.interactiveStepsInfo) {
+          this.addStepsInfoInteractivity();
+        }
         this._view.updateValueInfo();
         this._view.updateProgressBar();
         this._view.updateTooltip();
@@ -83,6 +86,9 @@ export default class Controller implements IController {
         this._view.updateThumb();
         this._view.removeStepsInfo();
         this._view.createStepsInfo();
+        if (this.interactiveStepsInfo) {
+          this.addStepsInfoInteractivity();
+        }
         this._view.updateValueInfo();
         this._view.updateProgressBar();
         this._view.updateTooltip();
@@ -94,6 +100,9 @@ export default class Controller implements IController {
         this.addThumbListener();
         this._view.removeStepsInfo();
         this._view.createStepsInfo();
+        if (this.interactiveStepsInfo) {
+          this.addStepsInfoInteractivity();
+        }
         this._view.updateProgressBar();
         this._view.updateValueInfo();
         this._view.updateTooltip();
