@@ -198,26 +198,43 @@ describe('model props change', () => {
     model.addStepsToValue(-5, 1);
     expect(model.getValue()).toEqual([1, 1]);
   });
+  it('setMin', () => {
+    model.setMin(2);
+    expect(model.getMin()).toBe(2);
+    expect(model.getValue()).toBe(2);
+    model.setMin(-1);
+    expect(model.getMin()).toBe(-1);
+    expect(model.getValue()).toBe(2);
+  });
+  it('setMax', () => {
+    model.setValue(10);
+    model.setMax(2);
+    expect(model.getMax()).toBe(2);
+    expect(model.getValue()).toBe(2);
+    model.setMax(7);
+    expect(model.getMax()).toBe(7);
+    expect(model.getValue()).toBe(2);
+  });
 });
 
-describe('Model change range and value with Observer', () => {
+describe('Model change range, value with Observer', () => {
   let model: IModel;
   let view: IView;
   let controller: IController;
+  const defaultViewOptions: ViewOptions = {
+    length: '200px',
+    tooltip: false,
+    stepsInfo: false,
+    valueInfo: false,
+    vertical: false,
+    responsive: false,
+  };
+  const defaultControllerOptions: ControllerOptions = {
+    useKeyboard: true,
+    interactiveStepsInfo: true,
+  };
 
   beforeEach(() => {
-    const defaultViewOptions: ViewOptions = {
-      length: '200px',
-      tooltip: false,
-      stepsInfo: false,
-      valueInfo: false,
-      vertical: false,
-      responsive: false,
-    };
-    const defaultControllerOptions: ControllerOptions = {
-      useKeyboard: true,
-      interactiveStepsInfo: true,
-    };
     model = new Model(defaultOptions);
     view = new View(model, defaultViewOptions, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
@@ -240,5 +257,61 @@ describe('Model change range and value with Observer', () => {
     model.setRange(true);
     model.setValue([4, 9.5]);
     console.log('Changed value to [4, 9.5], range=true', view.getSlider());
+  });
+  it('setMin', () => {
+    controller.onChange = () => {
+      console.log(view.getThumbPosition());
+    };
+    model.setMin(2);
+    console.log('setMin to 2', view.getSlider());
+
+    model = new Model(defaultOptions);
+    view = new View(model, {
+      ...defaultViewOptions,
+      stepsInfo: true,
+      valueInfo: true,
+      tooltip: true,
+    }, document.body);
+    controller = new Controller(model, view, defaultControllerOptions);
+    controller.onChange = () => {
+      console.log(view.getThumbPosition());
+    };
+    model.setMin(-1);
+    console.log('setMin to -1', view.getSlider());
+  });
+  it('setMax', () => {
+    controller.onChange = () => {
+      console.log(view.getThumbPosition());
+    };
+    model.setMax(8);
+    console.log('setMax to 8', view.getSlider());
+
+    model = new Model(defaultOptions);
+    view = new View(model, {
+      ...defaultViewOptions,
+      stepsInfo: true,
+      valueInfo: true,
+      tooltip: true,
+    }, document.body);
+    controller = new Controller(model, view, defaultControllerOptions);
+    controller.onChange = () => {
+      console.log(view.getThumbPosition());
+    };
+    model.setMax(15);
+    console.log('setMax to 15', view.getSlider());
+
+    model = new Model(defaultOptions);
+    view = new View(model, {
+      ...defaultViewOptions,
+      stepsInfo: true,
+      valueInfo: true,
+      tooltip: true,
+    }, document.body);
+    controller = new Controller(model, view, defaultControllerOptions);
+    controller.onChange = () => {
+      console.log(view.getThumbPosition());
+    };
+    model.setMax(-1);
+    console.log('setMax to -1', view.getSlider());
   });
 });

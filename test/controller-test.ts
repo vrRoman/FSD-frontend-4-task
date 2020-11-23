@@ -129,7 +129,10 @@ describe('Controller with different options in model and view', () => {
   let controller: IController;
 
   it('View all true, vertical=false and responsive with %', () => {
-    model = new Model(defaultModelOptions);
+    model = new Model({
+      ...defaultModelOptions,
+      min: -2,
+    });
     view = new View(model, {
       length: '80%',
       vertical: false,
@@ -139,6 +142,7 @@ describe('Controller with different options in model and view', () => {
       responsive: true,
     }, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
+    console.log('View all true, vertical=false and responsive with %: ', view.getSlider());
   });
   it('View all true, vertical=false and responsive with vh', () => {
     model = new Model(defaultModelOptions);

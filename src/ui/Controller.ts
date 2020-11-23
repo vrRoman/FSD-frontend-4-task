@@ -68,9 +68,30 @@ export default class Controller implements IController {
         this._view.updateTooltip();
         break;
 
+      case 'UPDATE_MIN':
+        this._view.updateThumb();
+        this._view.removeStepsInfo();
+        this._view.createStepsInfo();
+        this._view.updateValueInfo();
+        this._view.updateProgressBar();
+        this._view.updateTooltip();
+        break;
+
+      case 'UPDATE_MAX':
+        this._view.updateThumb();
+        this._view.removeStepsInfo();
+        this._view.createStepsInfo();
+        this._view.updateValueInfo();
+        this._view.updateProgressBar();
+        this._view.updateTooltip();
+        break;
+
       default:
         this._view.removeThumb();
         this._view.createThumb();
+        this.addThumbListener();
+        this._view.removeStepsInfo();
+        this._view.createStepsInfo();
         this._view.updateProgressBar();
         this._view.updateValueInfo();
         this._view.updateTooltip();

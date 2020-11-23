@@ -141,11 +141,14 @@ export default class View implements IView {
     let thumbPosition;
     // value === 'number' при range = false
     if (typeof value === 'number') {
-      thumbPosition = (this.getLength() / this.getModel().getMaxDiapason()) * value;
+      thumbPosition = (this.getLength() / this.getModel().getMaxDiapason())
+        * (value - this.getModel().getMin());
     } else {
       thumbPosition = [
-        (this.getLength() / this.getModel().getMaxDiapason()) * value[0],
-        (this.getLength() / this.getModel().getMaxDiapason()) * value[1],
+        (this.getLength() / this.getModel().getMaxDiapason())
+          * (value[0] - this.getModel().getMin()),
+        (this.getLength() / this.getModel().getMaxDiapason())
+          * (value[1] - this.getModel().getMin()),
       ];
     }
 

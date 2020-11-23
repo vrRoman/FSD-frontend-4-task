@@ -2,12 +2,14 @@ export type Value = [number, number] | number
 
 
 export interface ObserverAction {
-  type: 'UPDATE_VALUE' | 'UPDATE_RANGE'
+  type: 'UPDATE_VALUE' | 'UPDATE_RANGE' | 'UPDATE_MIN' | 'UPDATE_MAX'
 }
 
 
 export interface IModel {
   setValue(newValue: Value): Value
+  setMin(newMin: number): number
+  setMax(newMax: number): number
   setRange(newRange: boolean): boolean
   setStepSize(newStepSize: number): number
   addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1): Value

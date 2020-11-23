@@ -45,6 +45,29 @@ export default class Model implements IModel {
   }
 
 
+  // Меняет min
+  setMin(newMin: number): number {
+    this.min = newMin;
+    this.checkAndFixMinMax();
+    this.checkAndFixValue();
+    this.checkAndFixStepSize();
+    this.notify({
+      type: 'UPDATE_MIN',
+    });
+    return this.getMin();
+  }
+  // Меняет max
+  setMax(newMax: number): number {
+    this.max = newMax;
+    this.checkAndFixMinMax();
+    this.checkAndFixValue();
+    this.checkAndFixStepSize();
+    this.notify({
+      type: 'UPDATE_MAX',
+    });
+    return this.getMax();
+  }
+
   // Изменяет текущее значение и вызывает checkAndFixValue
   setValue(newValue: Value): Value {
     this.value = newValue;
