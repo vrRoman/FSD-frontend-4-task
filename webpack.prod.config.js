@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -18,8 +17,15 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'slider.js',
+    filename: 'slider.min.js',
   },
+  plugins: [
+    new CleanWebpackPlugin(),
+
+    new MiniCssExtractPlugin({
+      filename: 'slider.min.css',
+    }),
+  ],
 
   module: {
     rules: [
@@ -58,22 +64,5 @@ module.exports = {
         ],
       },
     ],
-  },
-
-  plugins: [
-    new CleanWebpackPlugin(),
-
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-    }),
-
-    new MiniCssExtractPlugin({
-      fileName: 'style.css',
-    }),
-  ],
-
-  optimization: {
-    minimize: false,
   },
 };
