@@ -48,7 +48,7 @@ declare global {
     slider: (
       options?: Options | OptionsString,
       otherOptions?: any
-    ) => JQuery<Element> | JQuery<Object> | string | boolean
+    ) => JQuery<Element> | JQuery<Object> | number | number[] | boolean
   }
 }
 
@@ -194,6 +194,10 @@ declare global {
           return this.data('model').getValue();
         case 'range':
           return this.data('model').getRange();
+        case 'min':
+          return this.data('model').getMin();
+        case 'max':
+          return this.data('model').getMax();
         default:
           $.error(`No ${options} value`);
       }

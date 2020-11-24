@@ -46,7 +46,11 @@ export default class Model implements IModel {
 
 
   // Меняет min
+  // Если макс = мин, то ничего не делать.
   setMin(newMin: number): number {
+    if (this.max === newMin) {
+      return this.getMin();
+    }
     this.min = newMin;
     this.checkAndFixMinMax();
     this.checkAndFixValue();
@@ -57,7 +61,11 @@ export default class Model implements IModel {
     return this.getMin();
   }
   // Меняет max
+  // Если макс = мин, то ничего не делать.
   setMax(newMax: number): number {
+    if (this.min === newMax) {
+      return this.getMax();
+    }
     this.max = newMax;
     this.checkAndFixMinMax();
     this.checkAndFixValue();
