@@ -72,8 +72,10 @@ export default class Controller implements IController {
 
       case 'UPDATE_MIN':
         this._view.updateThumb();
-        this._view.removeStepsInfo();
-        this._view.createStepsInfo();
+        if (this._view.getStepsInfo()) {
+          this._view.removeStepsInfo();
+          this._view.createStepsInfo();
+        }
         if (this.interactiveStepsInfo) {
           this.addStepsInfoInteractivity();
         }
@@ -84,8 +86,10 @@ export default class Controller implements IController {
 
       case 'UPDATE_MAX':
         this._view.updateThumb();
-        this._view.removeStepsInfo();
-        this._view.createStepsInfo();
+        if (this._view.getStepsInfo()) {
+          this._view.removeStepsInfo();
+          this._view.createStepsInfo();
+        }
         if (this.interactiveStepsInfo) {
           this.addStepsInfoInteractivity();
         }
@@ -98,8 +102,10 @@ export default class Controller implements IController {
         this._view.removeThumb();
         this._view.createThumb();
         this.addThumbListener();
-        this._view.removeStepsInfo();
-        this._view.createStepsInfo();
+        if (this._view.getStepsInfo()) {
+          this._view.removeStepsInfo();
+          this._view.createStepsInfo();
+        }
         if (this.interactiveStepsInfo) {
           this.addStepsInfoInteractivity();
         }
