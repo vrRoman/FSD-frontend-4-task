@@ -198,6 +198,16 @@ declare global {
           return this.data('model').getMin();
         case 'max':
           return this.data('model').getMax();
+        case 'vertical':
+          return this.data('view').getVertical();
+        case 'responsive':
+          return this.data('view').getResponsive();
+        case 'tooltip':
+          return this.data('view').getTooltip();
+        case 'valueInfo':
+          return this.data('view').getValueInfo();
+        case 'useKeyboard':
+          return this.data('controller').getUseKeyboard();
         default:
           $.error(`No ${options} value`);
       }
