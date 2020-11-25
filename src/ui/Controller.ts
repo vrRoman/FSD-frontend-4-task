@@ -267,16 +267,30 @@ export default class Controller implements IController {
       this.setActiveThumb();
     }
 
-    if (this._activeThumb) {
-      const stepValue = (
-        parseFloat(stepElem.style.left) + stepElem.offsetWidth / 2
-      ) / (this.getStepLength() / this._model.getStepSize());
-      const thumbValue = (
-        parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
-      ) / (this.getStepLength() / this._model.getStepSize());
+    if (this._view.getVertical()) {
+      if (this._activeThumb) {
+        const stepValue = (
+          parseFloat(stepElem.style.top) + stepElem.offsetHeight / 2
+        ) / (this.getStepLength() / this._model.getStepSize());
+        const thumbValue = (
+          parseFloat(this._activeThumb.style.top) + this._activeThumb.offsetHeight / 2
+        ) / (this.getStepLength() / this._model.getStepSize());
 
-      this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.getStepSize());
-      this.removeActiveThumb();
+        this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.getStepSize());
+        this.removeActiveThumb();
+      }
+    } else {
+      if (this._activeThumb) {
+        const stepValue = (
+          parseFloat(stepElem.style.left) + stepElem.offsetWidth / 2
+        ) / (this.getStepLength() / this._model.getStepSize());
+        const thumbValue = (
+          parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
+        ) / (this.getStepLength() / this._model.getStepSize());
+
+        this.addStepsToActiveThumb((stepValue - thumbValue) / this._model.getStepSize());
+        this.removeActiveThumb();
+      }
     }
   }
 

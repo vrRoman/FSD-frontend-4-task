@@ -66,8 +66,13 @@
     top: -2.5px;
   }
   .slider__tooltip {
-    top: calc(-100% - 5px);
+    top: -20px;
     justify-content: center;
+  }
+  .slider__thumb_active {
+    .slider__tooltip {
+      top: -21px
+    }
   }
   .slider__steps-info {
     height: 12px;
@@ -89,8 +94,13 @@
     left: -2.5px;
   }
   .slider__tooltip {
-    right: calc(-100% - 5px);
+    right: -20px;
     align-items: center;
+  }
+  .slider__thumb_active {
+    .slider__tooltip {
+      right: -21px
+    }
   }
   .slider__steps-info {
     width: 12px;

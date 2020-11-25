@@ -210,6 +210,8 @@ declare global {
           return this.data('view').getValueInfo();
         case 'useKeyboard':
           return this.data('controller').getUseKeyboard();
+        case 'interactiveStepsInfo':
+          return this.data('controller').getInteractiveStepsInfo();
         default:
           $.error(`No ${options} value`);
       }
