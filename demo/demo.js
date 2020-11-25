@@ -19,7 +19,44 @@ class SliderControlPanel {
     this.initLength();
     this.initStepSize();
     this.initStepsInfo();
+
+    // подписать на обновления модели
+    this.$slider.slider('model').subscribe(this);
   }
+
+  update(action) {
+    const [$value1, $value2] = this.valueElems;
+    switch (action.type) {
+      case 'UPDATE_VALUE':
+        if (Array.isArray(this.$slider.slider('value'))) {
+          $value1.val(this.$slider.slider('value')[0]);
+          $value2.val(this.$slider.slider('value')[1]);
+        } else {
+          $value1.val(+this.$slider.slider('value'));
+        }
+        break;
+      case 'UPDATE_RANGE':
+        if (Array.isArray(this.$slider.slider('value'))) {
+          $value1.val(this.$slider.slider('value')[0]);
+          $value2.val(this.$slider.slider('value')[1]);
+        } else {
+          $value1.val(+this.$slider.slider('value'));
+        }
+        break;
+      case 'UPDATE_MIN' || 'UPDATE_MAX':
+        this.valueElems.forEach(($elem) => {
+          $elem.val(+this.$slider.slider('value'));
+        });
+        this.minMaxNames.forEach((name) => {
+          const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
+          $minOrMax.val(+this.$slider.slider(name));
+        });
+        break;
+      default:
+        $.error('Wrong action.type');
+    }
+  }
+
 
   initCheckboxes(optionNames) {
     const { $slider } = this;
@@ -50,12 +87,14 @@ class SliderControlPanel {
           $value2.prop('disabled', false);
         } else {
           $value2.prop('disabled', true);
+          $value2.val('');
         }
         $checkbox.on('change', function switchValue2() {
           if (this.checked === true) {
             $value2.prop('disabled', false);
           } else {
             $value2.prop('disabled', true);
+            $value2.val('');
           }
         });
       }
@@ -65,6 +104,13 @@ class SliderControlPanel {
   initValueInputs() {
     const [$value1, $value2] = this.valueElems;
     const { $slider } = this;
+    if (Array.isArray($slider.slider('value'))) {
+      $value1.val($slider.slider('value')[0]);
+      $value2.val($slider.slider('value')[1]);
+    } else {
+      $value1.val(+$slider.slider('value'));
+    }
+
     this.valueElems.forEach(($value) => {
       $value.on('focusout', () => {
         if (Array.isArray($slider.slider('value'))) {
@@ -89,7 +135,10 @@ class SliderControlPanel {
     const [$value1, $value2] = this.valueElems;
 
     this.minMaxNames.forEach((name) => {
-      $(`#${this.sliderName}-${name.toLowerCase()}`).on('focusout', function changeMinMax() {
+      const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
+      $minOrMax.val(+$slider.slider(name));
+
+      $minOrMax.on('focusout', function changeMinMax() {
         if ($(this).val() && !Number.isNaN(+$(this).val())) {
           $slider.slider(name, +$(this).val());
           $(`#${sliderName}-${minMaxNames[1]}`).val(+$slider.slider('max'));
@@ -108,10 +157,11 @@ class SliderControlPanel {
   initStepSize() {
     const $stepSize = $(`#${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
     const { $slider } = this;
+    $stepSize.val(+$slider.slider('stepSize'));
     $stepSize.on('focusout', function changeStepSize() {
       if ($(this).val() && !Number.isNaN(+$(this).val())) {
         $slider.slider('stepSize', +$(this).val());
-        $(this).val($slider.slider('model').getStepSize());
+        $(this).val(+$slider.slider('stepSize'));
       }
     });
   }
@@ -119,6 +169,9 @@ class SliderControlPanel {
   initLength() {
     const $length = $(`#${this.sliderName}-${this.lengthName.toLowerCase()}`);
     const { $slider } = this;
+    $length.val($slider.slider('view').getBar().style.width
+    || $slider.slider('view').getBar().style.height);
+
     $length.on('focusout', function changeLength() {
       if ($(this).val()) {
         $slider.slider('length', +$(this).val());
@@ -130,6 +183,8 @@ class SliderControlPanel {
   initStepsInfo() {
     const $stepsInfo = $(`#${this.sliderName}-${this.stepsInfoName.toLowerCase()}`);
     const { $slider } = this;
+    $stepsInfo.val($slider.slider('view').getStepsInfoSettings());
+
     $stepsInfo.on('focusout', () => {
       if ($stepsInfo.val()) {
         const valIsBoolean = $stepsInfo.val().toLowerCase() === 'true'
@@ -152,9 +207,11 @@ class SliderControlPanel {
   }
 }
 
-$('#slider1').slider();
+$('#slider1').slider({
+  tooltip: true,
+});
 
-const controlPanel = new SliderControlPanel({
+const controlPanel1 = new SliderControlPanel({
   sliderName: 'slider1',
   rangeName: 'range',
   valueName1: 'value1',

@@ -194,6 +194,8 @@ declare global {
           return this.data('model').getValue();
         case 'range':
           return this.data('model').getRange();
+        case 'stepSize':
+          return this.data('model').getStepSize();
         case 'min':
           return this.data('model').getMin();
         case 'max':
