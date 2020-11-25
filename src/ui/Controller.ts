@@ -4,7 +4,7 @@ import { IController } from '../interfaces/controllerInterfaces';
 import { ControllerOptions, SliderOptions } from '../interfaces/options';
 
 
-export default class Controller implements IController {
+class Controller implements IController {
   private _model: IModel;
   private _view: IView;
   private _activeThumb: HTMLElement | undefined;
@@ -424,3 +424,5 @@ export default class Controller implements IController {
     }
   }
 }
+
+export default Controller;

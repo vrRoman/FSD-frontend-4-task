@@ -2,7 +2,7 @@ import { IModel } from '../interfaces/modelTypesAndInterfaces';
 import { SliderOptions, ViewOptions } from '../interfaces/options';
 import { IView } from '../interfaces/viewInterfaces';
 
-export default class View implements IView {
+class View implements IView {
   sliderClass: string | string[]
   sliderVerticalClass: string | string[]
   barClass: string | string[]
@@ -634,3 +634,5 @@ export default class View implements IView {
     }
   }
 }
+
+export default View;

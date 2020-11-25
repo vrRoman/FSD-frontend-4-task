@@ -2,7 +2,7 @@ import { ModelOptions, SliderOptions } from '../interfaces/options';
 import { IModel, ObserverAction, Value } from '../interfaces/modelTypesAndInterfaces';
 
 
-export default class Model implements IModel {
+class Model implements IModel {
   private value: Value
   private range: boolean
   private stepSize: number
@@ -225,3 +225,5 @@ export default class Model implements IModel {
     return this.stepSize;
   }
 }
+
+export default Model;
