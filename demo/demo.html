@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <link rel="stylesheet" href="../dist/slider.min.css">
+  <link rel="stylesheet" href="demo.css">
 </head>
 <body>
 
   <div class="slider-container">
-    <div id="slider1"></div>
+    <h2>Default options</h2>
+    <div id="slider1" class="slider-container__slider"></div>
     <div class="slider-container_config">
       <label for="slider1-range" class="checkbox-label">
         <span>Range</span>
@@ -34,14 +36,19 @@
         <span>UseKeyboard</span>
         <input type="checkbox" id="slider1-usekeyboard">
       </label>
-
-      <span>Value</span>
-      <label for="slider1-value1" class="text-label">
-        <input id="slider1-value1" type="text">
+      <label for="slider1-interactivestepsinfo" class="checkbox-label">
+        <span>InteractiveStepsInfo</span>
+        <input type="checkbox" id="slider1-interactivestepsinfo">
       </label>
-      <label for="slider1-value2" class="text-label">
-        <input id="slider1-value2" type="text">
-      </label>
+      <div class="slider1-value">
+        <span>Value</span>
+        <label for="slider1-value1" class="text-label">
+          <input id="slider1-value1" type="text">
+        </label>
+        <label for="slider1-value2" class="text-label">
+          <input id="slider1-value2" type="text">
+        </label>
+      </div>
       <label for="slider1-min" class="text-label">
         <span>Min</span>
         <input type="text" id="slider1-min">
@@ -61,8 +68,217 @@
       </label>
 
       <label for="slider1-stepsinfo" class="text-label">
-        <span>StepsInfo</span>
+        <span>StepsInfo (Array - вводить значения через запятую, Boolean
+          - ввести true или false, Number - ввести число)</span>
         <input type="text" id="slider1-stepsinfo">
+      </label>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="slider-container">
+    <h2>Custom options</h2>
+    <div id="slider2" class="slider-container__slider"></div>
+    <div class="slider-container_config">
+      <label for="slider2-range" class="checkbox-label">
+        <span>Range</span>
+        <input type="checkbox" id="slider2-range">
+      </label>
+      <label for="slider2-vertical" class="checkbox-label">
+        <span>Vertical</span>
+        <input type="checkbox" id="slider2-vertical">
+      </label>
+      <label for="slider2-tooltip" class="checkbox-label">
+        <span>Tooltip</span>
+        <input type="checkbox" id="slider2-tooltip">
+      </label>
+      <label for="slider2-valueinfo" class="checkbox-label">
+        <span>ValueInfo</span>
+        <input type="checkbox" id="slider2-valueinfo">
+      </label>
+      <label for="slider2-responsive" class="checkbox-label">
+        <span>Responsive</span>
+        <input type="checkbox" id="slider2-responsive">
+      </label>
+      <label for="slider2-usekeyboard" class="checkbox-label">
+        <span>UseKeyboard</span>
+        <input type="checkbox" id="slider2-usekeyboard">
+      </label>
+      <label for="slider2-interactivestepsinfo" class="checkbox-label">
+        <span>InteractiveStepsInfo</span>
+        <input type="checkbox" id="slider2-interactivestepsinfo">
+      </label>
+      <div class="slider2-value">
+        <span>Value</span>
+        <label for="slider2-value1" class="text-label">
+          <input id="slider2-value1" type="text">
+        </label>
+        <label for="slider2-value2" class="text-label">
+          <input id="slider2-value2" type="text">
+        </label>
+      </div>
+      <label for="slider2-min" class="text-label">
+        <span>Min</span>
+        <input type="text" id="slider2-min">
+      </label>
+      <label for="slider2-max" class="text-label">
+        <span>Max</span>
+        <input type="text" id="slider2-max">
+      </label>
+      <label for="slider2-stepsize" class="text-label">
+        <span>StepSize</span>
+        <input type="text" id="slider2-stepsize">
+      </label>
+
+      <label for="slider2-length" class="text-label">
+        <span>Length</span>
+        <input type="text" id="slider2-length">
+      </label>
+
+      <label for="slider2-stepsinfo" class="text-label">
+        <span>StepsInfo</span>
+        <input type="text" id="slider2-stepsinfo">
+      </label>
+    </div>
+  </div>
+
+
+
+
+  <div class="slider-container">
+    <h2>On change</h2>
+    <code>onChange() { console.log($('#slider3').slider('value')) }</code>
+    <div id="slider3" class="slider-container__slider"></div>
+    <div class="slider-container_config">
+      <label for="slider3-range" class="checkbox-label">
+        <span>Range</span>
+        <input type="checkbox" id="slider3-range">
+      </label>
+      <label for="slider3-vertical" class="checkbox-label">
+        <span>Vertical</span>
+        <input type="checkbox" id="slider3-vertical">
+      </label>
+      <label for="slider3-tooltip" class="checkbox-label">
+        <span>Tooltip</span>
+        <input type="checkbox" id="slider3-tooltip">
+      </label>
+      <label for="slider3-valueinfo" class="checkbox-label">
+        <span>ValueInfo</span>
+        <input type="checkbox" id="slider3-valueinfo">
+      </label>
+      <label for="slider3-responsive" class="checkbox-label">
+        <span>Responsive</span>
+        <input type="checkbox" id="slider3-responsive">
+      </label>
+      <label for="slider3-usekeyboard" class="checkbox-label">
+        <span>UseKeyboard</span>
+        <input type="checkbox" id="slider3-usekeyboard">
+      </label>
+      <label for="slider3-interactivestepsinfo" class="checkbox-label">
+        <span>InteractiveStepsInfo</span>
+        <input type="checkbox" id="slider3-interactivestepsinfo">
+      </label>
+      <div class="slider3-value">
+        <span>Value</span>
+        <label for="slider3-value1" class="text-label">
+          <input id="slider3-value1" type="text">
+        </label>
+        <label for="slider3-value2" class="text-label">
+          <input id="slider3-value2" type="text">
+        </label>
+      </div>
+      <label for="slider3-min" class="text-label">
+        <span>Min</span>
+        <input type="text" id="slider3-min">
+      </label>
+      <label for="slider3-max" class="text-label">
+        <span>Max</span>
+        <input type="text" id="slider3-max">
+      </label>
+      <label for="slider3-stepsize" class="text-label">
+        <span>StepSize</span>
+        <input type="text" id="slider3-stepsize">
+      </label>
+
+      <label for="slider3-length" class="text-label">
+        <span>Length</span>
+        <input type="text" id="slider3-length">
+      </label>
+
+      <label for="slider3-stepsinfo" class="text-label">
+        <span>StepsInfo</span>
+        <input type="text" id="slider3-stepsinfo">
+      </label>
+    </div>
+  </div>
+
+
+
+
+  <div class="slider-container">
+    <div id="slider4" class="slider-container__slider"></div>
+    <div class="slider-container_config">
+      <label for="slider4-range" class="checkbox-label">
+        <span>Range</span>
+        <input type="checkbox" id="slider4-range">
+      </label>
+      <label for="slider4-vertical" class="checkbox-label">
+        <span>Vertical</span>
+        <input type="checkbox" id="slider4-vertical">
+      </label>
+      <label for="slider4-tooltip" class="checkbox-label">
+        <span>Tooltip</span>
+        <input type="checkbox" id="slider4-tooltip">
+      </label>
+      <label for="slider4-valueinfo" class="checkbox-label">
+        <span>ValueInfo</span>
+        <input type="checkbox" id="slider4-valueinfo">
+      </label>
+      <label for="slider4-responsive" class="checkbox-label">
+        <span>Responsive</span>
+        <input type="checkbox" id="slider4-responsive">
+      </label>
+      <label for="slider4-usekeyboard" class="checkbox-label">
+        <span>UseKeyboard</span>
+        <input type="checkbox" id="slider4-usekeyboard">
+      </label>
+      <label for="slider4-interactivestepsinfo" class="checkbox-label">
+        <span>InteractiveStepsInfo</span>
+        <input type="checkbox" id="slider4-interactivestepsinfo">
+      </label>
+      <div class="slider4-value">
+        <span>Value</span>
+        <label for="slider4-value1" class="text-label">
+          <input id="slider4-value1" type="text">
+        </label>
+        <label for="slider4-value2" class="text-label">
+          <input id="slider4-value2" type="text">
+        </label>
+      </div>
+      <label for="slider4-min" class="text-label">
+        <span>Min</span>
+        <input type="text" id="slider4-min">
+      </label>
+      <label for="slider4-max" class="text-label">
+        <span>Max</span>
+        <input type="text" id="slider4-max">
+      </label>
+      <label for="slider4-stepsize" class="text-label">
+        <span>StepSize</span>
+        <input type="text" id="slider4-stepsize">
+      </label>
+
+      <label for="slider4-length" class="text-label">
+        <span>Length</span>
+        <input type="text" id="slider4-length">
+      </label>
+
+      <label for="slider4-stepsinfo" class="text-label">
+        <span>StepsInfo</span>
+        <input type="text" id="slider4-stepsinfo">
       </label>
     </div>
   </div>

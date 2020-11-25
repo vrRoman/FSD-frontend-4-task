@@ -206,6 +206,8 @@ declare global {
           return this.data('view').getResponsive();
         case 'tooltip':
           return this.data('view').getTooltip();
+        case 'stepsInfo':
+          return this.data('view').getStepsInfo();
         case 'valueInfo':
           return this.data('view').getValueInfo();
         case 'useKeyboard':

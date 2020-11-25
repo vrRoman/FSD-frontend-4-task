@@ -29,21 +29,30 @@ class SliderControlPanel {
     switch (action.type) {
       case 'UPDATE_VALUE':
         if (Array.isArray(this.$slider.slider('value'))) {
-          $value1.val(this.$slider.slider('value')[0]);
-          $value2.val(this.$slider.slider('value')[1]);
+          $value1.val(+(+this.$slider.slider('value')[0]).toFixed(3));
+          $value2.val(+(+this.$slider.slider('value')[1]).toFixed(3));
         } else {
-          $value1.val(+this.$slider.slider('value'));
+          $value1.val(+(+this.$slider.slider('value')).toFixed(3));
         }
         break;
       case 'UPDATE_RANGE':
         if (Array.isArray(this.$slider.slider('value'))) {
-          $value1.val(this.$slider.slider('value')[0]);
-          $value2.val(this.$slider.slider('value')[1]);
+          $value1.val(+(this.$slider.slider('value')[0]).toFixed(3));
+          $value2.val(+(this.$slider.slider('value')[1]).toFixed(3));
         } else {
-          $value1.val(+this.$slider.slider('value'));
+          $value1.val(+(+this.$slider.slider('value')).toFixed(3));
         }
         break;
-      case 'UPDATE_MIN' || 'UPDATE_MAX':
+      case 'UPDATE_MIN':
+        this.valueElems.forEach(($elem) => {
+          $elem.val(+this.$slider.slider('value'));
+        });
+        this.minMaxNames.forEach((name) => {
+          const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
+          $minOrMax.val(+this.$slider.slider(name));
+        });
+        break;
+      case 'UPDATE_MAX':
         this.valueElems.forEach(($elem) => {
           $elem.val(+this.$slider.slider('value'));
         });
@@ -207,9 +216,9 @@ class SliderControlPanel {
   }
 }
 
-$('#slider1').slider({
-  tooltip: true,
-});
+
+
+$('#slider1').slider();
 
 const controlPanel1 = new SliderControlPanel({
   sliderName: 'slider1',
@@ -222,5 +231,71 @@ const controlPanel1 = new SliderControlPanel({
   lengthName: 'length',
   stepsInfoName: 'stepsInfo',
   checkboxNames: ['vertical', 'responsive', 'range',
-    'tooltip', 'valueInfo', 'useKeyboard'],
+    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
+});
+
+
+$('#slider2').slider({
+  value: [2, 84],
+  range: true,
+  stepSize: 1,
+  max: 100,
+  min: -30,
+  length: '200px',
+  tooltip: true,
+  valueInfo: true,
+  stepsInfo: ['start', 'half', 'end'],
+  vertical: true,
+  responsive: true,
+});
+
+const controlPanel2 = new SliderControlPanel({
+  sliderName: 'slider2',
+  rangeName: 'range',
+  valueName1: 'value1',
+  valueName2: 'value2',
+  minName: 'min',
+  maxName: 'max',
+  stepSizeName: 'stepSize',
+  lengthName: 'length',
+  stepsInfoName: 'stepsInfo',
+  checkboxNames: ['vertical', 'responsive', 'range',
+    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
+});
+
+$('#slider3').slider({
+  onChange() {
+    console.log($('#slider3').slider('value'));
+  },
+});
+
+const controlPanel3 = new SliderControlPanel({
+  sliderName: 'slider3',
+  rangeName: 'range',
+  valueName1: 'value1',
+  valueName2: 'value2',
+  minName: 'min',
+  maxName: 'max',
+  stepSizeName: 'stepSize',
+  lengthName: 'length',
+  stepsInfoName: 'stepsInfo',
+  checkboxNames: ['vertical', 'responsive', 'range',
+    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
+});
+
+
+$('#slider4').slider();
+
+const controlPanel4 = new SliderControlPanel({
+  sliderName: 'slider4',
+  rangeName: 'range',
+  valueName1: 'value1',
+  valueName2: 'value2',
+  minName: 'min',
+  maxName: 'max',
+  stepSizeName: 'stepSize',
+  lengthName: 'length',
+  stepsInfoName: 'stepsInfo',
+  checkboxNames: ['vertical', 'responsive', 'range',
+    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
 });
