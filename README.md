@@ -1,6 +1,6 @@
 # Слайдер. Плагин для JQuery
 
-### [Демо слайдера]()
+### [Демо слайдера](https://vrroman.github.io/FSD-frontend-4-task/demo/demo.html)
 ---
 ## Развертывание
 #### Установка библиотек
@@ -64,7 +64,7 @@ npm run build:prod
 | valueInfo | boolean | false | Добавляет элмент с текущим значением слайдера(Если range==true, используется шаблон value[0] - value[1]). |
 | vertical | boolean | false | Вертикальный режим слайдера. |
 | responsive | boolean | false | Если true, при изменении размера слайдера, он обновляется. Не рекомендуется, если length указывается в статических ед. измерения(px). |
-| (slider\|sliderVertical\|bar\|progressBar\|thumb\|activeThumb\|tooltip\|stepsInfo\|valueInfo)Class | string \|Array<string\> | Одноименное, по БЭМ | Класс определенного элемента. Может быть массивом классов. |
+| (slider\|sliderVertical<br>\|bar\|progressBar\|thumb<br>\|activeThumb\|tooltip\|stepsInfo<br>\|valueInfo)Class | string \|Array<string\> | Одноименное, по БЭМ | Класс определенного элемента. Может быть массивом классов. |
 | useKeyboard | boolean | true | При нажатии стрелок и клавиш ad активный ползунок будет перемещаться. |
 | interactiveStepsInfo | boolean | true | При нажатии на элементы шкалы значений, значение будет меняться на соответсвующее. |
 | onChange | Function | None | Будет вызываться при каждом перемещении ползунков. |
