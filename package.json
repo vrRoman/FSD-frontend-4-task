@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vrRoman/FSD-frontent-4-task.git"
+    "url": "git+https://github.com/vrRoman/FSD-frontend-4-task.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vrRoman/FSD-frontent-4-task/issues"
+    "url": "https://github.com/vrRoman/FSD-frontend-4-task/issues"
   },
-  "homepage": "https://github.com/vrRoman/FSD-frontent-4-task#readme",
+  "homepage": "https://github.com/vrRoman/FSD-frontend-4-task#readme",
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-typescript": "^7.10.4",
