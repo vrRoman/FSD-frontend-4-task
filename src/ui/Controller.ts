@@ -315,11 +315,14 @@ class Controller implements IController {
 
   // При нажатии клавиш wasd и стрелок вызывается addStepsToActiveThumb(1/-1)
   private onKeydown(evt: KeyboardEvent): void {
-    if (evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
-      || evt.key === 'd' || evt.key === 's') {
+    const isThisNextKey = evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
+      || evt.key === 'd' || evt.key === 's';
+    const isThisPrevKey = evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
+      || evt.key === 'a' || evt.key === 'w';
+
+    if (isThisNextKey) {
       this.addStepsToActiveThumb(1);
-    } else if (evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
-      || evt.key === 'a' || evt.key === 'w') {
+    } else if (isThisPrevKey) {
       this.addStepsToActiveThumb(-1);
     }
   }

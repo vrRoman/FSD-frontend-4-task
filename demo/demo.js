@@ -66,7 +66,6 @@ class SliderControlPanel {
     }
   }
 
-
   initCheckboxes(optionNames) {
     const { $slider } = this;
     const [, $value2] = this.valueElems;
@@ -82,15 +81,24 @@ class SliderControlPanel {
       }
 
       // Навесить обработчики
-      $checkbox.on('change', function change() {
+      function onCheckboxChange() {
         if (this.checked === true) {
           $slider.slider(name, true);
         } else {
           $slider.slider(name, false);
         }
-      });
+      }
+      $checkbox.on('change', onCheckboxChange);
 
       // Если range===false, то отключить второе поле ввода значения
+      function switchValue2() {
+        if (this.checked === true) {
+          $value2.prop('disabled', false);
+        } else {
+          $value2.prop('disabled', true);
+          $value2.val('');
+        }
+      }
       if (name === this.rangeName) {
         if (this.$slider.slider(this.rangeName) === true) {
           $value2.prop('disabled', false);
@@ -98,14 +106,7 @@ class SliderControlPanel {
           $value2.prop('disabled', true);
           $value2.val('');
         }
-        $checkbox.on('change', function switchValue2() {
-          if (this.checked === true) {
-            $value2.prop('disabled', false);
-          } else {
-            $value2.prop('disabled', true);
-            $value2.val('');
-          }
-        });
+        $checkbox.on('change', switchValue2);
       }
     });
   }
@@ -120,22 +121,24 @@ class SliderControlPanel {
       $value1.val(+$slider.slider('value'));
     }
 
-    this.valueElems.forEach(($value) => {
-      $value.on('focusout', () => {
-        if (Array.isArray($slider.slider('value'))) {
-          if ($value1.val() && $value2.val()
-            && !Number.isNaN(+$value1.val()) && !Number.isNaN(+$value2.val())) {
-            $slider.slider('value', [+$value1.val(), +$value2.val()]);
-            $value1.val($slider.slider('value')[0]);
-            $value2.val($slider.slider('value')[1]);
-          }
-        } else {
-          if ($value1.val() && !Number.isNaN(+$value1.val())) {
-            $slider.slider('value', +$value1.val());
-            $value1.val(+$slider.slider('value'));
-          }
+    function onValueFocusout() {
+      if (Array.isArray($slider.slider('value'))) {
+        const isValValid = $value1.val() && $value2.val()
+          && !Number.isNaN(+$value1.val()) && !Number.isNaN(+$value2.val());
+        if (isValValid) {
+          $slider.slider('value', [+$value1.val(), +$value2.val()]);
+          $value1.val($slider.slider('value')[0]);
+          $value2.val($slider.slider('value')[1]);
         }
-      });
+      } else {
+        if ($value1.val() && !Number.isNaN(+$value1.val())) {
+          $slider.slider('value', +$value1.val());
+          $value1.val(+$slider.slider('value'));
+        }
+      }
+    }
+    this.valueElems.forEach(($value) => {
+      $value.on('focusout', onValueFocusout);
     });
   }
 
@@ -146,8 +149,7 @@ class SliderControlPanel {
     this.minMaxNames.forEach((name) => {
       const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
       $minOrMax.val(+$slider.slider(name));
-
-      $minOrMax.on('focusout', function changeMinMax() {
+      function onFocusoutMinMax() {
         if ($(this).val() && !Number.isNaN(+$(this).val())) {
           $slider.slider(name, +$(this).val());
           $(`#${sliderName}-${minMaxNames[1]}`).val(+$slider.slider('max'));
@@ -159,7 +161,9 @@ class SliderControlPanel {
             $value1.val(+$slider.slider('value'));
           }
         }
-      });
+      }
+
+      $minOrMax.on('focusout', onFocusoutMinMax);
     });
   }
 
@@ -167,12 +171,13 @@ class SliderControlPanel {
     const $stepSize = $(`#${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
     const { $slider } = this;
     $stepSize.val(+$slider.slider('stepSize'));
-    $stepSize.on('focusout', function changeStepSize() {
+    function onFocusoutStepSize() {
       if ($(this).val() && !Number.isNaN(+$(this).val())) {
         $slider.slider('stepSize', +$(this).val());
         $(this).val(+$slider.slider('stepSize'));
       }
-    });
+    }
+    $stepSize.on('focusout', onFocusoutStepSize);
   }
 
   initLength() {
@@ -181,20 +186,20 @@ class SliderControlPanel {
     $length.val($slider.slider('view').getBar().style.width
     || $slider.slider('view').getBar().style.height);
 
-    $length.on('focusout', function changeLength() {
+    function onFocusoutLength() {
       if ($(this).val()) {
         $slider.slider('length', +$(this).val());
         $slider.slider('length', $(this).val());
       }
-    });
+    }
+    $length.on('focusout', onFocusoutLength);
   }
 
   initStepsInfo() {
     const $stepsInfo = $(`#${this.sliderName}-${this.stepsInfoName.toLowerCase()}`);
     const { $slider } = this;
     $stepsInfo.val($slider.slider('view').getStepsInfoSettings());
-
-    $stepsInfo.on('focusout', () => {
+    function onFocusoutStepsInfo() {
       if ($stepsInfo.val()) {
         const valIsBoolean = $stepsInfo.val().toLowerCase() === 'true'
           || $stepsInfo.val().toLowerCase() === 'false';
@@ -212,7 +217,8 @@ class SliderControlPanel {
           }
         }
       }
-    });
+    }
+    $stepsInfo.on('focusout', onFocusoutStepsInfo);
   }
 }
 

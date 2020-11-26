@@ -6,6 +6,7 @@
         "jquery": true
     },
     "extends": [
+        "plugin:fsd/all",
         "airbnb-base"
     ],
     "parser": "@typescript-eslint/parser",
@@ -14,6 +15,7 @@
         "sourceType": "module"
     },
     "plugins": [
+        "fsd",
         "@typescript-eslint"
     ],
     "rules": {

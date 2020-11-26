@@ -43,8 +43,6 @@ class View implements IView {
 
     this._length = viewOptions.length;
 
-    this._responsive = viewOptions.responsive;
-
     this._vertical = viewOptions.vertical;
     this._stepsInfoSettings = viewOptions.stepsInfo;
 
@@ -60,9 +58,8 @@ class View implements IView {
     this.onWindowResize = this.onWindowResize.bind(this);
 
     this._lastLength = this.getLength();
-    if (this._responsive) {
-      window.addEventListener('resize', this.onWindowResize);
-    }
+
+    this._responsive = this.changeResponsive(viewOptions.responsive);
   }
 
   // Возвращает значение responsive
@@ -194,23 +191,25 @@ class View implements IView {
       const thumbPosition = this.getThumbPosition();
       const progressBar = this.getProgressBar();
 
-      if (thumb && !Array.isArray(thumb) && typeof thumbPosition === 'number') {
-        thumb.style.top = '';
-        thumb.style.left = `${thumbPosition - thumb.offsetHeight / 2}px`;
+      if (thumb) {
+        if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
+          thumb.style.top = '';
+          thumb.style.left = `${thumbPosition - thumb.offsetHeight / 2}px`;
 
-        progressBar.style.width = `${thumbPosition}px`;
-        progressBar.style.height = '';
-        progressBar.style.left = '0';
-        progressBar.style.top = '';
-      } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
-        for (let i = 0; i <= 1; i += 1) {
-          thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
-          thumb[i].style.top = '';
-
-          progressBar.style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
+          progressBar.style.width = `${thumbPosition}px`;
           progressBar.style.height = '';
-          progressBar.style.left = `${thumbPosition[0]}px`;
+          progressBar.style.left = '0';
           progressBar.style.top = '';
+        } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
+          for (let i = 0; i <= 1; i += 1) {
+            thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+            thumb[i].style.top = '';
+
+            progressBar.style.width = `${thumbPosition[1] - thumbPosition[0]}px`;
+            progressBar.style.height = '';
+            progressBar.style.left = `${thumbPosition[0]}px`;
+            progressBar.style.top = '';
+          }
         }
       }
     } else {
@@ -225,23 +224,25 @@ class View implements IView {
       const thumbPosition = this.getThumbPosition();
       const progressBar = this.getProgressBar();
 
-      if (thumb && !Array.isArray(thumb) && typeof thumbPosition === 'number') {
-        thumb.style.left = '';
-        thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
+      if (thumb) {
+        if (!Array.isArray(thumb) && typeof thumbPosition === 'number') {
+          thumb.style.left = '';
+          thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
 
-        progressBar.style.height = `${thumbPosition}px`;
-        progressBar.style.width = '';
-        progressBar.style.top = '0';
-        progressBar.style.left = '';
-      } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
-        for (let i = 0; i <= 1; i += 1) {
-          thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
-          thumb[i].style.left = '';
-
-          progressBar.style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
+          progressBar.style.height = `${thumbPosition}px`;
           progressBar.style.width = '';
-          progressBar.style.top = `${thumbPosition[0]}px`;
+          progressBar.style.top = '0';
           progressBar.style.left = '';
+        } else if (Array.isArray(thumb) && Array.isArray(thumbPosition)) {
+          for (let i = 0; i <= 1; i += 1) {
+            thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+            thumb[i].style.left = '';
+
+            progressBar.style.height = `${thumbPosition[1] - thumbPosition[0]}px`;
+            progressBar.style.width = '';
+            progressBar.style.top = `${thumbPosition[0]}px`;
+            progressBar.style.left = '';
+          }
         }
       }
     }
@@ -388,18 +389,20 @@ class View implements IView {
     const thumbPosition = this.getThumbPosition();
     const thumb = this.getThumb();
 
-    if (typeof thumbPosition === 'number' && !Array.isArray(thumb) && thumb) {
-      if (this.getVertical()) {
-        thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
-      } else {
-        thumb.style.left = `${thumbPosition - thumb.offsetWidth / 2}px`;
-      }
-    } else if (Array.isArray(thumbPosition) && Array.isArray(thumb)) {
-      for (let i = 0; i <= 1; i += 1) {
+    if (thumb) {
+      if (typeof thumbPosition === 'number' && !Array.isArray(thumb)) {
         if (this.getVertical()) {
-          thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+          thumb.style.top = `${thumbPosition - thumb.offsetHeight / 2}px`;
         } else {
-          thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetWidth / 2}px`;
+          thumb.style.left = `${thumbPosition - thumb.offsetWidth / 2}px`;
+        }
+      } else if (Array.isArray(thumbPosition) && Array.isArray(thumb)) {
+        for (let i = 0; i <= 1; i += 1) {
+          if (this.getVertical()) {
+            thumb[i].style.top = `${thumbPosition[i] - thumb[i].offsetHeight / 2}px`;
+          } else {
+            thumb[i].style.left = `${thumbPosition[i] - thumb[i].offsetWidth / 2}px`;
+          }
         }
       }
     }
