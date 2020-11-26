@@ -121,10 +121,12 @@ class Controller implements IController {
     if (Array.isArray(thumb)) {
       for (let i = 0; i <= 1; i += 1) {
         thumb[i].addEventListener('mousedown', this.thumbOnDown);
+        thumb[i].addEventListener('touchstart', this.thumbOnDown);
       }
     } else {
       if (thumb) {
         thumb.addEventListener('mousedown', this.thumbOnDown);
+        thumb.addEventListener('touchstart', this.thumbOnDown);
       }
     }
   }
@@ -180,11 +182,11 @@ class Controller implements IController {
   // перезаписывает activeThumb, _clientX/Y, добавляет обработчики
   // thumbOnMove, thumbOnUp и убирает слушатель
   // document-mouseup-removeActiveThumb
-  private thumbOnDown(evt: MouseEvent): void {
+  private thumbOnDown(evt: MouseEvent | TouchEvent): void {
     evt.preventDefault();
     evt.stopPropagation();
 
-    const target = <HTMLElement>evt.currentTarget;
+    const target = <HTMLElement>evt.target;
     if (target) {
       if (this._activeThumb) {
         this._activeThumb.style.zIndex = '';
@@ -207,9 +209,12 @@ class Controller implements IController {
     }
 
     document.addEventListener('mousemove', this.thumbOnMove);
+    document.addEventListener('touchmove', this.thumbOnMove);
     document.addEventListener('mouseup', this.thumbOnUp);
+    document.addEventListener('touchend', this.thumbOnUp);
 
     document.removeEventListener('mouseup', this.removeActiveThumb);
+    document.removeEventListener('touchend', this.removeActiveThumb);
   }
 
   // При отжатии кнопки после ползунка убирает обработчики thumbOnMove и
@@ -217,8 +222,11 @@ class Controller implements IController {
   // активный тамб при клике в любое место документа
   private thumbOnUp() {
     document.removeEventListener('mousemove', this.thumbOnMove);
+    document.removeEventListener('touchmove', this.thumbOnMove);
     document.removeEventListener('mouseup', this.thumbOnUp);
+    document.removeEventListener('touchend', this.thumbOnUp);
     document.addEventListener('mouseup', this.removeActiveThumb);
+    document.addEventListener('touchend', this.removeActiveThumb);
   }
 
   // Возвращает значение useKeyboard
@@ -400,11 +408,20 @@ class Controller implements IController {
 
   // При перемещении мыши вызывается addStepsToActiveThumb с numOfSteps,
   // зависящим от смещения мыши и перезаписывается this._client(X/Y)
-  private thumbOnMove(evt: MouseEvent) {
+  private thumbOnMove(evt: MouseEvent | TouchEvent) {
     if (this._activeThumb) {
+      let clientX;
+      let clientY;
+      if ('clientX' in evt) {
+        clientX = evt.clientX;
+        clientY = evt.clientY;
+      } else {
+        clientX = evt.touches[0].clientX;
+        clientY = evt.touches[0].clientY;
+      }
       if (this._view.getVertical()) {
-        if (Math.abs(evt.clientY - this._clientY) >= this.getStepLength()) {
-          const numOfSteps = Math.trunc((evt.clientY - this._clientY) / this.getStepLength());
+        if (Math.abs(clientY - this._clientY) >= this.getStepLength()) {
+          const numOfSteps = Math.trunc((clientY - this._clientY) / this.getStepLength());
           this.addStepsToActiveThumb(numOfSteps);
 
           this._clientY = parseFloat(this._activeThumb.style.top)
@@ -412,8 +429,8 @@ class Controller implements IController {
             + this._activeThumb.offsetHeight / 2;
         }
       } else {
-        if (Math.abs(evt.clientX - this._clientX) >= this.getStepLength()) {
-          const numOfSteps = Math.trunc((evt.clientX - this._clientX) / this.getStepLength());
+        if (Math.abs(clientX - this._clientX) >= this.getStepLength()) {
+          const numOfSteps = Math.trunc((clientX - this._clientX) / this.getStepLength());
           this.addStepsToActiveThumb(numOfSteps);
 
           this._clientX = parseFloat(this._activeThumb.style.left)
