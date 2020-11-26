@@ -12,6 +12,10 @@ _Запустить webpack-dev-server:_
 ```
 npm run start
 ```  
+_Запустить тесты:_  
+```
+npm run test
+```  
 _Скомпилировать код в режиме development:_  
 ```
 npm run build:dev
