@@ -1,8 +1,8 @@
 // Многие тесты для controller будут проверяться в браузере
 
-import Model from '../src/model/Model';
-import View from '../src/ui/View';
-import Controller from '../src/ui/Controller';
+import Model from '../src/Model';
+import View from '../src/View';
+import Controller from '../src/Controller';
 import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
 import { IView } from '../src/interfaces/viewInterfaces';
 import { IController } from '../src/interfaces/controllerInterfaces';

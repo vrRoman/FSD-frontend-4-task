@@ -1,11 +1,11 @@
 import './styles/main.scss';
 
 
-import Model from './model/Model';
+import Model from './Model';
 import { IModel } from './interfaces/modelTypesAndInterfaces';
-import View from './ui/View';
+import View from './View';
 import { IView } from './interfaces/viewInterfaces';
-import Controller from './ui/Controller';
+import Controller from './Controller';
 import { IController } from './interfaces/controllerInterfaces';
 
 import { SliderOptions } from './interfaces/options';
@@ -160,18 +160,18 @@ declare global {
           });
         case 'useKeyboard':
           return this.each(function changeUseKeyboard() {
-            if (otherOptions === true && !$(this).data('controller').getUseKeyboard()) {
-              $(this).data('controller').addKeyboardListener();
-            } else if (otherOptions === false && $(this).data('controller').getUseKeyboard()) {
-              $(this).data('controller').removeKeyboardListener();
+            if (otherOptions === true && !$(this).data('view').getUseKeyboard()) {
+              $(this).data('view').addKeyboardListener();
+            } else if (otherOptions === false && $(this).data('view').getUseKeyboard()) {
+              $(this).data('view').removeKeyboardListener();
             }
           });
         case 'interactiveStepsInfo':
           return this.each(function changeInteractiveStepsInfo() {
-            if (otherOptions === true && !$(this).data('controller').getInteractiveStepsInfo()) {
-              $(this).data('controller').addStepsInfoInteractivity();
-            } else if (otherOptions === false && $(this).data('controller').getInteractiveStepsInfo()) {
-              $(this).data('controller').removeStepsInfoInteractivity();
+            if (otherOptions === true && !$(this).data('view').getInteractiveStepsInfo()) {
+              $(this).data('view').addStepsInfoInteractivity();
+            } else if (otherOptions === false && $(this).data('view').getInteractiveStepsInfo()) {
+              $(this).data('view').removeStepsInfoInteractivity();
             }
           });
         case 'onChange':
@@ -211,9 +211,9 @@ declare global {
         case 'valueInfo':
           return this.data('view').getValueInfo();
         case 'useKeyboard':
-          return this.data('controller').getUseKeyboard();
+          return this.data('view').getUseKeyboard();
         case 'interactiveStepsInfo':
-          return this.data('controller').getInteractiveStepsInfo();
+          return this.data('view').getInteractiveStepsInfo();
         default:
           $.error(`No ${options} value`);
       }

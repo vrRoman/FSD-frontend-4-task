@@ -24,6 +24,12 @@ export interface ViewOptions {
   // Отзывчивость слайдера. Рекомендуется отключать(false), если length задана в
   // статических ед. измерения(например, px)
   responsive: boolean
+  // Если true, то при нажатии стрелок и ad активный ползунок будет перемещаться
+  useKeyboard: boolean
+  // Если true, то шкала значений будет кликабельна и активный
+  // ползунок(если range=true, по умолчанию = thumb[1]) будет
+  // перемещаться на соответствующее значение
+  interactiveStepsInfo: boolean
 
   // Классы элементов слайдера
   sliderClass?: string | string[]
@@ -38,12 +44,6 @@ export interface ViewOptions {
 }
 
 export interface ControllerOptions {
-  // Если true, то при нажатии стрелок и ad активный ползунок будет перемещаться
-  useKeyboard: boolean
-  // Если true, то шкала значений будет кликабельна и активный
-  // ползунок(если range=true, по умолчанию = thumb[1]) будет
-  // перемещаться на соответствующее значение
-  interactiveStepsInfo: boolean
   // Будет выполняться при любом передвижении ползунка
   onChange?: Function
 }

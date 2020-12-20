@@ -9,6 +9,23 @@ export interface IView {
   stepsInfoClass: string | string[]
   valueInfoClass: string | string[]
 
+  addThumbListener() : void
+
+  getActiveThumb(): HTMLElement | undefined
+  setActiveThumb(numOfThumb?: number): void
+  removeActiveThumb(): void
+
+  getUseKeyboard(): boolean
+  getInteractiveStepsInfo(): boolean
+
+  addStepsInfoInteractivity(): void
+  removeStepsInfoInteractivity(): void
+
+  addKeyboardListener(): void
+  removeKeyboardListener(): void
+
+  getStepLength(): number
+
   createSlider(): HTMLElement
 
   createBar(): HTMLElement

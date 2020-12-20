@@ -1,7 +1,7 @@
 // Многие тесты для view будут проверяться в браузере
 
-import Model from '../src/model/Model';
-import View from '../src/ui/View';
+import Model from '../src/Model';
+import View from '../src/View';
 import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
 import { IView } from '../src/interfaces/viewInterfaces';
 import { ViewOptions, ModelOptions } from '../src/interfaces/options';

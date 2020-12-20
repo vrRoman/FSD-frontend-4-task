@@ -1,5 +1,5 @@
-import { ModelOptions, SliderOptions } from '../interfaces/options';
-import { IModel, ObserverAction, Value } from '../interfaces/modelTypesAndInterfaces';
+import { ModelOptions, SliderOptions } from './interfaces/options';
+import { IModel, ObserverAction, Value } from './interfaces/modelTypesAndInterfaces';
 
 
 class Model implements IModel {
