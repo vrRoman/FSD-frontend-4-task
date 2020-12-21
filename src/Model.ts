@@ -103,6 +103,9 @@ class Model implements IModel {
   setStepSize(newStepSize: number): number {
     this.stepSize = newStepSize;
     this.checkAndFixStepSize();
+    this.notify({
+      type: 'UPDATE_STEPSIZE',
+    });
 
     return this.stepSize;
   }
@@ -178,11 +181,11 @@ class Model implements IModel {
     return this.value;
   }
 
-  // Если размер шага <= 0, то он равен 1.
+  // Если размер шага < 1, то он равен 1.
   // Если размер шага > наибольшего диапазона значений, то он равняется
   // разнице максимального значения и минимального.
   checkAndFixStepSize(): number {
-    if (this.stepSize < 0) {
+    if (this.stepSize < 1) {
       this.stepSize = 1;
     }
     if (this.stepSize > this.max - this.min) {

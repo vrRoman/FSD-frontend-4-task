@@ -1,3 +1,6 @@
+import { ViewOptions } from './options';
+import { ModelProps } from './modelTypesAndInterfaces';
+
 export interface IView {
   sliderClass: string | string[]
   sliderVerticalClass: string | string[]
@@ -9,66 +12,65 @@ export interface IView {
   stepsInfoClass: string | string[]
   valueInfoClass: string | string[]
 
-  addThumbListener() : void
+  subscribe(observer: Object): void
+  unsubscribe(observer: Object): void
+  notify(): void
+
+  getOptions(): ViewOptions
+  provideModelProps(modelProps: ModelProps): void
+
+  createSlider(): HTMLElement
+  createBar(): HTMLElement | undefined
+  createProgressBar(): HTMLElement | undefined
+  createThumb(): HTMLElement | Array<HTMLElement> | undefined
+  createTooltip(): HTMLElement | Array<HTMLElement> | undefined
+  createStepsInfo(): HTMLElement | undefined
+  createValueInfo(): HTMLElement | undefined
+
+  removeThumb(): void
+  removeTooltip(): void
+  removeStepsInfo(): void
+  removeValueInfo(): void
+
+  updateProgressBar(): void
+  updateThumb(): void
+  updateTooltip(): void
+  updateStepsInfo(): void
+  updateValueInfo(): void
+
+  getParent(): Element
+  getSlider(): HTMLElement | undefined
+  getBar(): HTMLElement | undefined
+  getProgressBar(): HTMLElement | undefined
+  getThumb(): HTMLElement | Array<HTMLElement> | undefined
+  getTooltip(): HTMLElement | Array<HTMLElement> | undefined
+  getStepsInfo(): HTMLElement | undefined
+  getValueInfo(): HTMLElement | undefined
+
+  getStepsInfoSettings(): boolean | Array<number | string> | number
+  getResponsive(): boolean
+  getVertical(): boolean
+  getUseKeyboard(): boolean
+  getInteractiveStepsInfo(): boolean
+
+  getLength(): number
+  getStepLength(): number | undefined
+  getThumbPosition(): number | number[] | undefined
 
   getActiveThumb(): HTMLElement | undefined
   setActiveThumb(numOfThumb?: number): void
   removeActiveThumb(): void
 
-  getUseKeyboard(): boolean
-  getInteractiveStepsInfo(): boolean
-
+  addThumbListener() : void
+  addKeyboardListener(): void
   addStepsInfoInteractivity(): void
+
+  removeKeyboardListener(): void
   removeStepsInfoInteractivity(): void
 
-  addKeyboardListener(): void
-  removeKeyboardListener(): void
-
-  getStepLength(): number
-
-  createSlider(): HTMLElement
-
-  createBar(): HTMLElement
-  createProgressBar(): HTMLElement
-  updateProgressBar(): void
-  createThumb(): HTMLElement | Array<HTMLElement>
-  updateThumb(): void
-  removeThumb(): void
-
-  createTooltip(): HTMLElement | Array<HTMLElement> | undefined
-  updateTooltip(): void
-  removeTooltip(): void
-
-  createStepsInfo(): HTMLElement | undefined
-  updateStepsInfo(): void
-  removeStepsInfo(): void
-
-  createValueInfo(): HTMLElement
-  updateValueInfo(): void
-  removeValueInfo(): void
-
-  getParent(): Element
-  getSlider(): HTMLElement
-
-  getBar(): HTMLElement
-  getProgressBar(): HTMLElement
-  getThumb(): HTMLElement | Array<HTMLElement> | undefined
-  getThumbPosition(): number | number[]
-
-  getTooltip(): HTMLElement | Array<HTMLElement> | undefined
-
-  getStepsInfo(): HTMLElement | undefined
-  getStepsInfoSettings(): boolean | Array<number | string> | number
-
-  getValueInfo(): HTMLElement | undefined
-
-  getResponsive(): boolean
-  getLength(): number
-  getVertical(): boolean
-
-  changeResponsive(newResponsive: boolean): boolean
   changeLength(newLength: string): number
   changeVertical(newVertical: boolean): boolean
+  changeResponsive(newResponsive: boolean): boolean
   changeStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number)
     : HTMLElement | undefined
 }

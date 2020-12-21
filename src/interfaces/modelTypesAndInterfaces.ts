@@ -2,7 +2,7 @@ export type Value = [number, number] | number
 
 
 export interface ObserverAction {
-  type: 'UPDATE_VALUE' | 'UPDATE_RANGE' | 'UPDATE_MIN' | 'UPDATE_MAX'
+  type: 'UPDATE_VALUE' | 'UPDATE_RANGE' | 'UPDATE_MIN' | 'UPDATE_MAX' | 'UPDATE_STEPSIZE'
 }
 
 
@@ -26,4 +26,12 @@ export interface IModel {
   subscribe(observer: Object): void
   unsubscribe(observer: Object): void
   notify(action: ObserverAction): void
+}
+
+export interface ModelProps {
+  value: Value
+  range: boolean
+  stepSize: number
+  min: number
+  max: number
 }

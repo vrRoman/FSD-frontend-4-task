@@ -26,6 +26,7 @@ class SliderControlPanel {
 
   update(action) {
     const [$value1, $value2] = this.valueElems;
+    const $stepSize = $(`#${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
     switch (action.type) {
       case 'UPDATE_VALUE':
         if (Array.isArray(this.$slider.slider('value'))) {
@@ -60,6 +61,9 @@ class SliderControlPanel {
           const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
           $minOrMax.val(+this.$slider.slider(name));
         });
+        break;
+      case 'UPDATE_STEPSIZE':
+        $stepSize.val(+this.$slider.slider('stepSize'));
         break;
       default:
         $.error('Wrong action.type');

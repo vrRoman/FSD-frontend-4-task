@@ -48,7 +48,7 @@ declare global {
     slider: (
       options?: Options | OptionsString,
       otherOptions?: any
-    ) => JQuery<Element> | JQuery<Object> | number | number[] | boolean
+    ) => JQuery<Element> | JQuery<Object> | number | number[] | boolean | undefined
   }
 }
 
@@ -87,10 +87,15 @@ declare global {
         };
 
         const model: IModel = new Model(settings);
-        const view: IView = new View(model, settings, this);
+        const view: IView = new View(settings, this);
         const controller: IController = new Controller(model, view, settings);
 
-        $(this).data('slider', view.getSlider());
+        const slider = view.getSlider();
+        if (slider) {
+          $(this).data('slider', slider);
+        } else {
+          $(this).data('slider', false);
+        }
         $(this).data('model', model);
         $(this).data('view', view);
         $(this).data('controller', controller);
