@@ -49,6 +49,7 @@ class Controller implements IController {
     if (this._view.getInteractiveStepsInfo()) {
       this._view.addStepsInfoInteractivity();
     }
+    this._view.changeResponsive(this._view.getResponsive());
   }
   roundValue(value: Value): Value {
     const symbolsAfterCommaStepSize = this._model.getStepSize().toString().includes('.')

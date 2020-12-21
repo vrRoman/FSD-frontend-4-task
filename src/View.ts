@@ -70,7 +70,7 @@ class View implements IView {
     this._length = viewOptions.length;
     this._vertical = viewOptions.vertical;
     this._stepsInfoSettings = viewOptions.stepsInfo;
-    this._responsive = this.changeResponsive(viewOptions.responsive);
+    this._responsive = viewOptions.responsive;
     this.useKeyboard = viewOptions.useKeyboard;
     this.interactiveStepsInfo = viewOptions.interactiveStepsInfo;
 
@@ -1015,14 +1015,13 @@ class View implements IView {
   // Изменяет значение responsive, добавляет/убирает слушатели window resize
   // Возвращает новое значение responsive
   changeResponsive(newResponsive: boolean): boolean {
-    if (this._responsive !== newResponsive) {
-      if (newResponsive) {
-        window.addEventListener('resize', this.handleWindowResize);
-      } else {
-        window.removeEventListener('resize', this.handleWindowResize);
-      }
-      this._responsive = newResponsive;
+    if (newResponsive) {
+      window.removeEventListener('resize', this.handleWindowResize);
+      window.addEventListener('resize', this.handleWindowResize);
+    } else {
+      window.removeEventListener('resize', this.handleWindowResize);
     }
+    this._responsive = newResponsive;
     return this.getResponsive();
   }
   // Меняет настройки шкалы значений и обновляет ее

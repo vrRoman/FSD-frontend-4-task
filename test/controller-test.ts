@@ -23,105 +23,11 @@ const defaultViewOptions: ViewOptions = {
   valueInfo: false,
   vertical: false,
   responsive: false,
-};
-const defaultControllerOptions: ControllerOptions = {
   useKeyboard: true,
   interactiveStepsInfo: true,
 };
-
-
-describe('Controller methods', () => {
-  let model: IModel;
-  let view: IView;
-  let controller: IController;
-  beforeEach(() => {
-    model = new Model(defaultModelOptions);
-    view = new View(model, defaultViewOptions, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
-  });
-
-  it('getUseKeyboard', () => {
-    expect(controller.getUseKeyboard()).toBe(true);
-  });
-  it('getInteractiveStepsInfo', () => {
-    expect(controller.getInteractiveStepsInfo()).toBe(true);
-  });
-  it('getStepLength', () => {
-    expect(controller.getStepLength()).toBe(20);
-  });
-
-
-  it('addStepsInfoInteractivity', () => {
-    view = new View(model, {
-      ...defaultViewOptions,
-      stepsInfo: true,
-    }, document.body);
-    controller = new Controller(model, view, {
-      ...defaultControllerOptions,
-      interactiveStepsInfo: false,
-    });
-    controller.addStepsInfoInteractivity();
-    // console.log для проверки в браузере
-    console.log('Added stepsInfo interactivity: ', view.getSlider());
-    expect(controller.getInteractiveStepsInfo()).toBe(true);
-  });
-
-  it('removeStepsInfoInteractivity', () => {
-    view.createStepsInfo();
-    controller.removeStepsInfoInteractivity();
-    console.log('Removed stepsInfo interactivity: ', view.getSlider());
-    expect(controller.getInteractiveStepsInfo()).toBe(false);
-  });
-
-  it('addKeyboardListener', () => {
-    view = new View(model, defaultViewOptions, document.body);
-    controller = new Controller(model, view, {
-      ...defaultControllerOptions,
-      useKeyboard: false,
-    });
-    controller.addKeyboardListener();
-    console.log('Added keyboard listener: ', view.getSlider());
-    expect(controller.getUseKeyboard()).toBe(true);
-  });
-  it('removeKeyboardListener', () => {
-    controller.removeKeyboardListener();
-    console.log('Removed keyboard listener: ', view.getSlider());
-    expect(controller.getUseKeyboard()).toBe(false);
-  });
-
-
-  it('setActiveThumb', () => {
-    controller.setActiveThumb();
-    console.log('SetActiveThumb range false: ', view.getSlider());
-    expect(controller.getActiveThumb()).toBeDefined();
-
-    model = new Model(defaultModelOptions);
-    model.setRange(true);
-    view = new View(model, defaultViewOptions, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
-    controller.setActiveThumb();
-    console.log('SetActiveThumb with range true', view.getSlider());
-    expect(controller.getActiveThumb()).toBeDefined();
-  });
-
-  it('removeActiveThumb', () => {
-    controller.setActiveThumb();
-    controller.removeActiveThumb();
-    console.log('RemoveActiveThumb range false: ', view.getSlider());
-    expect(controller.getActiveThumb()).toBe(undefined);
-
-    model = new Model({
-      ...defaultModelOptions,
-      range: true,
-    });
-    view = new View(model, defaultViewOptions, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
-    controller.setActiveThumb();
-    controller.removeActiveThumb();
-    console.log('RemoveActiveThumb with range true', view.getSlider());
-    expect(controller.getActiveThumb()).toBe(undefined);
-  });
-});
+const defaultControllerOptions: ControllerOptions = {
+};
 
 describe('Controller with different options in model and view', () => {
   let model: IModel;
@@ -133,26 +39,30 @@ describe('Controller with different options in model and view', () => {
       ...defaultModelOptions,
       min: -2,
     });
-    view = new View(model, {
+    view = new View({
       length: '80%',
       vertical: false,
       tooltip: true,
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
+      interactiveStepsInfo: true,
+      useKeyboard: true,
     }, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
     console.log('View all true, vertical=false and responsive with %: ', view.getSlider());
   });
   it('View all true, vertical=false and responsive with vh', () => {
     model = new Model(defaultModelOptions);
-    view = new View(model, {
+    view = new View({
       length: '30vh',
       vertical: true,
       tooltip: true,
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
+      interactiveStepsInfo: true,
+      useKeyboard: true,
     }, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
   });
@@ -164,20 +74,22 @@ describe('Controller with different options in model and view', () => {
       min: 0,
       max: 12,
     });
-    view = new View(model, {
+    view = new View({
       length: '80%',
       vertical: false,
       tooltip: true,
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
+      interactiveStepsInfo: true,
+      useKeyboard: true,
     }, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
   });
 
   it('onChange', () => {
     model = new Model(defaultModelOptions);
-    view = new View(model, defaultViewOptions, document.body);
+    view = new View(defaultViewOptions, document.body);
     controller = new Controller(model, view, {
       ...defaultControllerOptions,
       onChange: () => {

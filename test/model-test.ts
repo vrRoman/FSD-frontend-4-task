@@ -228,15 +228,14 @@ describe('Model change range, value with Observer', () => {
     valueInfo: false,
     vertical: false,
     responsive: false,
-  };
-  const defaultControllerOptions: ControllerOptions = {
+    interactiveStepsInfo: false,
     useKeyboard: true,
-    interactiveStepsInfo: true,
   };
+  const defaultControllerOptions: ControllerOptions = {};
 
   beforeEach(() => {
     model = new Model(defaultOptions);
-    view = new View(model, defaultViewOptions, document.body);
+    view = new View(defaultViewOptions, document.body);
     controller = new Controller(model, view, defaultControllerOptions);
   });
 
@@ -266,7 +265,7 @@ describe('Model change range, value with Observer', () => {
     console.log('setMin to 2', view.getSlider());
 
     model = new Model(defaultOptions);
-    view = new View(model, {
+    view = new View({
       ...defaultViewOptions,
       stepsInfo: true,
       valueInfo: true,
@@ -287,7 +286,7 @@ describe('Model change range, value with Observer', () => {
     console.log('setMax to 8', view.getSlider());
 
     model = new Model(defaultOptions);
-    view = new View(model, {
+    view = new View({
       ...defaultViewOptions,
       stepsInfo: true,
       valueInfo: true,
@@ -301,7 +300,7 @@ describe('Model change range, value with Observer', () => {
     console.log('setMax to 15', view.getSlider());
 
     model = new Model(defaultOptions);
-    view = new View(model, {
+    view = new View({
       ...defaultViewOptions,
       stepsInfo: true,
       valueInfo: true,
