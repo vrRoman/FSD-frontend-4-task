@@ -5,8 +5,8 @@ import View from '../src/View';
 import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
 import { IView } from '../src/interfaces/viewInterfaces';
 import { ViewOptions, ModelOptions } from '../src/interfaces/options';
-import Controller from '../src/Controller';
-import { IController } from '../src/interfaces/controllerInterfaces';
+import Presenter from '../src/Presenter';
+import { IPresenter } from '../src/interfaces/presenterInterfaces';
 
 const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',
@@ -17,7 +17,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   responsive: false,
   interactiveStepsInfo: true,
   useKeyboard: true,
-  sliderClass: ['slider', 'slider_without-controller'],
+  sliderClass: ['slider', 'slider_without-presenter'],
   sliderVerticalClass: ['slider_vertical', 'slider_vertical_some-class'],
   barClass: ['slider__bar', 'slider__bar_some-class'],
   progressBarClass: ['slider__progress-bar', 'slider__progress-bar_some-class'],
@@ -82,14 +82,14 @@ describe('View with different options and get slider elements methods', () => {
   });
   it('getSlider', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
-    const controller = new Controller(model, view, {});
+    const presenter = new Presenter(model, view, {});
 
     console.log('Slider: ', view.getSlider());
     expect(view.getSlider()).toBeDefined();
   });
   it('getBar', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
-    const controller = new Controller(model, view, {});
+    const presenter = new Presenter(model, view, {});
 
     console.log('Bar: ', view.getBar());
     expect(view.getBar()).toBeDefined();
@@ -97,7 +97,7 @@ describe('View with different options and get slider elements methods', () => {
   it('getProgressBar range false', () => {
     model.setValue(3);
     const view = new View(defaultViewOptionsWithClass, document.body);
-    const controller = new Controller(model, view, {});
+    const presenter = new Presenter(model, view, {});
     console.log('ProgressBar range=false', view.getProgressBar());
     expect(view.getProgressBar()).toBeDefined();
   });
@@ -105,14 +105,14 @@ describe('View with different options and get slider elements methods', () => {
     model.setRange(true);
     model.setValue([3, 5]);
     const view = new View(defaultViewOptionsWithClass, document.body);
-    const controller = new Controller(model, view, {});
+    const presenter = new Presenter(model, view, {});
     console.log('ProgressBar range=true: ', view.getProgressBar());
     expect(view.getProgressBar()).toBeDefined();
   });
 
   it('getThumb, range false', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
-    const controller = new Controller(model, view, {});
+    const presenter = new Presenter(model, view, {});
     console.log('Thumb not array: ', view.getThumb());
     expect(view.getThumb()).toBeDefined();
   });
@@ -120,14 +120,14 @@ describe('View with different options and get slider elements methods', () => {
     model.setRange(true);
     model.setValue([0, 2]);
     const view: IView = new View(defaultViewOptionsWithClass, document.body);
-    const controller = new Controller(model, view, {});
+    const presenter = new Presenter(model, view, {});
     console.log('Thumb array: ', view.getThumb());
     expect(Array.isArray(view.getThumb())).toBe(true);
   });
   it('getTooltip returns undefined when options.tooltip = false, and vice versa,'
     + 'when range true returns array', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
-    let controller = new Controller(model, view, {});
+    let presenter = new Presenter(model, view, {});
     expect(view.getTooltip()).toBe(undefined);
 
     const viewOptions: ViewOptions = {
@@ -135,7 +135,7 @@ describe('View with different options and get slider elements methods', () => {
       tooltip: true,
     };
     view = new View(viewOptions, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     console.log('Tooltip not array: ', view.getTooltip());
     expect(view.getTooltip()).toBeDefined();
 
@@ -143,13 +143,13 @@ describe('View with different options and get slider elements methods', () => {
     model.setRange(true);
     model.setValue([1, 6]);
     view = new View(viewOptions, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     console.log('Tooltip array: ', view.getTooltip());
     expect(Array.isArray(view.getTooltip())).toBe(true);
   });
   it('getStepsInfo when options.stepsInfo=false and true', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
-    let controller = new Controller(model, view, {});
+    let presenter = new Presenter(model, view, {});
     expect(view.getStepsInfo()).toBe(undefined);
 
     const viewOptions: ViewOptions = {
@@ -157,13 +157,13 @@ describe('View with different options and get slider elements methods', () => {
       stepsInfo: true,
     };
     view = new View(viewOptions, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     console.log('StepsInfo: ', view.getStepsInfo());
     expect(view.getStepsInfo()).toBeDefined();
   });
   it('getValueInfo when options.valueInfo=false and true', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
-    let controller = new Controller(model, view, {});
+    let presenter = new Presenter(model, view, {});
     expect(view.getValueInfo()).toBe(undefined);
 
     const viewOptions: ViewOptions = {
@@ -171,7 +171,7 @@ describe('View with different options and get slider elements methods', () => {
       valueInfo: true,
     };
     view = new View(viewOptions, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     console.log('ValueInfo: ', view.getValueInfo());
     expect(view.getValueInfo()).toBeDefined();
   });
@@ -180,11 +180,11 @@ describe('View with different options and get slider elements methods', () => {
 describe('View get values', () => {
   let model: IModel;
   let view: IView;
-  let controller: IController;
+  let presenter: IPresenter;
   beforeEach(() => {
     model = new Model(defaultModelOptions);
     view = new View(defaultViewOptionsWithClass, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
   });
 
 
@@ -247,7 +247,7 @@ describe('View get values', () => {
     };
     document.body.style.width = '100px';
     view = new View(viewOptions, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     // Учитывая margin-left и margin-right по 15
     expect(view.getLength()).toBe(100 - 15 * 2);
     document.body.style.width = '';
@@ -267,11 +267,11 @@ describe('View get values', () => {
 describe('View methods', () => {
   let model: IModel;
   let view: IView;
-  let controller: IController;
+  let presenter: IPresenter;
   beforeEach(() => {
     model = new Model(defaultModelOptions);
     view = new View(defaultViewOptionsWithClass, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
   });
 
 
@@ -280,7 +280,7 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       stepsInfo: true,
     }, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.addStepsInfoInteractivity();
     // console.log для проверки в браузере
     console.log('Added stepsInfo interactivity: ', view.getSlider());
@@ -296,7 +296,7 @@ describe('View methods', () => {
 
   it('addKeyboardListener', () => {
     view = new View(defaultViewOptionsWithClass, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.addKeyboardListener();
     console.log('Added keyboard listener: ', view.getSlider());
     expect(view.getUseKeyboard()).toBe(true);
@@ -316,7 +316,7 @@ describe('View methods', () => {
     model = new Model(defaultModelOptions);
     model.setRange(true);
     view = new View(defaultViewOptionsWithClass, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.setActiveThumb();
     console.log('SetActiveThumb with range true', view.getSlider());
     expect(view.getActiveThumb()).toBeDefined();
@@ -333,7 +333,7 @@ describe('View methods', () => {
       range: true,
     });
     view = new View(defaultViewOptionsWithClass, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.setActiveThumb();
     view.removeActiveThumb();
     console.log('RemoveActiveThumb with range true', view.getSlider());
@@ -377,7 +377,7 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       stepsInfo: true,
     }, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.changeStepsInfoSettings(2);
     expect(view.getStepsInfoSettings()).toBe(2);
     console.log('Changed steps info settings to 2', view.getSlider());
@@ -386,14 +386,14 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       stepsInfo: 2,
     }, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.changeStepsInfoSettings(['start', '0.25', 'half', '0.75', 'end']);
     expect(view.getStepsInfoSettings()).toEqual(['start', '0.25', 'half', '0.75', 'end']);
     console.log('Changed steps info settings to [\'start\', \'0.25\', \'half\', \'0.75\', \'end\']', view.getSlider());
   });
 
   it('create/remove tooltip range false', () => {
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.createTooltip();
     expect(view.getTooltip()).toBeDefined();
     console.log('Created tooltip range=false: ', view.getSlider());
@@ -402,7 +402,7 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       tooltip: true,
     }, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.removeTooltip();
     expect(view.getTooltip()).toBe(undefined);
     console.log('Removed tooltip range=false: ', view.getSlider());
@@ -411,7 +411,7 @@ describe('View methods', () => {
     model.setRange(true);
     model.setValue([0, 5]);
     view = new View(defaultViewOptionsWithClass, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.createTooltip();
     expect(Array.isArray(view.getTooltip())).toBe(true);
     console.log('Created tooltip range=true: ', view.getSlider());
@@ -420,7 +420,7 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       tooltip: true,
     }, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.removeTooltip();
     expect(view.getTooltip()).toBe(undefined);
     console.log('Removed tooltip range=true: ', view.getSlider());
@@ -434,7 +434,7 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       stepsInfo: true,
     }, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.removeStepsInfo();
     expect(view.getStepsInfo()).toBe(undefined);
     console.log('Removed stepsInfo: ', view.getSlider());
@@ -448,7 +448,7 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       valueInfo: true,
     }, document.body);
-    controller = new Controller(model, view, {});
+    presenter = new Presenter(model, view, {});
     view.removeValueInfo();
     expect(view.getValueInfo()).toBe(undefined);
     console.log('Removed valueInfo: ', view.getSlider());

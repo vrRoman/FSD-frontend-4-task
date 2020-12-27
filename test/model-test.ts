@@ -1,10 +1,10 @@
 import Model from '../src/Model';
 import View from '../src/View';
-import Controller from '../src/Controller';
+import Presenter from '../src/Presenter';
 import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
 import { IView } from '../src/interfaces/viewInterfaces';
-import { IController } from '../src/interfaces/controllerInterfaces';
-import { ControllerOptions, ViewOptions, ModelOptions } from '../src/interfaces/options';
+import { IPresenter } from '../src/interfaces/presenterInterfaces';
+import { PresenterOptions, ViewOptions, ModelOptions } from '../src/interfaces/options';
 
 const defaultOptions = {
   value: 0,
@@ -220,7 +220,7 @@ describe('model props change', () => {
 describe('Model change range, value with Observer', () => {
   let model: IModel;
   let view: IView;
-  let controller: IController;
+  let presenter: IPresenter;
   const defaultViewOptions: ViewOptions = {
     length: '200px',
     tooltip: false,
@@ -231,12 +231,12 @@ describe('Model change range, value with Observer', () => {
     interactiveStepsInfo: false,
     useKeyboard: true,
   };
-  const defaultControllerOptions: ControllerOptions = {};
+  const defaultPresenterOptions: PresenterOptions = {};
 
   beforeEach(() => {
     model = new Model(defaultOptions);
     view = new View(defaultViewOptions, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
+    presenter = new Presenter(model, view, defaultPresenterOptions);
   });
 
   it('Change value, range=false', () => {
@@ -258,7 +258,7 @@ describe('Model change range, value with Observer', () => {
     console.log('Changed value to [4, 9.5], range=true', view.getSlider());
   });
   it('setMin', () => {
-    controller.onChange = () => {
+    presenter.onChange = () => {
       console.log(view.getThumbPosition());
     };
     model.setMin(2);
@@ -271,15 +271,15 @@ describe('Model change range, value with Observer', () => {
       valueInfo: true,
       tooltip: true,
     }, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
-    controller.onChange = () => {
+    presenter = new Presenter(model, view, defaultPresenterOptions);
+    presenter.onChange = () => {
       console.log(view.getThumbPosition());
     };
     model.setMin(-1);
     console.log('setMin to -1', view.getSlider());
   });
   it('setMax', () => {
-    controller.onChange = () => {
+    presenter.onChange = () => {
       console.log(view.getThumbPosition());
     };
     model.setMax(8);
@@ -292,8 +292,8 @@ describe('Model change range, value with Observer', () => {
       valueInfo: true,
       tooltip: true,
     }, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
-    controller.onChange = () => {
+    presenter = new Presenter(model, view, defaultPresenterOptions);
+    presenter.onChange = () => {
       console.log(view.getThumbPosition());
     };
     model.setMax(15);
@@ -306,8 +306,8 @@ describe('Model change range, value with Observer', () => {
       valueInfo: true,
       tooltip: true,
     }, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
-    controller.onChange = () => {
+    presenter = new Presenter(model, view, defaultPresenterOptions);
+    presenter.onChange = () => {
       console.log(view.getThumbPosition());
     };
     model.setMax(-1);

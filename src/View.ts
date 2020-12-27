@@ -1,6 +1,6 @@
 import { SliderOptions, ViewOptions } from './interfaces/options';
 import { IView } from './interfaces/viewInterfaces';
-import { ModelProps } from './interfaces/modelTypesAndInterfaces';
+import { ModelProps, ObserverAction } from './interfaces/modelTypesAndInterfaces';
 
 class View implements IView {
   sliderClass: string | string[]
@@ -81,6 +81,119 @@ class View implements IView {
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
     this.handleStepElemMouseDown = this.handleStepElemMouseDown.bind(this);
     this.removeActiveThumb = this.removeActiveThumb.bind(this);
+  }
+
+  drawSlider() {
+    this.createSliderContainer();
+    this.createBar();
+    this.createProgressBar();
+    this.createThumb();
+    if (this.getOptions().tooltip) {
+      this.createTooltip();
+    }
+    if (this.getOptions().stepsInfo) {
+      this.createStepsInfo();
+    }
+    if (this.getOptions().valueInfo) {
+      this.createValueInfo();
+    }
+    this.addThumbListener();
+    if (this.getUseKeyboard()) {
+      this.addKeyboardListener();
+    }
+    if (this.getInteractiveStepsInfo()) {
+      this.addStepsInfoInteractivity();
+    }
+    this.changeResponsive(this.getResponsive());
+  }
+
+  // В зависимости от action, обновляет view
+  update(action: ObserverAction) {
+    switch (action.type) {
+      case 'UPDATE_VALUE':
+        if (action.updatedProps) {
+          this.provideModelProps({
+            value: action.updatedProps.value,
+          });
+        }
+        this.updateThumb();
+        this.updateValueInfo();
+        this.updateProgressBar();
+        this.updateTooltip();
+        break;
+
+      case 'UPDATE_RANGE':
+        if (action.updatedProps) {
+          this.provideModelProps({
+            value: action.updatedProps.value,
+            range: action.updatedProps.range,
+          });
+        }
+        this.removeThumb();
+        this.createThumb();
+        this.addThumbListener();
+        this.updateProgressBar();
+        this.updateValueInfo();
+        this.updateTooltip();
+        break;
+
+      case 'UPDATE_MIN-MAX':
+        if (action.updatedProps) {
+          this.provideModelProps({
+            value: action.updatedProps.value,
+            min: action.updatedProps.min,
+            max: action.updatedProps.max,
+            stepSize: action.updatedProps.stepSize,
+          });
+        }
+        this.updateThumb();
+        if (this.getStepsInfo()) {
+          this.removeStepsInfo();
+          this.createStepsInfo();
+        }
+        if (this.getInteractiveStepsInfo()) {
+          this.addStepsInfoInteractivity();
+        }
+        this.updateValueInfo();
+        this.updateProgressBar();
+        this.updateTooltip();
+        break;
+
+      case 'UPDATE_STEPSIZE':
+        if (action.updatedProps) {
+          this.provideModelProps({
+            stepSize: action.updatedProps.stepSize,
+          });
+        }
+        break;
+
+      default:
+        if (action.updatedProps) {
+          if (action.updatedProps.value) {
+            this.provideModelProps({
+              value: action.updatedProps.value,
+            });
+          }
+          if (action.updatedProps.value) {
+            this.provideModelProps({
+              value: action.updatedProps.value,
+            });
+          }
+        }
+        this.removeThumb();
+        this.createThumb();
+        this.addThumbListener();
+        if (this.getStepsInfo()) {
+          this.removeStepsInfo();
+          this.createStepsInfo();
+        }
+        if (this.getInteractiveStepsInfo()) {
+          this.addStepsInfoInteractivity();
+        }
+        this.updateProgressBar();
+        this.updateValueInfo();
+        this.updateTooltip();
+    }
   }
 
   // Перемещает ползунок на numOfSteps шагов и уведомляет подписчиков
@@ -238,30 +351,32 @@ class View implements IView {
       this.setActiveThumb();
     }
 
-    if (stepLength && this._modelProps) {
-      if (this.getVertical()) {
-        if (this._activeThumb) {
-          const stepValue = (
-              parseFloat(stepElem.style.top) + stepElem.offsetHeight / 2
-          ) / (stepLength / this._modelProps.stepSize);
-          const thumbValue = (
-              parseFloat(this._activeThumb.style.top) + this._activeThumb.offsetHeight / 2
-          ) / (stepLength / this._modelProps.stepSize);
+    if (stepLength) {
+      if (this._modelProps && this._modelProps.stepSize !== undefined) {
+        if (this.getVertical()) {
+          if (this._activeThumb) {
+            const stepValue = (
+                parseFloat(stepElem.style.top) + stepElem.offsetHeight / 2
+            ) / (stepLength / this._modelProps.stepSize);
+            const thumbValue = (
+                parseFloat(this._activeThumb.style.top) + this._activeThumb.offsetHeight / 2
+            ) / (stepLength / this._modelProps.stepSize);
 
-          this.moveActiveThumb((stepValue - thumbValue) / this._modelProps.stepSize);
-          this.removeActiveThumb();
-        }
-      } else {
-        if (this._activeThumb) {
-          const stepValue = (
-              parseFloat(stepElem.style.left) + stepElem.offsetWidth / 2
-          ) / (stepLength / this._modelProps.stepSize);
-          const thumbValue = (
-              parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
-          ) / (stepLength / this._modelProps.stepSize);
+            this.moveActiveThumb((stepValue - thumbValue) / this._modelProps.stepSize);
+            this.removeActiveThumb();
+          }
+        } else {
+          if (this._activeThumb) {
+            const stepValue = (
+                parseFloat(stepElem.style.left) + stepElem.offsetWidth / 2
+            ) / (stepLength / this._modelProps.stepSize);
+            const thumbValue = (
+                parseFloat(this._activeThumb.style.left) + this._activeThumb.offsetWidth / 2
+            ) / (stepLength / this._modelProps.stepSize);
 
-          this.moveActiveThumb((stepValue - thumbValue) / this._modelProps.stepSize);
-          this.removeActiveThumb();
+            this.moveActiveThumb((stepValue - thumbValue) / this._modelProps.stepSize);
+            this.removeActiveThumb();
+          }
         }
       }
     }
@@ -312,11 +427,14 @@ class View implements IView {
   }
   // Изменяет modelProps(из него берутся все значения модели)
   provideModelProps(modelProps: ModelProps) {
-    this._modelProps = modelProps;
+    this._modelProps = {
+      ...this._modelProps,
+      ...modelProps,
+    };
   }
 
   // Создает и возвращает слайдер в this._parent
-  createSlider(): HTMLElement {
+  createSliderContainer(): HTMLElement {
     const slider = document.createElement('div');
     if (Array.isArray(this.sliderClass)) {
       slider.classList.add(...this.sliderClass);
@@ -388,7 +506,6 @@ class View implements IView {
     const bar = this.getBar();
 
     if (bar) {
-      // thumbPosition === 'number' при range = false
       if (typeof thumbPosition === 'number') {
         const thumb = document.createElement('div');
 
@@ -437,7 +554,7 @@ class View implements IView {
   }
   // Создает и возвращает подсказки в ползунках
   createTooltip(): HTMLElement | Array<HTMLElement> | undefined {
-    if (this._modelProps) {
+    if (this._modelProps && this._modelProps.value !== undefined) {
       const thumb = this.getThumb();
       const { value } = this._modelProps;
 
@@ -482,62 +599,64 @@ class View implements IView {
   // Если stepsInfoSettings заданы как false, то переназначает на true
   createStepsInfo(): HTMLElement | undefined {
     const bar = this.getBar();
-    if (this._modelProps && bar) {
-      const stepsInfo = document.createElement('div');
-      let stepsInfoSettings = this.getStepsInfoSettings();
+    if (bar && this._modelProps) {
+      if (this._modelProps.min !== undefined && this._modelProps.max !== undefined) {
+        const stepsInfo = document.createElement('div');
+        let stepsInfoSettings = this.getStepsInfoSettings();
 
-      bar.appendChild(stepsInfo);
+        bar.appendChild(stepsInfo);
 
-      if (!stepsInfoSettings) {
-        this._stepsInfoSettings = true;
-        stepsInfoSettings = this.getStepsInfoSettings();
-      }
-      if (Array.isArray(this.stepsInfoClass)) {
-        stepsInfo.classList.add(...this.stepsInfoClass);
-      } else {
-        stepsInfo.classList.add(this.stepsInfoClass);
-      }
-
-      if (this.getVertical()) {
-        stepsInfo.style.height = `${this.getLength()}px`;
-      } else {
-        stepsInfo.style.width = `${this.getLength()}px`;
-      }
-
-      let numOfSteps: number = 5;
-      let steps: Array<number | string> = [];
-
-      if (typeof stepsInfoSettings === 'number' || stepsInfoSettings === true) {
-        if (typeof stepsInfoSettings === 'number') {
-          numOfSteps = stepsInfoSettings;
+        if (!stepsInfoSettings) {
+          this._stepsInfoSettings = true;
+          stepsInfoSettings = this.getStepsInfoSettings();
         }
-        const maxDiapason = this._modelProps.max - this._modelProps.min;
-        for (let i = 0; i < numOfSteps; i += 1) {
-          steps.push(
-              this._modelProps.min
-              + +((maxDiapason / (numOfSteps - 1)) * i).toFixed(3),
-          );
-        }
-      } else if (Array.isArray(stepsInfoSettings)) {
-        numOfSteps = stepsInfoSettings.length;
-        steps = stepsInfoSettings;
-      }
-
-      for (let i = 0; i < numOfSteps; i += 1) {
-        const stepElem = document.createElement('div');
-        const position = (this.getLength() / (numOfSteps - 1)) * i;
-        stepElem.innerText = `${steps[i]}`;
-        stepElem.style.position = 'absolute';
-        stepsInfo.appendChild(stepElem);
-        if (this.getVertical()) {
-          stepElem.style.top = `${position - stepElem.offsetHeight / 2}px`;
+        if (Array.isArray(this.stepsInfoClass)) {
+          stepsInfo.classList.add(...this.stepsInfoClass);
         } else {
-          stepElem.style.left = `${position - stepElem.offsetWidth / 2}px`;
+          stepsInfo.classList.add(this.stepsInfoClass);
         }
-      }
 
-      this._stepsInfo = stepsInfo;
-      return stepsInfo;
+        if (this.getVertical()) {
+          stepsInfo.style.height = `${this.getLength()}px`;
+        } else {
+          stepsInfo.style.width = `${this.getLength()}px`;
+        }
+
+        let numOfSteps: number = 5;
+        let steps: Array<number | string> = [];
+
+        if (typeof stepsInfoSettings === 'number' || stepsInfoSettings === true) {
+          if (typeof stepsInfoSettings === 'number') {
+            numOfSteps = stepsInfoSettings;
+          }
+          const maxDiapason = this._modelProps.max - this._modelProps.min;
+          for (let i = 0; i < numOfSteps; i += 1) {
+            steps.push(
+                this._modelProps.min
+                + +((maxDiapason / (numOfSteps - 1)) * i).toFixed(3),
+            );
+          }
+        } else if (Array.isArray(stepsInfoSettings)) {
+          numOfSteps = stepsInfoSettings.length;
+          steps = stepsInfoSettings;
+        }
+
+        for (let i = 0; i < numOfSteps; i += 1) {
+          const stepElem = document.createElement('div');
+          const position = (this.getLength() / (numOfSteps - 1)) * i;
+          stepElem.innerText = `${steps[i]}`;
+          stepElem.style.position = 'absolute';
+          stepsInfo.appendChild(stepElem);
+          if (this.getVertical()) {
+            stepElem.style.top = `${position - stepElem.offsetHeight / 2}px`;
+          } else {
+            stepElem.style.left = `${position - stepElem.offsetWidth / 2}px`;
+          }
+        }
+
+        this._stepsInfo = stepsInfo;
+        return stepsInfo;
+      }
     }
     return undefined;
   }
@@ -545,26 +664,28 @@ class View implements IView {
   // указывается просто model.value, иначе записывается в виде value[0] - value[1]
   createValueInfo(): HTMLElement | undefined {
     const slider = this.getSlider();
-    if (this._modelProps && slider) {
-      const valueInfo = document.createElement('div');
-      const { value } = this._modelProps;
+    if (slider) {
+      if (this._modelProps && this._modelProps.value !== undefined) {
+        const valueInfo = document.createElement('div');
+        const { value } = this._modelProps;
 
-      if (Array.isArray(this.valueInfoClass)) {
-        valueInfo.classList.add(...this.valueInfoClass);
-      } else {
-        valueInfo.classList.add(this.valueInfoClass);
+        if (Array.isArray(this.valueInfoClass)) {
+          valueInfo.classList.add(...this.valueInfoClass);
+        } else {
+          valueInfo.classList.add(this.valueInfoClass);
+        }
+
+        slider.appendChild(valueInfo);
+
+        if (typeof value === 'number') {
+          valueInfo.innerText = `${value}`;
+        } else {
+          valueInfo.innerText = `${value[0]} - ${value[1]}`;
+        }
+
+        this._valueInfo = valueInfo;
+        return valueInfo;
       }
-
-      slider.appendChild(valueInfo);
-
-      if (typeof value === 'number') {
-        valueInfo.innerText = `${value}`;
-      } else {
-        valueInfo.innerText = `${value[0]} - ${value[1]}`;
-      }
-
-      this._valueInfo = valueInfo;
-      return valueInfo;
     }
     return undefined;
   }
@@ -666,7 +787,7 @@ class View implements IView {
   }
   // Обновляет значение в подсказках
   updateTooltip() {
-    if (this._modelProps) {
+    if (this._modelProps && this._modelProps.value !== undefined) {
       const tooltip = this.getTooltip();
       const { value } = this._modelProps;
       if (tooltip) {
@@ -707,7 +828,7 @@ class View implements IView {
     if (this._modelProps) {
       const valueInfo = this.getValueInfo();
       const { value } = this._modelProps;
-      if (valueInfo) {
+      if (valueInfo && value) {
         if (typeof value === 'number') {
           valueInfo.innerText = `${value}`;
         } else {
@@ -776,33 +897,37 @@ class View implements IView {
   }
   // Получить длину шага
   getStepLength(): number | undefined {
-    if (this._modelProps) {
-      const numOfSteps = (this._modelProps.max - this._modelProps.min)
-          / this._modelProps.stepSize;
-      return this.getLength() / numOfSteps;
+    if (this._modelProps && this._modelProps.stepSize !== undefined) {
+      if (this._modelProps.min !== undefined && this._modelProps.max !== undefined) {
+        const numOfSteps = (this._modelProps.max - this._modelProps.min)
+            / this._modelProps.stepSize;
+        return this.getLength() / numOfSteps;
+      }
     }
     return undefined;
   }
   // Возвращает нужное положение ползунка(ов), исходя из значений модели
   getThumbPosition(): number | number[] | undefined {
-    if (this._modelProps) {
-      const { value } = this._modelProps;
-      const maxDiapason = this._modelProps.max - this._modelProps.min;
-      let thumbPosition;
-      // value === 'number' при range = false
-      if (typeof value === 'number') {
-        thumbPosition = (this.getLength() / maxDiapason)
-            * (value - this._modelProps.min);
-      } else {
-        thumbPosition = [
-          (this.getLength() / maxDiapason)
-          * (value[0] - this._modelProps.min),
-          (this.getLength() / maxDiapason)
-          * (value[1] - this._modelProps.min),
-        ];
-      }
+    if (this._modelProps && this._modelProps.value !== undefined) {
+      if (this._modelProps.min !== undefined && this._modelProps.max !== undefined) {
+        const { value } = this._modelProps;
+        const maxDiapason = this._modelProps.max - this._modelProps.min;
+        let thumbPosition;
+        // value === 'number' при range = false
+        if (typeof value === 'number') {
+          thumbPosition = (this.getLength() / maxDiapason)
+              * (value - this._modelProps.min);
+        } else {
+          thumbPosition = [
+            (this.getLength() / maxDiapason)
+            * (value[0] - this._modelProps.min),
+            (this.getLength() / maxDiapason)
+            * (value[1] - this._modelProps.min),
+          ];
+        }
 
-      return thumbPosition;
+        return thumbPosition;
+      }
     }
     return undefined;
   }

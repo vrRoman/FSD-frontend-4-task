@@ -43,11 +43,11 @@ export interface ViewOptions {
   valueInfoClass?: string | string[]
 }
 
-export interface ControllerOptions {
+export interface PresenterOptions {
   // Будет выполняться при любом передвижении ползунка
   onChange?: Function
 }
 
 
-export interface SliderOptions extends ModelOptions, ViewOptions, ControllerOptions{
+export interface SliderOptions extends ModelOptions, ViewOptions, PresenterOptions{
 }

@@ -44,16 +44,7 @@ class SliderControlPanel {
           $value1.val(+(+this.$slider.slider('value')).toFixed(3));
         }
         break;
-      case 'UPDATE_MIN':
-        this.valueElems.forEach(($elem) => {
-          $elem.val(+this.$slider.slider('value'));
-        });
-        this.minMaxNames.forEach((name) => {
-          const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
-          $minOrMax.val(+this.$slider.slider(name));
-        });
-        break;
-      case 'UPDATE_MAX':
+      case 'UPDATE_MIN-MAX':
         this.valueElems.forEach(($elem) => {
           $elem.val(+this.$slider.slider('value'));
         });

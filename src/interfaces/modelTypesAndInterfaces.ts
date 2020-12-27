@@ -2,7 +2,14 @@ export type Value = [number, number] | number
 
 
 export interface ObserverAction {
-  type: 'UPDATE_VALUE' | 'UPDATE_RANGE' | 'UPDATE_MIN' | 'UPDATE_MAX' | 'UPDATE_STEPSIZE'
+  type: 'UPDATE_VALUE' | 'UPDATE_RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEPSIZE'
+  updatedProps?: {
+    value?: Value
+    range?: boolean
+    stepSize?: number
+    min?: number
+    max?: number
+  }
 }
 
 
@@ -29,9 +36,9 @@ export interface IModel {
 }
 
 export interface ModelProps {
-  value: Value
-  range: boolean
-  stepSize: number
-  min: number
-  max: number
+  value?: Value
+  range?: boolean
+  stepSize?: number
+  min?: number
+  max?: number
 }

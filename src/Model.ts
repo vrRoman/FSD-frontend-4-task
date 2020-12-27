@@ -56,7 +56,13 @@ class Model implements IModel {
     this.checkAndFixValue();
     this.checkAndFixStepSize();
     this.notify({
-      type: 'UPDATE_MIN',
+      type: 'UPDATE_MIN-MAX',
+      updatedProps: {
+        min: this.getMin(),
+        max: this.getMax(),
+        value: this.getValue(),
+        stepSize: this.getStepSize(),
+      },
     });
     return this.getMin();
   }
@@ -71,7 +77,13 @@ class Model implements IModel {
     this.checkAndFixValue();
     this.checkAndFixStepSize();
     this.notify({
-      type: 'UPDATE_MAX',
+      type: 'UPDATE_MIN-MAX',
+      updatedProps: {
+        min: this.getMin(),
+        max: this.getMax(),
+        value: this.getValue(),
+        stepSize: this.getStepSize(),
+      },
     });
     return this.getMax();
   }
@@ -84,6 +96,9 @@ class Model implements IModel {
 
     this.notify({
       type: 'UPDATE_VALUE',
+      updatedProps: {
+        value: this.getValue(),
+      },
     });
 
     return this.value;
@@ -95,6 +110,10 @@ class Model implements IModel {
 
     this.notify({
       type: 'UPDATE_RANGE',
+      updatedProps: {
+        value: this.getValue(),
+        range: this.getRange(),
+      },
     });
 
     return this.range;
@@ -105,6 +124,9 @@ class Model implements IModel {
     this.checkAndFixStepSize();
     this.notify({
       type: 'UPDATE_STEPSIZE',
+      updatedProps: {
+        stepSize: this.getStepSize(),
+      },
     });
 
     return this.stepSize;
@@ -132,6 +154,9 @@ class Model implements IModel {
 
     this.notify({
       type: 'UPDATE_VALUE',
+      updatedProps: {
+        value: this.getValue(),
+      },
     });
 
     return this.value;

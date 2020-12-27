@@ -79,7 +79,7 @@ npm run build:prod
 | ------------ |:--------------------------:| -------- |
 | model | Object | Возвращает model слайдера. Можно использовать, если нужны методы Model. |
 | view | Object | Возвращает view слайдера. Можно использовать, если нужны методы View. |
-| controller | Object | Возвращает controller слайдера. Можно использовать, если нужны методы Controller. |
+| controller | Object | Возвращает controller слайдера. Можно использовать, если нужны методы Presenter. |
 | value | [number, number] \| number | Текущее значение слайдера |
 | range | boolean | Range |
 | stepSize | number | Размер шага |
@@ -102,9 +102,9 @@ npm run build:prod
 с входящим параметром action. В action.type может храниться: 'UPDATE_VALUE' 
 | 'UPDATE_RANGE' | 'UPDATE_MIN' | 'UPDATE_MAX' | 'UPDATE_STEPSIZE'.
 #### View
-Отрисовывает все элементы слайдера. Значения предоставляет Controller через метод provideModelProps.
+Отрисовывает все элементы слайдера. Значения предоставляет Presenter через метод provideModelProps.
 При движении ползунка вызывает у всех подписчиков метод onThumbMove.
-#### Controller
+#### Presenter
 Реализует взаимодействие отображения и модели. Подписывается и на model, и на view. 
 При изменении модели обновляет view, при движении ползунка передает значение в model.
 

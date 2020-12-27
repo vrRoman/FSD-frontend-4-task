@@ -1,12 +1,12 @@
-// Многие тесты для controller будут проверяться в браузере
+// Многие тесты для presenter будут проверяться в браузере
 
 import Model from '../src/Model';
 import View from '../src/View';
-import Controller from '../src/Controller';
+import Presenter from '../src/Presenter';
 import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
 import { IView } from '../src/interfaces/viewInterfaces';
-import { IController } from '../src/interfaces/controllerInterfaces';
-import { ControllerOptions, ViewOptions, ModelOptions } from '../src/interfaces/options';
+import { IPresenter } from '../src/interfaces/presenterInterfaces';
+import { PresenterOptions, ViewOptions, ModelOptions } from '../src/interfaces/options';
 
 
 const defaultModelOptions: ModelOptions = {
@@ -26,13 +26,13 @@ const defaultViewOptions: ViewOptions = {
   useKeyboard: true,
   interactiveStepsInfo: true,
 };
-const defaultControllerOptions: ControllerOptions = {
+const defaultPresenterOptions: PresenterOptions = {
 };
 
-describe('Controller with different options in model and view', () => {
+describe('Presenter with different options in model and view', () => {
   let model: IModel;
   let view: IView;
-  let controller: IController;
+  let presenter: IPresenter;
 
   it('View all true, vertical=false and responsive with %', () => {
     model = new Model({
@@ -49,7 +49,7 @@ describe('Controller with different options in model and view', () => {
       interactiveStepsInfo: true,
       useKeyboard: true,
     }, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
+    presenter = new Presenter(model, view, defaultPresenterOptions);
     console.log('View all true, vertical=false and responsive with %: ', view.getSlider());
   });
   it('View all true, vertical=false and responsive with vh', () => {
@@ -64,7 +64,7 @@ describe('Controller with different options in model and view', () => {
       interactiveStepsInfo: true,
       useKeyboard: true,
     }, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
+    presenter = new Presenter(model, view, defaultPresenterOptions);
   });
   it('model range true, stepSize', () => {
     model = new Model({
@@ -84,14 +84,14 @@ describe('Controller with different options in model and view', () => {
       interactiveStepsInfo: true,
       useKeyboard: true,
     }, document.body);
-    controller = new Controller(model, view, defaultControllerOptions);
+    presenter = new Presenter(model, view, defaultPresenterOptions);
   });
 
   it('onChange', () => {
     model = new Model(defaultModelOptions);
     view = new View(defaultViewOptions, document.body);
-    controller = new Controller(model, view, {
-      ...defaultControllerOptions,
+    presenter = new Presenter(model, view, {
+      ...defaultPresenterOptions,
       onChange: () => {
         console.log(model.getValue());
       },

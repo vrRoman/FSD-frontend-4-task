@@ -5,8 +5,8 @@ import Model from './Model';
 import { IModel } from './interfaces/modelTypesAndInterfaces';
 import View from './View';
 import { IView } from './interfaces/viewInterfaces';
-import Controller from './Controller';
-import { IController } from './interfaces/controllerInterfaces';
+import Presenter from './Presenter';
+import { IPresenter } from './interfaces/presenterInterfaces';
 
 import { SliderOptions } from './interfaces/options';
 
@@ -40,7 +40,7 @@ interface Options {
 type OptionsString = 'destroy' | 'value' | 'range' | 'stepSize' | 'max' | 'min'
   | 'length' | 'tooltip' | 'stepsInfo' | 'valueInfo' | 'vertical' | 'responsive'
   | 'useKeyboard' | 'interactiveStepsInfo' | 'onChange'
-  | 'model' | 'view' | 'controller';
+  | 'model' | 'view' | 'presenter';
 
 declare global {
   // eslint-disable-next-line
@@ -88,7 +88,7 @@ declare global {
 
         const model: IModel = new Model(settings);
         const view: IView = new View(settings, this);
-        const controller: IController = new Controller(model, view, settings);
+        const presenter: IPresenter = new Presenter(model, view, settings);
 
         const slider = view.getSlider();
         if (slider) {
@@ -98,7 +98,7 @@ declare global {
         }
         $(this).data('model', model);
         $(this).data('view', view);
-        $(this).data('controller', controller);
+        $(this).data('presenter', presenter);
       });
     }
     if (otherOptions !== undefined) {
@@ -109,7 +109,7 @@ declare global {
             $(this).removeData('slider');
             $(this).removeData('model');
             $(this).removeData('view');
-            $(this).removeData('controller');
+            $(this).removeData('presenter');
           });
         case 'value':
           return this.each(function changeValue() {
@@ -182,7 +182,7 @@ declare global {
         case 'onChange':
           return this.each(function changeOnChange() {
             // eslint-disable-next-line no-param-reassign
-            $(this).data('controller').onChange = otherOptions;
+            $(this).data('presenter').onChange = otherOptions;
           });
         default:
           $.error(`${options} option not found`);
@@ -193,8 +193,8 @@ declare global {
           return this.data('model');
         case 'view':
           return this.data('view');
-        case 'controller':
-          return this.data('controller');
+        case 'presenter':
+          return this.data('presenter');
         case 'value':
           return this.data('model').getValue();
         case 'range':
