@@ -1,5 +1,6 @@
 import { ViewOptions } from './options';
 import { ModelProps, ObserverAction } from './modelTypesAndInterfaces';
+import { IPresenter } from './presenterInterfaces';
 
 export interface IView {
   sliderClass: string | string[]
@@ -15,12 +16,9 @@ export interface IView {
   drawSlider(): void
   update(action: ObserverAction): void
 
-  subscribe(observer: Object): void
-  unsubscribe(observer: Object): void
-  notify(): void
-
   getOptions(): ViewOptions
   provideModelProps(modelProps: ModelProps): void
+  setPresenter(presenter: IPresenter): void
 
   createSliderContainer(): HTMLElement
   createBar(): HTMLElement | undefined

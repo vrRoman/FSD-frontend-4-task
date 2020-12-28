@@ -44,6 +44,22 @@ class Model implements IModel {
     });
   }
 
+  // Округляет и возвращает входящее значение
+  roundValue(value: Value): Value {
+    const symbolsAfterCommaStepSize = this.getStepSize().toString().includes('.')
+        ? this.getStepSize().toString().split('.').pop()
+        : false;
+    const numOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
+        ? symbolsAfterCommaStepSize.length
+        : 0;
+    if (Array.isArray(value)) {
+      return [
+        +value[0].toFixed(numOfSymbolsAfterCommaStepSize),
+        +value[1].toFixed(numOfSymbolsAfterCommaStepSize),
+      ];
+    }
+    return +value.toFixed(numOfSymbolsAfterCommaStepSize);
+  }
 
   // Меняет min
   // Если макс = мин, то ничего не делать.
@@ -89,8 +105,8 @@ class Model implements IModel {
   }
 
   // Изменяет текущее значение и вызывает checkAndFixValue
-  setValue(newValue: Value): Value {
-    this.value = newValue;
+  setValue(newValue: Value, round: boolean = false): Value {
+    this.value = round ? this.roundValue(newValue) : newValue;
 
     this.checkAndFixValue();
 

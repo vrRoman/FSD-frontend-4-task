@@ -1,6 +1,7 @@
 import { SliderOptions, ViewOptions } from './interfaces/options';
 import { IView } from './interfaces/viewInterfaces';
 import { ModelProps, ObserverAction } from './interfaces/modelTypesAndInterfaces';
+import { IPresenter } from './interfaces/presenterInterfaces';
 
 class View implements IView {
   sliderClass: string | string[]
@@ -14,8 +15,8 @@ class View implements IView {
   valueInfoClass: string | string[]
 
   private readonly _options: ViewOptions
+  private _presenter: IPresenter | undefined
   private _modelProps: ModelProps | undefined
-  private observers: Array<any>
 
   private readonly _parent: Element
   private _slider: HTMLElement | undefined
@@ -51,7 +52,7 @@ class View implements IView {
 
     this._options = viewOptions;
     this._modelProps = undefined;
-    this.observers = [];
+    this._presenter = undefined;
 
     this._parent = parent;
     this._slider = undefined;
@@ -235,14 +236,15 @@ class View implements IView {
         if (pos <= maxPos) {
           if (pos >= minPos) {
             this._activeThumb.style[leftOrTop] = `${pos}px`;
-            this.notify();
           } else {
             this._activeThumb.style[leftOrTop] = `${minPos}px`;
-            this.notify();
           }
         } else {
           this._activeThumb.style[leftOrTop] = `${maxPos}px`;
-          this.notify();
+        }
+        if (this._presenter) {
+          const thumbNumber = activeThumbIsFirst ? 0 : 1;
+          this._presenter.onThumbMove(numOfSteps, thumbNumber);
         }
       }
     }
@@ -406,21 +408,6 @@ class View implements IView {
     }
   }
 
-  // Подписывает на обновление ползунка
-  subscribe(observer: Object) {
-    this.observers.push(observer);
-  }
-  // Убирает подписку
-  unsubscribe(observer: Object) {
-    this.observers.filter((obs) => obs !== observer);
-  }
-  // Вызывает у всех подписчиков метод onThumbMove
-  notify() {
-    this.observers.forEach((observer) => {
-      observer.onThumbMove();
-    });
-  }
-
   // Возвращает настройки, которые переданы во view
   getOptions(): ViewOptions {
     return this._options;
@@ -431,6 +418,10 @@ class View implements IView {
       ...this._modelProps,
       ...modelProps,
     };
+  }
+  // Устанавливает presenter
+  setPresenter(presenter: IPresenter) {
+    this._presenter = presenter;
   }
 
   // Создает и возвращает слайдер в this._parent

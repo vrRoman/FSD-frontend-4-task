@@ -1,9 +1,8 @@
-import { ObserverAction, Value } from './modelTypesAndInterfaces';
+import { ObserverAction } from './modelTypesAndInterfaces';
 
 export interface IPresenter {
   onChange: Function | undefined
 
-  roundValue(value: Value): Value
-  onThumbMove(): void
+  onThumbMove(numOfSteps?: number, thumbNumber?: 0 | 1): void
   update(action: ObserverAction): void
 }
