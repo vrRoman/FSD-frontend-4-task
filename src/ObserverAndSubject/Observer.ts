@@ -1,4 +1,4 @@
-import { IObserver, ISubject, SubjectAction } from '../interfaces/observerAndSubjectInterfaces';
+import { IObserver, ISubject, SubjectAction } from '../interfacesAndTypes/observerAndSubjectInterfaces';
 
 class Observer implements IObserver {
   constructor(subject: ISubject) {

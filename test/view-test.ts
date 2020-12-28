@@ -2,11 +2,11 @@
 
 import Model from '../src/Model';
 import View from '../src/View';
-import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
-import { IView } from '../src/interfaces/viewInterfaces';
-import { ViewOptions, ModelOptions } from '../src/interfaces/options';
+import { IModel } from '../src/interfacesAndTypes/modelTypesAndInterfaces';
+import { IView } from '../src/interfacesAndTypes/viewInterfaces';
+import { ViewOptions, ModelOptions } from '../src/interfacesAndTypes/options';
 import Presenter from '../src/Presenter';
-import { IPresenter } from '../src/interfaces/presenterInterfaces';
+import { IPresenter } from '../src/interfacesAndTypes/presenterInterfaces';
 
 const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',

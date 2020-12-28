@@ -1,5 +1,5 @@
-import { ModelOptions, SliderOptions } from './interfaces/options';
-import { IModel, Value } from './interfaces/modelTypesAndInterfaces';
+import { ModelOptions, SliderOptions } from './interfacesAndTypes/options';
+import { IModel, Value } from './interfacesAndTypes/modelTypesAndInterfaces';
 import ObserverAndSubject from './ObserverAndSubject/Subject';
 
 

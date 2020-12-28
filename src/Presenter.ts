@@ -1,8 +1,8 @@
-import { IModel } from './interfaces/modelTypesAndInterfaces';
-import { IView } from './interfaces/viewInterfaces';
-import { IPresenter } from './interfaces/presenterInterfaces';
-import { PresenterOptions, SliderOptions } from './interfaces/options';
-import { SubjectAction } from './interfaces/observerAndSubjectInterfaces';
+import { IModel } from './interfacesAndTypes/modelTypesAndInterfaces';
+import { IView } from './interfacesAndTypes/viewInterfaces';
+import { IPresenter } from './interfacesAndTypes/presenterInterfaces';
+import { PresenterOptions, SliderOptions } from './interfacesAndTypes/options';
+import { SubjectAction } from './interfacesAndTypes/observerAndSubjectInterfaces';
 import Observer from './ObserverAndSubject/Observer';
 
 

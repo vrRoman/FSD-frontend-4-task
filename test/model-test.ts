@@ -1,10 +1,10 @@
 import Model from '../src/Model';
 import View from '../src/View';
 import Presenter from '../src/Presenter';
-import { IModel } from '../src/interfaces/modelTypesAndInterfaces';
-import { IView } from '../src/interfaces/viewInterfaces';
-import { IPresenter } from '../src/interfaces/presenterInterfaces';
-import { PresenterOptions, ViewOptions, ModelOptions } from '../src/interfaces/options';
+import { IModel } from '../src/interfacesAndTypes/modelTypesAndInterfaces';
+import { IView } from '../src/interfacesAndTypes/viewInterfaces';
+import { IPresenter } from '../src/interfacesAndTypes/presenterInterfaces';
+import { PresenterOptions, ViewOptions, ModelOptions } from '../src/interfacesAndTypes/options';
 
 const defaultOptions = {
   value: 0,
