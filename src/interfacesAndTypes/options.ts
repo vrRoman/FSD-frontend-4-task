@@ -1,4 +1,4 @@
-export interface ModelOptions {
+export type ModelOptions = {
   value: [number, number] | number
   range: boolean
   stepSize: number
@@ -6,7 +6,7 @@ export interface ModelOptions {
   min: number
 }
 
-export interface ViewOptions {
+export type ViewOptions = {
   // Длина слайдера(в любых единицах измерения)
   length: string
   // Наличие подсказки у ползунков
@@ -43,11 +43,10 @@ export interface ViewOptions {
   valueInfoClass?: string | string[]
 }
 
-export interface PresenterOptions {
+export type PresenterOptions = {
   // Будет выполняться при любом передвижении ползунка
   onChange?: Function
 }
 
 
-export interface SliderOptions extends ModelOptions, ViewOptions, PresenterOptions{
-}
+export type SliderOptions = ModelOptions & ViewOptions & PresenterOptions
