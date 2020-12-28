@@ -17,7 +17,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   responsive: false,
   interactiveStepsInfo: true,
   useKeyboard: true,
-  sliderClass: ['slider', 'slider_without-presenter'],
+  sliderClass: ['slider'],
   sliderVerticalClass: ['slider_vertical', 'slider_vertical_some-class'],
   barClass: ['slider__bar', 'slider__bar_some-class'],
   progressBarClass: ['slider__progress-bar', 'slider__progress-bar_some-class'],
