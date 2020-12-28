@@ -1,18 +1,17 @@
 import { ModelOptions, SliderOptions } from './interfaces/options';
-import { IModel, ObserverAction, Value } from './interfaces/modelTypesAndInterfaces';
+import { IModel, Value } from './interfaces/modelTypesAndInterfaces';
+import ObserverAndSubject from './ObserverAndSubject/Subject';
 
 
-class Model implements IModel {
+class Model extends ObserverAndSubject implements IModel {
   private value: Value
   private range: boolean
   private stepSize: number
   private max: number
   private min: number
 
-  private observers: Array<any>
-
   constructor(options: ModelOptions | SliderOptions) {
-    this.observers = [];
+    super();
 
     this.max = options.max;
     this.min = options.min;
@@ -27,21 +26,6 @@ class Model implements IModel {
 
     this.stepSize = options.stepSize;
     this.checkAndFixStepSize();
-  }
-
-  // Подписывает на обновления модели
-  subscribe(observer: Object) {
-    this.observers.push(observer);
-  }
-  // Убирает подписку
-  unsubscribe(observer: Object) {
-    this.observers.filter((obs) => obs !== observer);
-  }
-  // Вызывает у всех подписчиков метод update
-  notify(action: ObserverAction) {
-    this.observers.forEach((observer) => {
-      observer.update(action);
-    });
   }
 
   // Округляет и возвращает входящее значение

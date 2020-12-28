@@ -1,16 +1,20 @@
-import { IModel, ObserverAction } from './interfaces/modelTypesAndInterfaces';
+import { IModel } from './interfaces/modelTypesAndInterfaces';
 import { IView } from './interfaces/viewInterfaces';
 import { IPresenter } from './interfaces/presenterInterfaces';
 import { PresenterOptions, SliderOptions } from './interfaces/options';
+import { SubjectAction } from './interfaces/observerAndSubjectInterfaces';
+import Observer from './ObserverAndSubject/Observer';
 
 
-class Presenter implements IPresenter {
+class Presenter extends Observer implements IPresenter {
   private _model: IModel;
   private _view: IView;
 
   onChange: Function | undefined
 
   constructor(model: IModel, view: IView, presenterOptions: PresenterOptions | SliderOptions) {
+    super(model);
+
     this._model = model;
     this._view = view;
     this.onChange = presenterOptions.onChange;
@@ -24,8 +28,6 @@ class Presenter implements IPresenter {
     });
     this._view.drawSlider();
 
-    this._model.subscribe(this);
-
     this._view.setPresenter(this);
   }
 
@@ -34,7 +36,7 @@ class Presenter implements IPresenter {
   }
 
   // Обновляет view
-  update(action: ObserverAction): void {
+  update(action: SubjectAction): void {
     this._view.update(action);
   }
 }

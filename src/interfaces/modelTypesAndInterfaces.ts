@@ -1,19 +1,9 @@
+import { ISubject } from './observerAndSubjectInterfaces';
+
 export type Value = [number, number] | number
 
 
-export interface ObserverAction {
-  type: 'UPDATE_VALUE' | 'UPDATE_RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEPSIZE'
-  updatedProps?: {
-    value?: Value
-    range?: boolean
-    stepSize?: number
-    min?: number
-    max?: number
-  }
-}
-
-
-export interface IModel {
+export interface IModel extends ISubject {
   setValue(newValue: Value, round?: boolean): Value
   setMin(newMin: number): number
   setMax(newMax: number): number
@@ -30,10 +20,6 @@ export interface IModel {
   getMin(): number
   getMax(): number
   getMaxDiapason(): number
-
-  subscribe(observer: Object): void
-  unsubscribe(observer: Object): void
-  notify(action: ObserverAction): void
 }
 
 export interface ModelProps {

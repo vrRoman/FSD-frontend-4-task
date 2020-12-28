@@ -1,7 +1,8 @@
 import { SliderOptions, ViewOptions } from './interfaces/options';
 import { IView } from './interfaces/viewInterfaces';
-import { ModelProps, ObserverAction } from './interfaces/modelTypesAndInterfaces';
+import { ModelProps } from './interfaces/modelTypesAndInterfaces';
 import { IPresenter } from './interfaces/presenterInterfaces';
+import { SubjectAction } from './interfaces/observerAndSubjectInterfaces';
 
 class View implements IView {
   sliderClass: string | string[]
@@ -109,7 +110,7 @@ class View implements IView {
   }
 
   // В зависимости от action, обновляет view
-  update(action: ObserverAction) {
+  update(action: SubjectAction) {
     switch (action.type) {
       case 'UPDATE_VALUE':
         if (action.updatedProps) {

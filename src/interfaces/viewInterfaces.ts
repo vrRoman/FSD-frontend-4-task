@@ -1,6 +1,7 @@
 import { ViewOptions } from './options';
-import { ModelProps, ObserverAction } from './modelTypesAndInterfaces';
+import { ModelProps } from './modelTypesAndInterfaces';
 import { IPresenter } from './presenterInterfaces';
+import { SubjectAction } from './observerAndSubjectInterfaces';
 
 export interface IView {
   sliderClass: string | string[]
@@ -14,7 +15,7 @@ export interface IView {
   valueInfoClass: string | string[]
 
   drawSlider(): void
-  update(action: ObserverAction): void
+  update(action: SubjectAction): void
 
   getOptions(): ViewOptions
   provideModelProps(modelProps: ModelProps): void
