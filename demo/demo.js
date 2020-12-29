@@ -2,16 +2,17 @@ class SliderControlPanel {
   constructor(options) {
     this.sliderName = options.sliderName;
     this.$slider = $(`#${this.sliderName}`);
-    this.rangeName = options.rangeName;
+    this.rangeName = 'range';
     this.valueElems = [
-      $(`#${this.sliderName}-${options.valueName1}`),
-      $(`#${this.sliderName}-${options.valueName2}`),
+      $(`#${this.sliderName}-value1`),
+      $(`#${this.sliderName}-value2`),
     ];
-    this.minMaxNames = [options.minName, options.maxName];
-    this.stepSizeName = options.stepSizeName;
-    this.lengthName = options.lengthName;
-    this.stepsInfoName = options.stepsInfoName;
-    this.checkboxNames = options.checkboxNames;
+    this.minMaxNames = ['min', 'max'];
+    this.stepSizeName = 'stepSize';
+    this.lengthName = 'length';
+    this.stepsInfoName = 'stepsInfo';
+    this.checkboxNames = ['vertical', 'responsive', 'range',
+      'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'];
 
     this.initCheckboxes(this.checkboxNames);
     this.initValueInputs();
@@ -50,11 +51,15 @@ class SliderControlPanel {
         });
         this.minMaxNames.forEach((name) => {
           const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
-          $minOrMax.val(+this.$slider.slider(name));
+          if (name === 'min') {
+            $minOrMax.val(+this.$slider.slider('model').getMin());
+          } else if (name === 'max') {
+            $minOrMax.val(+this.$slider.slider('model').getMax());
+          }
         });
         break;
       case 'UPDATE_STEPSIZE':
-        $stepSize.val(+this.$slider.slider('stepSize'));
+        $stepSize.val(+this.$slider.slider('model').getStepSize());
         break;
       default:
         $.error('Wrong action.type');
@@ -69,7 +74,14 @@ class SliderControlPanel {
       const $checkbox = $(`#${this.sliderName}-${name.toLowerCase()}`);
 
       // Для включенных изначально настроек включить чекбоксы
-      if (this.$slider.slider(name)) {
+      let module;
+      if (['range'].indexOf(name) !== -1) {
+        module = 'model';
+      } else if (['responsive', 'vertical', 'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'].indexOf(name) !== -1) {
+        module = 'view';
+      }
+
+      if (this.$slider.slider(module)[`get${name[0].toUpperCase() + name.slice(1)}`]()) {
         $checkbox.prop('checked', true);
       } else {
         $checkbox.prop('checked', false);
@@ -78,9 +90,13 @@ class SliderControlPanel {
       // Навесить обработчики
       function onCheckboxChange() {
         if (this.checked === true) {
-          $slider.slider(name, true);
+          $slider.slider('changeOptions', {
+            [name]: true,
+          });
         } else {
-          $slider.slider(name, false);
+          $slider.slider('changeOptions', {
+            [name]: false,
+          });
         }
       }
       $checkbox.on('change', onCheckboxChange);
@@ -95,7 +111,7 @@ class SliderControlPanel {
         }
       }
       if (name === this.rangeName) {
-        if (this.$slider.slider(this.rangeName) === true) {
+        if (this.$slider.slider('model').getRange() === true) {
           $value2.prop('disabled', false);
         } else {
           $value2.prop('disabled', true);
@@ -121,13 +137,17 @@ class SliderControlPanel {
         const isValValid = $value1.val() && $value2.val()
           && !Number.isNaN(+$value1.val()) && !Number.isNaN(+$value2.val());
         if (isValValid) {
-          $slider.slider('value', [+$value1.val(), +$value2.val()]);
+          $slider.slider('changeOptions', {
+            value: [+$value1.val(), +$value2.val()],
+          });
           $value1.val($slider.slider('value')[0]);
           $value2.val($slider.slider('value')[1]);
         }
       } else {
         if ($value1.val() && !Number.isNaN(+$value1.val())) {
-          $slider.slider('value', +$value1.val());
+          $slider.slider('changeOptions', {
+            value: +$value1.val(),
+          });
           $value1.val(+$slider.slider('value'));
         }
       }
@@ -143,12 +163,14 @@ class SliderControlPanel {
 
     this.minMaxNames.forEach((name) => {
       const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
-      $minOrMax.val(+$slider.slider(name));
+      $minOrMax.val(+$slider.slider('model')[`get${$minOrMax === 'min' ? 'Min' : 'Max'}`]());
       function onFocusoutMinMax() {
         if ($(this).val() && !Number.isNaN(+$(this).val())) {
-          $slider.slider(name, +$(this).val());
-          $(`#${sliderName}-${minMaxNames[1]}`).val(+$slider.slider('max'));
-          $(`#${sliderName}-${minMaxNames[0]}`).val(+$slider.slider('min'));
+          $slider.slider('changeOptions', {
+            [name]: +$(this).val(),
+        });
+          $(`#${sliderName}-${minMaxNames[1]}`).val(+$slider.slider('model').getMax());
+          $(`#${sliderName}-${minMaxNames[0]}`).val(+$slider.slider('model').getMin());
           if (Array.isArray($slider.slider('value'))) {
             $value1.val($slider.slider('value')[0]);
             $value2.val($slider.slider('value')[1]);
@@ -165,11 +187,13 @@ class SliderControlPanel {
   initStepSize() {
     const $stepSize = $(`#${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
     const { $slider } = this;
-    $stepSize.val(+$slider.slider('stepSize'));
+    $stepSize.val(+$slider.slider('model').getStepSize());
     function onFocusoutStepSize() {
       if ($(this).val() && !Number.isNaN(+$(this).val())) {
-        $slider.slider('stepSize', +$(this).val());
-        $(this).val(+$slider.slider('stepSize'));
+        $slider.slider('changeOptions', {
+          stepSize: +$(this).val(),
+        });
+        $(this).val(+$slider.slider('model').getStepSize());
       }
     }
     $stepSize.on('focusout', onFocusoutStepSize);
@@ -183,8 +207,9 @@ class SliderControlPanel {
 
     function onFocusoutLength() {
       if ($(this).val()) {
-        $slider.slider('length', +$(this).val());
-        $slider.slider('length', $(this).val());
+        $slider.slider('changeOptions', {
+          length: $(this).val(),
+        });
       }
     }
     $length.on('focusout', onFocusoutLength);
@@ -199,15 +224,21 @@ class SliderControlPanel {
         const valIsBoolean = $stepsInfo.val().toLowerCase() === 'true'
           || $stepsInfo.val().toLowerCase() === 'false';
         if (valIsBoolean) {
-          $slider.slider('stepsInfo', $stepsInfo.val().toLowerCase() === 'true');
+          $slider.slider('changeOptions', {
+            stepsInfo: $stepsInfo.val().toLowerCase() === 'true',
+          });
         } else {
           const valIsArr = $stepsInfo.val().indexOf(',') !== -1;
           if (valIsArr) {
-            $slider.slider('stepsInfo', $stepsInfo.val().split(','));
+            $slider.slider('changeOptions', {
+              stepsInfo: $stepsInfo.val().split(','),
+            });
           } else {
             const valIsNum = !Number.isNaN(+$stepsInfo.val());
             if (valIsNum) {
-              $slider.slider('stepsInfo', +$stepsInfo.val());
+              $slider.slider('changeOptions', {
+                stepsInfo: +$stepsInfo.val(),
+              });
             }
           }
         }
@@ -221,18 +252,9 @@ class SliderControlPanel {
 
 $('#slider1').slider();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const controlPanel1 = new SliderControlPanel({
   sliderName: 'slider1',
-  rangeName: 'range',
-  valueName1: 'value1',
-  valueName2: 'value2',
-  minName: 'min',
-  maxName: 'max',
-  stepSizeName: 'stepSize',
-  lengthName: 'length',
-  stepsInfoName: 'stepsInfo',
-  checkboxNames: ['vertical', 'responsive', 'range',
-    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
 });
 
 
@@ -250,18 +272,9 @@ $('#slider2').slider({
   responsive: true,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const controlPanel2 = new SliderControlPanel({
   sliderName: 'slider2',
-  rangeName: 'range',
-  valueName1: 'value1',
-  valueName2: 'value2',
-  minName: 'min',
-  maxName: 'max',
-  stepSizeName: 'stepSize',
-  lengthName: 'length',
-  stepsInfoName: 'stepsInfo',
-  checkboxNames: ['vertical', 'responsive', 'range',
-    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
 });
 
 $('#slider3').slider({
@@ -270,33 +283,15 @@ $('#slider3').slider({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const controlPanel3 = new SliderControlPanel({
   sliderName: 'slider3',
-  rangeName: 'range',
-  valueName1: 'value1',
-  valueName2: 'value2',
-  minName: 'min',
-  maxName: 'max',
-  stepSizeName: 'stepSize',
-  lengthName: 'length',
-  stepsInfoName: 'stepsInfo',
-  checkboxNames: ['vertical', 'responsive', 'range',
-    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
 });
 
 
 $('#slider4').slider();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const controlPanel4 = new SliderControlPanel({
   sliderName: 'slider4',
-  rangeName: 'range',
-  valueName1: 'value1',
-  valueName2: 'value2',
-  minName: 'min',
-  maxName: 'max',
-  stepSizeName: 'stepSize',
-  lengthName: 'length',
-  stepsInfoName: 'stepsInfo',
-  checkboxNames: ['vertical', 'responsive', 'range',
-    'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'],
 });

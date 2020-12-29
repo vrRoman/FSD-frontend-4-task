@@ -8,45 +8,14 @@ import { IView } from './interfacesAndTypes/viewInterfaces';
 import Presenter from './Presenter';
 import { IPresenter } from './interfacesAndTypes/presenterInterfaces';
 
-import { SliderOptions } from './interfacesAndTypes/options';
+import { SliderOptions, SliderOptionsOptionalParams } from './interfacesAndTypes/options';
 
-// копия SliderOptions, но с необязательными параметрами
-interface Options {
-  value?: [number, number] | number
-  range?: boolean
-  stepSize?: number
-  max?: number
-  min?: number
-  length?: string
-  tooltip?: boolean
-  stepsInfo?: boolean | Array<number | string> | number
-  valueInfo?: boolean
-  vertical?: boolean
-  responsive?: boolean
-  sliderClass?: string | string[]
-  sliderVerticalClass?: string | string[]
-  barClass?: string | string[]
-  progressBarClass?: string | string[]
-  thumbClass?: string | string[]
-  activeThumbClass?: string | string[]
-  tooltipClass?: string | string[]
-  stepsInfoClass?: string | string[]
-  valueInfoClass?: string | string[]
-  useKeyboard?: boolean
-  interactiveStepsInfo?: boolean
-  onChange?: Function
-}
-
-type OptionsString = 'destroy' | 'value' | 'range' | 'stepSize' | 'max' | 'min'
-  | 'length' | 'tooltip' | 'stepsInfo' | 'valueInfo' | 'vertical' | 'responsive'
-  | 'useKeyboard' | 'interactiveStepsInfo' | 'onChange'
-  | 'model' | 'view' | 'presenter';
 
 declare global {
   // eslint-disable-next-line
   interface JQuery {
     slider: (
-      options?: Options | OptionsString,
+      options?: SliderOptionsOptionalParams | 'changeOptions',
       otherOptions?: any
     ) => JQuery<Element> | JQuery<Object> | number | number[] | boolean | undefined
   }
@@ -70,11 +39,12 @@ declare global {
     responsive: false,
 
     useKeyboard: true,
-    interactiveStepsInfo: true,
+    interactiveStepsInfo: false,
   };
 
   // eslint-disable-next-line no-param-reassign
-  $.fn.slider = function start(options?: Options | OptionsString, otherOptions?: any) {
+  $.fn.slider = function start(options?: SliderOptionsOptionalParams | 'changeOptions' | 'value' | 'model' | 'view' | 'presenter',
+                               newOptions?: SliderOptionsOptionalParams) {
     if (typeof options === 'object' || !options) {
       if (this.data('slider')) {
         $.error('Slider has already been called for this element');
@@ -101,127 +71,16 @@ declare global {
         $(this).data('presenter', presenter);
       });
     }
-    if (otherOptions !== undefined) {
-      switch (options) {
-        case 'destroy':
-          return this.each(function destroy() {
-            $(this).data('slider').remove();
-            $(this).removeData('slider');
-            $(this).removeData('model');
-            $(this).removeData('view');
-            $(this).removeData('presenter');
-          });
-        case 'value':
-          return this.each(function changeValue() {
-            $(this).data('model').setValue(otherOptions);
-          });
-        case 'range':
-          return this.each(function changeRange() {
-            $(this).data('model').setRange(otherOptions);
-          });
-        case 'stepSize':
-          return this.each(function changeStepSize() {
-            $(this).data('model').setStepSize(otherOptions);
-          });
-        case 'max':
-          return this.each(function changeMax() {
-            $(this).data('model').setMax(otherOptions);
-          });
-        case 'min':
-          return this.each(function changeMin() {
-            $(this).data('model').setMin(otherOptions);
-          });
-        case 'length':
-          return this.each(function changeLength() {
-            $(this).data('view').changeLength(otherOptions);
-          });
-        case 'tooltip':
-          return this.each(function changeTooltip() {
-            if (otherOptions === true && !$(this).data('view').getTooltip()) {
-              $(this).data('view').createTooltip();
-            } else if (otherOptions === false && $(this).data('view').getTooltip()) {
-              $(this).data('view').removeTooltip();
-            }
-          });
-        case 'stepsInfo':
-          return this.each(function changeStepsInfo() {
-            $(this).data('view').changeStepsInfoSettings(otherOptions);
-          });
-        case 'valueInfo':
-          return this.each(function changeValueInfo() {
-            if (otherOptions === true && !$(this).data('view').getValueInfo()) {
-              $(this).data('view').createValueInfo();
-            } else if (otherOptions === false && $(this).data('view').getValueInfo()) {
-              $(this).data('view').removeValueInfo();
-            }
-          });
-        case 'vertical':
-          return this.each(function changeVertical() {
-            $(this).data('view').changeVertical(otherOptions);
-          });
-        case 'responsive':
-          return this.each(function changeResponsive() {
-            $(this).data('view').changeResponsive(otherOptions);
-          });
-        case 'useKeyboard':
-          return this.each(function changeUseKeyboard() {
-            if (otherOptions === true && !$(this).data('view').getUseKeyboard()) {
-              $(this).data('view').addKeyboardListener();
-            } else if (otherOptions === false && $(this).data('view').getUseKeyboard()) {
-              $(this).data('view').removeKeyboardListener();
-            }
-          });
-        case 'interactiveStepsInfo':
-          return this.each(function changeInteractiveStepsInfo() {
-            if (otherOptions === true && !$(this).data('view').getInteractiveStepsInfo()) {
-              $(this).data('view').addStepsInfoInteractivity();
-            } else if (otherOptions === false && $(this).data('view').getInteractiveStepsInfo()) {
-              $(this).data('view').removeStepsInfoInteractivity();
-            }
-          });
-        case 'onChange':
-          return this.each(function changeOnChange() {
-            // eslint-disable-next-line no-param-reassign
-            $(this).data('presenter').onChange = otherOptions;
-          });
-        default:
-          $.error(`${options} option not found`);
-      }
-    } else {
-      switch (options) {
-        case 'model':
-          return this.data('model');
-        case 'view':
-          return this.data('view');
-        case 'presenter':
-          return this.data('presenter');
-        case 'value':
-          return this.data('model').getValue();
-        case 'range':
-          return this.data('model').getRange();
-        case 'stepSize':
-          return this.data('model').getStepSize();
-        case 'min':
-          return this.data('model').getMin();
-        case 'max':
-          return this.data('model').getMax();
-        case 'vertical':
-          return this.data('view').getVertical();
-        case 'responsive':
-          return this.data('view').getResponsive();
-        case 'tooltip':
-          return this.data('view').getTooltip();
-        case 'stepsInfo':
-          return this.data('view').getStepsInfo();
-        case 'valueInfo':
-          return this.data('view').getValueInfo();
-        case 'useKeyboard':
-          return this.data('view').getUseKeyboard();
-        case 'interactiveStepsInfo':
-          return this.data('view').getInteractiveStepsInfo();
-        default:
-          $.error(`No ${options} value`);
-      }
+    if (options === 'changeOptions' && newOptions) {
+      this.data('presenter').changeOptions(newOptions);
+    } else if (options === 'value') {
+      return this.data('model').getValue();
+    } else if (options === 'model') {
+      return this.data('model');
+    } else if (options === 'view') {
+      return this.data('view');
+    } else if (options === 'presenter') {
+      return this.data('presenter');
     }
     return this;
   };
