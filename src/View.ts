@@ -1,4 +1,4 @@
-import { SliderOptions, ViewOptions } from './interfacesAndTypes/options';
+import { SliderOptions, ViewOptions, ViewOptionsOptionalParams } from './interfacesAndTypes/options';
 import { IView } from './interfacesAndTypes/viewInterfaces';
 import { ModelProps } from './interfacesAndTypes/modelTypesAndInterfaces';
 import { IPresenter } from './interfacesAndTypes/presenterInterfaces';
@@ -83,6 +83,50 @@ class View implements IView {
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
     this.handleStepElemMouseDown = this.handleStepElemMouseDown.bind(this);
     this.removeActiveThumb = this.removeActiveThumb.bind(this);
+  }
+
+  // Меняет настройки
+  changeOptions(newOptions: ViewOptionsOptionalParams) {
+    if (newOptions.length) {
+      this.changeLength(newOptions.length);
+    }
+    if (newOptions.tooltip !== undefined) {
+      if (newOptions.tooltip) {
+        this.createTooltip();
+      } else {
+        this.removeTooltip();
+      }
+    }
+    if (newOptions.stepsInfo !== undefined) {
+      this.changeStepsInfoSettings(newOptions.stepsInfo);
+    }
+    if (newOptions.valueInfo !== undefined) {
+      if (newOptions.valueInfo) {
+        this.createValueInfo();
+      } else {
+        this.removeValueInfo();
+      }
+    }
+    if (newOptions.vertical !== undefined) {
+      this.changeVertical(newOptions.vertical);
+    }
+    if (newOptions.responsive !== undefined) {
+      this.changeResponsive(newOptions.responsive);
+    }
+    if (newOptions.useKeyboard !== undefined) {
+      if (newOptions.useKeyboard) {
+        this.addKeyboardListener();
+      } else {
+        this.removeKeyboardListener();
+      }
+    }
+    if (newOptions.interactiveStepsInfo !== undefined) {
+      if (newOptions.interactiveStepsInfo) {
+        this.addStepsInfoInteractivity();
+      } else {
+        this.removeStepsInfoInteractivity();
+      }
+    }
   }
 
   drawSlider() {

@@ -1,5 +1,7 @@
+import { Value } from './modelTypesAndInterfaces';
+
 export type ModelOptions = {
-  value: [number, number] | number
+  value: Value
   range: boolean
   stepSize: number
   max: number
@@ -48,5 +50,39 @@ export type PresenterOptions = {
   onChange?: Function
 }
 
-
 export type SliderOptions = ModelOptions & ViewOptions & PresenterOptions
+
+
+export type ModelOptionsOptionalParams = {
+  value?: Value
+  range?: boolean
+  stepSize?: number
+  max?: number
+  min?: number
+}
+export type ViewOptionsOptionalParams = {
+  length?: string
+  tooltip?: boolean
+  stepsInfo?: boolean | Array<number | string> | number
+  valueInfo?: boolean
+  vertical?: boolean
+  responsive?: boolean
+  useKeyboard?: boolean
+  interactiveStepsInfo?: boolean
+  sliderClass?: string | string[]
+  sliderVerticalClass?: string | string[]
+  barClass?: string | string[]
+  progressBarClass?: string | string[]
+  thumbClass?: string | string[]
+  activeThumbClass?: string | string[]
+  tooltipClass?: string | string[]
+  stepsInfoClass?: string | string[]
+  valueInfoClass?: string | string[]
+}
+export type PresenterOptionsOptionalParams = {
+  onChange?: Function
+}
+
+export type SliderOptionsOptionalParams = ModelOptionsOptionalParams
+  & ViewOptionsOptionalParams
+  & PresenterOptionsOptionalParams

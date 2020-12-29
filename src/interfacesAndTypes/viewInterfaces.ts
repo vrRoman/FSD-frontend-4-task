@@ -1,4 +1,4 @@
-import { ViewOptions } from './options';
+import { ViewOptions, ViewOptionsOptionalParams } from './options';
 import { ModelProps } from './modelTypesAndInterfaces';
 import { IPresenter } from './presenterInterfaces';
 import { SubjectAction } from './observerAndSubjectInterfaces';
@@ -18,6 +18,7 @@ export interface IView {
   update(action: SubjectAction): void
 
   getOptions(): ViewOptions
+  changeOptions(newOptions: ViewOptionsOptionalParams): void
   provideModelProps(modelProps: ModelProps): void
   setPresenter(presenter: IPresenter): void
 

@@ -1,4 +1,8 @@
-import { ModelOptions, SliderOptions } from './interfacesAndTypes/options';
+import {
+  ModelOptions,
+  ModelOptionsOptionalParams,
+  SliderOptions,
+} from './interfacesAndTypes/options';
 import { IModel, Value } from './interfacesAndTypes/modelTypesAndInterfaces';
 import ObserverAndSubject from './ObserverAndSubject/Subject';
 
@@ -26,6 +30,25 @@ class Model extends ObserverAndSubject implements IModel {
 
     this.stepSize = options.stepSize;
     this.checkAndFixStepSize();
+  }
+
+  // Меняет настройки
+  changeOptions(newOptions: ModelOptionsOptionalParams) {
+    if (newOptions.value !== undefined) {
+      this.setValue(newOptions.value);
+    }
+    if (newOptions.range !== undefined) {
+      this.setRange(newOptions.range);
+    }
+    if (newOptions.stepSize !== undefined) {
+      this.setStepSize(newOptions.stepSize);
+    }
+    if (newOptions.min !== undefined) {
+      this.setMin(newOptions.min);
+    }
+    if (newOptions.max !== undefined) {
+      this.setMax(newOptions.max);
+    }
   }
 
   // Округляет и возвращает входящее значение
@@ -134,7 +157,7 @@ class Model extends ObserverAndSubject implements IModel {
 
   // Добавляет указанное количество шагов к нужному значению(если не
   // диапазон или нужно большее значение, то указывать не обязательно)
-  addStepsToValue(numOfSteps: number, valueNumber: 0 | 1 = 1): Value {
+  addStepsToValue(numOfSteps: number, valueNumber: 0 | 1 = 1, round: boolean = false): Value {
     if (typeof this.value === 'number') {
       this.value += numOfSteps * this.stepSize;
     } else {
@@ -148,6 +171,10 @@ class Model extends ObserverAndSubject implements IModel {
           [, this.value[valueNumber]] = this.value;
         }
       }
+    }
+
+    if (round) {
+      this.value = this.roundValue(this.value);
     }
 
     this.checkAndFixValue();
