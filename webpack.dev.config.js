@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -62,13 +62,8 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
 
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery',
-    // }),
-
     new MiniCssExtractPlugin({
-      fileName: 'style.css',
+      filename: 'slider.css',
     }),
   ],
 
