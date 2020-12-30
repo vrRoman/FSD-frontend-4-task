@@ -1,5 +1,5 @@
 import Model from '../src/Model';
-import View from '../src/View';
+import View from '../src/View/View';
 import Presenter from '../src/Presenter';
 import { IModel } from '../src/interfacesAndTypes/modelTypesAndInterfaces';
 import { IView } from '../src/interfacesAndTypes/viewInterfaces';

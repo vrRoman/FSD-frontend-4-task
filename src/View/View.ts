@@ -1,8 +1,8 @@
-import { SliderOptions, ViewOptions, ViewOptionsOptionalParams } from './interfacesAndTypes/options';
-import { IView } from './interfacesAndTypes/viewInterfaces';
-import { ModelProps } from './interfacesAndTypes/modelTypesAndInterfaces';
-import { IPresenter } from './interfacesAndTypes/presenterInterfaces';
-import { SubjectAction } from './interfacesAndTypes/observerAndSubjectInterfaces';
+import { SliderOptions, ViewOptions, ViewOptionsOptionalParams } from '../interfacesAndTypes/options';
+import { IView } from '../interfacesAndTypes/viewInterfaces';
+import { ModelProps } from '../interfacesAndTypes/modelTypesAndInterfaces';
+import { IPresenter } from '../interfacesAndTypes/presenterInterfaces';
+import { SubjectAction } from '../interfacesAndTypes/observerAndSubjectInterfaces';
 
 class View implements IView {
   sliderClass: string | string[]

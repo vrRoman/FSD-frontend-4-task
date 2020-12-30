@@ -3,7 +3,7 @@ import './styles/main.scss';
 
 import Model from './Model';
 import { IModel } from './interfacesAndTypes/modelTypesAndInterfaces';
-import View from './View';
+import View from './View/View';
 import { IView } from './interfacesAndTypes/viewInterfaces';
 import Presenter from './Presenter';
 import { IPresenter } from './interfacesAndTypes/presenterInterfaces';
