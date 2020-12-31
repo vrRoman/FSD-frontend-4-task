@@ -46,11 +46,15 @@ npm run build:prod
 #### Получение значений
 ```javascript
  $('selector').slider('value'); // Возвращает текущее value
+ $('selector').slider('view'); // Возвращает view
 ```
 
 #### Изменение настроек
 ```javascript
- $('selector').slider('value', [1, 9]);
+ $('selector').slider('changeOptions', {
+   value: [1, 9],
+   vertical: true,
+ });
 ```
 ---
 
@@ -70,7 +74,7 @@ npm run build:prod
 | responsive | boolean | false | Если true, при изменении размера слайдера, он обновляется. Не рекомендуется, если length указывается в статических ед. измерения(px). |
 | (slider\|sliderVertical<br>\|bar\|progressBar\|thumb<br>\|activeThumb\|tooltip\|stepsInfo<br>\|valueInfo)Class | string \|Array<string\> | Одноименное, по БЭМ | Класс определенного элемента. Может быть массивом классов. |
 | useKeyboard | boolean | true | При нажатии стрелок и клавиш ad активный ползунок будет перемещаться. |
-| interactiveStepsInfo | boolean | true | При нажатии на элементы шкалы значений, значение будет меняться на соответсвующее. |
+| stepsInfoInteractivity | boolean | true | При нажатии на элементы шкалы значений, значение будет меняться на соответсвующее. |
 | onChange | Function | None | Будет вызываться при каждом перемещении ползунков. |
 
 
@@ -79,33 +83,30 @@ npm run build:prod
 | ------------ |:--------------------------:| -------- |
 | model | Object | Возвращает model слайдера. Можно использовать, если нужны методы Model. |
 | view | Object | Возвращает view слайдера. Можно использовать, если нужны методы View. |
+| viewModel | Object | Возвращает viewModel слайдера. Можно использовать, если нужны данные отображения. |
 | controller | Object | Возвращает controller слайдера. Можно использовать, если нужны методы Presenter. |
 | value | [number, number] \| number | Текущее значение слайдера |
-| range | boolean | Range |
-| stepSize | number | Размер шага |
-| min | number | Минимальное значение |
-| max | number | Максимальное значение |
-| vertical | boolean | Вертикальный режим |
-| responsive | boolean | Отзывчивость |
-| tooltip | undefined \| HTMLElement | Элемент(ы) с подсказками |
-| stepsInfo | undefined \| HTMLElement | Элемент шкалы значений |
-| valueInfo | undefined \| HTMLElement | Элемент информации о значении |
-| useKeyboard | boolean | Использование клавиатуры |
-| interactiveStepsInfo | boolean | Интерактивная шкала значений |
 
 ---
 
 ## Описание архитектуры
 #### Model
-Управляет значением слайдера(работа без пользовательского интерфейса). 
+Управляет данными слайдера(работа без пользовательского интерфейса). 
 При изменении значений вызывает у всех подписчиков метод update 
 с входящим параметром action. В action.type может храниться: 'UPDATE_VALUE' 
-| 'UPDATE_RANGE' | 'UPDATE_MIN' | 'UPDATE_MAX' | 'UPDATE_STEPSIZE'.
+| 'UPDATE_RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEPSIZE'.
 #### View
-Отрисовывает все элементы слайдера. Значения предоставляет Presenter через метод provideModelProps.
-При движении ползунка вызывает у всех подписчиков метод onThumbMove.
+Имеет свою внутреннюю структуру: ViewModel, SubViews, View. Внутренний View
+ является "точкой входа" в этот модуль, управляет и предоставляет данные SubViews и ViewModel,
+ подписывается на ViewModel и обновляет SubViews. При движении ползунка уведомляет Presenter.
+ SubViews отвечают за отрисовку элементов слайдера, берут значения из ViewModel,
+ который предоставляет View. ViewModel
+ управляет данными отображения. При изменении данных, уведомляет подписчиков. В action.type
+ может храниться 'UPDATE_LENGTH' | 'UPDATE_VERTICAL' | 'UPDATE_RESPONSIVE' | 'UPDATE_TOOLTIP'
+ | 'UPDATE_STEPSINFO-SETTINGS' | 'UPDATE_VALUEINFO' | 'UPDATE_USEKEYBOARD'
+ | 'UPDATE_STEPSINFO-INTERACTIVITY'. 
 #### Presenter
-Реализует взаимодействие отображения и модели. Подписывается и на model, и на view. 
-При изменении модели обновляет view, при движении ползунка передает значение в model.
+Реализует взаимодействие отображения и модели. Подписывается на model. 
+При изменении модели обновляет view, при движении ползунка обращается к модели.
 
 ### ![Diagram](https://github.com/vrRoman/FSD-frontend-4-task/blob/master/slider-uml.png)
