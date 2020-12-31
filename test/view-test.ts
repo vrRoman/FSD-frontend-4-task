@@ -2,11 +2,12 @@
 
 import Model from '../src/modules/Model/Model';
 import View from '../src/modules/View/modules/View/View';
-import { IModel } from '../src/modules/Model/interfacesAndTypes';
-import { IView } from '../src/modules/View/modules/View/interfaces';
-import { ViewOptions, ModelOptions } from '../src/options/options';
+import IModel from '../src/modules/Model/interfacesAndTypes';
+import IView from '../src/modules/View/modules/View/interfaces';
+import IPresenter from '../src/modules/Presenter/interface';
+import { ViewOptions } from '../src/modules/View/options';
+import { ModelOptions } from '../src/modules/Model/options';
 import Presenter from '../src/modules/Presenter/Presenter';
-import { IPresenter } from '../src/modules/Presenter/interface';
 
 const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',
@@ -15,7 +16,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   valueInfo: false,
   vertical: false,
   responsive: false,
-  interactiveStepsInfo: true,
+  stepsInfoInteractivity: true,
   useKeyboard: true,
   sliderClass: ['slider'],
   sliderVerticalClass: ['slider_vertical', 'slider_vertical_some-class'],
@@ -77,58 +78,58 @@ describe('View with different options and get slider elements methods', () => {
   it('getParent', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
 
-    console.log('Parent: ', view.getParent());
-    expect(view.getParent()).toBeDefined();
+    console.log('Parent: ', view.getElem('parent'));
+    expect(view.getElem('parent')).toBeDefined();
   });
   it('getSlider', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
 
-    console.log('Slider: ', view.getSlider());
-    expect(view.getSlider()).toBeDefined();
+    console.log('Slider: ', view.getElem('slider'));
+    expect(view.getElem('slider')).toBeDefined();
   });
   it('getBar', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
 
-    console.log('Bar: ', view.getBar());
-    expect(view.getBar()).toBeDefined();
+    console.log('Bar: ', view.getElem('bar'));
+    expect(view.getElem('bar')).toBeDefined();
   });
   it('getProgressBar range false', () => {
     model.setValue(3);
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
-    console.log('ProgressBar range=false', view.getProgressBar());
-    expect(view.getProgressBar()).toBeDefined();
+    console.log('ProgressBar range=false', view.getElem('progressBar'));
+    expect(view.getElem('progressBar')).toBeDefined();
   });
   it('getProgressBar range true', () => {
     model.setRange(true);
     model.setValue([3, 5]);
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
-    console.log('ProgressBar range=true: ', view.getProgressBar());
-    expect(view.getProgressBar()).toBeDefined();
+    console.log('ProgressBar range=true: ', view.getElem('progressBar'));
+    expect(view.getElem('progressBar')).toBeDefined();
   });
 
   it('getThumb, range false', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
-    console.log('Thumb not array: ', view.getThumb());
-    expect(view.getThumb()).toBeDefined();
+    console.log('Thumb not array: ', view.getElem('thumb'));
+    expect(view.getElem('thumb')).toBeDefined();
   });
   it('getThumb, range true', () => {
     model.setRange(true);
     model.setValue([0, 2]);
     const view: IView = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
-    console.log('Thumb array: ', view.getThumb());
-    expect(Array.isArray(view.getThumb())).toBe(true);
+    console.log('Thumb array: ', view.getElem('thumb'));
+    expect(Array.isArray(view.getElem('thumb'))).toBe(true);
   });
   it('getTooltip returns undefined when options.tooltip = false, and vice versa,'
     + 'when range true returns array', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
-    expect(view.getTooltip()).toBe(undefined);
+    expect(view.getElem('tooltip')).toBe(undefined);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
@@ -136,21 +137,21 @@ describe('View with different options and get slider elements methods', () => {
     };
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
-    console.log('Tooltip not array: ', view.getTooltip());
-    expect(view.getTooltip()).toBeDefined();
+    console.log('Tooltip not array: ', view.getElem('tooltip'));
+    expect(view.getElem('tooltip')).toBeDefined();
 
     model = new Model(defaultModelOptions);
     model.setRange(true);
     model.setValue([1, 6]);
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
-    console.log('Tooltip array: ', view.getTooltip());
-    expect(Array.isArray(view.getTooltip())).toBe(true);
+    console.log('Tooltip array: ', view.getElem('tooltip'));
+    expect(Array.isArray(view.getElem('tooltip'))).toBe(true);
   });
   it('getStepsInfo when options.stepsInfo=false and true', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
-    expect(view.getStepsInfo()).toBe(undefined);
+    expect(view.getElem('stepsInfo')).toBe(undefined);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
@@ -158,13 +159,13 @@ describe('View with different options and get slider elements methods', () => {
     };
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
-    console.log('StepsInfo: ', view.getStepsInfo());
-    expect(view.getStepsInfo()).toBeDefined();
+    console.log('StepsInfo: ', view.getElem('stepsInfo'));
+    expect(view.getElem('stepsInfo')).toBeDefined();
   });
   it('getValueInfo when options.valueInfo=false and true', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
-    expect(view.getValueInfo()).toBe(undefined);
+    expect(view.getElem('valueInfo')).toBe(undefined);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
@@ -172,8 +173,8 @@ describe('View with different options and get slider elements methods', () => {
     };
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
-    console.log('ValueInfo: ', view.getValueInfo());
-    expect(view.getValueInfo()).toBeDefined();
+    console.log('ValueInfo: ', view.getElem('valueInfo'));
+    expect(view.getElem('valueInfo')).toBeDefined();
   });
 });
 
@@ -189,57 +190,57 @@ describe('View get values', () => {
 
 
   it('getUseKeyboard', () => {
-    expect(view.getUseKeyboard()).toBe(true);
+    expect(view.getViewModel().getUseKeyboard()).toBe(true);
   });
-  it('getInteractiveStepsInfo', () => {
-    expect(view.getInteractiveStepsInfo()).toBe(true);
+  it('getStepsInfoInteractivity', () => {
+    expect(view.getViewModel().getStepsInfoInteractivity()).toBe(true);
   });
   it('getStepLength', () => {
-    expect(view.getStepLength()).toBe(20);
+    expect(view.getViewModel().getStepLength()).toBe(20);
   });
   it('getResponsive', () => {
-    expect(view.getResponsive()).toBe(false);
+    expect(view.getViewModel().getResponsive()).toBe(false);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       responsive: true,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getResponsive()).toBe(true);
+    expect(view.getViewModel().getResponsive()).toBe(true);
   });
-  it('getThumbPosition', () => {
-    expect(view.getThumbPosition()).toBe(0);
+  it('getValuePosition', () => {
+    expect(view.getViewModel().getValuePosition()).toBe(0);
 
     model.setRange(true);
     model.setValue([2, 6]);
-    expect(view.getThumbPosition()).toEqual([40, 120]);
+    expect(view.getViewModel().getValuePosition()).toEqual([40, 120]);
   });
   it('getStepsInfoSettings', () => {
-    expect(view.getStepsInfoSettings()).toBe(false);
+    expect(view.getViewModel().getStepsInfoSettings()).toBe(false);
 
     let viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       stepsInfo: true,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getStepsInfoSettings()).toBe(true);
+    expect(view.getViewModel().getStepsInfoSettings()).toBe(true);
 
     viewOptions = {
       ...defaultViewOptionsWithClass,
       stepsInfo: 7,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getStepsInfoSettings()).toBe(7);
+    expect(view.getViewModel().getStepsInfoSettings()).toBe(7);
 
     viewOptions = {
       ...defaultViewOptionsWithClass,
       stepsInfo: [1, '5', 'end'],
     };
     view = new View(viewOptions, document.body);
-    expect(view.getStepsInfoSettings()).toEqual([1, '5', 'end']);
+    expect(view.getViewModel().getStepsInfoSettings()).toEqual([1, '5', 'end']);
   });
   it('getLength', () => {
-    expect(view.getLength()).toBe(200);
+    expect(view.getViewModel().getLengthInPx()).toBe(200);
 
     const viewOptions = {
       ...defaultViewOptionsWithClass,
@@ -249,18 +250,18 @@ describe('View get values', () => {
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
     // Учитывая margin-left и margin-right по 15
-    expect(view.getLength()).toBe(100 - 15 * 2);
+    expect(view.getViewModel().getLengthInPx()).toBe(100 - 15 * 2);
     document.body.style.width = '';
   });
   it('getVertical', () => {
-    expect(view.getVertical()).toBe(false);
+    expect(view.getViewModel().getVertical()).toBe(false);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       vertical: true,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getVertical()).toEqual(true);
+    expect(view.getViewModel().getVertical()).toEqual(true);
   });
 });
 
@@ -281,52 +282,60 @@ describe('View methods', () => {
       stepsInfo: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
-    view.addStepsInfoInteractivity();
+    view.changeOptions({
+      stepsInfoInteractivity: true,
+    });
     // console.log для проверки в браузере
-    console.log('Added stepsInfo interactivity: ', view.getSlider());
-    expect(view.getInteractiveStepsInfo()).toBe(true);
+    console.log('Added stepsInfo interactivity: ', view.getElem('slider'));
+    expect(view.getViewModel().getStepsInfoInteractivity()).toBe(true);
   });
 
   it('removeStepsInfoInteractivity', () => {
-    view.createStepsInfo();
-    view.removeStepsInfoInteractivity();
-    console.log('Removed stepsInfo interactivity: ', view.getSlider());
-    expect(view.getInteractiveStepsInfo()).toBe(false);
+    view.changeOptions({
+      stepsInfo: true,
+      stepsInfoInteractivity: false,
+    });
+    console.log('Removed stepsInfo interactivity: ', view.getElem('slider'));
+    expect(view.getViewModel().getStepsInfoInteractivity()).toBe(false);
   });
 
   it('addKeyboardListener', () => {
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
-    view.addKeyboardListener();
-    console.log('Added keyboard listener: ', view.getSlider());
-    expect(view.getUseKeyboard()).toBe(true);
+    view.changeOptions({
+      useKeyboard: true,
+    });
+    console.log('Added keyboard listener: ', view.getElem('slider'));
+    expect(view.getViewModel().getUseKeyboard()).toBe(true);
   });
   it('removeKeyboardListener', () => {
-    view.removeKeyboardListener();
-    console.log('Removed keyboard listener: ', view.getSlider());
-    expect(view.getUseKeyboard()).toBe(false);
+    view.changeOptions({
+      useKeyboard: false,
+    });
+    console.log('Removed keyboard listener: ', view.getElem('slider'));
+    expect(view.getViewModel().getUseKeyboard()).toBe(false);
   });
 
 
   it('setActiveThumb', () => {
     view.setActiveThumb();
-    console.log('SetActiveThumb range false: ', view.getSlider());
-    expect(view.getActiveThumb()).toBeDefined();
+    console.log('SetActiveThumb range false: ', view.getElem('slider'));
+    expect(view.getViewModel().getActiveThumb()).toBeDefined();
 
     model = new Model(defaultModelOptions);
     model.setRange(true);
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
     view.setActiveThumb();
-    console.log('SetActiveThumb with range true', view.getSlider());
-    expect(view.getActiveThumb()).toBeDefined();
+    console.log('SetActiveThumb with range true', view.getElem('slider'));
+    expect(view.getViewModel().getActiveThumb()).toBeDefined();
   });
 
   it('removeActiveThumb', () => {
     view.setActiveThumb();
     view.removeActiveThumb();
-    console.log('RemoveActiveThumb range false: ', view.getSlider());
-    expect(view.getActiveThumb()).toBe(undefined);
+    console.log('RemoveActiveThumb range false: ', view.getElem('slider'));
+    expect(view.getViewModel().getActiveThumb()).toBe(undefined);
 
     model = new Model({
       ...defaultModelOptions,
@@ -336,8 +345,8 @@ describe('View methods', () => {
     presenter = new Presenter(model, view, {});
     view.setActiveThumb();
     view.removeActiveThumb();
-    console.log('RemoveActiveThumb with range true', view.getSlider());
-    expect(view.getActiveThumb()).toBe(undefined);
+    console.log('RemoveActiveThumb with range true', view.getElem('slider'));
+    expect(view.getViewModel().getActiveThumb()).toBe(undefined);
   });
 
   it('changeResponsive', () => {
@@ -346,31 +355,43 @@ describe('View methods', () => {
       length: '70%',
     }, document.body);
 
-    view.changeResponsive(true);
-    expect(view.getResponsive()).toBe(true);
-    view.changeResponsive(false);
-    expect(view.getResponsive()).toBe(false);
+    view.changeOptions({
+      responsive: true,
+    });
+    expect(view.getViewModel().getResponsive()).toBe(true);
+    view.changeOptions({
+      responsive: false,
+    });
+    expect(view.getViewModel().getResponsive()).toBe(false);
   });
   it('changeLength', () => {
-    view.changeLength('100px');
-    expect(view.getLength()).toBe(100);
+    view.changeOptions({
+      length: '100px',
+    });
+    expect(view.getViewModel().getLengthInPx()).toBe(100);
   });
   it('changeVertical', () => {
-    view.changeVertical(true);
-    expect(view.getVertical()).toBe(true);
+    view.changeOptions({
+      vertical: true,
+    });
+    expect(view.getViewModel().getVertical()).toBe(true);
     // создание нового элемента slider для показа в браузере
     view = new View({
       ...defaultViewOptionsWithClass,
       vertical: true,
     }, document.body);
-    view.changeVertical(false);
-    expect(view.getVertical()).toBe(false);
+    view.changeOptions({
+      vertical: false,
+    });
+    expect(view.getViewModel().getVertical()).toBe(false);
   });
   it('changeStepsInfoSettings', () => {
-    view.changeStepsInfoSettings(true);
-    expect(view.getStepsInfoSettings()).toBe(true);
+    view.changeOptions({
+      stepsInfo: true,
+    });
+    expect(view.getViewModel().getStepsInfoSettings()).toBe(true);
     // console.log для того, чтобы быстро найти имзененное значение
-    console.log('Changed steps info settings to true', view.getSlider());
+    console.log('Changed steps info settings to true', view.getElem('slider'));
 
     // создаю новый слайдер
     view = new View({
@@ -378,79 +399,100 @@ describe('View methods', () => {
       stepsInfo: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
-    view.changeStepsInfoSettings(2);
-    expect(view.getStepsInfoSettings()).toBe(2);
-    console.log('Changed steps info settings to 2', view.getSlider());
+    view.changeOptions({
+      stepsInfo: 2,
+    });
+    expect(view.getViewModel().getStepsInfoSettings()).toBe(2);
+    console.log('Changed steps info settings to 2', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
       stepsInfo: 2,
     }, document.body);
     presenter = new Presenter(model, view, {});
-    view.changeStepsInfoSettings(['start', '0.25', 'half', '0.75', 'end']);
-    expect(view.getStepsInfoSettings()).toEqual(['start', '0.25', 'half', '0.75', 'end']);
-    console.log('Changed steps info settings to [\'start\', \'0.25\', \'half\', \'0.75\', \'end\']', view.getSlider());
+    view.changeOptions({
+      stepsInfo: ['start', '0.25', 'half', '0.75', 'end'],
+    });
+    expect(view.getViewModel().getStepsInfoSettings()).toEqual(['start', '0.25', 'half', '0.75', 'end']);
+    console.log('Changed steps info settings to [\'start\', \'0.25\', \'half\', \'0.75\','
+      + ' \'end\']', view.getElem('slider'));
   });
 
   it('create/remove tooltip range false', () => {
     presenter = new Presenter(model, view, {});
-    view.createTooltip();
-    expect(view.getTooltip()).toBeDefined();
-    console.log('Created tooltip range=false: ', view.getSlider());
+    view.changeOptions({
+      tooltip: true,
+    });
+    expect(view.getElem('tooltip')).toBeDefined();
+    console.log('Created tooltip range=false: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
       tooltip: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
-    view.removeTooltip();
-    expect(view.getTooltip()).toBe(undefined);
-    console.log('Removed tooltip range=false: ', view.getSlider());
+    view.changeOptions({
+      tooltip: false,
+    });
+    expect(view.getElem('tooltip')).toBe(undefined);
+    console.log('Removed tooltip range=false: ', view.getElem('slider'));
   });
   it('create/remove tooltip range true', () => {
     model.setRange(true);
     model.setValue([0, 5]);
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
-    view.createTooltip();
-    expect(Array.isArray(view.getTooltip())).toBe(true);
-    console.log('Created tooltip range=true: ', view.getSlider());
+    view.changeOptions({
+      tooltip: true,
+    });
+    expect(Array.isArray(view.getElem('tooltip'))).toBe(true);
+    console.log('Created tooltip range=true: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
       tooltip: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
-    view.removeTooltip();
-    expect(view.getTooltip()).toBe(undefined);
-    console.log('Removed tooltip range=true: ', view.getSlider());
+    view.changeOptions({
+      tooltip: false,
+    });
+    expect(view.getElem('tooltip')).toBe(undefined);
+    console.log('Removed tooltip range=true: ', view.getElem('slider'));
   });
   it('create/remove stepsInfo', () => {
-    view.createStepsInfo();
-    expect(view.getStepsInfo()).toBeDefined();
-    console.log('Created stepsInfo: ', view.getSlider());
+    view.changeOptions({
+      stepsInfo: true,
+    });
+    expect(view.getElem('stepsInfo')).toBeDefined();
+    console.log('Created stepsInfo: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
       stepsInfo: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
-    view.removeStepsInfo();
-    expect(view.getStepsInfo()).toBe(undefined);
-    console.log('Removed stepsInfo: ', view.getSlider());
+    view.changeOptions({
+      stepsInfo: false,
+    });
+    expect(view.getElem('stepsInfo')).toBe(undefined);
+    console.log('Removed stepsInfo: ', view.getElem('slider'));
   });
   it('create/remove valueInfo', () => {
-    view.createValueInfo();
-    expect(view.getValueInfo()).toBeDefined();
-    console.log('Created valueInfo: ', view.getSlider());
+    view.changeOptions({
+      valueInfo: true,
+    });
+    expect(view.getElem('valueInfo')).toBeDefined();
+    console.log('Created valueInfo: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
       valueInfo: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
-    view.removeValueInfo();
-    expect(view.getValueInfo()).toBe(undefined);
-    console.log('Removed valueInfo: ', view.getSlider());
+    view.changeOptions({
+      valueInfo: false,
+    });
+    expect(view.getElem('valueInfo')).toBe(undefined);
+    console.log('Removed valueInfo: ', view.getElem('slider'));
   });
 });

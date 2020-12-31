@@ -1,10 +1,12 @@
 import Model from '../src/modules/Model/Model';
 import View from '../src/modules/View/modules/View/View';
 import Presenter from '../src/modules/Presenter/Presenter';
-import { IModel } from '../src/modules/Model/interfacesAndTypes';
-import { IView } from '../src/modules/View/modules/View/interfaces';
-import { IPresenter } from '../src/modules/Presenter/interface';
-import { PresenterOptions, ViewOptions, ModelOptions } from '../src/options/options';
+import IModel from '../src/modules/Model/interfacesAndTypes';
+import IView from '../src/modules/View/modules/View/interfaces';
+import IPresenter from '../src/modules/Presenter/interface';
+import { PresenterOptions } from '../src/modules/Presenter/options';
+import { ViewOptions } from '../src/modules/View/options';
+import { ModelOptions } from '../src/modules/Model/options';
 
 const defaultOptions = {
   value: 0,
@@ -228,7 +230,7 @@ describe('Model change range, value with Observer', () => {
     valueInfo: false,
     vertical: false,
     responsive: false,
-    interactiveStepsInfo: false,
+    stepsInfoInteractivity: false,
     useKeyboard: true,
   };
   const defaultPresenterOptions: PresenterOptions = {};
@@ -241,28 +243,28 @@ describe('Model change range, value with Observer', () => {
 
   it('Change value, range=false', () => {
     model.setValue(4);
-    console.log('Changed value to 4, range=false', view.getSlider());
+    console.log('Changed value to 4, range=false', view.getElem('slider'));
   });
   it('Change range to true', () => {
     model.setRange(true);
-    console.log('Changed range to true', view.getSlider());
+    console.log('Changed range to true', view.getElem('slider'));
   });
   it('Change range to false', () => {
     model.setRange(true);
     model.setRange(false);
-    console.log('Changed range to false', view.getSlider());
+    console.log('Changed range to false', view.getElem('slider'));
   });
   it('Changed value when range true', () => {
     model.setRange(true);
     model.setValue([4, 9.5]);
-    console.log('Changed value to [4, 9.5], range=true', view.getSlider());
+    console.log('Changed value to [4, 9.5], range=true', view.getElem('slider'));
   });
   it('setMin', () => {
     presenter.onChange = () => {
-      console.log(view.getThumbPosition());
+      console.log(view.getViewModel().getValuePosition());
     };
     model.setMin(2);
-    console.log('setMin to 2', view.getSlider());
+    console.log('setMin to 2', view.getElem('slider'));
 
     model = new Model(defaultOptions);
     view = new View({
@@ -273,17 +275,17 @@ describe('Model change range, value with Observer', () => {
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
     presenter.onChange = () => {
-      console.log(view.getThumbPosition());
+      console.log(view.getViewModel().getValuePosition());
     };
     model.setMin(-1);
-    console.log('setMin to -1', view.getSlider());
+    console.log('setMin to -1', view.getElem('slider'));
   });
   it('setMax', () => {
     presenter.onChange = () => {
-      console.log(view.getThumbPosition());
+      console.log(view.getViewModel().getValuePosition());
     };
     model.setMax(8);
-    console.log('setMax to 8', view.getSlider());
+    console.log('setMax to 8', view.getElem('slider'));
 
     model = new Model(defaultOptions);
     view = new View({
@@ -294,10 +296,10 @@ describe('Model change range, value with Observer', () => {
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
     presenter.onChange = () => {
-      console.log(view.getThumbPosition());
+      console.log(view.getViewModel().getValuePosition());
     };
     model.setMax(15);
-    console.log('setMax to 15', view.getSlider());
+    console.log('setMax to 15', view.getElem('slider'));
 
     model = new Model(defaultOptions);
     view = new View({
@@ -308,9 +310,9 @@ describe('Model change range, value with Observer', () => {
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
     presenter.onChange = () => {
-      console.log(view.getThumbPosition());
+      console.log(view.getViewModel().getValuePosition());
     };
     model.setMax(-1);
-    console.log('setMax to -1', view.getSlider());
+    console.log('setMax to -1', view.getElem('slider'));
   });
 });

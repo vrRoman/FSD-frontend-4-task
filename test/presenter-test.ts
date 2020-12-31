@@ -3,10 +3,12 @@
 import Model from '../src/modules/Model/Model';
 import View from '../src/modules/View/modules/View/View';
 import Presenter from '../src/modules/Presenter/Presenter';
-import { IModel } from '../src/modules/Model/interfacesAndTypes';
-import { IView } from '../src/modules/View/modules/View/interfaces';
-import { IPresenter } from '../src/modules/Presenter/interface';
-import { PresenterOptions, ViewOptions, ModelOptions } from '../src/options/options';
+import IModel from '../src/modules/Model/interfacesAndTypes';
+import IView from '../src/modules/View/modules/View/interfaces';
+import IPresenter from '../src/modules/Presenter/interface';
+import { PresenterOptions } from '../src/modules/Presenter/options';
+import { ViewOptions } from '../src/modules/View/options';
+import { ModelOptions } from '../src/modules/Model/options';
 
 
 const defaultModelOptions: ModelOptions = {
@@ -24,7 +26,7 @@ const defaultViewOptions: ViewOptions = {
   vertical: false,
   responsive: false,
   useKeyboard: true,
-  interactiveStepsInfo: true,
+  stepsInfoInteractivity: true,
 };
 const defaultPresenterOptions: PresenterOptions = {
 };
@@ -46,11 +48,11 @@ describe('Presenter with different options in model and view', () => {
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
-      interactiveStepsInfo: true,
+      stepsInfoInteractivity: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
-    console.log('View all true, vertical=false and responsive with %: ', view.getSlider());
+    console.log('View all true, vertical=false and responsive with %: ', view.getElem('slider'));
   });
   it('View all true, vertical=false and responsive with vh', () => {
     model = new Model(defaultModelOptions);
@@ -61,7 +63,7 @@ describe('Presenter with different options in model and view', () => {
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
-      interactiveStepsInfo: true,
+      stepsInfoInteractivity: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
@@ -81,7 +83,7 @@ describe('Presenter with different options in model and view', () => {
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
-      interactiveStepsInfo: true,
+      stepsInfoInteractivity: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
@@ -96,6 +98,6 @@ describe('Presenter with different options in model and view', () => {
         console.log(model.getValue());
       },
     });
-    console.log('onChange: ', view.getSlider());
+    console.log('onChange: ', view.getElem('slider'));
   });
 });
