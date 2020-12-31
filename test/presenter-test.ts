@@ -1,12 +1,12 @@
 // Многие тесты для presenter будут проверяться в браузере
 
-import Model from '../src/Model';
-import View from '../src/View/View';
-import Presenter from '../src/Presenter';
-import { IModel } from '../src/interfacesAndTypes/modelTypesAndInterfaces';
-import { IView } from '../src/interfacesAndTypes/viewInterfaces';
-import { IPresenter } from '../src/interfacesAndTypes/presenterInterfaces';
-import { PresenterOptions, ViewOptions, ModelOptions } from '../src/interfacesAndTypes/options';
+import Model from '../src/modules/Model/Model';
+import View from '../src/modules/View/modules/View/View';
+import Presenter from '../src/modules/Presenter/Presenter';
+import { IModel } from '../src/modules/Model/interfacesAndTypes';
+import { IView } from '../src/modules/View/modules/View/interfaces';
+import { IPresenter } from '../src/modules/Presenter/interface';
+import { PresenterOptions, ViewOptions, ModelOptions } from '../src/options/options';
 
 
 const defaultModelOptions: ModelOptions = {

@@ -1,14 +1,14 @@
 import './styles/main.scss';
 
 
-import Model from './Model';
-import { IModel } from './interfacesAndTypes/modelTypesAndInterfaces';
-import View from './View/View';
-import { IView } from './interfacesAndTypes/viewInterfaces';
-import Presenter from './Presenter';
-import { IPresenter } from './interfacesAndTypes/presenterInterfaces';
+import Model from './modules/Model/Model';
+import IModel from './modules/Model/interfacesAndTypes';
+import View from './modules/View/modules/View/View';
+import IView from './modules/View/modules/View/interfaces';
+import Presenter from './modules/Presenter/Presenter';
+import IPresenter from './modules/Presenter/interface';
 
-import { SliderOptions, SliderOptionsOptionalParams } from './interfacesAndTypes/options';
+import { SliderOptions, SliderOptionsOptionalParams } from './options/options';
 
 
 declare global {
@@ -39,11 +39,12 @@ declare global {
     responsive: false,
 
     useKeyboard: true,
-    interactiveStepsInfo: false,
+    stepsInfoInteractivity: false,
   };
 
   // eslint-disable-next-line no-param-reassign
-  $.fn.slider = function start(options?: SliderOptionsOptionalParams | 'changeOptions' | 'value' | 'model' | 'view' | 'presenter',
+  $.fn.slider = function start(options?: SliderOptionsOptionalParams
+    | 'changeOptions' | 'value' | 'model' | 'view' | 'viewModel' | 'presenter',
                                newOptions?: SliderOptionsOptionalParams) {
     if (typeof options === 'object' || !options) {
       if (this.data('slider')) {
@@ -60,7 +61,7 @@ declare global {
         const view: IView = new View(settings, this);
         const presenter: IPresenter = new Presenter(model, view, settings);
 
-        const slider = view.getSlider();
+        const slider = view.getElem('slider');
         if (slider) {
           $(this).data('slider', slider);
         } else {
@@ -68,6 +69,7 @@ declare global {
         }
         $(this).data('model', model);
         $(this).data('view', view);
+        $(this).data('viewModel', view.getViewModel());
         $(this).data('presenter', presenter);
       });
     }
@@ -79,6 +81,8 @@ declare global {
       return this.data('model');
     } else if (options === 'view') {
       return this.data('view');
+    } else if (options === 'viewModel') {
+      return this.data('viewModel');
     } else if (options === 'presenter') {
       return this.data('presenter');
     }

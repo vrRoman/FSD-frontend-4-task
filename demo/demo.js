@@ -12,7 +12,7 @@ class SliderControlPanel {
     this.lengthName = 'length';
     this.stepsInfoName = 'stepsInfo';
     this.checkboxNames = ['vertical', 'responsive', 'range',
-      'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'];
+      'tooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'];
 
     this.initCheckboxes(this.checkboxNames);
     this.initValueInputs();
@@ -77,8 +77,8 @@ class SliderControlPanel {
       let module;
       if (['range'].indexOf(name) !== -1) {
         module = 'model';
-      } else if (['responsive', 'vertical', 'tooltip', 'valueInfo', 'useKeyboard', 'interactiveStepsInfo'].indexOf(name) !== -1) {
-        module = 'view';
+      } else if (['responsive', 'vertical', 'tooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'].indexOf(name) !== -1) {
+        module = 'viewModel';
       }
 
       if (this.$slider.slider(module)[`get${name[0].toUpperCase() + name.slice(1)}`]()) {
@@ -163,12 +163,12 @@ class SliderControlPanel {
 
     this.minMaxNames.forEach((name) => {
       const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
-      $minOrMax.val(+$slider.slider('model')[`get${$minOrMax === 'min' ? 'Min' : 'Max'}`]());
+      $minOrMax.val(+$slider.slider('model')[`get${name === 'min' ? 'Min' : 'Max'}`]());
       function onFocusoutMinMax() {
         if ($(this).val() && !Number.isNaN(+$(this).val())) {
           $slider.slider('changeOptions', {
             [name]: +$(this).val(),
-        });
+          });
           $(`#${sliderName}-${minMaxNames[1]}`).val(+$slider.slider('model').getMax());
           $(`#${sliderName}-${minMaxNames[0]}`).val(+$slider.slider('model').getMin());
           if (Array.isArray($slider.slider('value'))) {
@@ -202,8 +202,8 @@ class SliderControlPanel {
   initLength() {
     const $length = $(`#${this.sliderName}-${this.lengthName.toLowerCase()}`);
     const { $slider } = this;
-    $length.val($slider.slider('view').getBar().style.width
-    || $slider.slider('view').getBar().style.height);
+    $length.val($slider.slider('view').getElem('bar').style.width
+    || $slider.slider('view').getElem('bar').style.height);
 
     function onFocusoutLength() {
       if ($(this).val()) {
@@ -218,7 +218,7 @@ class SliderControlPanel {
   initStepsInfo() {
     const $stepsInfo = $(`#${this.sliderName}-${this.stepsInfoName.toLowerCase()}`);
     const { $slider } = this;
-    $stepsInfo.val($slider.slider('view').getStepsInfoSettings());
+    $stepsInfo.val($slider.slider('viewModel').getStepsInfoSettings());
     function onFocusoutStepsInfo() {
       if ($stepsInfo.val()) {
         const valIsBoolean = $stepsInfo.val().toLowerCase() === 'true'

@@ -1,10 +1,25 @@
-import { ISubject } from './observerAndSubjectInterfaces';
+import { ISubject } from '../../ObserverAndSubject/interfacesAndTypes';
 import { ModelOptionsOptionalParams } from './options';
 
-export type Value = [number, number] | number
+type Value = [number, number] | number
 
+type ModelProps = {
+  value?: Value
+  range?: boolean
+  stepSize?: number
+  min?: number
+  max?: number
+}
 
-export interface IModel extends ISubject {
+interface IModelData {
+  value: Value
+  range: boolean
+  stepSize: number
+  min: number
+  max: number
+}
+
+interface IModel extends ISubject {
   changeOptions(newOptions: ModelOptionsOptionalParams): void
   setValue(newValue: Value, round?: boolean): Value
   setMin(newMin: number): number
@@ -24,10 +39,6 @@ export interface IModel extends ISubject {
   getMaxDiapason(): number
 }
 
-export type ModelProps = {
-  value?: Value
-  range?: boolean
-  stepSize?: number
-  min?: number
-  max?: number
-}
+
+export default IModel;
+export { ModelProps, Value, IModelData };

@@ -1,4 +1,4 @@
-import { ISubject, SubjectAction } from '../interfacesAndTypes/observerAndSubjectInterfaces';
+import { ISubject, SubjectAction } from './interfacesAndTypes';
 
 
 class Subject implements ISubject {

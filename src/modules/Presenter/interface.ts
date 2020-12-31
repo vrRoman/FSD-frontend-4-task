@@ -1,8 +1,12 @@
-import { SliderOptions } from './options';
+import { SliderOptions } from '../../options/options';
 
-export interface IPresenter {
+
+interface IPresenter {
   onChange: Function | undefined
 
   onThumbMove(numOfSteps?: number, thumbNumber?: 0 | 1): void
   changeOptions(newOptions: SliderOptions): void
 }
+
+
+export default IPresenter;

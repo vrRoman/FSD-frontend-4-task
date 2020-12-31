@@ -1,13 +1,14 @@
-import { IModel } from './interfacesAndTypes/modelTypesAndInterfaces';
-import { IView } from './interfacesAndTypes/viewInterfaces';
-import { IPresenter } from './interfacesAndTypes/presenterInterfaces';
-import {
-  ModelOptionsOptionalParams,
-  PresenterOptions, PresenterOptionsOptionalParams,
-  SliderOptions, SliderOptionsOptionalParams, ViewOptionsOptionalParams,
-} from './interfacesAndTypes/options';
-import { SubjectAction } from './interfacesAndTypes/observerAndSubjectInterfaces';
-import Observer from './ObserverAndSubject/Observer';
+import IModel from '../Model/interfacesAndTypes';
+import IView from '../View/modules/View/interfaces';
+import IPresenter from './interface';
+import { SliderOptions, SliderOptionsOptionalParams } from '../../options/options';
+import { ModelOptionsOptionalParams } from '../Model/options';
+import { ViewOptionsOptionalParams } from '../View/options';
+import { PresenterOptions, PresenterOptionsOptionalParams } from './options';
+
+
+import { SubjectAction } from '../../ObserverAndSubject/interfacesAndTypes';
+import Observer from '../../ObserverAndSubject/Observer';
 
 
 class Presenter extends Observer implements IPresenter {
@@ -23,7 +24,7 @@ class Presenter extends Observer implements IPresenter {
     this._view = view;
     this.onChange = presenterOptions.onChange;
 
-    this._view.provideModelProps({
+    this._view.setModelProps({
       value: this._model.getValue(),
       min: this._model.getMin(),
       max: this._model.getMax(),
@@ -41,7 +42,7 @@ class Presenter extends Observer implements IPresenter {
 
   // Обновляет view
   update(action: SubjectAction): void {
-    this._view.update(action);
+    this._view.updateModelPropsInSlider(action);
     if (this.onChange) {
       this.onChange();
     }
@@ -53,7 +54,7 @@ class Presenter extends Observer implements IPresenter {
     const modelOptions = ['value', 'range', 'stepSize', 'max', 'min'];
     const viewOptions = ['length', 'vertical', 'responsive',
       'tooltip', 'stepsInfo', 'valueInfo',
-      'useKeyboard', 'interactiveStepsInfo'];
+      'useKeyboard', 'stepsInfoInteractivity'];
     const presenterOptions = ['onChange'];
 
     const newModelOptions: { [key: string]: any } = {};

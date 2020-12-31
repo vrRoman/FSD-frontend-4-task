@@ -1,12 +1,12 @@
 // Многие тесты для view будут проверяться в браузере
 
-import Model from '../src/Model';
-import View from '../src/View/View';
-import { IModel } from '../src/interfacesAndTypes/modelTypesAndInterfaces';
-import { IView } from '../src/interfacesAndTypes/viewInterfaces';
-import { ViewOptions, ModelOptions } from '../src/interfacesAndTypes/options';
-import Presenter from '../src/Presenter';
-import { IPresenter } from '../src/interfacesAndTypes/presenterInterfaces';
+import Model from '../src/modules/Model/Model';
+import View from '../src/modules/View/modules/View/View';
+import { IModel } from '../src/modules/Model/interfacesAndTypes';
+import { IView } from '../src/modules/View/modules/View/interfaces';
+import { ViewOptions, ModelOptions } from '../src/options/options';
+import Presenter from '../src/modules/Presenter/Presenter';
+import { IPresenter } from '../src/modules/Presenter/interface';
 
 const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',

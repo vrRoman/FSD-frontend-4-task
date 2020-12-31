@@ -1,14 +1,4 @@
-import { Value } from './modelTypesAndInterfaces';
-
-export type ModelOptions = {
-  value: Value
-  range: boolean
-  stepSize: number
-  max: number
-  min: number
-}
-
-export type ViewOptions = {
+type ViewOptions = {
   // Длина слайдера(в любых единицах измерения)
   length: string
   // Наличие подсказки у ползунков
@@ -31,7 +21,7 @@ export type ViewOptions = {
   // Если true, то шкала значений будет кликабельна и активный
   // ползунок(если range=true, по умолчанию = thumb[1]) будет
   // перемещаться на соответствующее значение
-  interactiveStepsInfo: boolean
+  stepsInfoInteractivity: boolean
 
   // Классы элементов слайдера
   sliderClass?: string | string[]
@@ -45,22 +35,7 @@ export type ViewOptions = {
   valueInfoClass?: string | string[]
 }
 
-export type PresenterOptions = {
-  // Будет выполняться при любом передвижении ползунка
-  onChange?: Function
-}
-
-export type SliderOptions = ModelOptions & ViewOptions & PresenterOptions
-
-
-export type ModelOptionsOptionalParams = {
-  value?: Value
-  range?: boolean
-  stepSize?: number
-  max?: number
-  min?: number
-}
-export type ViewOptionsOptionalParams = {
+type ViewOptionsOptionalParams = {
   length?: string
   tooltip?: boolean
   stepsInfo?: boolean | Array<number | string> | number
@@ -68,7 +43,7 @@ export type ViewOptionsOptionalParams = {
   vertical?: boolean
   responsive?: boolean
   useKeyboard?: boolean
-  interactiveStepsInfo?: boolean
+  stepsInfoInteractivity?: boolean
   sliderClass?: string | string[]
   sliderVerticalClass?: string | string[]
   barClass?: string | string[]
@@ -79,10 +54,6 @@ export type ViewOptionsOptionalParams = {
   stepsInfoClass?: string | string[]
   valueInfoClass?: string | string[]
 }
-export type PresenterOptionsOptionalParams = {
-  onChange?: Function
-}
 
-export type SliderOptionsOptionalParams = ModelOptionsOptionalParams
-  & ViewOptionsOptionalParams
-  & PresenterOptionsOptionalParams
+
+export { ViewOptions, ViewOptionsOptionalParams };
