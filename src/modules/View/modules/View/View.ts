@@ -27,7 +27,7 @@ import ValueInfoView from '../SubViews/ValueInfoView/ValueInfoView';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
 import Observer from '../../../../ObserverAndSubject/Observer';
 import WindowListeners from './WindowListeners';
-import {ModelProps} from "../../../Model/interfacesAndTypes";
+import { ModelProps } from '../../../Model/interfacesAndTypes';
 
 
 class View extends Observer implements IView {
