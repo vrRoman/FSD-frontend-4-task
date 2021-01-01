@@ -1,10 +1,10 @@
 import './styles/main.scss';
 
-
 import Model from './modules/Model/Model';
-import IModel from './modules/Model/interfacesAndTypes';
+import IModel, { Value } from './modules/Model/interfacesAndTypes';
 import View from './modules/View/modules/View/View';
 import IView from './modules/View/modules/View/interfaces';
+import { IViewModel } from './modules/View/modules/ViewModel/interfacesAndTypes';
 import Presenter from './modules/Presenter/Presenter';
 import IPresenter from './modules/Presenter/interface';
 
@@ -17,10 +17,9 @@ declare global {
     slider: (
       options?: SliderOptionsOptionalParams | 'changeOptions',
       otherOptions?: any
-    ) => JQuery<Element> | JQuery<Object> | number | number[] | boolean | undefined
+    ) => IModel | IView | IViewModel | IPresenter | Value | JQuery<HTMLElement>
   }
 }
-
 
 
 (function initialization($) {
