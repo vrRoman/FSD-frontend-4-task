@@ -174,27 +174,23 @@ class StepsInfoView implements IStepsInfoView {
       if (modelProps && modelProps.stepSize !== undefined) {
         const activeThumb = this.viewModel.getActiveThumb();
         if (activeThumb) {
+          let leftOrTop: 'left' | 'top';
+          let offsetWidthOrHeigth: 'offsetWidth' | 'offsetHeight';
           if (this.viewModel.getVertical()) {
-            const stepValue = (
-              parseFloat(stepElem.style.top) + stepElem.offsetHeight / 2
-            ) / (stepLength / modelProps.stepSize);
-            const thumbValue = (
-              parseFloat(activeThumb.style.top) + activeThumb.offsetHeight / 2
-            ) / (stepLength / modelProps.stepSize);
-
-            this.mainView.moveActiveThumb((stepValue - thumbValue) / modelProps.stepSize);
-            this.mainView.removeActiveThumb();
+            leftOrTop = 'top';
+            offsetWidthOrHeigth = 'offsetHeight';
           } else {
-            const stepValue = (
-              parseFloat(stepElem.style.left) + stepElem.offsetWidth / 2
-            ) / (stepLength / modelProps.stepSize);
-            const thumbValue = (
-              parseFloat(activeThumb.style.left) + activeThumb.offsetWidth / 2
-            ) / (stepLength / modelProps.stepSize);
-
-            this.mainView.moveActiveThumb((stepValue - thumbValue) / modelProps.stepSize);
-            this.mainView.removeActiveThumb();
+            leftOrTop = 'left';
+            offsetWidthOrHeigth = 'offsetWidth';
           }
+          const stepValue = (
+            parseFloat(stepElem.style[leftOrTop]) + stepElem[offsetWidthOrHeigth] / 2
+          ) / (stepLength / modelProps.stepSize);
+          const thumbValue = (
+            parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeigth] / 2
+          ) / (stepLength / modelProps.stepSize);
+          this.mainView.moveActiveThumb((stepValue - thumbValue) / modelProps.stepSize);
+          this.mainView.removeActiveThumb();
         }
       }
     }
