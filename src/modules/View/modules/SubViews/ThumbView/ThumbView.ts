@@ -142,11 +142,11 @@ class ThumbView implements IThumbView {
         if (Array.isArray(this.thumb)) {
           if (activeThumb.isEqualNode(this.thumb[0])) {
             const zIndex: number = window.getComputedStyle(this.thumb[1]).zIndex === 'auto'
-              ? 0 : +window.getComputedStyle(this.thumb[1]).zIndex;
+              ? 0 : Number(window.getComputedStyle(this.thumb[1]).zIndex);
             activeThumb.style.zIndex = String(zIndex + 1);
           } else {
             const zIndex: number = window.getComputedStyle(this.thumb[0]).zIndex === 'auto'
-              ? 0 : +window.getComputedStyle(this.thumb[0]).zIndex;
+              ? 0 : Number(window.getComputedStyle(this.thumb[0]).zIndex);
             activeThumb.style.zIndex = String(zIndex + 1);
           }
         }

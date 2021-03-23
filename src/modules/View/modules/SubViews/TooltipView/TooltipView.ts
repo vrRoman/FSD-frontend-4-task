@@ -33,7 +33,7 @@ class TooltipView implements ITooltipView {
           }
 
           if (Array.isArray(value)) {
-            tooltip.innerHTML = `<div>${+(value[i]).toFixed(3)}</div>`;
+            tooltip.innerHTML = `<div>${Number(value[i]).toFixed(3)}</div>`;
           }
 
           this.target[i].appendChild(tooltip);
@@ -51,7 +51,7 @@ class TooltipView implements ITooltipView {
         }
 
         if (!Array.isArray(value)) {
-          tooltip.innerHTML = `<div>${+(value).toFixed(3)}</div>`;
+          tooltip.innerHTML = `<div>${Number(value).toFixed(3)}</div>`;
         }
 
         this.target.appendChild(tooltip);
@@ -86,12 +86,12 @@ class TooltipView implements ITooltipView {
         if (Array.isArray(this.tooltip)) {
           if (Array.isArray(value)) {
             for (let i = 0; i <= 1; i += 1) {
-              this.tooltip[i].innerHTML = `<div>${+(value[i]).toFixed(3)}</div>`;
+              this.tooltip[i].innerHTML = `<div>${Number(value[i]).toFixed(3)}</div>`;
             }
           }
         } else {
           if (!Array.isArray(value)) {
-            this.tooltip.innerHTML = `<div>${+(value).toFixed(3)}</div>`;
+            this.tooltip.innerHTML = `<div>${Number(value).toFixed(3)}</div>`;
           }
         }
       }

@@ -54,11 +54,11 @@ class Model extends ObserverAndSubject implements IModel {
         : 0;
     if (Array.isArray(value)) {
       return [
-        +value[0].toFixed(numOfSymbolsAfterCommaStepSize),
-        +value[1].toFixed(numOfSymbolsAfterCommaStepSize),
+        Number(value[0].toFixed(numOfSymbolsAfterCommaStepSize)),
+        Number(value[1].toFixed(numOfSymbolsAfterCommaStepSize)),
       ];
     }
-    return +value.toFixed(numOfSymbolsAfterCommaStepSize);
+    return Number(value.toFixed(numOfSymbolsAfterCommaStepSize));
   }
 
   // Меняет min
