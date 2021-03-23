@@ -64,7 +64,7 @@ class StepsInfoView implements IStepsInfoView {
             for (let i = 0; i < numOfSteps; i += 1) {
               steps.push(
                 modelProps.min
-                + Number((maxDiapason / (numOfSteps - 1)) * i).toFixed(3),
+                + Number(((maxDiapason / (numOfSteps - 1)) * i).toFixed(3)),
               );
             }
           } else if (Array.isArray(stepsInfoSettings)) {
