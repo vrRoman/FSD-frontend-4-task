@@ -188,11 +188,18 @@ class View extends Observer implements IView {
         }
         if (this.thumbView) {
           this.thumbView.remove();
-          this.thumbView.create();
+          const thumb = this.thumbView.create();
+
+          if (thumb) {
+            if (this.tooltipView) this.tooltipView.remove();
+            this.tooltipView = new TooltipView(thumb, this.viewModel);
+            if (this.viewModel.getTooltip()) {
+              this.tooltipView.create();
+            }
+          }
         }
         if (this.barView) this.barView.updateProgressBar();
         if (this.valueInfoView) this.valueInfoView.update();
-        if (this.tooltipView) this.tooltipView.update();
         break;
 
       case 'UPDATE_MIN-MAX':
