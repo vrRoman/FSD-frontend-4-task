@@ -125,8 +125,8 @@ describe('View with different options and get slider elements methods', () => {
     console.log('Thumb array: ', view.getElem('thumb'));
     expect(Array.isArray(view.getElem('thumb'))).toBe(true);
   });
-  it('getTooltip returns undefined when options.tooltip = false, and vice versa,'
-    + 'when range true returns array', () => {
+  it(`getTooltip returns undefined when options.tooltip = false, and vice versa,
+      when range true returns array`, () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
     expect(view.getElem('tooltip')).toBe(undefined);
@@ -414,8 +414,8 @@ describe('View methods', () => {
       stepsInfo: ['start', '0.25', 'half', '0.75', 'end'],
     });
     expect(view.getViewModel().getStepsInfoSettings()).toEqual(['start', '0.25', 'half', '0.75', 'end']);
-    console.log('Changed steps info settings to [\'start\', \'0.25\', \'half\', \'0.75\','
-      + ' \'end\']', view.getElem('slider'));
+    console.log('Changed steps info settings to [\'start\', \'0.25\', \'half\', \'0.75\', \'end\']',
+      view.getElem('slider'));
   });
 
   it('create/remove tooltip range false', () => {

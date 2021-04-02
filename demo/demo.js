@@ -31,35 +31,35 @@ class SliderControlPanel {
     switch (action.type) {
       case 'UPDATE_VALUE':
         if (Array.isArray(this.$slider.slider('value'))) {
-          $value1.val(+(+this.$slider.slider('value')[0]).toFixed(3));
-          $value2.val(+(+this.$slider.slider('value')[1]).toFixed(3));
+          $value1.val(Number((Number(this.$slider.slider('value')[0])).toFixed(3)));
+          $value2.val(Number((Number(this.$slider.slider('value')[1])).toFixed(3)));
         } else {
-          $value1.val(+(+this.$slider.slider('value')).toFixed(3));
+          $value1.val(Number((Number(this.$slider.slider('value'))).toFixed(3)));
         }
         break;
       case 'UPDATE_RANGE':
         if (Array.isArray(this.$slider.slider('value'))) {
-          $value1.val(+(this.$slider.slider('value')[0]).toFixed(3));
-          $value2.val(+(this.$slider.slider('value')[1]).toFixed(3));
+          $value1.val(Number((this.$slider.slider('value')[0]).toFixed(3)));
+          $value2.val(Number((this.$slider.slider('value')[1]).toFixed(3)));
         } else {
-          $value1.val(+(+this.$slider.slider('value')).toFixed(3));
+          $value1.val(Number((Number(this.$slider.slider('value'))).toFixed(3)));
         }
         break;
       case 'UPDATE_MIN-MAX':
         this.valueElems.forEach(($elem) => {
-          $elem.val(+this.$slider.slider('value'));
+          $elem.val(Number(this.$slider.slider('value')));
         });
         this.minMaxNames.forEach((name) => {
           const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
           if (name === 'min') {
-            $minOrMax.val(+this.$slider.slider('model').getMin());
+            $minOrMax.val(Number(this.$slider.slider('model').getMin()));
           } else if (name === 'max') {
-            $minOrMax.val(+this.$slider.slider('model').getMax());
+            $minOrMax.val(Number(this.$slider.slider('model').getMax()));
           }
         });
         break;
       case 'UPDATE_STEPSIZE':
-        $stepSize.val(+this.$slider.slider('model').getStepSize());
+        $stepSize.val(Number(this.$slider.slider('model').getStepSize()));
         break;
       default:
         $.error('Wrong action.type');
@@ -129,26 +129,26 @@ class SliderControlPanel {
       $value1.val($slider.slider('value')[0]);
       $value2.val($slider.slider('value')[1]);
     } else {
-      $value1.val(+$slider.slider('value'));
+      $value1.val(Number($slider.slider('value')));
     }
 
     function onValueFocusout() {
       if (Array.isArray($slider.slider('value'))) {
         const isValValid = $value1.val() && $value2.val()
-          && !Number.isNaN(+$value1.val()) && !Number.isNaN(+$value2.val());
+          && !Number.isNaN(Number($value1.val())) && !Number.isNaN(Number($value2.val()));
         if (isValValid) {
           $slider.slider('changeOptions', {
-            value: [+$value1.val(), +$value2.val()],
+            value: [Number($value1.val()), Number($value2.val())],
           });
           $value1.val($slider.slider('value')[0]);
           $value2.val($slider.slider('value')[1]);
         }
       } else {
-        if ($value1.val() && !Number.isNaN(+$value1.val())) {
+        if ($value1.val() && !Number.isNaN(Number($value1.val()))) {
           $slider.slider('changeOptions', {
-            value: +$value1.val(),
+            value: Number($value1.val()),
           });
-          $value1.val(+$slider.slider('value'));
+          $value1.val(Number($slider.slider('value')));
         }
       }
     }
@@ -163,19 +163,19 @@ class SliderControlPanel {
 
     this.minMaxNames.forEach((name) => {
       const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
-      $minOrMax.val(+$slider.slider('model')[`get${name === 'min' ? 'Min' : 'Max'}`]());
+      $minOrMax.val(Number($slider.slider('model')[`get${name === 'min' ? 'Min' : 'Max'}`]()));
       function onFocusoutMinMax() {
-        if ($(this).val() && !Number.isNaN(+$(this).val())) {
+        if ($(this).val() && !Number.isNaN(Number($(this).val()))) {
           $slider.slider('changeOptions', {
-            [name]: +$(this).val(),
+            [name]: Number($(this).val()),
           });
-          $(`#${sliderName}-${minMaxNames[1]}`).val(+$slider.slider('model').getMax());
-          $(`#${sliderName}-${minMaxNames[0]}`).val(+$slider.slider('model').getMin());
+          $(`#${sliderName}-${minMaxNames[1]}`).val(Number($slider.slider('model').getMax()));
+          $(`#${sliderName}-${minMaxNames[0]}`).val(Number($slider.slider('model').getMin()));
           if (Array.isArray($slider.slider('value'))) {
             $value1.val($slider.slider('value')[0]);
             $value2.val($slider.slider('value')[1]);
           } else {
-            $value1.val(+$slider.slider('value'));
+            $value1.val(Number($slider.slider('value')));
           }
         }
       }
@@ -187,13 +187,13 @@ class SliderControlPanel {
   initStepSize() {
     const $stepSize = $(`#${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
     const { $slider } = this;
-    $stepSize.val(+$slider.slider('model').getStepSize());
+    $stepSize.val(Number($slider.slider('model').getStepSize()));
     function onFocusoutStepSize() {
-      if ($(this).val() && !Number.isNaN(+$(this).val())) {
+      if ($(this).val() && !Number.isNaN(Number($(this).val()))) {
         $slider.slider('changeOptions', {
-          stepSize: +$(this).val(),
+          stepSize: Number($(this).val()),
         });
-        $(this).val(+$slider.slider('model').getStepSize());
+        $(this).val(Number($slider.slider('model').getStepSize()));
       }
     }
     $stepSize.on('focusout', onFocusoutStepSize);
@@ -234,10 +234,10 @@ class SliderControlPanel {
               stepsInfo: $stepsInfo.val().split(','),
             });
           } else {
-            const valIsNum = !Number.isNaN(+$stepsInfo.val());
+            const valIsNum = !Number.isNaN(Number($stepsInfo.val()));
             if (valIsNum) {
               $slider.slider('changeOptions', {
-                stepsInfo: +$stepsInfo.val(),
+                stepsInfo: Number($stepsInfo.val()),
               });
             }
           }
