@@ -6,7 +6,8 @@
   "scripts": {
     "build:dev": "webpack --config webpack.dev.config.js",
     "build:prod": "webpack --config webpack.prod.config.js",
-    "test": "karma start karma.conf.js"
+    "test": "karma start karma.conf.js",
+    "lint": "npx eslint ./"
   },
   "repository": {
     "type": "git",
