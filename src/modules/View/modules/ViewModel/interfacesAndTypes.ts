@@ -9,6 +9,7 @@ type ViewClasses = {
   thumbClass: string | string[]
   activeThumbClass: string | string[]
   tooltipClass: string | string[]
+  tooltipValueClass: string | string[]
   stepsInfoClass: string | string[]
   valueInfoClass: string | string[]
 }

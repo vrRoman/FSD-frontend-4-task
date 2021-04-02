@@ -19,7 +19,7 @@ class TooltipView implements ITooltipView {
 
     if (modelProps && modelProps.value !== undefined) {
       const { value } = modelProps;
-      const { tooltipClass } = this.viewModel.getClasses();
+      const { tooltipClass, tooltipValueClass } = this.viewModel.getClasses();
 
       if (Array.isArray(this.target)) {
         const tooltipElems: Array<HTMLElement> = [];
@@ -33,7 +33,7 @@ class TooltipView implements ITooltipView {
           }
 
           if (Array.isArray(value)) {
-            tooltip.innerHTML = `<div>${Number((value[i]).toFixed(3))}</div>`;
+            tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</div>`;
           }
 
           this.target[i].appendChild(tooltip);
@@ -51,7 +51,7 @@ class TooltipView implements ITooltipView {
         }
 
         if (!Array.isArray(value)) {
-          tooltip.innerHTML = `<div>${Number((value).toFixed(3))}</div>`;
+          tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
         }
 
         this.target.appendChild(tooltip);
@@ -83,15 +83,17 @@ class TooltipView implements ITooltipView {
     if (modelProps && modelProps.value !== undefined) {
       const { value } = modelProps;
       if (this.tooltip) {
+        const { tooltipValueClass } = this.viewModel.getClasses();
+
         if (Array.isArray(this.tooltip)) {
           if (Array.isArray(value)) {
             for (let i = 0; i <= 1; i += 1) {
-              this.tooltip[i].innerHTML = `<div>${Number((value[i]).toFixed(3))}</div>`;
+              this.tooltip[i].innerHTML = `<div class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</div>`;
             }
           }
         } else {
           if (!Array.isArray(value)) {
-            this.tooltip.innerHTML = `<div>${Number((value).toFixed(3))}</div>`;
+            this.tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
           }
         }
       }

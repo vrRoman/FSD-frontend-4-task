@@ -12,12 +12,12 @@ html {
   flex-wrap: wrap;
 }
 
-.slider-container h2 {
+.slider-container__title {
   width: 100%;
   text-align: center;
 }
 
-.slider-container code {
+.slider-container__code {
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
@@ -54,7 +54,7 @@ html {
   width: 100%;
 }
 
-.slider-container_config {
+.slider-container__config {
   width: 45%;
   display: flex;
   flex-direction: column;

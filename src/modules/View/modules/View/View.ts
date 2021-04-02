@@ -53,6 +53,7 @@ class View extends Observer implements IView {
       thumbClass: viewOptions.thumbClass ? viewOptions.thumbClass : 'slider__thumb',
       activeThumbClass: viewOptions.activeThumbClass ? viewOptions.activeThumbClass : 'slider__thumb_active',
       tooltipClass: viewOptions.tooltipClass ? viewOptions.tooltipClass : 'slider__tooltip',
+      tooltipValueClass: viewOptions.tooltipValueClass ? viewOptions.tooltipValueClass : 'slider__tooltip-value',
       stepsInfoClass: viewOptions.stepsInfoClass ? viewOptions.stepsInfoClass : 'slider__steps-info',
       valueInfoClass: viewOptions.valueInfoClass ? viewOptions.valueInfoClass : 'slider__value-info',
     };
