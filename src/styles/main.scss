@@ -55,6 +55,8 @@
 
 
   &:not(&_vertical) {
+    width: 100%;
+
     #{$selector}__bar {
       height: 5px;
     }
@@ -91,6 +93,8 @@
 
 
   &_vertical {
+    height: 100%;
+
     #{$selector}__bar {
       width: 5px;
     }

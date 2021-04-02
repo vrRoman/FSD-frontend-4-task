@@ -46,14 +46,6 @@ html {
   margin: auto
 }
 
-.slider-container__slider .slider.slider_vertical {
-  height: 100%;
-}
-
-.slider-container__slider .slider:not(.slider_vertical) {
-  width: 100%;
-}
-
 .slider-container__config {
   width: 45%;
   display: flex;
