@@ -33,7 +33,7 @@ declare global {
     length: '100%',
     hasTooltip: false,
     stepsInfo: false,
-    valueInfo: false,
+    hasValueInfo: false,
     vertical: false,
     responsive: false,
 

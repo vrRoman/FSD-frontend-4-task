@@ -64,7 +64,7 @@ class View extends Observer implements IView {
       lengthInPx: undefined,
       vertical: viewOptions.vertical,
       hasTooltip: viewOptions.hasTooltip,
-      valueInfo: viewOptions.valueInfo,
+      hasValueInfo: viewOptions.hasValueInfo,
       stepsInfoSettings: viewOptions.stepsInfo,
       responsive: viewOptions.responsive,
       useKeyboard: viewOptions.useKeyboard,
@@ -149,7 +149,7 @@ class View extends Observer implements IView {
       this.stepsInfoView.create();
     }
     this.valueInfoView = new ValueInfoView(slider, this.viewModel);
-    if (this.viewModel.getValueInfo()) {
+    if (this.viewModel.getHasValueInfo()) {
       this.valueInfoView.create();
     }
 
@@ -248,8 +248,8 @@ class View extends Observer implements IView {
     if (newOptions.stepsInfo !== undefined) {
       this.viewModel.setStepsInfoSettings(newOptions.stepsInfo);
     }
-    if (newOptions.valueInfo !== undefined) {
-      this.viewModel.setValueInfo(newOptions.valueInfo);
+    if (newOptions.hasValueInfo !== undefined) {
+      this.viewModel.setHasValueInfo(newOptions.hasValueInfo);
     }
     if (newOptions.vertical !== undefined) {
       this.viewModel.setVertical(newOptions.vertical);
@@ -307,9 +307,9 @@ class View extends Observer implements IView {
           }
         }
         break;
-      case 'UPDATE_VALUEINFO':
+      case 'UPDATE_HAS-VALUEINFO':
         if (this.valueInfoView) {
-          if (this.viewModel.getValueInfo()) {
+          if (this.viewModel.getHasValueInfo()) {
             this.valueInfoView.remove();
             this.valueInfoView.create();
           } else {

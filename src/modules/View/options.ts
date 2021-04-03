@@ -10,7 +10,7 @@ type ViewOptions = {
   // Array - показывает array.length значений(любых) по порядку в шкале значений
   stepsInfo: boolean | Array<number | string> | number
   // Элемент с текущим значением
-  valueInfo: boolean
+  hasValueInfo: boolean
   // Вертикальный слайдер
   vertical: boolean
   // Отзывчивость слайдера. Рекомендуется отключать(false), если length задана в
@@ -40,7 +40,7 @@ type ViewOptionsOptionalParams = {
   length?: string
   hasTooltip?: boolean
   stepsInfo?: boolean | Array<number | string> | number
-  valueInfo?: boolean
+  hasValueInfo?: boolean
   vertical?: boolean
   responsive?: boolean
   useKeyboard?: boolean

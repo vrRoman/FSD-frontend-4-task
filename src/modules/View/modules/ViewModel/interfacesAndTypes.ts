@@ -20,7 +20,7 @@ interface IViewModelData {
   lengthInPx: number | undefined
   vertical: boolean
   hasTooltip: boolean
-  valueInfo: boolean
+  hasValueInfo: boolean
   stepsInfoSettings: boolean | Array<number | string> | number
   responsive: boolean
   useKeyboard: boolean
@@ -42,7 +42,7 @@ interface IViewModelGetMethods {
   getLengthInPx(): number | undefined
   getVertical(): boolean
   getHasTooltip(): boolean
-  getValueInfo(): boolean
+  getHasValueInfo(): boolean
   getStepsInfoSettings(): boolean | Array<number | string> | number
   getResponsive(): boolean
   getUseKeyboard(): boolean
@@ -61,7 +61,7 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setVertical(newVertical: boolean): void
   setStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number): void
   setHasTooltip(newHasTooltip: boolean): void
-  setValueInfo(newValueInfo: boolean): void
+  setHasValueInfo(newHasValueInfo: boolean): void
   setResponsive(newResponsive: boolean): void
   setUseKeyboard(newUseKeyboard: boolean): void
   setStepsInfoInteractivity(newStepsInfoInteractivity: boolean): void

@@ -57,10 +57,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       type: 'UPDATE_HAS-TOOLTIP',
     });
   }
-  setValueInfo(newValueInfo: boolean) {
-    this.data.valueInfo = newValueInfo;
+  setHasValueInfo(newHasValueInfo: boolean) {
+    this.data.hasValueInfo = newHasValueInfo;
     this.notify({
-      type: 'UPDATE_VALUEINFO',
+      type: 'UPDATE_HAS-VALUEINFO',
     });
   }
   setResponsive(newResponsive: boolean) {
@@ -110,8 +110,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getHasTooltip(): boolean {
     return this.data.hasTooltip;
   }
-  getValueInfo(): boolean {
-    return this.data.valueInfo;
+  getHasValueInfo(): boolean {
+    return this.data.hasValueInfo;
   }
   getStepsInfoSettings(): boolean | Array<number | string> | number {
     if (Array.isArray(this.data.stepsInfoSettings)) {

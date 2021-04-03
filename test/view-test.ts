@@ -13,7 +13,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',
   hasTooltip: false,
   stepsInfo: false,
-  valueInfo: false,
+  hasValueInfo: false,
   vertical: false,
   responsive: false,
   stepsInfoInteractivity: true,
@@ -51,7 +51,7 @@ describe('View with different options and get slider elements methods', () => {
       length: '90%',
       hasTooltip: true,
       stepsInfo: true,
-      valueInfo: true,
+      hasValueInfo: true,
       responsive: true,
     };
     model.setValue(2);
@@ -64,7 +64,7 @@ describe('View with different options and get slider elements methods', () => {
       length: '20vh',
       hasTooltip: true,
       stepsInfo: true,
-      valueInfo: true,
+      hasValueInfo: true,
       vertical: true,
       responsive: true,
     };
@@ -162,14 +162,14 @@ describe('View with different options and get slider elements methods', () => {
     console.log('StepsInfo: ', view.getElem('stepsInfo'));
     expect(view.getElem('stepsInfo')).toBeDefined();
   });
-  it('getValueInfo when options.valueInfo=false and true', () => {
+  it('getValueInfo when options.hasValueInfo=false and true', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
     expect(view.getElem('valueInfo')).toBe(undefined);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
-      valueInfo: true,
+      hasValueInfo: true,
     };
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
@@ -480,18 +480,18 @@ describe('View methods', () => {
   });
   it('create/remove valueInfo', () => {
     view.changeOptions({
-      valueInfo: true,
+      hasValueInfo: true,
     });
     expect(view.getElem('valueInfo')).toBeDefined();
     console.log('Created valueInfo: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
-      valueInfo: true,
+      hasValueInfo: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      valueInfo: false,
+      hasValueInfo: false,
     });
     expect(view.getElem('valueInfo')).toBe(undefined);
     console.log('Removed valueInfo: ', view.getElem('slider'));
