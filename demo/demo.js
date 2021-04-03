@@ -12,7 +12,7 @@ class SliderControlPanel {
     this.lengthName = 'length';
     this.stepsInfoName = 'stepsInfo';
     this.checkboxNames = ['vertical', 'responsive', 'isRange',
-      'tooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'];
+      'hasTooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'];
 
     this.initCheckboxes(this.checkboxNames);
     this.initValueInputs();
@@ -77,7 +77,7 @@ class SliderControlPanel {
       let module;
       if ([this.isRangeName].indexOf(name) !== -1) {
         module = 'model';
-      } else if (['responsive', 'vertical', 'tooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'].indexOf(name) !== -1) {
+      } else if (['responsive', 'vertical', 'hasTooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'].indexOf(name) !== -1) {
         module = 'viewModel';
       }
 
@@ -265,7 +265,7 @@ $('#slider2').slider({
   max: 100,
   min: -30,
   length: '200px',
-  tooltip: true,
+  hasTooltip: true,
   valueInfo: true,
   stepsInfo: ['start', 'half', 'end'],
   vertical: true,

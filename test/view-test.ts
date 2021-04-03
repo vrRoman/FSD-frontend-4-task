@@ -11,7 +11,7 @@ import Presenter from '../src/modules/Presenter/Presenter';
 
 const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',
-  tooltip: false,
+  hasTooltip: false,
   stepsInfo: false,
   valueInfo: false,
   vertical: false,
@@ -49,7 +49,7 @@ describe('View with different options and get slider elements methods', () => {
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       length: '90%',
-      tooltip: true,
+      hasTooltip: true,
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
@@ -62,7 +62,7 @@ describe('View with different options and get slider elements methods', () => {
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       length: '20vh',
-      tooltip: true,
+      hasTooltip: true,
       stepsInfo: true,
       valueInfo: true,
       vertical: true,
@@ -125,7 +125,7 @@ describe('View with different options and get slider elements methods', () => {
     console.log('Thumb array: ', view.getElem('thumb'));
     expect(Array.isArray(view.getElem('thumb'))).toBe(true);
   });
-  it(`getTooltip returns undefined when options.tooltip = false, and vice versa,
+  it(`getTooltip returns undefined when options.hasTooltip = false, and vice versa,
       when isRange true returns array`, () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
@@ -133,7 +133,7 @@ describe('View with different options and get slider elements methods', () => {
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
-      tooltip: true,
+      hasTooltip: true,
     };
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
@@ -422,18 +422,18 @@ describe('View methods', () => {
   it('create/remove tooltip isRange false', () => {
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      tooltip: true,
+      hasTooltip: true,
     });
     expect(view.getElem('tooltip')).toBeDefined();
     console.log('Created tooltip isRange=false: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
-      tooltip: true,
+      hasTooltip: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      tooltip: false,
+      hasTooltip: false,
     });
     expect(view.getElem('tooltip')).toBe(undefined);
     console.log('Removed tooltip isRange=false: ', view.getElem('slider'));
@@ -444,18 +444,18 @@ describe('View methods', () => {
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      tooltip: true,
+      hasTooltip: true,
     });
     expect(Array.isArray(view.getElem('tooltip'))).toBe(true);
     console.log('Created tooltip isRange=true: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
-      tooltip: true,
+      hasTooltip: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      tooltip: false,
+      hasTooltip: false,
     });
     expect(view.getElem('tooltip')).toBe(undefined);
     console.log('Removed tooltip isRange=true: ', view.getElem('slider'));

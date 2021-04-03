@@ -31,7 +31,7 @@ declare global {
     max: 10,
 
     length: '100%',
-    tooltip: false,
+    hasTooltip: false,
     stepsInfo: false,
     valueInfo: false,
     vertical: false,

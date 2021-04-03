@@ -20,7 +20,7 @@ const defaultModelOptions: ModelOptions = {
 };
 const defaultViewOptions: ViewOptions = {
   length: '200px',
-  tooltip: false,
+  hasTooltip: false,
   stepsInfo: false,
   valueInfo: false,
   vertical: false,
@@ -44,7 +44,7 @@ describe('Presenter with different options in model and view', () => {
     view = new View({
       length: '80%',
       vertical: false,
-      tooltip: true,
+      hasTooltip: true,
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
@@ -59,7 +59,7 @@ describe('Presenter with different options in model and view', () => {
     view = new View({
       length: '30vh',
       vertical: true,
-      tooltip: true,
+      hasTooltip: true,
       stepsInfo: true,
       valueInfo: true,
       responsive: true,
@@ -79,7 +79,7 @@ describe('Presenter with different options in model and view', () => {
     view = new View({
       length: '80%',
       vertical: false,
-      tooltip: true,
+      hasTooltip: true,
       stepsInfo: true,
       valueInfo: true,
       responsive: true,

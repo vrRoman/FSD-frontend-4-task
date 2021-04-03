@@ -225,7 +225,7 @@ describe('Model change isRange, value with Observer', () => {
   let presenter: IPresenter;
   const defaultViewOptions: ViewOptions = {
     length: '200px',
-    tooltip: false,
+    hasTooltip: false,
     stepsInfo: false,
     valueInfo: false,
     vertical: false,
@@ -271,7 +271,7 @@ describe('Model change isRange, value with Observer', () => {
       ...defaultViewOptions,
       stepsInfo: true,
       valueInfo: true,
-      tooltip: true,
+      hasTooltip: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
     presenter.onChange = () => {
@@ -292,7 +292,7 @@ describe('Model change isRange, value with Observer', () => {
       ...defaultViewOptions,
       stepsInfo: true,
       valueInfo: true,
-      tooltip: true,
+      hasTooltip: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
     presenter.onChange = () => {
@@ -306,7 +306,7 @@ describe('Model change isRange, value with Observer', () => {
       ...defaultViewOptions,
       stepsInfo: true,
       valueInfo: true,
-      tooltip: true,
+      hasTooltip: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
     presenter.onChange = () => {

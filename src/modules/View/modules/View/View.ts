@@ -63,7 +63,7 @@ class View extends Observer implements IView {
       length: viewOptions.length,
       lengthInPx: undefined,
       vertical: viewOptions.vertical,
-      tooltip: viewOptions.tooltip,
+      hasTooltip: viewOptions.hasTooltip,
       valueInfo: viewOptions.valueInfo,
       stepsInfoSettings: viewOptions.stepsInfo,
       responsive: viewOptions.responsive,
@@ -139,7 +139,7 @@ class View extends Observer implements IView {
     if (thumb) {
       this.tooltipView = new TooltipView(thumb, this.viewModel);
 
-      if (this.viewModel.getTooltip()) {
+      if (this.viewModel.getHasTooltip()) {
         this.tooltipView.create();
       }
     }
@@ -194,7 +194,7 @@ class View extends Observer implements IView {
           if (thumb) {
             if (this.tooltipView) this.tooltipView.remove();
             this.tooltipView = new TooltipView(thumb, this.viewModel);
-            if (this.viewModel.getTooltip()) {
+            if (this.viewModel.getHasTooltip()) {
               this.tooltipView.create();
             }
           }
@@ -242,8 +242,8 @@ class View extends Observer implements IView {
     if (newOptions.length !== undefined) {
       this.viewModel.setLength(newOptions.length);
     }
-    if (newOptions.tooltip !== undefined) {
-      this.viewModel.setTooltip(newOptions.tooltip);
+    if (newOptions.hasTooltip !== undefined) {
+      this.viewModel.setHasTooltip(newOptions.hasTooltip);
     }
     if (newOptions.stepsInfo !== undefined) {
       this.viewModel.setStepsInfoSettings(newOptions.stepsInfo);
@@ -288,9 +288,9 @@ class View extends Observer implements IView {
           this.windowListeners.setResponsive(this.viewModel.getResponsive());
         }
         break;
-      case 'UPDATE_TOOLTIP':
+      case 'UPDATE_HAS-TOOLTIP':
         if (this.tooltipView) {
-          if (this.viewModel.getTooltip()) {
+          if (this.viewModel.getHasTooltip()) {
             this.tooltipView.remove();
             this.tooltipView.create();
           } else {

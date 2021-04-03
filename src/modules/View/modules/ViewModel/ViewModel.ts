@@ -51,10 +51,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       type: 'UPDATE_STEPSINFO-SETTINGS',
     });
   }
-  setTooltip(newTooltip: boolean) {
-    this.data.tooltip = newTooltip;
+  setHasTooltip(newHasTooltip: boolean) {
+    this.data.hasTooltip = newHasTooltip;
     this.notify({
-      type: 'UPDATE_TOOLTIP',
+      type: 'UPDATE_HAS-TOOLTIP',
     });
   }
   setValueInfo(newValueInfo: boolean) {
@@ -107,8 +107,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getVertical(): boolean {
     return this.data.vertical;
   }
-  getTooltip(): boolean {
-    return this.data.tooltip;
+  getHasTooltip(): boolean {
+    return this.data.hasTooltip;
   }
   getValueInfo(): boolean {
     return this.data.valueInfo;

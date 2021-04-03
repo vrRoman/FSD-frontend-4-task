@@ -2,7 +2,7 @@ type ViewOptions = {
   // Длина слайдера(в любых единицах измерения)
   length: string
   // Наличие подсказки у ползунков
-  tooltip: boolean
+  hasTooltip: boolean
   // Наличие шкалы значений
   // False - отсутствует
   // True - показывает 5 чисел в шкале значений
@@ -38,7 +38,7 @@ type ViewOptions = {
 
 type ViewOptionsOptionalParams = {
   length?: string
-  tooltip?: boolean
+  hasTooltip?: boolean
   stepsInfo?: boolean | Array<number | string> | number
   valueInfo?: boolean
   vertical?: boolean
