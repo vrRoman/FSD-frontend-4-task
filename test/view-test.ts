@@ -250,7 +250,8 @@ describe('View get values', () => {
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
     // Учитывая margin-left и margin-right по 15
-    expect(view.getViewModel().getLengthInPx()).toBe(100 - 15 * 2);
+    expect(view.getViewModel().getLengthInPx()).toBe(100);
+    console.log(view.getElem('slider'));
     document.body.style.width = '';
   });
   it('getVertical', () => {
