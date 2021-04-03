@@ -177,10 +177,10 @@ class ThumbView implements IThumbView {
 
     if (stepLength && length) {
       if (activeThumb) {
-        let activeThumbIsFirst: boolean = false;
+        let isActiveThumbFirst: boolean = false;
         if (Array.isArray(this.thumb)) {
           if (this.thumb[0].isEqualNode(activeThumb)) {
-            activeThumbIsFirst = true;
+            isActiveThumbFirst = true;
           }
         }
 
@@ -197,7 +197,7 @@ class ThumbView implements IThumbView {
         let maxPos: number = length - activeThumb[offsetWidthOrHeight] / 2;
         let minPos: number = -activeThumb[offsetWidthOrHeight] / 2;
         if (Array.isArray(this.thumb)) {
-          if (activeThumbIsFirst) {
+          if (isActiveThumbFirst) {
             maxPos = parseFloat(this.thumb[1].style[leftOrTop]);
           } else {
             minPos = parseFloat(this.thumb[0].style[leftOrTop]);
@@ -215,7 +215,7 @@ class ThumbView implements IThumbView {
         } else {
           activeThumb.style[leftOrTop] = `${maxPos}px`;
         }
-        const thumbNumber: 0 | 1 = activeThumbIsFirst ? 0 : 1;
+        const thumbNumber: 0 | 1 = isActiveThumbFirst ? 0 : 1;
         this.mainView.onThumbMove(numOfSteps, thumbNumber);
       }
     }

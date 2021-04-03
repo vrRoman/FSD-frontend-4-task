@@ -221,21 +221,21 @@ class SliderControlPanel {
     $stepsInfo.val($slider.slider('viewModel').getStepsInfoSettings());
     function onFocusoutStepsInfo() {
       if ($stepsInfo.val()) {
-        const valIsBoolean = $stepsInfo.val().toLowerCase() === 'true'
+        const isValBoolean = $stepsInfo.val().toLowerCase() === 'true'
           || $stepsInfo.val().toLowerCase() === 'false';
-        if (valIsBoolean) {
+        if (isValBoolean) {
           $slider.slider('changeOptions', {
             stepsInfo: $stepsInfo.val().toLowerCase() === 'true',
           });
         } else {
-          const valIsArr = $stepsInfo.val().indexOf(',') !== -1;
-          if (valIsArr) {
+          const isValArr = $stepsInfo.val().indexOf(',') !== -1;
+          if (isValArr) {
             $slider.slider('changeOptions', {
               stepsInfo: $stepsInfo.val().split(','),
             });
           } else {
-            const valIsNum = !Number.isNaN(Number($stepsInfo.val()));
-            if (valIsNum) {
+            const isValNum = !Number.isNaN(Number($stepsInfo.val()));
+            if (isValNum) {
               $slider.slider('changeOptions', {
                 stepsInfo: Number($stepsInfo.val()),
               });
@@ -279,6 +279,7 @@ const controlPanel2 = new SliderControlPanel({
 
 $('#slider3').slider({
   onChange() {
+    // eslint-disable-next-line no-console
     console.log($('#slider3').slider('value'));
   },
 });

@@ -48,7 +48,7 @@ class Model extends ObserverAndSubject implements IModel {
   roundValue(value: Value): Value {
     const symbolsAfterCommaStepSize = this.getStepSize().toString().includes('.')
         ? this.getStepSize().toString().split('.').pop()
-        : false;
+        : null;
     const numOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
         ? symbolsAfterCommaStepSize.length
         : 0;
@@ -105,8 +105,8 @@ class Model extends ObserverAndSubject implements IModel {
   }
 
   // Изменяет текущее значение и вызывает checkAndFixValue
-  setValue(newValue: Value, round: boolean = false): Value {
-    this.data.value = round ? this.roundValue(newValue) : newValue;
+  setValue(newValue: Value, shouldRound: boolean = false): Value {
+    this.data.value = shouldRound ? this.roundValue(newValue) : newValue;
 
     this.checkAndFixValue();
 
@@ -150,7 +150,7 @@ class Model extends ObserverAndSubject implements IModel {
 
   // Добавляет указанное количество шагов к нужному значению(если не
   // диапазон или нужно большее значение, то указывать не обязательно)
-  addStepsToValue(numOfSteps: number, valueNumber: 0 | 1 = 1, round: boolean = false): Value {
+  addStepsToValue(numOfSteps: number, valueNumber: 0 | 1 = 1, shouldRound: boolean = false): Value {
     if (typeof this.data.value === 'number') {
       this.data.value += numOfSteps * this.data.stepSize;
     } else {
@@ -166,7 +166,7 @@ class Model extends ObserverAndSubject implements IModel {
       }
     }
 
-    if (round) {
+    if (shouldRound) {
       this.data.value = this.roundValue(this.data.value);
     }
 

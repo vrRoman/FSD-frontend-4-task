@@ -21,12 +21,12 @@ interface IModelData {
 
 interface IModel extends ISubject {
   changeOptions(newOptions: ModelOptionsOptionalParams): void
-  setValue(newValue: Value, round?: boolean): Value
+  setValue(newValue: Value, shouldRound?: boolean): Value
   setMin(newMin: number): number
   setMax(newMax: number): number
   setRange(newRange: boolean): boolean
   setStepSize(newStepSize: number): number
-  addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1, round?: boolean): Value
+  addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1, shouldRound?: boolean): Value
   roundValue(value: Value): Value
   checkAndFixValue(): Value
   checkAndFixStepSize(): number
