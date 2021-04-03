@@ -25,7 +25,7 @@ declare global {
 (function initialization($) {
   const defaultOptions: SliderOptions = {
     value: 0,
-    range: false,
+    isRange: false,
     stepSize: 1,
     min: 0,
     max: 10,

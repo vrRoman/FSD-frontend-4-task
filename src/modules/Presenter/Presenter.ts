@@ -28,7 +28,7 @@ class Presenter extends Observer implements IPresenter {
       value: this._model.getValue(),
       min: this._model.getMin(),
       max: this._model.getMax(),
-      range: this._model.getRange(),
+      isRange: this._model.getIsRange(),
       stepSize: this._model.getStepSize(),
     });
     this._view.drawSlider();
@@ -51,7 +51,7 @@ class Presenter extends Observer implements IPresenter {
   // Меняет настройки слайдера
   changeOptions(newOptions: SliderOptionsOptionalParams): void {
     // Распределение настроек по модулям
-    const modelOptions = ['value', 'range', 'stepSize', 'max', 'min'];
+    const modelOptions = ['value', 'isRange', 'stepSize', 'max', 'min'];
     const viewOptions = ['length', 'vertical', 'responsive',
       'tooltip', 'stepsInfo', 'valueInfo',
       'useKeyboard', 'stepsInfoInteractivity'];

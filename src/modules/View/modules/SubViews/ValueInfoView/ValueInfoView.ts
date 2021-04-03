@@ -13,7 +13,7 @@ class ValueInfoView implements IValueInfoView {
     this.valueInfo = undefined;
   }
 
-  // Создает элемент с текущим значением. По умолчанию, если range=false, то
+  // Создает элемент с текущим значением. По умолчанию, если isRange=false, то
   // указывается просто model.value, иначе записывается в виде value[0] - value[1]
   create(): HTMLElement | undefined {
     const modelProps = this.viewModel.getModelProps();

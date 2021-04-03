@@ -2,7 +2,7 @@ class SliderControlPanel {
   constructor(options) {
     this.sliderName = options.sliderName;
     this.$slider = $(`#${this.sliderName}`);
-    this.rangeName = 'range';
+    this.isRangeName = 'isRange';
     this.valueElems = [
       $(`#${this.sliderName}-value1`),
       $(`#${this.sliderName}-value2`),
@@ -11,7 +11,7 @@ class SliderControlPanel {
     this.stepSizeName = 'stepSize';
     this.lengthName = 'length';
     this.stepsInfoName = 'stepsInfo';
-    this.checkboxNames = ['vertical', 'responsive', 'range',
+    this.checkboxNames = ['vertical', 'responsive', 'isRange',
       'tooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'];
 
     this.initCheckboxes(this.checkboxNames);
@@ -37,7 +37,7 @@ class SliderControlPanel {
           $value1.val(Number((Number(this.$slider.slider('value'))).toFixed(3)));
         }
         break;
-      case 'UPDATE_RANGE':
+      case 'UPDATE_IS-RANGE':
         if (Array.isArray(this.$slider.slider('value'))) {
           $value1.val(Number((this.$slider.slider('value')[0]).toFixed(3)));
           $value2.val(Number((this.$slider.slider('value')[1]).toFixed(3)));
@@ -75,7 +75,7 @@ class SliderControlPanel {
 
       // Для включенных изначально настроек включить чекбоксы
       let module;
-      if (['range'].indexOf(name) !== -1) {
+      if ([this.isRangeName].indexOf(name) !== -1) {
         module = 'model';
       } else if (['responsive', 'vertical', 'tooltip', 'valueInfo', 'useKeyboard', 'stepsInfoInteractivity'].indexOf(name) !== -1) {
         module = 'viewModel';
@@ -101,7 +101,7 @@ class SliderControlPanel {
       }
       $checkbox.on('change', onCheckboxChange);
 
-      // Если range===false, то отключить второе поле ввода значения
+      // Если isRange===false, то отключить второе поле ввода значения
       function switchValue2() {
         if (this.checked === true) {
           $value2.prop('disabled', false);
@@ -110,8 +110,8 @@ class SliderControlPanel {
           $value2.val('');
         }
       }
-      if (name === this.rangeName) {
-        if (this.$slider.slider('model').getRange() === true) {
+      if (name === this.isRangeName) {
+        if (this.$slider.slider('model').getIsRange() === true) {
           $value2.prop('disabled', false);
         } else {
           $value2.prop('disabled', true);
@@ -260,7 +260,7 @@ const controlPanel1 = new SliderControlPanel({
 
 $('#slider2').slider({
   value: [2, 84],
-  range: true,
+  isRange: true,
   stepSize: 1,
   max: 100,
   min: -30,

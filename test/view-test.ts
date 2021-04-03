@@ -31,7 +31,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
 
 const defaultModelOptions: ModelOptions = {
   value: 0,
-  range: false,
+  isRange: false,
   stepSize: 1,
   min: 0,
   max: 10,
@@ -68,7 +68,7 @@ describe('View with different options and get slider elements methods', () => {
       vertical: true,
       responsive: true,
     };
-    model.setRange(true);
+    model.setIsRange(true);
     model.setValue([3, 7.25]);
     const view = new View(viewOptions, document.body);
     expect(view).toBeDefined();
@@ -95,30 +95,30 @@ describe('View with different options and get slider elements methods', () => {
     console.log('Bar: ', view.getElem('bar'));
     expect(view.getElem('bar')).toBeDefined();
   });
-  it('getProgressBar range false', () => {
+  it('getProgressBar isRange false', () => {
     model.setValue(3);
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
-    console.log('ProgressBar range=false', view.getElem('progressBar'));
+    console.log('ProgressBar isRange=false', view.getElem('progressBar'));
     expect(view.getElem('progressBar')).toBeDefined();
   });
-  it('getProgressBar range true', () => {
-    model.setRange(true);
+  it('getProgressBar isRange true', () => {
+    model.setIsRange(true);
     model.setValue([3, 5]);
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
-    console.log('ProgressBar range=true: ', view.getElem('progressBar'));
+    console.log('ProgressBar isRange=true: ', view.getElem('progressBar'));
     expect(view.getElem('progressBar')).toBeDefined();
   });
 
-  it('getThumb, range false', () => {
+  it('getThumb, isRange false', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
     console.log('Thumb not array: ', view.getElem('thumb'));
     expect(view.getElem('thumb')).toBeDefined();
   });
-  it('getThumb, range true', () => {
-    model.setRange(true);
+  it('getThumb, isRange true', () => {
+    model.setIsRange(true);
     model.setValue([0, 2]);
     const view: IView = new View(defaultViewOptionsWithClass, document.body);
     const presenter = new Presenter(model, view, {});
@@ -126,7 +126,7 @@ describe('View with different options and get slider elements methods', () => {
     expect(Array.isArray(view.getElem('thumb'))).toBe(true);
   });
   it(`getTooltip returns undefined when options.tooltip = false, and vice versa,
-      when range true returns array`, () => {
+      when isRange true returns array`, () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
     expect(view.getElem('tooltip')).toBe(undefined);
@@ -141,7 +141,7 @@ describe('View with different options and get slider elements methods', () => {
     expect(view.getElem('tooltip')).toBeDefined();
 
     model = new Model(defaultModelOptions);
-    model.setRange(true);
+    model.setIsRange(true);
     model.setValue([1, 6]);
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
@@ -211,7 +211,7 @@ describe('View get values', () => {
   it('getValuePosition', () => {
     expect(view.getViewModel().getValuePosition()).toBe(0);
 
-    model.setRange(true);
+    model.setIsRange(true);
     model.setValue([2, 6]);
     expect(view.getViewModel().getValuePosition()).toEqual([40, 120]);
   });
@@ -319,33 +319,33 @@ describe('View methods', () => {
 
   it('setActiveThumb', () => {
     view.setActiveThumb();
-    console.log('SetActiveThumb range false: ', view.getElem('slider'));
+    console.log('SetActiveThumb isRange false: ', view.getElem('slider'));
     expect(view.getViewModel().getActiveThumb()).toBeDefined();
 
     model = new Model(defaultModelOptions);
-    model.setRange(true);
+    model.setIsRange(true);
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
     view.setActiveThumb();
-    console.log('SetActiveThumb with range true', view.getElem('slider'));
+    console.log('SetActiveThumb with isRange true', view.getElem('slider'));
     expect(view.getViewModel().getActiveThumb()).toBeDefined();
   });
 
   it('removeActiveThumb', () => {
     view.setActiveThumb();
     view.removeActiveThumb();
-    console.log('RemoveActiveThumb range false: ', view.getElem('slider'));
+    console.log('RemoveActiveThumb isRange false: ', view.getElem('slider'));
     expect(view.getViewModel().getActiveThumb()).toBe(undefined);
 
     model = new Model({
       ...defaultModelOptions,
-      range: true,
+      isRange: true,
     });
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
     view.setActiveThumb();
     view.removeActiveThumb();
-    console.log('RemoveActiveThumb with range true', view.getElem('slider'));
+    console.log('RemoveActiveThumb with isRange true', view.getElem('slider'));
     expect(view.getViewModel().getActiveThumb()).toBe(undefined);
   });
 
@@ -418,13 +418,13 @@ describe('View methods', () => {
       view.getElem('slider'));
   });
 
-  it('create/remove tooltip range false', () => {
+  it('create/remove tooltip isRange false', () => {
     presenter = new Presenter(model, view, {});
     view.changeOptions({
       tooltip: true,
     });
     expect(view.getElem('tooltip')).toBeDefined();
-    console.log('Created tooltip range=false: ', view.getElem('slider'));
+    console.log('Created tooltip isRange=false: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
@@ -435,10 +435,10 @@ describe('View methods', () => {
       tooltip: false,
     });
     expect(view.getElem('tooltip')).toBe(undefined);
-    console.log('Removed tooltip range=false: ', view.getElem('slider'));
+    console.log('Removed tooltip isRange=false: ', view.getElem('slider'));
   });
-  it('create/remove tooltip range true', () => {
-    model.setRange(true);
+  it('create/remove tooltip isRange true', () => {
+    model.setIsRange(true);
     model.setValue([0, 5]);
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
@@ -446,7 +446,7 @@ describe('View methods', () => {
       tooltip: true,
     });
     expect(Array.isArray(view.getElem('tooltip'))).toBe(true);
-    console.log('Created tooltip range=true: ', view.getElem('slider'));
+    console.log('Created tooltip isRange=true: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
@@ -457,7 +457,7 @@ describe('View methods', () => {
       tooltip: false,
     });
     expect(view.getElem('tooltip')).toBe(undefined);
-    console.log('Removed tooltip range=true: ', view.getElem('slider'));
+    console.log('Removed tooltip isRange=true: ', view.getElem('slider'));
   });
   it('create/remove stepsInfo', () => {
     view.changeOptions({

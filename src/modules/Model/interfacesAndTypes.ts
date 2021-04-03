@@ -5,7 +5,7 @@ type Value = [number, number] | number
 
 type ModelProps = {
   value?: Value
-  range?: boolean
+  isRange?: boolean
   stepSize?: number
   min?: number
   max?: number
@@ -13,7 +13,7 @@ type ModelProps = {
 
 interface IModelData {
   value: Value
-  range: boolean
+  isRange: boolean
   stepSize: number
   min: number
   max: number
@@ -24,7 +24,7 @@ interface IModel extends ISubject {
   setValue(newValue: Value, shouldRound?: boolean): Value
   setMin(newMin: number): number
   setMax(newMax: number): number
-  setRange(newRange: boolean): boolean
+  setIsRange(newRange: boolean): boolean
   setStepSize(newStepSize: number): number
   addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1, shouldRound?: boolean): Value
   roundValue(value: Value): Value
@@ -32,7 +32,7 @@ interface IModel extends ISubject {
   checkAndFixStepSize(): number
   checkAndFixMinMax(): number[]
   getValue(): Value
-  getRange(): boolean
+  getIsRange(): boolean
   getStepSize(): number
   getMin(): number
   getMax(): number

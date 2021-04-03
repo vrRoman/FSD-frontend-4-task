@@ -1,7 +1,7 @@
 import { Value } from '../modules/Model/interfacesAndTypes';
 
 
-type actionModelType = 'UPDATE_VALUE' | 'UPDATE_RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEPSIZE';
+type actionModelType = 'UPDATE_VALUE' | 'UPDATE_IS-RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEPSIZE';
 type actionViewType = 'UPDATE_LENGTH' | 'UPDATE_VERTICAL' | 'UPDATE_RESPONSIVE' | 'UPDATE_TOOLTIP'
   | 'UPDATE_STEPSINFO-SETTINGS' | 'UPDATE_VALUEINFO' | 'UPDATE_USEKEYBOARD' | 'UPDATE_STEPSINFO-INTERACTIVITY'
 
@@ -10,7 +10,7 @@ type SubjectAction = {
 
   updatedProps?: {
     value?: Value
-    range?: boolean
+    isRange?: boolean
     stepSize?: number
     min?: number
     max?: number

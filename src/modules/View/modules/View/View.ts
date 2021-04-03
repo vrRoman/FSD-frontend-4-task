@@ -180,11 +180,11 @@ class View extends Observer implements IView {
         if (this.tooltipView) this.tooltipView.update();
         break;
 
-      case 'UPDATE_RANGE':
+      case 'UPDATE_IS-RANGE':
         if (action.updatedProps) {
           this.setModelProps({
             value: action.updatedProps.value,
-            range: action.updatedProps.range,
+            isRange: action.updatedProps.isRange,
           });
         }
         if (this.thumbView) {

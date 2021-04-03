@@ -2,7 +2,7 @@ import { Value } from './interfacesAndTypes';
 
 type ModelOptions = {
   value: Value
-  range: boolean
+  isRange: boolean
   stepSize: number
   max: number
   min: number
@@ -10,7 +10,7 @@ type ModelOptions = {
 
 type ModelOptionsOptionalParams = {
   value?: Value
-  range?: boolean
+  isRange?: boolean
   stepSize?: number
   max?: number
   min?: number

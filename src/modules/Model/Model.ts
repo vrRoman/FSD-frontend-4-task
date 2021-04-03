@@ -14,7 +14,7 @@ class Model extends ObserverAndSubject implements IModel {
       min: options.min,
       max: options.max,
       value: options.value,
-      range: options.range,
+      isRange: options.isRange,
       stepSize: options.stepSize,
     };
 
@@ -30,8 +30,8 @@ class Model extends ObserverAndSubject implements IModel {
     if (newOptions.value !== undefined) {
       this.setValue(newOptions.value);
     }
-    if (newOptions.range !== undefined) {
-      this.setRange(newOptions.range);
+    if (newOptions.isRange !== undefined) {
+      this.setIsRange(newOptions.isRange);
     }
     if (newOptions.stepSize !== undefined) {
       this.setStepSize(newOptions.stepSize);
@@ -119,20 +119,20 @@ class Model extends ObserverAndSubject implements IModel {
 
     return this.data.value;
   }
-  // Меняет range и вызывает checkAndFixValue
-  setRange(newRange: boolean): boolean {
-    this.data.range = newRange;
+  // Меняет isRange и вызывает checkAndFixValue
+  setIsRange(newIsRange: boolean): boolean {
+    this.data.isRange = newIsRange;
     this.checkAndFixValue();
 
     this.notify({
-      type: 'UPDATE_RANGE',
+      type: 'UPDATE_IS-RANGE',
       updatedProps: {
         value: this.getValue(),
-        range: this.getRange(),
+        isRange: this.getIsRange(),
       },
     });
 
-    return this.data.range;
+    return this.data.isRange;
   }
   // Меняет stepSize и вызывает checkAndFixStepSize
   setStepSize(newStepSize: number): number {
@@ -190,7 +190,7 @@ class Model extends ObserverAndSubject implements IModel {
   // Если значения больше максимального, то
   // приравнять с максимальным, и наоборот для минимального.
   checkAndFixValue(): Value {
-    if (this.data.range) {
+    if (this.data.isRange) {
       if (typeof this.data.value === 'number') {
         this.data.value = [this.data.value, this.data.value];
       }
@@ -256,8 +256,8 @@ class Model extends ObserverAndSubject implements IModel {
     }
     return [...this.data.value];
   }
-  getRange(): boolean {
-    return this.data.range;
+  getIsRange(): boolean {
+    return this.data.isRange;
   }
   getMin(): number {
     return this.data.min;

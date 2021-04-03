@@ -13,7 +13,7 @@ import { ModelOptions } from '../src/modules/Model/options';
 
 const defaultModelOptions: ModelOptions = {
   value: 0,
-  range: false,
+  isRange: false,
   stepSize: 1,
   min: 0,
   max: 10,
@@ -68,10 +68,10 @@ describe('Presenter with different options in model and view', () => {
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
   });
-  it('model range true, stepSize', () => {
+  it('model isRange true, stepSize', () => {
     model = new Model({
       value: [2, 8.25],
-      range: true,
+      isRange: true,
       stepSize: 3.5,
       min: 0,
       max: 12,

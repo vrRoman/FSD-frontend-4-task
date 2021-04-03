@@ -10,7 +10,7 @@ import { ModelOptions } from '../src/modules/Model/options';
 
 const defaultOptions = {
   value: 0,
-  range: false,
+  isRange: false,
   stepSize: 1,
   min: 0,
   max: 10,
@@ -27,8 +27,8 @@ describe('model get methods and props', () => {
   it('getValue', () => {
     expect(model.getValue()).toBe(0);
   });
-  it('getRange', () => {
-    expect(model.getRange()).toBe(false);
+  it('getIsRange', () => {
+    expect(model.getIsRange()).toBe(false);
   });
   it('getStepSize', () => {
     expect(model.getStepSize()).toBe(1);
@@ -44,29 +44,29 @@ describe('model get methods and props', () => {
 
 
 describe('Model value, stepSize, min/max checking', () => {
-  it('value is array when range = true', () => {
+  it('value is array when isRange = true', () => {
     const options: ModelOptions = {
       ...defaultOptions,
-      range: true,
+      isRange: true,
       value: 2,
     };
-    const modelRange = new Model(options);
-    expect(modelRange.getValue()).toEqual([2, 2]);
+    const modelIsRangeTrue = new Model(options);
+    expect(modelIsRangeTrue.getValue()).toEqual([2, 2]);
   });
-  it('value is number(value[0]) when range = false', () => {
+  it('value is number(value[0]) when isRange = false', () => {
     const options: ModelOptions = {
       ...defaultOptions,
-      range: false,
+      isRange: false,
       value: [2, 8],
     };
-    const modelRange = new Model(options);
-    expect(modelRange.getValue()).toBe(2);
+    const modelIsRangeTrue = new Model(options);
+    expect(modelIsRangeTrue.getValue()).toBe(2);
   });
 
   it('value is reversed if value[0] > value[1]', () => {
     const options: ModelOptions = {
       ...defaultOptions,
-      range: true,
+      isRange: true,
       value: [3, 1],
     };
     const modelValue = new Model(options);
@@ -90,17 +90,17 @@ describe('Model value, stepSize, min/max checking', () => {
     options = {
       ...defaultOptions,
       value: [-10, 30],
-      range: true,
+      isRange: true,
     };
     const modelMinMaxRange = new Model(options);
     expect(modelMinMaxRange.getValue()).toEqual([0, 10]);
   });
 
-  it('min-max, range, value checking together', () => {
+  it('min-max, isRange, value checking together', () => {
     const options: ModelOptions = {
       ...defaultOptions,
       value: [-100, 59],
-      range: false,
+      isRange: false,
     };
     const modelValue = new Model(options);
     expect(modelValue.getValue()).toBe(0);
@@ -146,9 +146,9 @@ describe('model props change', () => {
     expect(model.getValue()).toBe(0);
   });
 
-  it('setRange change range and value', () => {
-    model.setRange(true);
-    expect(model.getRange()).toBe(true);
+  it('setIsRange change isRange and value', () => {
+    model.setIsRange(true);
+    expect(model.getIsRange()).toBe(true);
     expect(model.getValue()).toEqual([0, 0]);
   });
 
@@ -161,17 +161,17 @@ describe('model props change', () => {
     expect(model.getStepSize()).toBe(1);
   });
 
-  it('addStepsToValue with range=false and stepSize=1', () => {
+  it('addStepsToValue with isRange=false and stepSize=1', () => {
     model.addStepsToValue(2);
     expect(model.getValue()).toBe(2);
   });
-  it('addStepsToValue with range=false and stepSize != 1', () => {
+  it('addStepsToValue with isRange=false and stepSize != 1', () => {
     model.setStepSize(3);
     model.addStepsToValue(2);
     expect(model.getValue()).toBe(6);
   });
-  it('addStepsToValue with range=true', () => {
-    model.setRange(true);
+  it('addStepsToValue with isRange=true', () => {
+    model.setIsRange(true);
     model.setValue([0, 6]);
 
     model.addStepsToValue(2);
@@ -186,13 +186,13 @@ describe('model props change', () => {
     expect(model.getValue()).toBe(4);
   });
   it('addStepsToValue check min and max', () => {
-    model.setRange(true);
+    model.setIsRange(true);
     model.addStepsToValue(-15, 0);
     model.addStepsToValue(17, 1);
     expect(model.getValue()).toEqual([0, 10]);
   });
-  it('addStepsToValue when range=true and value[0]>value[1]', () => {
-    model.setRange(true);
+  it('addStepsToValue when isRange=true and value[0]>value[1]', () => {
+    model.setIsRange(true);
     model.setValue([1, 4]);
     model.addStepsToValue(5, 0);
     expect(model.getValue()).toEqual([4, 4]);
@@ -219,7 +219,7 @@ describe('model props change', () => {
   });
 });
 
-describe('Model change range, value with Observer', () => {
+describe('Model change isRange, value with Observer', () => {
   let model: IModel;
   let view: IView;
   let presenter: IPresenter;
@@ -241,23 +241,23 @@ describe('Model change range, value with Observer', () => {
     presenter = new Presenter(model, view, defaultPresenterOptions);
   });
 
-  it('Change value, range=false', () => {
+  it('Change value, isRange=false', () => {
     model.setValue(4);
-    console.log('Changed value to 4, range=false', view.getElem('slider'));
+    console.log('Changed value to 4, isRange=false', view.getElem('slider'));
   });
-  it('Change range to true', () => {
-    model.setRange(true);
-    console.log('Changed range to true', view.getElem('slider'));
+  it('Change isRange to true', () => {
+    model.setIsRange(true);
+    console.log('Changed isRange to true', view.getElem('slider'));
   });
-  it('Change range to false', () => {
-    model.setRange(true);
-    model.setRange(false);
-    console.log('Changed range to false', view.getElem('slider'));
+  it('Change isRange to false', () => {
+    model.setIsRange(true);
+    model.setIsRange(false);
+    console.log('Changed isRange to false', view.getElem('slider'));
   });
-  it('Changed value when range true', () => {
-    model.setRange(true);
+  it('Changed value when isRange true', () => {
+    model.setIsRange(true);
     model.setValue([4, 9.5]);
-    console.log('Changed value to [4, 9.5], range=true', view.getElem('slider'));
+    console.log('Changed value to [4, 9.5], isRange=true', view.getElem('slider'));
   });
   it('setMin', () => {
     presenter.onChange = () => {
