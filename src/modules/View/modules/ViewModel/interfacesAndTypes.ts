@@ -24,7 +24,7 @@ interface IViewModelData {
   stepsInfoSettings: boolean | Array<number | string> | number
   isResponsive: boolean
   useKeyboard: boolean
-  stepsInfoInteractivity: boolean
+  isScaleClickable: boolean
 
   modelProps: ModelProps | undefined
 
@@ -46,7 +46,7 @@ interface IViewModelGetMethods {
   getStepsInfoSettings(): boolean | Array<number | string> | number
   getIsResponsive(): boolean
   getUseKeyboard(): boolean
-  getStepsInfoInteractivity(): boolean
+  getIsScaleClickable(): boolean
   getValuePosition(): number | [number, number] | undefined
   getStepLength(): number | undefined
 }
@@ -64,7 +64,7 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setHasValueInfo(newHasValueInfo: boolean): void
   setIsResponsive(newResponsive: boolean): void
   setUseKeyboard(newUseKeyboard: boolean): void
-  setStepsInfoInteractivity(newStepsInfoInteractivity: boolean): void
+  setIsScaleClickable(newStepsInfoInteractivity: boolean): void
 }
 
 

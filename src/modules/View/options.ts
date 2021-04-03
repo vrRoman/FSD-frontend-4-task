@@ -21,7 +21,7 @@ type ViewOptions = {
   // Если true, то шкала значений будет кликабельна и активный
   // ползунок(если isRange=true, по умолчанию = thumb[1]) будет
   // перемещаться на соответствующее значение
-  stepsInfoInteractivity: boolean
+  isScaleClickable: boolean
 
   // Классы элементов слайдера
   sliderClass?: string | string[]
@@ -44,7 +44,7 @@ type ViewOptionsOptionalParams = {
   isVertical?: boolean
   isResponsive?: boolean
   useKeyboard?: boolean
-  stepsInfoInteractivity?: boolean
+  isScaleClickable?: boolean
   sliderClass?: string | string[]
   sliderVerticalClass?: string | string[]
   barClass?: string | string[]

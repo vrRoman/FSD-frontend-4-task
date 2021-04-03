@@ -16,7 +16,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   hasValueInfo: false,
   isVertical: false,
   isResponsive: false,
-  stepsInfoInteractivity: true,
+  isScaleClickable: true,
   useKeyboard: true,
   sliderClass: ['slider'],
   sliderVerticalClass: ['slider_vertical', 'slider_vertical_some-class'],
@@ -192,8 +192,8 @@ describe('View get values', () => {
   it('getUseKeyboard', () => {
     expect(view.getViewModel().getUseKeyboard()).toBe(true);
   });
-  it('getStepsInfoInteractivity', () => {
-    expect(view.getViewModel().getStepsInfoInteractivity()).toBe(true);
+  it('getIsScaleClickable', () => {
+    expect(view.getViewModel().getIsScaleClickable()).toBe(true);
   });
   it('getStepLength', () => {
     expect(view.getViewModel().getStepLength()).toBe(20);
@@ -277,27 +277,27 @@ describe('View methods', () => {
   });
 
 
-  it('addStepsInfoInteractivity', () => {
+  it('add stepsInfo interactivity', () => {
     view = new View({
       ...defaultViewOptionsWithClass,
       stepsInfo: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      stepsInfoInteractivity: true,
+      isScaleClickable: true,
     });
     // console.log для проверки в браузере
     console.log('Added stepsInfo interactivity: ', view.getElem('slider'));
-    expect(view.getViewModel().getStepsInfoInteractivity()).toBe(true);
+    expect(view.getViewModel().getIsScaleClickable()).toBe(true);
   });
 
-  it('removeStepsInfoInteractivity', () => {
+  it('remove stepsInfo interactivity', () => {
     view.changeOptions({
       stepsInfo: true,
-      stepsInfoInteractivity: false,
+      isScaleClickable: false,
     });
     console.log('Removed stepsInfo interactivity: ', view.getElem('slider'));
-    expect(view.getViewModel().getStepsInfoInteractivity()).toBe(false);
+    expect(view.getViewModel().getIsScaleClickable()).toBe(false);
   });
 
   it('addKeyboardListener', () => {

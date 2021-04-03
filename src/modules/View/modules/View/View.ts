@@ -68,7 +68,7 @@ class View extends Observer implements IView {
       stepsInfoSettings: viewOptions.stepsInfo,
       isResponsive: viewOptions.isResponsive,
       useKeyboard: viewOptions.useKeyboard,
-      stepsInfoInteractivity: viewOptions.stepsInfoInteractivity,
+      isScaleClickable: viewOptions.isScaleClickable,
       activeThumb: undefined,
       clientX: 0,
       clientY: 0,
@@ -260,9 +260,9 @@ class View extends Observer implements IView {
     if (newOptions.useKeyboard !== undefined) {
       this.viewModel.setUseKeyboard(newOptions.useKeyboard);
     }
-    if (newOptions.stepsInfoInteractivity !== undefined) {
-      if (this.viewModel.getStepsInfoInteractivity() !== newOptions.stepsInfoInteractivity) {
-        this.viewModel.setStepsInfoInteractivity(newOptions.stepsInfoInteractivity);
+    if (newOptions.isScaleClickable !== undefined) {
+      if (this.viewModel.getIsScaleClickable() !== newOptions.isScaleClickable) {
+        this.viewModel.setIsScaleClickable(newOptions.isScaleClickable);
       }
     }
   }
@@ -325,10 +325,10 @@ class View extends Observer implements IView {
           }
         }
         break;
-      case 'UPDATE_STEPSINFO-INTERACTIVITY':
+      case 'UPDATE_IS-SCALE-CLICKABLE':
         if (this.viewModel.getStepsInfoSettings()) {
           if (this.stepsInfoView) {
-            if (this.viewModel.getStepsInfoInteractivity()) {
+            if (this.viewModel.getIsScaleClickable()) {
               this.stepsInfoView.addInteractivity();
             } else {
               this.stepsInfoView.removeInteractivity();

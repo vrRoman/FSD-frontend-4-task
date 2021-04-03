@@ -26,7 +26,7 @@ const defaultViewOptions: ViewOptions = {
   isVertical: false,
   isResponsive: false,
   useKeyboard: true,
-  stepsInfoInteractivity: true,
+  isScaleClickable: true,
 };
 const defaultPresenterOptions: PresenterOptions = {
 };
@@ -48,7 +48,7 @@ describe('Presenter with different options in model and view', () => {
       stepsInfo: true,
       hasValueInfo: true,
       isResponsive: true,
-      stepsInfoInteractivity: true,
+      isScaleClickable: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
@@ -63,7 +63,7 @@ describe('Presenter with different options in model and view', () => {
       stepsInfo: true,
       hasValueInfo: true,
       isResponsive: true,
-      stepsInfoInteractivity: true,
+      isScaleClickable: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
@@ -83,7 +83,7 @@ describe('Presenter with different options in model and view', () => {
       stepsInfo: true,
       hasValueInfo: true,
       isResponsive: true,
-      stepsInfoInteractivity: true,
+      isScaleClickable: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);

@@ -87,7 +87,7 @@ class StepsInfoView implements IStepsInfoView {
 
           this.stepsInfo = stepsInfo;
 
-          if (this.viewModel.getStepsInfoInteractivity()) {
+          if (this.viewModel.getIsScaleClickable()) {
             this.addInteractivity();
           }
 
@@ -130,7 +130,7 @@ class StepsInfoView implements IStepsInfoView {
   }
 
   // Добавляет stepElemOnDown при клике на элементы шкалы значений и вызывает у view
-  // changeStepsInfoInteractivity(true)
+  // changeIsScaleClickable(true)
   addInteractivity() {
     if (this.stepsInfo) {
       const stepElems = Array.from(this.stepsInfo.children) as HTMLElement[];
@@ -138,7 +138,7 @@ class StepsInfoView implements IStepsInfoView {
         stepElems[i].addEventListener('mousedown', this.handleStepElemMouseDown);
       }
       this.mainView.changeOptions({
-        stepsInfoInteractivity: true,
+        isScaleClickable: true,
       });
     }
   }
@@ -150,7 +150,7 @@ class StepsInfoView implements IStepsInfoView {
         stepElems[i].removeEventListener('mousedown', this.handleStepElemMouseDown);
       }
       this.mainView.changeOptions({
-        stepsInfoInteractivity: false,
+        isScaleClickable: false,
       });
     }
   }

@@ -75,10 +75,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       type: 'UPDATE_USEKEYBOARD',
     });
   }
-  setStepsInfoInteractivity(newStepsInfoInteractivity: boolean) {
-    this.data.stepsInfoInteractivity = newStepsInfoInteractivity;
+  setIsScaleClickable(newIsScaleClickable: boolean) {
+    this.data.isScaleClickable = newIsScaleClickable;
     this.notify({
-      type: 'UPDATE_STEPSINFO-INTERACTIVITY',
+      type: 'UPDATE_IS-SCALE-CLICKABLE',
     });
   }
 
@@ -125,8 +125,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getUseKeyboard(): boolean {
     return this.data.useKeyboard;
   }
-  getStepsInfoInteractivity(): boolean {
-    return this.data.stepsInfoInteractivity;
+  getIsScaleClickable(): boolean {
+    return this.data.isScaleClickable;
   }
   getValuePosition(): number | [number, number] | undefined {
     let valuePosition: number | [number, number] | undefined;

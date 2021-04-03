@@ -38,7 +38,7 @@ declare global {
     isResponsive: false,
 
     useKeyboard: true,
-    stepsInfoInteractivity: false,
+    isScaleClickable: false,
   };
 
   // eslint-disable-next-line no-param-reassign
