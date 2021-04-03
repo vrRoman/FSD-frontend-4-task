@@ -12,10 +12,10 @@ type ViewOptions = {
   // Элемент с текущим значением
   hasValueInfo: boolean
   // Вертикальный слайдер
-  vertical: boolean
+  isVertical: boolean
   // Отзывчивость слайдера. Рекомендуется отключать(false), если length задана в
   // статических ед. измерения(например, px)
-  responsive: boolean
+  isResponsive: boolean
   // Если true, то при нажатии стрелок и ad активный ползунок будет перемещаться
   useKeyboard: boolean
   // Если true, то шкала значений будет кликабельна и активный
@@ -41,8 +41,8 @@ type ViewOptionsOptionalParams = {
   hasTooltip?: boolean
   stepsInfo?: boolean | Array<number | string> | number
   hasValueInfo?: boolean
-  vertical?: boolean
-  responsive?: boolean
+  isVertical?: boolean
+  isResponsive?: boolean
   useKeyboard?: boolean
   stepsInfoInteractivity?: boolean
   sliderClass?: string | string[]

@@ -30,10 +30,10 @@ class WindowListeners implements IWindowListeners {
     document.removeEventListener('keydown', this.handleDocumentKeyDown);
   }
 
-  // Изменяет значение responsive, добавляет/убирает слушатели window resize
-  // Возвращает новое значение responsive
-  setResponsive(newResponsive: boolean): void {
-    if (newResponsive) {
+  // Изменяет значение isResponsive, добавляет/убирает слушатели window resize
+  // Возвращает новое значение isResponsive
+  setIsResponsive(newIsResponsive: boolean): void {
+    if (newIsResponsive) {
       window.removeEventListener('resize', this.handleWindowResize);
       window.addEventListener('resize', this.handleWindowResize);
     } else {
@@ -62,7 +62,7 @@ class WindowListeners implements IWindowListeners {
     if (this.barView) {
       const bar = this.barView.getBar();
       if (bar) {
-        const currentLength = this.viewModel.getVertical() ? bar.offsetHeight : bar.offsetWidth;
+        const currentLength = this.viewModel.getIsVertical() ? bar.offsetHeight : bar.offsetWidth;
 
         if (currentLength !== this.viewModel.getLengthInPx()) {
           this.barView.updateProgressBar();

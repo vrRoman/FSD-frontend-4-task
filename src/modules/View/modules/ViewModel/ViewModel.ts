@@ -39,10 +39,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   setLengthInPx(newLength: number) {
     this.data.lengthInPx = newLength;
   }
-  setVertical(newVertical: boolean) {
-    this.data.vertical = newVertical;
+  setIsVertical(newIsVertical: boolean) {
+    this.data.isVertical = newIsVertical;
     this.notify({
-      type: 'UPDATE_VERTICAL',
+      type: 'UPDATE_IS-VERTICAL',
     });
   }
   setStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number) {
@@ -63,10 +63,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       type: 'UPDATE_HAS-VALUEINFO',
     });
   }
-  setResponsive(newResponsive: boolean) {
-    this.data.responsive = newResponsive;
+  setIsResponsive(newIsResponsive: boolean) {
+    this.data.isResponsive = newIsResponsive;
     this.notify({
-      type: 'UPDATE_RESPONSIVE',
+      type: 'UPDATE_IS-RESPONSIVE',
     });
   }
   setUseKeyboard(newUseKeyboard: boolean) {
@@ -104,8 +104,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getLengthInPx(): number | undefined {
     return this.data.lengthInPx;
   }
-  getVertical(): boolean {
-    return this.data.vertical;
+  getIsVertical(): boolean {
+    return this.data.isVertical;
   }
   getHasTooltip(): boolean {
     return this.data.hasTooltip;
@@ -119,8 +119,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     }
     return this.data.stepsInfoSettings;
   }
-  getResponsive(): boolean {
-    return this.data.responsive;
+  getIsResponsive(): boolean {
+    return this.data.isResponsive;
   }
   getUseKeyboard(): boolean {
     return this.data.useKeyboard;

@@ -34,8 +34,8 @@ declare global {
     hasTooltip: false,
     stepsInfo: false,
     hasValueInfo: false,
-    vertical: false,
-    responsive: false,
+    isVertical: false,
+    isResponsive: false,
 
     useKeyboard: true,
     stepsInfoInteractivity: false,

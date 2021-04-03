@@ -18,11 +18,11 @@ interface IViewModelData {
   classes: ViewClasses
   length: string
   lengthInPx: number | undefined
-  vertical: boolean
+  isVertical: boolean
   hasTooltip: boolean
   hasValueInfo: boolean
   stepsInfoSettings: boolean | Array<number | string> | number
-  responsive: boolean
+  isResponsive: boolean
   useKeyboard: boolean
   stepsInfoInteractivity: boolean
 
@@ -40,11 +40,11 @@ interface IViewModelGetMethods {
   getClasses(): ViewClasses
   getLength(): string
   getLengthInPx(): number | undefined
-  getVertical(): boolean
+  getIsVertical(): boolean
   getHasTooltip(): boolean
   getHasValueInfo(): boolean
   getStepsInfoSettings(): boolean | Array<number | string> | number
-  getResponsive(): boolean
+  getIsResponsive(): boolean
   getUseKeyboard(): boolean
   getStepsInfoInteractivity(): boolean
   getValuePosition(): number | [number, number] | undefined
@@ -58,11 +58,11 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setClientCoords(coords: [number, number]): void
   setLength(newLength: string): void
   setLengthInPx(newLength: number): void
-  setVertical(newVertical: boolean): void
+  setIsVertical(newIsVertical: boolean): void
   setStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number): void
   setHasTooltip(newHasTooltip: boolean): void
   setHasValueInfo(newHasValueInfo: boolean): void
-  setResponsive(newResponsive: boolean): void
+  setIsResponsive(newResponsive: boolean): void
   setUseKeyboard(newUseKeyboard: boolean): void
   setStepsInfoInteractivity(newStepsInfoInteractivity: boolean): void
 }

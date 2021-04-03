@@ -23,8 +23,8 @@ const defaultViewOptions: ViewOptions = {
   hasTooltip: false,
   stepsInfo: false,
   hasValueInfo: false,
-  vertical: false,
-  responsive: false,
+  isVertical: false,
+  isResponsive: false,
   useKeyboard: true,
   stepsInfoInteractivity: true,
 };
@@ -36,33 +36,33 @@ describe('Presenter with different options in model and view', () => {
   let view: IView;
   let presenter: IPresenter;
 
-  it('View all true, vertical=false and responsive with %', () => {
+  it('View all true, isVertical=false and isResponsive with %', () => {
     model = new Model({
       ...defaultModelOptions,
       min: -2,
     });
     view = new View({
       length: '80%',
-      vertical: false,
+      isVertical: false,
       hasTooltip: true,
       stepsInfo: true,
       hasValueInfo: true,
-      responsive: true,
+      isResponsive: true,
       stepsInfoInteractivity: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
-    console.log('View all true, vertical=false and responsive with %: ', view.getElem('slider'));
+    console.log('View all true, isVertical=false and isResponsive with %: ', view.getElem('slider'));
   });
-  it('View all true, vertical=false and responsive with vh', () => {
+  it('View all true, isVertical=false and isResponsive with vh', () => {
     model = new Model(defaultModelOptions);
     view = new View({
       length: '30vh',
-      vertical: true,
+      isVertical: true,
       hasTooltip: true,
       stepsInfo: true,
       hasValueInfo: true,
-      responsive: true,
+      isResponsive: true,
       stepsInfoInteractivity: true,
       useKeyboard: true,
     }, document.body);
@@ -78,11 +78,11 @@ describe('Presenter with different options in model and view', () => {
     });
     view = new View({
       length: '80%',
-      vertical: false,
+      isVertical: false,
       hasTooltip: true,
       stepsInfo: true,
       hasValueInfo: true,
-      responsive: true,
+      isResponsive: true,
       stepsInfoInteractivity: true,
       useKeyboard: true,
     }, document.body);

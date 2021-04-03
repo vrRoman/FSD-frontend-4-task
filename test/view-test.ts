@@ -14,8 +14,8 @@ const defaultViewOptionsWithClass: ViewOptions = {
   hasTooltip: false,
   stepsInfo: false,
   hasValueInfo: false,
-  vertical: false,
-  responsive: false,
+  isVertical: false,
+  isResponsive: false,
   stepsInfoInteractivity: true,
   useKeyboard: true,
   sliderClass: ['slider'],
@@ -45,28 +45,28 @@ describe('View with different options and get slider elements methods', () => {
   });
 
 
-  it('length in % with all elements and responsive', () => {
+  it('length in % with all elements and isResponsive', () => {
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       length: '90%',
       hasTooltip: true,
       stepsInfo: true,
       hasValueInfo: true,
-      responsive: true,
+      isResponsive: true,
     };
     model.setValue(2);
     const view = new View(viewOptions, document.body);
     expect(view).toBeDefined();
   });
-  it('vertical and responsive with vh', () => {
+  it('vertical and isResponsive with vh', () => {
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       length: '20vh',
       hasTooltip: true,
       stepsInfo: true,
       hasValueInfo: true,
-      vertical: true,
-      responsive: true,
+      isVertical: true,
+      isResponsive: true,
     };
     model.setIsRange(true);
     model.setValue([3, 7.25]);
@@ -198,15 +198,15 @@ describe('View get values', () => {
   it('getStepLength', () => {
     expect(view.getViewModel().getStepLength()).toBe(20);
   });
-  it('getResponsive', () => {
-    expect(view.getViewModel().getResponsive()).toBe(false);
+  it('getIsResponsive', () => {
+    expect(view.getViewModel().getIsResponsive()).toBe(false);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
-      responsive: true,
+      isResponsive: true,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getViewModel().getResponsive()).toBe(true);
+    expect(view.getViewModel().getIsResponsive()).toBe(true);
   });
   it('getValuePosition', () => {
     expect(view.getViewModel().getValuePosition()).toBe(0);
@@ -254,15 +254,15 @@ describe('View get values', () => {
     console.log(view.getElem('slider'));
     document.body.style.width = '';
   });
-  it('getVertical', () => {
-    expect(view.getViewModel().getVertical()).toBe(false);
+  it('getIsVertical', () => {
+    expect(view.getViewModel().getIsVertical()).toBe(false);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
-      vertical: true,
+      isVertical: true,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getViewModel().getVertical()).toEqual(true);
+    expect(view.getViewModel().getIsVertical()).toEqual(true);
   });
 });
 
@@ -350,20 +350,20 @@ describe('View methods', () => {
     expect(view.getViewModel().getActiveThumb()).toBe(undefined);
   });
 
-  it('changeResponsive', () => {
+  it('changeIsResponsive', () => {
     view = new View({
       ...defaultViewOptionsWithClass,
       length: '70%',
     }, document.body);
 
     view.changeOptions({
-      responsive: true,
+      isResponsive: true,
     });
-    expect(view.getViewModel().getResponsive()).toBe(true);
+    expect(view.getViewModel().getIsResponsive()).toBe(true);
     view.changeOptions({
-      responsive: false,
+      isResponsive: false,
     });
-    expect(view.getViewModel().getResponsive()).toBe(false);
+    expect(view.getViewModel().getIsResponsive()).toBe(false);
   });
   it('changeLength', () => {
     view.changeOptions({
@@ -373,18 +373,18 @@ describe('View methods', () => {
   });
   it('changeVertical', () => {
     view.changeOptions({
-      vertical: true,
+      isVertical: true,
     });
-    expect(view.getViewModel().getVertical()).toBe(true);
+    expect(view.getViewModel().getIsVertical()).toBe(true);
     // создание нового элемента slider для показа в браузере
     view = new View({
       ...defaultViewOptionsWithClass,
-      vertical: true,
+      isVertical: true,
     }, document.body);
     view.changeOptions({
-      vertical: false,
+      isVertical: false,
     });
-    expect(view.getViewModel().getVertical()).toBe(false);
+    expect(view.getViewModel().getIsVertical()).toBe(false);
   });
   it('changeStepsInfoSettings', () => {
     view.changeOptions({

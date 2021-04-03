@@ -28,7 +28,7 @@ class BarView implements IBarView {
   // Возвращает длину бара
   getOffsetLength(): number | undefined {
     if (this.bar) {
-      if (this.viewModel.getVertical()) {
+      if (this.viewModel.getIsVertical()) {
         return this.bar.offsetHeight;
       }
       return this.bar.offsetWidth;
@@ -47,7 +47,7 @@ class BarView implements IBarView {
     }
     bar.style.position = 'relative';
 
-    if (!this.viewModel.getVertical()) {
+    if (!this.viewModel.getIsVertical()) {
       bar.style.width = this.viewModel.getLength();
     } else {
       bar.style.height = this.viewModel.getLength();
@@ -93,7 +93,7 @@ class BarView implements IBarView {
         this.progressBar.style.top = '';
         let widthOrHeight: 'width' | 'height' = 'width';
         let leftOrTop: 'left' | 'top' = 'left';
-        if (this.viewModel.getVertical()) {
+        if (this.viewModel.getIsVertical()) {
           widthOrHeight = 'height';
           leftOrTop = 'top';
         }
@@ -111,7 +111,7 @@ class BarView implements IBarView {
   // Обновляет длину и положение бара
   updateBar() {
     if (this.bar) {
-      if (this.viewModel.getVertical()) {
+      if (this.viewModel.getIsVertical()) {
         this.bar.style.height = this.viewModel.getLength();
         this.bar.style.width = '';
       } else {

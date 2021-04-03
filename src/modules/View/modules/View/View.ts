@@ -62,11 +62,11 @@ class View extends Observer implements IView {
       classes,
       length: viewOptions.length,
       lengthInPx: undefined,
-      vertical: viewOptions.vertical,
+      isVertical: viewOptions.isVertical,
       hasTooltip: viewOptions.hasTooltip,
       hasValueInfo: viewOptions.hasValueInfo,
       stepsInfoSettings: viewOptions.stepsInfo,
-      responsive: viewOptions.responsive,
+      isResponsive: viewOptions.isResponsive,
       useKeyboard: viewOptions.useKeyboard,
       stepsInfoInteractivity: viewOptions.stepsInfoInteractivity,
       activeThumb: undefined,
@@ -130,7 +130,7 @@ class View extends Observer implements IView {
 
     this.barView = new BarView(slider, this.viewModel);
     const bar = this.barView.createBar();
-    const length = this.viewModel.getVertical() ? bar.offsetHeight : bar.offsetWidth;
+    const length = this.viewModel.getIsVertical() ? bar.offsetHeight : bar.offsetWidth;
     this.viewModel.setLengthInPx(length);
     this.barView.createProgressBar();
 
@@ -162,7 +162,7 @@ class View extends Observer implements IView {
     if (this.viewModel.getUseKeyboard()) {
       this.windowListeners.addKeyboardListener();
     }
-    this.windowListeners.setResponsive(this.viewModel.getResponsive());
+    this.windowListeners.setIsResponsive(this.viewModel.getIsResponsive());
   }
 
   // В зависимости от action, обновляет view
@@ -251,11 +251,11 @@ class View extends Observer implements IView {
     if (newOptions.hasValueInfo !== undefined) {
       this.viewModel.setHasValueInfo(newOptions.hasValueInfo);
     }
-    if (newOptions.vertical !== undefined) {
-      this.viewModel.setVertical(newOptions.vertical);
+    if (newOptions.isVertical !== undefined) {
+      this.viewModel.setIsVertical(newOptions.isVertical);
     }
-    if (newOptions.responsive !== undefined) {
-      this.viewModel.setResponsive(newOptions.responsive);
+    if (newOptions.isResponsive !== undefined) {
+      this.viewModel.setIsResponsive(newOptions.isResponsive);
     }
     if (newOptions.useKeyboard !== undefined) {
       this.viewModel.setUseKeyboard(newOptions.useKeyboard);
@@ -276,16 +276,16 @@ class View extends Observer implements IView {
         if (this.thumbView) this.thumbView.update();
         if (this.stepsInfoView) this.stepsInfoView.update();
         break;
-      case 'UPDATE_VERTICAL':
+      case 'UPDATE_IS-VERTICAL':
         if (this.sliderContainerView) this.sliderContainerView.updateVertical();
         if (this.barView) this.barView.updateBar();
         if (this.barView) this.barView.updateProgressBar();
         if (this.thumbView) this.thumbView.update();
         if (this.stepsInfoView) this.stepsInfoView.updateVertical();
         break;
-      case 'UPDATE_RESPONSIVE':
+      case 'UPDATE_IS-RESPONSIVE':
         if (this.windowListeners) {
-          this.windowListeners.setResponsive(this.viewModel.getResponsive());
+          this.windowListeners.setIsResponsive(this.viewModel.getIsResponsive());
         }
         break;
       case 'UPDATE_HAS-TOOLTIP':

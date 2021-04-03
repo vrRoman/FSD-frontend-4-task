@@ -21,7 +21,7 @@ class SliderContainerView implements ISliderContainerView {
     } else {
       slider.classList.add(sliderClass);
     }
-    if (this.viewModel.getVertical()) {
+    if (this.viewModel.getIsVertical()) {
       if (Array.isArray(sliderVerticalClass)) {
         slider.classList.add(...sliderVerticalClass);
       } else {
@@ -41,7 +41,7 @@ class SliderContainerView implements ISliderContainerView {
   updateVertical() {
     if (this.slider) {
       const { sliderVerticalClass } = this.viewModel.getClasses();
-      if (this.viewModel.getVertical()) {
+      if (this.viewModel.getIsVertical()) {
         if (Array.isArray(sliderVerticalClass)) {
           this.slider.classList.add(...sliderVerticalClass);
         } else {

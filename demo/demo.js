@@ -11,7 +11,7 @@ class SliderControlPanel {
     this.stepSizeName = 'stepSize';
     this.lengthName = 'length';
     this.stepsInfoName = 'stepsInfo';
-    this.checkboxNames = ['vertical', 'responsive', 'isRange',
+    this.checkboxNames = ['isVertical', 'isResponsive', 'isRange',
       'hasTooltip', 'hasValueInfo', 'useKeyboard', 'stepsInfoInteractivity'];
 
     this.initCheckboxes(this.checkboxNames);
@@ -77,7 +77,7 @@ class SliderControlPanel {
       let module;
       if ([this.isRangeName].indexOf(name) !== -1) {
         module = 'model';
-      } else if (['responsive', 'vertical', 'hasTooltip', 'hasValueInfo', 'useKeyboard', 'stepsInfoInteractivity'].indexOf(name) !== -1) {
+      } else if (['isResponsive', 'isVertical', 'hasTooltip', 'hasValueInfo', 'useKeyboard', 'stepsInfoInteractivity'].indexOf(name) !== -1) {
         module = 'viewModel';
       }
 
@@ -268,8 +268,8 @@ $('#slider2').slider({
   hasTooltip: true,
   hasValueInfo: true,
   stepsInfo: ['start', 'half', 'end'],
-  vertical: true,
-  responsive: true,
+  isVertical: true,
+  isResponsive: true,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

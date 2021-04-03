@@ -228,8 +228,8 @@ describe('Model change isRange, value with Observer', () => {
     hasTooltip: false,
     stepsInfo: false,
     hasValueInfo: false,
-    vertical: false,
-    responsive: false,
+    isVertical: false,
+    isResponsive: false,
     stepsInfoInteractivity: false,
     useKeyboard: true,
   };

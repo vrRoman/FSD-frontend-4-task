@@ -38,7 +38,7 @@ class ThumbView implements IThumbView {
 
       this.target.appendChild(thumb);
 
-      if (this.viewModel.getVertical()) {
+      if (this.viewModel.getIsVertical()) {
         thumb.style.top = `${valuePosition - thumb.offsetHeight / 2}px`;
       } else {
         thumb.style.left = `${valuePosition - thumb.offsetWidth / 2}px`;
@@ -61,7 +61,7 @@ class ThumbView implements IThumbView {
 
         this.target.appendChild(thumbElem);
 
-        if (this.viewModel.getVertical()) {
+        if (this.viewModel.getIsVertical()) {
           thumbElem.style.top = `${valuePosition[i] - thumbElem.offsetHeight / 2}px`;
         } else {
           thumbElem.style.left = `${valuePosition[i] - thumbElem.offsetWidth / 2}px`;
@@ -98,7 +98,7 @@ class ThumbView implements IThumbView {
 
     if (this.thumb) {
       if (typeof valuePosition === 'number' && !Array.isArray(this.thumb)) {
-        if (this.viewModel.getVertical()) {
+        if (this.viewModel.getIsVertical()) {
           this.thumb.style.top = `${valuePosition - this.thumb.offsetHeight / 2}px`;
           this.thumb.style.left = '';
         } else {
@@ -107,7 +107,7 @@ class ThumbView implements IThumbView {
         }
       } else if (Array.isArray(valuePosition) && Array.isArray(this.thumb)) {
         for (let i = 0; i <= 1; i += 1) {
-          if (this.viewModel.getVertical()) {
+          if (this.viewModel.getIsVertical()) {
             this.thumb[i].style.top = `${valuePosition[i] - this.thumb[i].offsetHeight / 2}px`;
             this.thumb[i].style.left = '';
           } else {
@@ -186,7 +186,7 @@ class ThumbView implements IThumbView {
 
         let offsetWidthOrHeight: 'offsetHeight' | 'offsetWidth';
         let leftOrTop: 'left' | 'top';
-        if (this.viewModel.getVertical()) {
+        if (this.viewModel.getIsVertical()) {
           offsetWidthOrHeight = 'offsetHeight';
           leftOrTop = 'top';
         } else {
@@ -300,7 +300,7 @@ class ThumbView implements IThumbView {
           clientX = evt.touches[0].clientX;
           clientY = evt.touches[0].clientY;
         }
-        if (this.viewModel.getVertical()) {
+        if (this.viewModel.getIsVertical()) {
           if (Math.abs(clientY - this.viewModel.getClientCoords()[1]) >= stepLength) {
             const numOfSteps = Math.trunc(
               (clientY - this.viewModel.getClientCoords()[1]) / stepLength,

@@ -47,7 +47,7 @@ class StepsInfoView implements IStepsInfoView {
             stepsInfo.classList.add(stepsInfoClass);
           }
 
-          if (this.viewModel.getVertical()) {
+          if (this.viewModel.getIsVertical()) {
             stepsInfo.style.height = `${length}px`;
           } else {
             stepsInfo.style.width = `${length}px`;
@@ -78,7 +78,7 @@ class StepsInfoView implements IStepsInfoView {
             stepElem.innerText = `${steps[i]}`;
             stepElem.style.position = 'absolute';
             stepsInfo.appendChild(stepElem);
-            if (this.viewModel.getVertical()) {
+            if (this.viewModel.getIsVertical()) {
               stepElem.style.top = `${position - stepElem.offsetHeight / 2}px`;
             } else {
               stepElem.style.left = `${position - stepElem.offsetWidth / 2}px`;
@@ -115,7 +115,7 @@ class StepsInfoView implements IStepsInfoView {
       for (let i = 0; i < stepElems.length; i += 1) {
         const position = (length / (stepElems.length - 1)) * i;
 
-        if (this.viewModel.getVertical()) {
+        if (this.viewModel.getIsVertical()) {
           stepElems[i].style.top = `${position - stepElems[i].offsetHeight / 2}px`;
         } else {
           stepElems[i].style.left = `${position - stepElems[i].offsetWidth / 2}px`;
@@ -176,7 +176,7 @@ class StepsInfoView implements IStepsInfoView {
         if (activeThumb) {
           let leftOrTop: 'left' | 'top';
           let offsetWidthOrHeigth: 'offsetWidth' | 'offsetHeight';
-          if (this.viewModel.getVertical()) {
+          if (this.viewModel.getIsVertical()) {
             leftOrTop = 'top';
             offsetWidthOrHeigth = 'offsetHeight';
           } else {
