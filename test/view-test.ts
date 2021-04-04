@@ -26,7 +26,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   thumbClass: ['slider__thumb', 'slider__thumb_some-class'],
   activeThumbClass: ['slider__thumb_active', 'slider__thumb_active_some-class'],
   tooltipClass: ['slider__tooltip', 'slider__tooltip_some-class'],
-  scaleClass: ['slider__steps-info', 'slider__steps-info_some-class'],
+  scaleClass: ['slider__scale', 'slider__scale_some-class'],
   valueInfoClass: ['slider__value-info', 'slider__value-info_some-class'],
 };
 
