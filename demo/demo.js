@@ -1,12 +1,9 @@
 class SliderControlPanel {
   constructor(options) {
     this.sliderName = options.sliderName;
-    this.$slider = $(`.js-${this.sliderName}`);
+    this.$slider = this.getSlider();
     this.isRangeName = 'isRange';
-    this.valueElems = [
-      $(`.js-${this.sliderName}-value1`),
-      $(`.js-${this.sliderName}-value2`),
-    ];
+    this.valueElems = this.getValueElems();
     this.minMaxNames = ['min', 'max'];
     this.stepSizeName = 'stepSize';
     this.lengthName = 'length';
@@ -21,8 +18,22 @@ class SliderControlPanel {
     this.initStepSize();
     this.initScaleValue();
 
-    // подписать на обновления модели
+    this.subscribeToModel();
+  }
+
+  subscribeToModel() {
     this.$slider.slider('model').subscribe(this);
+  }
+
+  getSlider() {
+    return $(`.js-${this.sliderName}`);
+  }
+
+  getValueElems() {
+    return [
+      $(`.js-${this.sliderName}-value1`),
+      $(`.js-${this.sliderName}-value2`),
+    ];
   }
 
   update(action) {
