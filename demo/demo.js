@@ -1,11 +1,11 @@
 class SliderControlPanel {
   constructor(options) {
     this.sliderName = options.sliderName;
-    this.$slider = $(`#${this.sliderName}`);
+    this.$slider = $(`.js-${this.sliderName}`);
     this.isRangeName = 'isRange';
     this.valueElems = [
-      $(`#${this.sliderName}-value1`),
-      $(`#${this.sliderName}-value2`),
+      $(`.js-${this.sliderName}-value1`),
+      $(`.js-${this.sliderName}-value2`),
     ];
     this.minMaxNames = ['min', 'max'];
     this.stepSizeName = 'stepSize';
@@ -27,7 +27,7 @@ class SliderControlPanel {
 
   update(action) {
     const [$value1, $value2] = this.valueElems;
-    const $stepSize = $(`#${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
+    const $stepSize = $(`.js-${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
     switch (action.type) {
       case 'UPDATE_VALUE':
         if (Array.isArray(this.$slider.slider('value'))) {
@@ -50,7 +50,7 @@ class SliderControlPanel {
           $elem.val(Number(this.$slider.slider('value')));
         });
         this.minMaxNames.forEach((name) => {
-          const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
+          const $minOrMax = $(`.js-${this.sliderName}-${name.toLowerCase()}`);
           if (name === 'min') {
             $minOrMax.val(Number(this.$slider.slider('model').getMin()));
           } else if (name === 'max') {
@@ -71,7 +71,7 @@ class SliderControlPanel {
     const [, $value2] = this.valueElems;
 
     optionNames.forEach((name) => {
-      const $checkbox = $(`#${this.sliderName}-${name.toLowerCase()}`);
+      const $checkbox = $(`.js-${this.sliderName}-${name.toLowerCase()}`);
 
       // Для включенных изначально настроек включить чекбоксы
       let module;
@@ -164,15 +164,15 @@ class SliderControlPanel {
     const [$value1, $value2] = this.valueElems;
 
     this.minMaxNames.forEach((name) => {
-      const $minOrMax = $(`#${this.sliderName}-${name.toLowerCase()}`);
+      const $minOrMax = $(`.js-${this.sliderName}-${name.toLowerCase()}`);
       $minOrMax.val(Number($slider.slider('model')[`get${name === 'min' ? 'Min' : 'Max'}`]()));
       function onFocusoutMinMax() {
         if ($(this).val() && !Number.isNaN(Number($(this).val()))) {
           $slider.slider('changeOptions', {
             [name]: Number($(this).val()),
           });
-          $(`#${sliderName}-${minMaxNames[1]}`).val(Number($slider.slider('model').getMax()));
-          $(`#${sliderName}-${minMaxNames[0]}`).val(Number($slider.slider('model').getMin()));
+          $(`.js-${sliderName}-${minMaxNames[1]}`).val(Number($slider.slider('model').getMax()));
+          $(`.js-${sliderName}-${minMaxNames[0]}`).val(Number($slider.slider('model').getMin()));
           if (Array.isArray($slider.slider('value'))) {
             $value1.val($slider.slider('value')[0]);
             $value2.val($slider.slider('value')[1]);
@@ -187,7 +187,7 @@ class SliderControlPanel {
   }
 
   initStepSize() {
-    const $stepSize = $(`#${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
+    const $stepSize = $(`.js-${this.sliderName}-${this.stepSizeName.toLowerCase()}`);
     const { $slider } = this;
     $stepSize.val(Number($slider.slider('model').getStepSize()));
     function onFocusoutStepSize() {
@@ -202,7 +202,7 @@ class SliderControlPanel {
   }
 
   initLength() {
-    const $length = $(`#${this.sliderName}-${this.lengthName.toLowerCase()}`);
+    const $length = $(`.js-${this.sliderName}-${this.lengthName.toLowerCase()}`);
     const { $slider } = this;
     $length.val($slider.slider('view').getElem('bar').style.width
     || $slider.slider('view').getElem('bar').style.height);
@@ -218,7 +218,7 @@ class SliderControlPanel {
   }
 
   initScaleValue() {
-    const $scaleValue = $(`#${this.sliderName}-${this.scaleValueName.toLowerCase()}`);
+    const $scaleValue = $(`.js-${this.sliderName}-${this.scaleValueName.toLowerCase()}`);
     const { $slider } = this;
     $scaleValue.val($slider.slider('viewModel').getScaleValue());
 
@@ -246,7 +246,7 @@ class SliderControlPanel {
 
 
 
-$('#slider1').slider();
+$('.js-slider1').slider();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const controlPanel1 = new SliderControlPanel({
@@ -254,7 +254,7 @@ const controlPanel1 = new SliderControlPanel({
 });
 
 
-$('#slider2').slider({
+$('.js-slider2').slider({
   value: [2, 84],
   isRange: true,
   stepSize: 1,
@@ -274,10 +274,10 @@ const controlPanel2 = new SliderControlPanel({
   sliderName: 'slider2',
 });
 
-$('#slider3').slider({
+$('.js-slider3').slider({
   onChange() {
     // eslint-disable-next-line no-console
-    console.log($('#slider3').slider('value'));
+    console.log($('.js-slider3').slider('value'));
   },
 });
 
@@ -287,7 +287,7 @@ const controlPanel3 = new SliderControlPanel({
 });
 
 
-$('#slider4').slider();
+$('.js-slider4').slider();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const controlPanel4 = new SliderControlPanel({
