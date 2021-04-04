@@ -10,16 +10,16 @@ class SliderControlPanel {
     this.minMaxNames = ['min', 'max'];
     this.stepSizeName = 'stepSize';
     this.lengthName = 'length';
-    this.stepsInfoName = 'stepsInfo';
+    this.scaleValueName = 'scaleValue';
     this.checkboxNames = ['isVertical', 'isResponsive', 'isRange',
-      'hasTooltip', 'hasValueInfo', 'useKeyboard', 'isScaleClickable'];
+      'hasTooltip', 'hasValueInfo', 'useKeyboard', 'isScaleClickable', 'hasScale'];
 
     this.initCheckboxes(this.checkboxNames);
     this.initValueInputs();
     this.initMinMax();
     this.initLength();
     this.initStepSize();
-    this.initStepsInfo();
+    this.initScaleValue();
 
     // подписать на обновления модели
     this.$slider.slider('model').subscribe(this);
@@ -77,7 +77,9 @@ class SliderControlPanel {
       let module;
       if ([this.isRangeName].indexOf(name) !== -1) {
         module = 'model';
-      } else if (['isResponsive', 'isVertical', 'hasTooltip', 'hasValueInfo', 'useKeyboard', 'isScaleClickable'].indexOf(name) !== -1) {
+      } else if ([
+        'isResponsive', 'isVertical', 'hasTooltip', 'hasValueInfo', 'useKeyboard', 'isScaleClickable', 'hasScale',
+      ].indexOf(name) !== -1) {
         module = 'viewModel';
       }
 
@@ -215,36 +217,30 @@ class SliderControlPanel {
     $length.on('focusout', onFocusoutLength);
   }
 
-  initStepsInfo() {
-    const $stepsInfo = $(`#${this.sliderName}-${this.stepsInfoName.toLowerCase()}`);
+  initScaleValue() {
+    const $scaleValue = $(`#${this.sliderName}-${this.scaleValueName.toLowerCase()}`);
     const { $slider } = this;
-    $stepsInfo.val($slider.slider('viewModel').getStepsInfoSettings());
-    function onFocusoutStepsInfo() {
-      if ($stepsInfo.val()) {
-        const isValBoolean = $stepsInfo.val().toLowerCase() === 'true'
-          || $stepsInfo.val().toLowerCase() === 'false';
-        if (isValBoolean) {
+    $scaleValue.val($slider.slider('viewModel').getScaleValue());
+
+    function onFocusoutScaleValue() {
+      if ($scaleValue.val()) {
+        const isValArr = $scaleValue.val().indexOf(',') !== -1;
+        if (isValArr) {
           $slider.slider('changeOptions', {
-            stepsInfo: $stepsInfo.val().toLowerCase() === 'true',
+            scaleValue: $scaleValue.val().split(','),
           });
         } else {
-          const isValArr = $stepsInfo.val().indexOf(',') !== -1;
-          if (isValArr) {
+          const isValNum = !Number.isNaN(Number($scaleValue.val()));
+          if (isValNum) {
             $slider.slider('changeOptions', {
-              stepsInfo: $stepsInfo.val().split(','),
+              scaleValue: Number($scaleValue.val()),
             });
-          } else {
-            const isValNum = !Number.isNaN(Number($stepsInfo.val()));
-            if (isValNum) {
-              $slider.slider('changeOptions', {
-                stepsInfo: Number($stepsInfo.val()),
-              });
-            }
           }
         }
       }
     }
-    $stepsInfo.on('focusout', onFocusoutStepsInfo);
+
+    $scaleValue.on('focusout', onFocusoutScaleValue);
   }
 }
 
@@ -267,7 +263,8 @@ $('#slider2').slider({
   length: '200px',
   hasTooltip: true,
   hasValueInfo: true,
-  stepsInfo: ['start', 'half', 'end'],
+  hasScale: true,
+  scaleValue: ['start', 'half', 'end'],
   isVertical: true,
   isResponsive: true,
 });

@@ -12,7 +12,8 @@ import Presenter from '../src/modules/Presenter/Presenter';
 const defaultViewOptionsWithClass: ViewOptions = {
   length: '200px',
   hasTooltip: false,
-  stepsInfo: false,
+  hasScale: false,
+  scaleValue: 3,
   hasValueInfo: false,
   isVertical: false,
   isResponsive: false,
@@ -50,7 +51,7 @@ describe('View with different options and get slider elements methods', () => {
       ...defaultViewOptionsWithClass,
       length: '90%',
       hasTooltip: true,
-      stepsInfo: true,
+      hasScale: true,
       hasValueInfo: true,
       isResponsive: true,
     };
@@ -63,7 +64,7 @@ describe('View with different options and get slider elements methods', () => {
       ...defaultViewOptionsWithClass,
       length: '20vh',
       hasTooltip: true,
-      stepsInfo: true,
+      hasScale: true,
       hasValueInfo: true,
       isVertical: true,
       isResponsive: true,
@@ -155,7 +156,7 @@ describe('View with different options and get slider elements methods', () => {
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
-      stepsInfo: true,
+      hasScale: true,
     };
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
@@ -215,29 +216,33 @@ describe('View get values', () => {
     model.setValue([2, 6]);
     expect(view.getViewModel().getValuePosition()).toEqual([40, 120]);
   });
-  it('getStepsInfoSettings', () => {
-    expect(view.getViewModel().getStepsInfoSettings()).toBe(false);
+  it('getHasScale and getScaleValue', () => {
+    expect(view.getViewModel().getHasScale()).toBe(false);
 
     let viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
-      stepsInfo: true,
+      hasScale: true,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getViewModel().getStepsInfoSettings()).toBe(true);
+    expect(view.getViewModel().getHasScale()).toBe(true);
 
     viewOptions = {
       ...defaultViewOptionsWithClass,
-      stepsInfo: 7,
+      hasScale: true,
+      scaleValue: 7,
     };
     view = new View(viewOptions, document.body);
-    expect(view.getViewModel().getStepsInfoSettings()).toBe(7);
+    expect(view.getViewModel().getHasScale()).toBe(true);
+    expect(view.getViewModel().getScaleValue()).toBe(7);
 
     viewOptions = {
       ...defaultViewOptionsWithClass,
-      stepsInfo: [1, '5', 'end'],
+      hasScale: true,
+      scaleValue: [1, '5', 'end'],
     };
     view = new View(viewOptions, document.body);
-    expect(view.getViewModel().getStepsInfoSettings()).toEqual([1, '5', 'end']);
+    expect(view.getViewModel().getHasScale()).toBe(true);
+    expect(view.getViewModel().getScaleValue()).toEqual([1, '5', 'end']);
   });
   it('getLength', () => {
     expect(view.getViewModel().getLengthInPx()).toBe(200);
@@ -280,7 +285,7 @@ describe('View methods', () => {
   it('add stepsInfo interactivity', () => {
     view = new View({
       ...defaultViewOptionsWithClass,
-      stepsInfo: true,
+      hasScale: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
@@ -293,7 +298,7 @@ describe('View methods', () => {
 
   it('remove stepsInfo interactivity', () => {
     view.changeOptions({
-      stepsInfo: true,
+      hasScale: true,
       isScaleClickable: false,
     });
     console.log('Removed stepsInfo interactivity: ', view.getElem('slider'));
@@ -386,35 +391,35 @@ describe('View methods', () => {
     });
     expect(view.getViewModel().getIsVertical()).toBe(false);
   });
-  it('changeStepsInfoSettings', () => {
+  it('change scale settings', () => {
     view.changeOptions({
-      stepsInfo: true,
+      hasScale: true,
     });
-    expect(view.getViewModel().getStepsInfoSettings()).toBe(true);
-    // console.log для того, чтобы быстро найти имзененное значение
-    console.log('Changed steps info settings to true', view.getElem('slider'));
+    expect(view.getViewModel().getHasScale()).toBe(true);
 
-    // создаю новый слайдер
+    console.log('Changed hasScale to true', view.getElem('slider'));
+
     view = new View({
       ...defaultViewOptionsWithClass,
-      stepsInfo: true,
+      hasScale: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      stepsInfo: 2,
+      scaleValue: 2,
     });
-    expect(view.getViewModel().getStepsInfoSettings()).toBe(2);
+    expect(view.getViewModel().getScaleValue()).toBe(2);
     console.log('Changed steps info settings to 2', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
-      stepsInfo: 2,
+      hasScale: true,
+      scaleValue: 2,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      stepsInfo: ['start', '0.25', 'half', '0.75', 'end'],
+      scaleValue: ['start', '0.25', 'half', '0.75', 'end'],
     });
-    expect(view.getViewModel().getStepsInfoSettings()).toEqual(['start', '0.25', 'half', '0.75', 'end']);
+    expect(view.getViewModel().getScaleValue()).toEqual(['start', '0.25', 'half', '0.75', 'end']);
     console.log('Changed steps info settings to [\'start\', \'0.25\', \'half\', \'0.75\', \'end\']',
       view.getElem('slider'));
   });
@@ -462,18 +467,18 @@ describe('View methods', () => {
   });
   it('create/remove stepsInfo', () => {
     view.changeOptions({
-      stepsInfo: true,
+      hasScale: true,
     });
     expect(view.getElem('stepsInfo')).toBeDefined();
     console.log('Created stepsInfo: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
-      stepsInfo: true,
+      hasScale: true,
     }, document.body);
     presenter = new Presenter(model, view, {});
     view.changeOptions({
-      stepsInfo: false,
+      hasScale: false,
     });
     expect(view.getElem('stepsInfo')).toBe(undefined);
     console.log('Removed stepsInfo: ', view.getElem('slider'));

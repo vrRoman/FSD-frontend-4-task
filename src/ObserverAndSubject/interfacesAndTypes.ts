@@ -3,7 +3,8 @@ import { Value } from '../modules/Model/interfacesAndTypes';
 
 type actionModelType = 'UPDATE_VALUE' | 'UPDATE_IS-RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEPSIZE';
 type actionViewType = 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_IS-RESPONSIVE' | 'UPDATE_HAS-TOOLTIP'
-  | 'UPDATE_STEPSINFO-SETTINGS' | 'UPDATE_HAS-VALUEINFO' | 'UPDATE_USEKEYBOARD' | 'UPDATE_IS-SCALE-CLICKABLE'
+  | 'UPDATE_HAS-SCALE' | 'UPDATE_SCALE-VALUE' | 'UPDATE_IS-SCALE-CLICKABLE'
+  | 'UPDATE_HAS-VALUEINFO' | 'UPDATE_USEKEYBOARD'
 
 type SubjectAction = {
   type: actionModelType | actionViewType

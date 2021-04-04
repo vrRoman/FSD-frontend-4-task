@@ -4,11 +4,10 @@ type ViewOptions = {
   // Наличие подсказки у ползунков
   hasTooltip: boolean
   // Наличие шкалы значений
-  // False - отсутствует
-  // True - показывает 5 чисел в шкале значений
+  hasScale: boolean
   // Number - показывает number чисел в шкале значений
   // Array - показывает array.length значений(любых) по порядку в шкале значений
-  stepsInfo: boolean | Array<number | string> | number
+  scaleValue: Array<number | string> | number
   // Элемент с текущим значением
   hasValueInfo: boolean
   // Вертикальный слайдер
@@ -39,7 +38,8 @@ type ViewOptions = {
 type ViewOptionsOptionalParams = {
   length?: string
   hasTooltip?: boolean
-  stepsInfo?: boolean | Array<number | string> | number
+  hasScale?: boolean
+  scaleValue?: Array<number | string> | number
   hasValueInfo?: boolean
   isVertical?: boolean
   isResponsive?: boolean

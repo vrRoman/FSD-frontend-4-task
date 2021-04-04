@@ -65,7 +65,8 @@ class View extends Observer implements IView {
       isVertical: viewOptions.isVertical,
       hasTooltip: viewOptions.hasTooltip,
       hasValueInfo: viewOptions.hasValueInfo,
-      stepsInfoSettings: viewOptions.stepsInfo,
+      hasScale: viewOptions.hasScale,
+      scaleValue: viewOptions.scaleValue,
       isResponsive: viewOptions.isResponsive,
       useKeyboard: viewOptions.useKeyboard,
       isScaleClickable: viewOptions.isScaleClickable,
@@ -145,7 +146,7 @@ class View extends Observer implements IView {
     }
 
     this.stepsInfoView = new StepsInfoView(bar, this.viewModel, this);
-    if (this.viewModel.getStepsInfoSettings()) {
+    if (this.viewModel.getHasScale()) {
       this.stepsInfoView.create();
     }
     this.valueInfoView = new ValueInfoView(slider, this.viewModel);
@@ -213,7 +214,7 @@ class View extends Observer implements IView {
           });
         }
         if (this.thumbView) this.thumbView.update();
-        if (this.stepsInfoView && this.viewModel.getStepsInfoSettings()) {
+        if (this.stepsInfoView && this.viewModel.getHasScale()) {
           this.stepsInfoView.remove();
           this.stepsInfoView.create();
         }
@@ -245,8 +246,11 @@ class View extends Observer implements IView {
     if (newOptions.hasTooltip !== undefined) {
       this.viewModel.setHasTooltip(newOptions.hasTooltip);
     }
-    if (newOptions.stepsInfo !== undefined) {
-      this.viewModel.setStepsInfoSettings(newOptions.stepsInfo);
+    if (newOptions.hasScale !== undefined) {
+      this.viewModel.setHasScale(newOptions.hasScale);
+    }
+    if (newOptions.scaleValue !== undefined) {
+      this.viewModel.setScaleValue(newOptions.scaleValue);
     }
     if (newOptions.hasValueInfo !== undefined) {
       this.viewModel.setHasValueInfo(newOptions.hasValueInfo);
@@ -298,12 +302,19 @@ class View extends Observer implements IView {
           }
         }
         break;
-      case 'UPDATE_STEPSINFO-SETTINGS':
+      case 'UPDATE_HAS-SCALE':
         if (this.stepsInfoView) {
           this.stepsInfoView.remove();
-          if (this.viewModel.getStepsInfoSettings()) {
+          if (this.viewModel.getHasScale()) {
             this.stepsInfoView.create();
-            this.stepsInfoView.update();
+          }
+        }
+        break;
+      case 'UPDATE_SCALE-VALUE':
+        if (this.stepsInfoView) {
+          if (this.viewModel.getHasScale()) {
+            this.stepsInfoView.remove();
+            this.stepsInfoView.create();
           }
         }
         break;
@@ -326,7 +337,7 @@ class View extends Observer implements IView {
         }
         break;
       case 'UPDATE_IS-SCALE-CLICKABLE':
-        if (this.viewModel.getStepsInfoSettings()) {
+        if (this.viewModel.getHasScale()) {
           if (this.stepsInfoView) {
             if (this.viewModel.getIsScaleClickable()) {
               this.stepsInfoView.addInteractivity();

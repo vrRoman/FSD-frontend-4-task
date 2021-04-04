@@ -21,7 +21,8 @@ interface IViewModelData {
   isVertical: boolean
   hasTooltip: boolean
   hasValueInfo: boolean
-  stepsInfoSettings: boolean | Array<number | string> | number
+  hasScale: boolean
+  scaleValue: Array<number | string> | number
   isResponsive: boolean
   useKeyboard: boolean
   isScaleClickable: boolean
@@ -43,7 +44,8 @@ interface IViewModelGetMethods {
   getIsVertical(): boolean
   getHasTooltip(): boolean
   getHasValueInfo(): boolean
-  getStepsInfoSettings(): boolean | Array<number | string> | number
+  getHasScale(): boolean
+  getScaleValue(): Array<number | string> | number
   getIsResponsive(): boolean
   getUseKeyboard(): boolean
   getIsScaleClickable(): boolean
@@ -59,7 +61,8 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setLength(newLength: string): void
   setLengthInPx(newLength: number): void
   setIsVertical(newIsVertical: boolean): void
-  setStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number): void
+  setHasScale(newHasScale: boolean): void
+  setScaleValue(newScaleValue: Array<number | string> | number): void
   setHasTooltip(newHasTooltip: boolean): void
   setHasValueInfo(newHasValueInfo: boolean): void
   setIsResponsive(newResponsive: boolean): void

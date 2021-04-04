@@ -28,17 +28,8 @@ class StepsInfoView implements IStepsInfoView {
       if (modelProps.min !== undefined && modelProps.max !== undefined) {
         const length = this.viewModel.getLengthInPx();
         if (length) {
-          let stepsInfoSettings = this.viewModel.getStepsInfoSettings();
           const stepsInfo = document.createElement('div');
-
           this.target.appendChild(stepsInfo);
-
-          if (!stepsInfoSettings) {
-            this.mainView.changeOptions({
-              stepsInfo: true,
-            });
-            stepsInfoSettings = true;
-          }
 
           const { stepsInfoClass } = this.viewModel.getClasses();
           if (Array.isArray(stepsInfoClass)) {
@@ -53,28 +44,25 @@ class StepsInfoView implements IStepsInfoView {
             stepsInfo.style.width = `${length}px`;
           }
 
-          let numOfSteps: number = 5;
           let steps: Array<number | string> = [];
+          const scaleValue = this.viewModel.getScaleValue();
 
-          if (typeof stepsInfoSettings === 'number' || stepsInfoSettings === true) {
-            if (typeof stepsInfoSettings === 'number') {
-              numOfSteps = stepsInfoSettings;
-            }
+          if (Array.isArray(scaleValue)) {
+            steps = scaleValue;
+          } else {
             const maxDiapason = modelProps.max - modelProps.min;
-            for (let i = 0; i < numOfSteps; i += 1) {
+            for (let i = 0; i < scaleValue; i += 1) {
               steps.push(
-                modelProps.min
-                + Number(((maxDiapason / (numOfSteps - 1)) * i).toFixed(3)),
+                Number(
+                  (modelProps.min + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
+                ),
               );
             }
-          } else if (Array.isArray(stepsInfoSettings)) {
-            numOfSteps = stepsInfoSettings.length;
-            steps = stepsInfoSettings;
           }
 
-          for (let i = 0; i < numOfSteps; i += 1) {
+          for (let i = 0; i < steps.length; i += 1) {
             const stepElem = document.createElement('div');
-            const position = (length / (numOfSteps - 1)) * i;
+            const position = (length / (steps.length - 1)) * i;
             stepElem.innerText = `${steps[i]}`;
             stepElem.style.position = 'absolute';
             stepsInfo.appendChild(stepElem);
@@ -198,7 +186,7 @@ class StepsInfoView implements IStepsInfoView {
 
   // Меняет плоскость шкалы значений
   updateVertical() {
-    if (this.viewModel.getStepsInfoSettings()) {
+    if (this.viewModel.getHasScale()) {
       this.remove();
       this.create();
     }

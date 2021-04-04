@@ -226,7 +226,8 @@ describe('Model change isRange, value with Observer', () => {
   const defaultViewOptions: ViewOptions = {
     length: '200px',
     hasTooltip: false,
-    stepsInfo: false,
+    hasScale: false,
+    scaleValue: 3,
     hasValueInfo: false,
     isVertical: false,
     isResponsive: false,
@@ -269,7 +270,7 @@ describe('Model change isRange, value with Observer', () => {
     model = new Model(defaultOptions);
     view = new View({
       ...defaultViewOptions,
-      stepsInfo: true,
+      hasScale: true,
       hasValueInfo: true,
       hasTooltip: true,
     }, document.body);
@@ -290,7 +291,7 @@ describe('Model change isRange, value with Observer', () => {
     model = new Model(defaultOptions);
     view = new View({
       ...defaultViewOptions,
-      stepsInfo: true,
+      hasScale: true,
       hasValueInfo: true,
       hasTooltip: true,
     }, document.body);
@@ -304,7 +305,7 @@ describe('Model change isRange, value with Observer', () => {
     model = new Model(defaultOptions);
     view = new View({
       ...defaultViewOptions,
-      stepsInfo: true,
+      hasScale: true,
       hasValueInfo: true,
       hasTooltip: true,
     }, document.body);

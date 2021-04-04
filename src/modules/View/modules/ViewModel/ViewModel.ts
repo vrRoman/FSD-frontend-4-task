@@ -45,10 +45,16 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       type: 'UPDATE_IS-VERTICAL',
     });
   }
-  setStepsInfoSettings(newStepsInfoSettings: boolean | Array<number | string> | number) {
-    this.data.stepsInfoSettings = newStepsInfoSettings;
+  setHasScale(newHasScale: boolean) {
+    this.data.hasScale = newHasScale;
     this.notify({
-      type: 'UPDATE_STEPSINFO-SETTINGS',
+      type: 'UPDATE_HAS-SCALE',
+    });
+  }
+  setScaleValue(newScaleValue: Array<number | string> | number) {
+    this.data.scaleValue = newScaleValue;
+    this.notify({
+      type: 'UPDATE_SCALE-VALUE',
     });
   }
   setHasTooltip(newHasTooltip: boolean) {
@@ -113,11 +119,14 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getHasValueInfo(): boolean {
     return this.data.hasValueInfo;
   }
-  getStepsInfoSettings(): boolean | Array<number | string> | number {
-    if (Array.isArray(this.data.stepsInfoSettings)) {
-      return [...this.data.stepsInfoSettings];
+  getHasScale(): boolean {
+    return this.data.hasScale;
+  }
+  getScaleValue(): Array<number | string> | number {
+    if (Array.isArray(this.data.scaleValue)) {
+      return [...this.data.scaleValue];
     }
-    return this.data.stepsInfoSettings;
+    return this.data.scaleValue;
   }
   getIsResponsive(): boolean {
     return this.data.isResponsive;

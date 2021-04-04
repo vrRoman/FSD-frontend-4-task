@@ -16,7 +16,7 @@ declare global {
   interface JQuery {
     slider: (
       options?: SliderOptionsOptionalParams | 'changeOptions',
-      otherOptions?: any
+      newOptions?: any
     ) => IModel | IView | IViewModel | IPresenter | Value | JQuery<HTMLElement>
   }
 }
@@ -32,7 +32,8 @@ declare global {
 
     length: '100%',
     hasTooltip: false,
-    stepsInfo: false,
+    hasScale: false,
+    scaleValue: 3,
     hasValueInfo: false,
     isVertical: false,
     isResponsive: false,
