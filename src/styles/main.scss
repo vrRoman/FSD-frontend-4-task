@@ -43,7 +43,7 @@
     }
   }
 
-  &__steps-info {
+  &__scale {
     color: rgba(0, 0, 0, 0.3);
     z-index: -1;
   }
@@ -79,7 +79,7 @@
       }
     }
 
-    #{$selector}__steps-info {
+    #{$selector}__scale {
       height: 12px;
       padding-top: 10px;
     }
@@ -117,7 +117,7 @@
       }
     }
 
-    #{$selector}__steps-info {
+    #{$selector}__scale {
       width: 12px;
       padding-left: 10px;
     }

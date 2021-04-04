@@ -2,19 +2,19 @@ import { IWindowListeners, Views } from './interfaces';
 import { IViewModel } from '../ViewModel/interfacesAndTypes';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
 import IBarView from '../SubViews/BarView/interface';
-import IStepsInfoView from '../SubViews/StepsInfoView/interface';
+import IScaleView from '../SubViews/ScaleView/interface';
 
 class WindowListeners implements IWindowListeners {
   private readonly viewModel: IViewModel
   private thumbView: IThumbView | undefined
   private barView: IBarView | undefined
-  private stepsInfoView: IStepsInfoView | undefined
+  private scaleView: IScaleView | undefined
 
   constructor(viewModel: IViewModel, views: Views) {
     this.viewModel = viewModel;
     this.thumbView = views.thumb;
     this.barView = views.bar;
-    this.stepsInfoView = views.stepsInfo;
+    this.scaleView = views.scale;
 
     this.handleWindowResize = this.handleWindowResize.bind(this);
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
@@ -67,7 +67,7 @@ class WindowListeners implements IWindowListeners {
         if (currentLength !== this.viewModel.getLengthInPx()) {
           this.barView.updateProgressBar();
           if (this.thumbView) this.thumbView.update();
-          if (this.stepsInfoView) this.stepsInfoView.update();
+          if (this.scaleView) this.scaleView.update();
 
           this.viewModel.setLengthInPx(currentLength);
         }

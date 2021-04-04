@@ -10,7 +10,7 @@ type ViewClasses = {
   activeThumbClass: string | string[]
   tooltipClass: string | string[]
   tooltipValueClass: string | string[]
-  stepsInfoClass: string | string[]
+  scaleClass: string | string[]
   valueInfoClass: string | string[]
 }
 
@@ -67,7 +67,7 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setHasValueInfo(newHasValueInfo: boolean): void
   setIsResponsive(newResponsive: boolean): void
   setUseKeyboard(newUseKeyboard: boolean): void
-  setIsScaleClickable(newStepsInfoInteractivity: boolean): void
+  setIsScaleClickable(newIsScaleClickable: boolean): void
 }
 
 

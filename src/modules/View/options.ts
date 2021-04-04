@@ -31,7 +31,7 @@ type ViewOptions = {
   activeThumbClass?: string | string[]
   tooltipClass?: string | string[]
   tooltipValueClass?: string | string[]
-  stepsInfoClass?: string | string[]
+  scaleClass?: string | string[]
   valueInfoClass?: string | string[]
 }
 
@@ -53,7 +53,7 @@ type ViewOptionsOptionalParams = {
   activeThumbClass?: string | string[]
   tooltipClass?: string | string[]
   tooltipValueClass?: string | string[]
-  stepsInfoClass?: string | string[]
+  scaleClass?: string | string[]
   valueInfoClass?: string | string[]
 }
 

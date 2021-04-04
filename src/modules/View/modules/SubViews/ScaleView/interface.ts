@@ -1,4 +1,4 @@
-interface IStepsInfoView {
+interface IScaleView {
   create(): HTMLElement | undefined
   remove(): void
   update(): void
@@ -8,4 +8,4 @@ interface IStepsInfoView {
   updateVertical(): void
 }
 
-export default IStepsInfoView;
+export default IScaleView;

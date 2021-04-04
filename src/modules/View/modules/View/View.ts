@@ -14,8 +14,8 @@ import ISliderContainerView from '../SubViews/SliderContainerView/interface';
 import BarView from '../SubViews/BarView/BarView';
 import IBarView from '../SubViews/BarView/interface';
 
-import StepsInfoView from '../SubViews/StepsInfoView/StepsInfoView';
-import IStepsInfoView from '../SubViews/StepsInfoView/interface';
+import ScaleView from '../SubViews/ScaleView/ScaleView';
+import IScaleView from '../SubViews/ScaleView/interface';
 
 import ThumbView from '../SubViews/ThumbView/ThumbView';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
@@ -37,7 +37,7 @@ class View extends Observer implements IView {
 
   private sliderContainerView: ISliderContainerView | undefined
   private barView: IBarView | undefined
-  private stepsInfoView: IStepsInfoView | undefined
+  private scaleView: IScaleView | undefined
   private thumbView: IThumbView | undefined
   private tooltipView: ITooltipView | undefined
   private valueInfoView: IValueInfoView | undefined
@@ -54,7 +54,7 @@ class View extends Observer implements IView {
       activeThumbClass: viewOptions.activeThumbClass ? viewOptions.activeThumbClass : 'slider__thumb_active',
       tooltipClass: viewOptions.tooltipClass ? viewOptions.tooltipClass : 'slider__tooltip',
       tooltipValueClass: viewOptions.tooltipValueClass ? viewOptions.tooltipValueClass : 'slider__tooltip-value',
-      stepsInfoClass: viewOptions.stepsInfoClass ? viewOptions.stepsInfoClass : 'slider__steps-info',
+      scaleClass: viewOptions.scaleClass ? viewOptions.scaleClass : 'slider__scale',
       valueInfoClass: viewOptions.valueInfoClass ? viewOptions.valueInfoClass : 'slider__value-info',
     };
     const viewModel: IViewModel = new ViewModel({
@@ -83,7 +83,7 @@ class View extends Observer implements IView {
 
     this.sliderContainerView = undefined;
     this.barView = undefined;
-    this.stepsInfoView = undefined;
+    this.scaleView = undefined;
     this.thumbView = undefined;
     this.tooltipView = undefined;
     this.valueInfoView = undefined;
@@ -113,8 +113,8 @@ class View extends Observer implements IView {
       case 'tooltip':
         elem = this.tooltipView ? this.tooltipView.get() : undefined;
         break;
-      case 'stepsInfo':
-        elem = this.stepsInfoView ? this.stepsInfoView.get() : undefined;
+      case 'scale':
+        elem = this.scaleView ? this.scaleView.get() : undefined;
         break;
       case 'valueInfo':
         elem = this.valueInfoView ? this.valueInfoView.get() : undefined;
@@ -145,9 +145,9 @@ class View extends Observer implements IView {
       }
     }
 
-    this.stepsInfoView = new StepsInfoView(bar, this.viewModel, this);
+    this.scaleView = new ScaleView(bar, this.viewModel, this);
     if (this.viewModel.getHasScale()) {
-      this.stepsInfoView.create();
+      this.scaleView.create();
     }
     this.valueInfoView = new ValueInfoView(slider, this.viewModel);
     if (this.viewModel.getHasValueInfo()) {
@@ -157,7 +157,7 @@ class View extends Observer implements IView {
     this.windowListeners = new WindowListeners(this.viewModel, {
       thumb: this.thumbView,
       bar: this.barView,
-      stepsInfo: this.stepsInfoView,
+      scale: this.scaleView,
     });
 
     if (this.viewModel.getUseKeyboard()) {
@@ -214,9 +214,9 @@ class View extends Observer implements IView {
           });
         }
         if (this.thumbView) this.thumbView.update();
-        if (this.stepsInfoView && this.viewModel.getHasScale()) {
-          this.stepsInfoView.remove();
-          this.stepsInfoView.create();
+        if (this.scaleView && this.viewModel.getHasScale()) {
+          this.scaleView.remove();
+          this.scaleView.create();
         }
         if (this.valueInfoView) this.valueInfoView.update();
         if (this.barView) this.barView.updateProgressBar();
@@ -278,14 +278,14 @@ class View extends Observer implements IView {
         if (this.barView) this.viewModel.setLengthInPx(this.barView.getOffsetLength() || 0);
         if (this.barView) this.barView.updateProgressBar();
         if (this.thumbView) this.thumbView.update();
-        if (this.stepsInfoView) this.stepsInfoView.update();
+        if (this.scaleView) this.scaleView.update();
         break;
       case 'UPDATE_IS-VERTICAL':
         if (this.sliderContainerView) this.sliderContainerView.updateVertical();
         if (this.barView) this.barView.updateBar();
         if (this.barView) this.barView.updateProgressBar();
         if (this.thumbView) this.thumbView.update();
-        if (this.stepsInfoView) this.stepsInfoView.updateVertical();
+        if (this.scaleView) this.scaleView.updateVertical();
         break;
       case 'UPDATE_IS-RESPONSIVE':
         if (this.windowListeners) {
@@ -303,18 +303,18 @@ class View extends Observer implements IView {
         }
         break;
       case 'UPDATE_HAS-SCALE':
-        if (this.stepsInfoView) {
-          this.stepsInfoView.remove();
+        if (this.scaleView) {
+          this.scaleView.remove();
           if (this.viewModel.getHasScale()) {
-            this.stepsInfoView.create();
+            this.scaleView.create();
           }
         }
         break;
       case 'UPDATE_SCALE-VALUE':
-        if (this.stepsInfoView) {
+        if (this.scaleView) {
           if (this.viewModel.getHasScale()) {
-            this.stepsInfoView.remove();
-            this.stepsInfoView.create();
+            this.scaleView.remove();
+            this.scaleView.create();
           }
         }
         break;
@@ -338,11 +338,11 @@ class View extends Observer implements IView {
         break;
       case 'UPDATE_IS-SCALE-CLICKABLE':
         if (this.viewModel.getHasScale()) {
-          if (this.stepsInfoView) {
+          if (this.scaleView) {
             if (this.viewModel.getIsScaleClickable()) {
-              this.stepsInfoView.addInteractivity();
+              this.scaleView.addInteractivity();
             } else {
-              this.stepsInfoView.removeInteractivity();
+              this.scaleView.removeInteractivity();
             }
           }
         }

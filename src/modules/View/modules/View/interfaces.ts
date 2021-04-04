@@ -4,7 +4,7 @@ import { IObserver, SubjectAction } from '../../../../ObserverAndSubject/interfa
 import { IViewModel } from '../ViewModel/interfacesAndTypes';
 import IBarView from '../SubViews/BarView/interface';
 import ISliderContainerView from '../SubViews/SliderContainerView/interface';
-import IStepsInfoView from '../SubViews/StepsInfoView/interface';
+import IScaleView from '../SubViews/ScaleView/interface';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
 import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
@@ -12,12 +12,12 @@ import { ModelProps } from '../../../Model/interfacesAndTypes';
 
 
 type ElemName = 'parent' | 'slider' | 'bar' | 'progressBar'
-  | 'thumb' | 'tooltip' | 'stepsInfo' | 'valueInfo'
+  | 'thumb' | 'tooltip' | 'scale' | 'valueInfo'
 
 type Views = {
   bar?: IBarView
   sliderContainer?: ISliderContainerView
-  stepsInfo?: IStepsInfoView
+  scale?: IScaleView
   thumb?: IThumbView
   tooltip?: ITooltipView
   valueInfo?: IValueInfoView

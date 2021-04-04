@@ -1,26 +1,25 @@
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
-import IStepsInfoView from './interface';
+import IScaleView from './interface';
 import { ModelProps } from '../../../../Model/interfacesAndTypes';
 import IView from '../../View/interfaces';
 
 
-class StepsInfoView implements IStepsInfoView {
+class ScaleView implements IScaleView {
   private readonly viewModel: IViewModelGetMethods
   private readonly mainView: IView
   private readonly target: HTMLElement
-  private stepsInfo: HTMLElement | undefined
+  private scale: HTMLElement | undefined
 
   constructor(target: HTMLElement, viewModel: IViewModelGetMethods, mainView: IView) {
     this.target = target;
     this.viewModel = viewModel;
     this.mainView = mainView;
-    this.stepsInfo = undefined;
+    this.scale = undefined;
 
     this.handleStepElemMouseDown = this.handleStepElemMouseDown.bind(this);
   }
 
-  // Создает шкалу значений в зависимости от текущих настроек stepsInfo.
-  // Если stepsInfoSettings заданы как false, то вызывает у view метод changeStepsInfoSettings
+  // Создает шкалу значений в зависимости от scaleValue.
   create(): HTMLElement | undefined {
     const modelProps: ModelProps | undefined = this.viewModel.getModelProps();
 
@@ -28,20 +27,20 @@ class StepsInfoView implements IStepsInfoView {
       if (modelProps.min !== undefined && modelProps.max !== undefined) {
         const length = this.viewModel.getLengthInPx();
         if (length) {
-          const stepsInfo = document.createElement('div');
-          this.target.appendChild(stepsInfo);
+          const scale = document.createElement('div');
+          this.target.appendChild(scale);
 
-          const { stepsInfoClass } = this.viewModel.getClasses();
-          if (Array.isArray(stepsInfoClass)) {
-            stepsInfo.classList.add(...stepsInfoClass);
+          const { scaleClass } = this.viewModel.getClasses();
+          if (Array.isArray(scaleClass)) {
+            scale.classList.add(...scaleClass);
           } else {
-            stepsInfo.classList.add(stepsInfoClass);
+            scale.classList.add(scaleClass);
           }
 
           if (this.viewModel.getIsVertical()) {
-            stepsInfo.style.height = `${length}px`;
+            scale.style.height = `${length}px`;
           } else {
-            stepsInfo.style.width = `${length}px`;
+            scale.style.width = `${length}px`;
           }
 
           let steps: Array<number | string> = [];
@@ -65,7 +64,7 @@ class StepsInfoView implements IStepsInfoView {
             const position = (length / (steps.length - 1)) * i;
             stepElem.innerText = `${steps[i]}`;
             stepElem.style.position = 'absolute';
-            stepsInfo.appendChild(stepElem);
+            scale.appendChild(stepElem);
             if (this.viewModel.getIsVertical()) {
               stepElem.style.top = `${position - stepElem.offsetHeight / 2}px`;
             } else {
@@ -73,32 +72,32 @@ class StepsInfoView implements IStepsInfoView {
             }
           }
 
-          this.stepsInfo = stepsInfo;
+          this.scale = scale;
 
           if (this.viewModel.getIsScaleClickable()) {
             this.addInteractivity();
           }
 
-          return stepsInfo;
+          return scale;
         }
       }
     }
     return undefined;
   }
 
-  // Удаляет stepsInfo
+  // Удаляет scale
   remove() {
-    if (this.stepsInfo) {
-      this.stepsInfo.remove();
-      this.stepsInfo = undefined;
+    if (this.scale) {
+      this.scale.remove();
+      this.scale = undefined;
     }
   }
 
   // Обновляет положение элементов шкалы значений
   update() {
     const length = this.viewModel.getLengthInPx();
-    if (this.stepsInfo && length) {
-      const stepElems = Array.from(this.stepsInfo.children) as HTMLElement[];
+    if (this.scale && length) {
+      const stepElems = Array.from(this.scale.children) as HTMLElement[];
 
       for (let i = 0; i < stepElems.length; i += 1) {
         const position = (length / (stepElems.length - 1)) * i;
@@ -112,16 +111,16 @@ class StepsInfoView implements IStepsInfoView {
     }
   }
 
-  // Возвращает элемент stepsInfo
+  // Возвращает элемент scale
   get(): HTMLElement | undefined {
-    return this.stepsInfo;
+    return this.scale;
   }
 
   // Добавляет stepElemOnDown при клике на элементы шкалы значений и вызывает у view
   // changeIsScaleClickable(true)
   addInteractivity() {
-    if (this.stepsInfo) {
-      const stepElems = Array.from(this.stepsInfo.children) as HTMLElement[];
+    if (this.scale) {
+      const stepElems = Array.from(this.scale.children) as HTMLElement[];
       for (let i = 0; i < stepElems.length; i += 1) {
         stepElems[i].addEventListener('mousedown', this.handleStepElemMouseDown);
       }
@@ -132,8 +131,8 @@ class StepsInfoView implements IStepsInfoView {
   }
   // Убирает слушатель клика у элементов шкалы значений и обращается к viewModel
   removeInteractivity() {
-    if (this.stepsInfo) {
-      const stepElems = Array.from(this.stepsInfo.children) as HTMLElement[];
+    if (this.scale) {
+      const stepElems = Array.from(this.scale.children) as HTMLElement[];
       for (let i = 0; i < stepElems.length; i += 1) {
         stepElems[i].removeEventListener('mousedown', this.handleStepElemMouseDown);
       }
@@ -193,4 +192,4 @@ class StepsInfoView implements IStepsInfoView {
   }
 }
 
-export default StepsInfoView;
+export default ScaleView;

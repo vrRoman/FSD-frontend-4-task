@@ -26,7 +26,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   thumbClass: ['slider__thumb', 'slider__thumb_some-class'],
   activeThumbClass: ['slider__thumb_active', 'slider__thumb_active_some-class'],
   tooltipClass: ['slider__tooltip', 'slider__tooltip_some-class'],
-  stepsInfoClass: ['slider__steps-info', 'slider__steps-info_some-class'],
+  scaleClass: ['slider__steps-info', 'slider__steps-info_some-class'],
   valueInfoClass: ['slider__value-info', 'slider__value-info_some-class'],
 };
 
@@ -149,10 +149,10 @@ describe('View with different options and get slider elements methods', () => {
     console.log('Tooltip array: ', view.getElem('tooltip'));
     expect(Array.isArray(view.getElem('tooltip'))).toBe(true);
   });
-  it('getStepsInfo when options.stepsInfo=false and true', () => {
+  it('getscale when options.scale=false and true', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
     let presenter = new Presenter(model, view, {});
-    expect(view.getElem('stepsInfo')).toBe(undefined);
+    expect(view.getElem('scale')).toBe(undefined);
 
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
@@ -160,8 +160,8 @@ describe('View with different options and get slider elements methods', () => {
     };
     view = new View(viewOptions, document.body);
     presenter = new Presenter(model, view, {});
-    console.log('StepsInfo: ', view.getElem('stepsInfo'));
-    expect(view.getElem('stepsInfo')).toBeDefined();
+    console.log('scale: ', view.getElem('scale'));
+    expect(view.getElem('scale')).toBeDefined();
   });
   it('getValueInfo when options.hasValueInfo=false and true', () => {
     let view = new View(defaultViewOptionsWithClass, document.body);
@@ -282,7 +282,7 @@ describe('View methods', () => {
   });
 
 
-  it('add stepsInfo interactivity', () => {
+  it('add scale interactivity', () => {
     view = new View({
       ...defaultViewOptionsWithClass,
       hasScale: true,
@@ -292,16 +292,16 @@ describe('View methods', () => {
       isScaleClickable: true,
     });
     // console.log для проверки в браузере
-    console.log('Added stepsInfo interactivity: ', view.getElem('slider'));
+    console.log('Added scale interactivity: ', view.getElem('slider'));
     expect(view.getViewModel().getIsScaleClickable()).toBe(true);
   });
 
-  it('remove stepsInfo interactivity', () => {
+  it('remove scale interactivity', () => {
     view.changeOptions({
       hasScale: true,
       isScaleClickable: false,
     });
-    console.log('Removed stepsInfo interactivity: ', view.getElem('slider'));
+    console.log('Removed scale interactivity: ', view.getElem('slider'));
     expect(view.getViewModel().getIsScaleClickable()).toBe(false);
   });
 
@@ -465,12 +465,12 @@ describe('View methods', () => {
     expect(view.getElem('tooltip')).toBe(undefined);
     console.log('Removed tooltip isRange=true: ', view.getElem('slider'));
   });
-  it('create/remove stepsInfo', () => {
+  it('create/remove scale', () => {
     view.changeOptions({
       hasScale: true,
     });
-    expect(view.getElem('stepsInfo')).toBeDefined();
-    console.log('Created stepsInfo: ', view.getElem('slider'));
+    expect(view.getElem('scale')).toBeDefined();
+    console.log('Created scale: ', view.getElem('slider'));
 
     view = new View({
       ...defaultViewOptionsWithClass,
@@ -480,8 +480,8 @@ describe('View methods', () => {
     view.changeOptions({
       hasScale: false,
     });
-    expect(view.getElem('stepsInfo')).toBe(undefined);
-    console.log('Removed stepsInfo: ', view.getElem('slider'));
+    expect(view.getElem('scale')).toBe(undefined);
+    console.log('Removed scale: ', view.getElem('slider'));
   });
   it('create/remove valueInfo', () => {
     view.changeOptions({
