@@ -139,7 +139,7 @@ class Model extends ObserverAndSubject implements IModel {
     this.data.stepSize = newStepSize;
     this.checkAndFixStepSize();
     this.notify({
-      type: 'UPDATE_STEPSIZE',
+      type: 'UPDATE_STEP-SIZE',
       updatedProps: {
         stepSize: this.getStepSize(),
       },

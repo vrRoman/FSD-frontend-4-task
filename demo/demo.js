@@ -58,7 +58,7 @@ class SliderControlPanel {
           }
         });
         break;
-      case 'UPDATE_STEPSIZE':
+      case 'UPDATE_STEP-SIZE':
         $stepSize.val(Number(this.$slider.slider('model').getStepSize()));
         break;
       default:

@@ -95,7 +95,7 @@ npm run lint
 Управляет данными слайдера(работа без пользовательского интерфейса). 
 При изменении значений вызывает у всех подписчиков метод update 
 с входящим параметром action. В action.type может храниться: 'UPDATE_VALUE' 
-| 'UPDATE_IS-RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEPSIZE'.
+| 'UPDATE_IS-RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEP-SIZE'.
 #### View
 Имеет свою внутреннюю структуру: ViewModel, SubViews, View. Внутренний View
  является "точкой входа" в этот модуль, управляет и предоставляет данные SubViews и ViewModel,
@@ -104,7 +104,7 @@ npm run lint
  который предоставляет View. ViewModel
  управляет данными отображения. При изменении данных, уведомляет подписчиков. В action.type ViewModel'а
  может храниться 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_IS-RESPONSIVE' | 'UPDATE_HAS-TOOLTIP'
- | 'UPDATE_HAS-SCALE' | 'UPDATE_SCALE-VALUE' | 'UPDATE_HAS-VALUEINFO' | 'UPDATE_USEKEYBOARD'
+ | 'UPDATE_HAS-SCALE' | 'UPDATE_SCALE-VALUE' | 'UPDATE_HAS-VALUE-INFO' | 'UPDATE_USE-KEYBOARD'
  | 'UPDATE_IS-SCALE-CLICKABLE'. 
 #### Presenter
 Реализует взаимодействие отображения и модели. Подписывается на model. 

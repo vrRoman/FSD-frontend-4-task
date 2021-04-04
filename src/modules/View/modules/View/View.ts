@@ -223,7 +223,7 @@ class View extends Observer implements IView {
         if (this.tooltipView) this.tooltipView.update();
         break;
 
-      case 'UPDATE_STEPSIZE':
+      case 'UPDATE_STEP-SIZE':
         if (action.updatedProps) {
           this.setModelProps({
             stepSize: action.updatedProps.stepSize,
@@ -318,7 +318,7 @@ class View extends Observer implements IView {
           }
         }
         break;
-      case 'UPDATE_HAS-VALUEINFO':
+      case 'UPDATE_HAS-VALUE-INFO':
         if (this.valueInfoView) {
           if (this.viewModel.getHasValueInfo()) {
             this.valueInfoView.remove();
@@ -328,7 +328,7 @@ class View extends Observer implements IView {
           }
         }
         break;
-      case 'UPDATE_USEKEYBOARD':
+      case 'UPDATE_USE-KEYBOARD':
         if (this.windowListeners) {
           this.windowListeners.removeKeyboardListener();
           if (this.viewModel.getUseKeyboard()) {

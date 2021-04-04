@@ -66,7 +66,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   setHasValueInfo(newHasValueInfo: boolean) {
     this.data.hasValueInfo = newHasValueInfo;
     this.notify({
-      type: 'UPDATE_HAS-VALUEINFO',
+      type: 'UPDATE_HAS-VALUE-INFO',
     });
   }
   setIsResponsive(newIsResponsive: boolean) {
@@ -78,7 +78,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   setUseKeyboard(newUseKeyboard: boolean) {
     this.data.useKeyboard = newUseKeyboard;
     this.notify({
-      type: 'UPDATE_USEKEYBOARD',
+      type: 'UPDATE_USE-KEYBOARD',
     });
   }
   setIsScaleClickable(newIsScaleClickable: boolean) {
