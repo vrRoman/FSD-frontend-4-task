@@ -157,7 +157,9 @@ class SliderControlPanel {
           $value2.val($slider.slider('value')[1]);
         }
       } else {
-        if ($value1.val() && !Number.isNaN(Number($value1.val()))) {
+        const isValCorrect = $value1.val() && !Number.isNaN(Number($value1.val()));
+
+        if (isValCorrect) {
           $slider.slider('changeOptions', {
             value: Number($value1.val()),
           });
@@ -178,7 +180,9 @@ class SliderControlPanel {
       const $minOrMax = $(`.js-${this.sliderName}-${name.toLowerCase()}`);
       $minOrMax.val(Number($slider.slider('model')[`get${name === 'min' ? 'Min' : 'Max'}`]()));
       function onFocusoutMinMax() {
-        if ($(this).val() && !Number.isNaN(Number($(this).val()))) {
+        const isValCorrect = $(this).val() && !Number.isNaN(Number($(this).val()));
+
+        if (isValCorrect) {
           $slider.slider('changeOptions', {
             [name]: Number($(this).val()),
           });
@@ -202,7 +206,9 @@ class SliderControlPanel {
     const { $slider } = this;
     $stepSize.val(Number($slider.slider('model').getStepSize()));
     function onFocusoutStepSize() {
-      if ($(this).val() && !Number.isNaN(Number($(this).val()))) {
+      const isValCorrect = $(this).val() && !Number.isNaN(Number($(this).val()));
+
+      if (isValCorrect) {
         $slider.slider('changeOptions', {
           stepSize: Number($(this).val()),
         });
