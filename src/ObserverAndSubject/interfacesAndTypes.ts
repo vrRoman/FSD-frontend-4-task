@@ -21,7 +21,6 @@ type SubjectAction = {
 interface ISubject {
   subscribe(observer: Object): void
   unsubscribe(observer: Object): void
-  notify(action: SubjectAction): void
 }
 
 interface IObserver {

@@ -24,22 +24,9 @@ class Presenter extends Observer implements IPresenter {
     this._view = view;
     this.onChange = presenterOptions.onChange;
 
-    this.provideInfoToView();
+    this._provideInfoToView();
 
     this._view.drawSlider();
-  }
-
-  // Передает во View modelProps и Presenter
-  provideInfoToView() {
-    this._view.setModelProps({
-      value: this._model.getValue(),
-      min: this._model.getMin(),
-      max: this._model.getMax(),
-      isRange: this._model.getIsRange(),
-      stepSize: this._model.getStepSize(),
-    });
-
-    this._view.setPresenter(this);
   }
 
   onThumbMove(numOfSteps: number = 1, thumbNumber: 0 | 1 = 1) {
@@ -94,6 +81,19 @@ class Presenter extends Observer implements IPresenter {
         this.onChange = newPresenterOptions.onChange;
       }
     }
+  }
+
+  // Передает во View modelProps и Presenter
+  private _provideInfoToView() {
+    this._view.setModelProps({
+      value: this._model.getValue(),
+      min: this._model.getMin(),
+      max: this._model.getMax(),
+      isRange: this._model.getIsRange(),
+      stepSize: this._model.getStepSize(),
+    });
+
+    this._view.setPresenter(this);
   }
 }
 

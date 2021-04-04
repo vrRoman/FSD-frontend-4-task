@@ -142,6 +142,14 @@ class ScaleView implements IScaleView {
     }
   }
 
+  // Меняет плоскость шкалы значений
+  updateVertical() {
+    if (this.viewModel.getHasScale()) {
+      this.remove();
+      this.create();
+    }
+  }
+
   // При клике на элементы шкалы значений вызывает moveActiveThumb и
   // убирает активный ползунок
   private handleStepElemMouseDown(evt: MouseEvent): void {
@@ -180,14 +188,6 @@ class ScaleView implements IScaleView {
           this.mainView.removeActiveThumb();
         }
       }
-    }
-  }
-
-  // Меняет плоскость шкалы значений
-  updateVertical() {
-    if (this.viewModel.getHasScale()) {
-      this.remove();
-      this.create();
     }
   }
 }

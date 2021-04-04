@@ -17,7 +17,7 @@ class Subject implements ISubject {
     this.observers.filter((obs) => obs !== observer);
   }
   // Вызывает у всех подписчиков метод update
-  notify(action: SubjectAction) {
+  protected notify(action: SubjectAction) {
     this.observers.forEach((observer) => {
       observer.update(action);
     });

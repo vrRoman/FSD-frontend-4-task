@@ -221,6 +221,21 @@ class ThumbView implements IThumbView {
     }
   }
 
+  // Добавляет слушатель thumb onMouseDown к ползунку(ам)
+  addListener() {
+    if (Array.isArray(this.thumb)) {
+      for (let i = 0; i <= 1; i += 1) {
+        this.thumb[i].addEventListener('mousedown', this.handleThumbMouseDown);
+        this.thumb[i].addEventListener('touchstart', this.handleThumbMouseDown);
+      }
+    } else {
+      if (this.thumb) {
+        this.thumb.addEventListener('mousedown', this.handleThumbMouseDown);
+        this.thumb.addEventListener('touchstart', this.handleThumbMouseDown);
+      }
+    }
+  }
+
   // При нажатии на ползунок убирает z-index предыдущего активного ползунка,
   // вызывает this.setActiveThumb, обращается к mainView для изменения clientX/Y, добавляет
   // обработчики handleThumbMouseMove, handleThumbMouseUp и убирает слушатель
@@ -325,21 +340,6 @@ class ThumbView implements IThumbView {
             ]);
           }
         }
-      }
-    }
-  }
-
-  // Добавляет слушатель thumb onMouseDown к ползунку(ам)
-  addListener() {
-    if (Array.isArray(this.thumb)) {
-      for (let i = 0; i <= 1; i += 1) {
-        this.thumb[i].addEventListener('mousedown', this.handleThumbMouseDown);
-        this.thumb[i].addEventListener('touchstart', this.handleThumbMouseDown);
-      }
-    } else {
-      if (this.thumb) {
-        this.thumb.addEventListener('mousedown', this.handleThumbMouseDown);
-        this.thumb.addEventListener('touchstart', this.handleThumbMouseDown);
       }
     }
   }
