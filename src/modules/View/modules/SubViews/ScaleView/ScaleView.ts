@@ -2,6 +2,7 @@ import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IScaleView from './interface';
 import { ModelProps } from '../../../../Model/interfacesAndTypes';
 import IView from '../../View/interfaces';
+import areNumbersDefined from '../../../../../utils/areNumbersDefined';
 
 
 class ScaleView implements IScaleView {
@@ -24,7 +25,9 @@ class ScaleView implements IScaleView {
     const modelProps: ModelProps | undefined = this.viewModel.getModelProps();
 
     if (modelProps) {
-      if (modelProps.min !== undefined && modelProps.max !== undefined) {
+      const minAndMax = [modelProps.min, modelProps.max];
+
+      if (areNumbersDefined(minAndMax)) {
         const length = this.viewModel.getLengthInPx();
         if (length) {
           const scale = document.createElement('div');
@@ -49,11 +52,11 @@ class ScaleView implements IScaleView {
           if (Array.isArray(scaleValue)) {
             steps = scaleValue;
           } else {
-            const maxDiapason = modelProps.max - modelProps.min;
+            const maxDiapason = minAndMax[1] - minAndMax[0];
             for (let i = 0; i < scaleValue; i += 1) {
               steps.push(
                 Number(
-                  (modelProps.min + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
+                  (minAndMax[0] + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
                 ),
               );
             }

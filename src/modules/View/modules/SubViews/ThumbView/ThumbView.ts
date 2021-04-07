@@ -1,6 +1,7 @@
 import { IThumbView, Thumb } from './interfaceAndTypes';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IView from '../../View/interfaces';
+import areNumbersDefined from '../../../../../utils/areNumbersDefined';
 
 
 class ThumbView implements IThumbView {
@@ -94,27 +95,37 @@ class ThumbView implements IThumbView {
 
   // Обновляет положение ползунков
   update() {
-    const valuePosition = this.viewModel.getValuePosition();
-
     if (this.thumb) {
-      if (typeof valuePosition === 'number' && !Array.isArray(this.thumb)) {
-        if (this.viewModel.getIsVertical()) {
-          this.thumb.style.top = `${valuePosition - this.thumb.offsetHeight / 2}px`;
-          this.thumb.style.left = '';
-        } else {
-          this.thumb.style.left = `${valuePosition - this.thumb.offsetWidth / 2}px`;
-          this.thumb.style.top = '';
-        }
-      } else if (Array.isArray(valuePosition) && Array.isArray(this.thumb)) {
-        for (let i = 0; i <= 1; i += 1) {
-          if (this.viewModel.getIsVertical()) {
-            this.thumb[i].style.top = `${valuePosition[i] - this.thumb[i].offsetHeight / 2}px`;
-            this.thumb[i].style.left = '';
+      const valuePosition = this.viewModel.getValuePosition();
+      let valPos: number[];
+      let thumb: HTMLElement[];
+
+      if (valuePosition !== undefined) {
+        if (typeof valuePosition === 'number') {
+          if (!Array.isArray(this.thumb)) {
+            valPos = [valuePosition];
+            thumb = [this.thumb];
           } else {
-            this.thumb[i].style.left = `${valuePosition[i] - this.thumb[i].offsetWidth / 2}px`;
-            this.thumb[i].style.top = '';
+            throw new Error('valuePosition is number, but thumb is array.');
+          }
+        } else {
+          if (Array.isArray(this.thumb)) {
+            valPos = valuePosition;
+            thumb = this.thumb;
+          } else {
+            throw new Error('valuePosition is array, but thumb is not array.');
           }
         }
+
+        thumb.forEach((_, index) => {
+          if (this.viewModel.getIsVertical()) {
+            thumb[index].style.top = `${valPos[index] - thumb[index].offsetHeight / 2}px`;
+            thumb[index].style.left = '';
+          } else {
+            thumb[index].style.left = `${valPos[index] - thumb[index].offsetWidth / 2}px`;
+            thumb[index].style.top = '';
+          }
+        });
       }
     }
   }
@@ -171,11 +182,12 @@ class ThumbView implements IThumbView {
 
   // Перемещает ползунок на numOfSteps шагов
   moveActiveThumb(numOfSteps: number = 1) {
-    const stepLength = this.viewModel.getStepLength();
-    const length = this.viewModel.getLengthInPx();
-    const activeThumb = this.viewModel.getActiveThumb();
+    const stepLengthAndLength = [this.viewModel.getStepLength(), this.viewModel.getLengthInPx()];
 
-    if (stepLength && length) {
+    if (areNumbersDefined(stepLengthAndLength)) {
+      const [stepLength, length] = stepLengthAndLength;
+      const activeThumb = this.viewModel.getActiveThumb();
+
       if (activeThumb) {
         let isActiveThumbFirst: boolean = false;
         if (Array.isArray(this.thumb)) {

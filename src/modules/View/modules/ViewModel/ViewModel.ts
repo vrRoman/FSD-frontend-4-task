@@ -3,6 +3,7 @@ import Subject from '../../../../ObserverAndSubject/Subject';
 import {
   IViewModel, IViewModelData, IViewModelGetMethods, ViewClasses,
 } from './interfacesAndTypes';
+import isModelPropsValuesDefined from '../../../../utils/isModelPropsValuesDefined';
 
 
 class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
@@ -140,23 +141,21 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getValuePosition(): number | [number, number] | undefined {
     let valuePosition: number | [number, number] | undefined;
 
-    if (this.data.modelProps) {
-      if (this.data.modelProps.min !== undefined && this.data.modelProps.max !== undefined) {
-        const maxDiapason: number = this.data.modelProps.max - this.data.modelProps.min;
-        const { value } = this.data.modelProps;
+    if (isModelPropsValuesDefined(this.data.modelProps)) {
+      const maxDiapason: number = this.data.modelProps.max - this.data.modelProps.min;
+      const { value } = this.data.modelProps;
 
-        if (this.data.lengthInPx !== undefined) {
-          if (typeof value === 'number') {
-            valuePosition = (this.data.lengthInPx / maxDiapason)
-              * (value - this.data.modelProps.min);
-          } else if (Array.isArray(value)) {
-            valuePosition = [
-              (this.data.lengthInPx / maxDiapason)
-              * (value[0] - this.data.modelProps.min),
-              (this.data.lengthInPx / maxDiapason)
-              * (value[1] - this.data.modelProps.min),
-            ];
-          }
+      if (this.data.lengthInPx !== undefined) {
+        if (typeof value === 'number') {
+          valuePosition = (this.data.lengthInPx / maxDiapason)
+            * (value - this.data.modelProps.min);
+        } else if (Array.isArray(value)) {
+          valuePosition = [
+            (this.data.lengthInPx / maxDiapason)
+            * (value[0] - this.data.modelProps.min),
+            (this.data.lengthInPx / maxDiapason)
+            * (value[1] - this.data.modelProps.min),
+          ];
         }
       }
     }
@@ -165,13 +164,11 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   // Получить длину шага
   getStepLength(): number | undefined {
     const length = this.getLengthInPx();
-    if (length && this.data.modelProps) {
-      if (this.data.modelProps.stepSize !== undefined) {
-        if (this.data.modelProps.min !== undefined && this.data.modelProps.max !== undefined) {
-          const numOfSteps = (this.data.modelProps.max - this.data.modelProps.min)
-            / this.data.modelProps.stepSize;
-          return length / numOfSteps;
-        }
+    if (length !== undefined) {
+      if (isModelPropsValuesDefined(this.data.modelProps)) {
+        const numOfSteps = (this.data.modelProps.max - this.data.modelProps.min)
+          / this.data.modelProps.stepSize;
+        return length / numOfSteps;
       }
     }
     return undefined;

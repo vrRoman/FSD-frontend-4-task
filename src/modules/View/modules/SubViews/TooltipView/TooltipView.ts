@@ -1,6 +1,7 @@
 import { ITooltipView, Tooltip } from './interfaceAndTypes';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import { Thumb } from '../ThumbView/interfaceAndTypes';
+import isModelPropsValuesDefined from '../../../../../utils/isModelPropsValuesDefined';
 
 class TooltipView implements ITooltipView {
   private readonly target: Thumb
@@ -17,7 +18,7 @@ class TooltipView implements ITooltipView {
   create(): Tooltip | undefined {
     const modelProps = this.viewModel.getModelProps();
 
-    if (modelProps && modelProps.value !== undefined) {
+    if (isModelPropsValuesDefined(modelProps)) {
       const { value } = modelProps;
       const { tooltipClass, tooltipValueClass } = this.viewModel.getClasses();
 
@@ -80,7 +81,7 @@ class TooltipView implements ITooltipView {
   update() {
     const modelProps = this.viewModel.getModelProps();
 
-    if (modelProps && modelProps.value !== undefined) {
+    if (isModelPropsValuesDefined(modelProps)) {
       const { value } = modelProps;
       if (this.tooltip) {
         const { tooltipValueClass } = this.viewModel.getClasses();

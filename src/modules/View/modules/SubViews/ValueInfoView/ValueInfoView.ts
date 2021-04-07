@@ -1,5 +1,6 @@
 import IValueInfoView from './interface';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
+import isModelPropsValuesDefined from '../../../../../utils/isModelPropsValuesDefined';
 
 
 class ValueInfoView implements IValueInfoView {
@@ -17,7 +18,7 @@ class ValueInfoView implements IValueInfoView {
   // указывается просто model.value, иначе записывается в виде value[0] - value[1]
   create(): HTMLElement | undefined {
     const modelProps = this.viewModel.getModelProps();
-    if (modelProps && modelProps.value !== undefined) {
+    if (isModelPropsValuesDefined(modelProps)) {
       const valueInfo = document.createElement('div');
       const { value } = modelProps;
       const { valueInfoClass } = this.viewModel.getClasses();
@@ -53,13 +54,12 @@ class ValueInfoView implements IValueInfoView {
   // Обновляет значение в valueInfo
   update() {
     const modelProps = this.viewModel.getModelProps();
-    if (modelProps) {
-      const { value } = modelProps;
-      if (this.valueInfo && value) {
-        if (typeof value === 'number') {
-          this.valueInfo.innerText = `${value}`;
+    if (isModelPropsValuesDefined(modelProps)) {
+      if (this.valueInfo) {
+        if (typeof modelProps.value === 'number') {
+          this.valueInfo.innerText = `${modelProps.value}`;
         } else {
-          this.valueInfo.innerText = `${value[0]} - ${value[1]}`;
+          this.valueInfo.innerText = `${modelProps.value[0]} - ${modelProps.value[1]}`;
         }
       }
     }

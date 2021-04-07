@@ -86,7 +86,7 @@ class BarView implements IBarView {
   updateProgressBar() {
     if (this.progressBar) {
       const valuePosition = this.viewModel.getValuePosition();
-      if (valuePosition || valuePosition === 0) {
+      if (valuePosition !== undefined) {
         this.progressBar.style.width = '';
         this.progressBar.style.left = '';
         this.progressBar.style.height = '';

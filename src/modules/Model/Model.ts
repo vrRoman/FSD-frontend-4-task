@@ -198,12 +198,6 @@ class Model extends ObserverAndSubject implements IModel {
       [this.data.value] = this.data.value;
     }
 
-    if (typeof this.data.value !== 'number') {
-      if (this.data.value[0] > this.data.value[1]) {
-        this.data.value = [this.data.value[1], this.data.value[0]];
-      }
-    }
-
     if (typeof this.data.value === 'number') {
       if (this.data.value > this.data.max) {
         this.data.value = this.data.max;
@@ -211,6 +205,10 @@ class Model extends ObserverAndSubject implements IModel {
         this.data.value = this.data.min;
       }
     } else {
+      if (this.data.value[0] > this.data.value[1]) {
+        this.data.value = [this.data.value[1], this.data.value[0]];
+      }
+
       if (this.data.value[1] > this.data.max) {
         this.data.value[1] = this.data.max;
       } else if (this.data.value[1] < this.data.min) {
