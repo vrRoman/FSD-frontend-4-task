@@ -17,7 +17,7 @@ class ScaleView implements IScaleView {
     this.mainView = mainView;
     this.scale = undefined;
 
-    this.handleStepElemMouseDown = this.handleStepElemMouseDown.bind(this);
+    this._handleStepElemMouseDown = this._handleStepElemMouseDown.bind(this);
   }
 
   // Создает шкалу значений в зависимости от scaleValue.
@@ -125,7 +125,7 @@ class ScaleView implements IScaleView {
     if (this.scale) {
       const stepElems = Array.from(this.scale.children) as HTMLElement[];
       for (let i = 0; i < stepElems.length; i += 1) {
-        stepElems[i].addEventListener('mousedown', this.handleStepElemMouseDown);
+        stepElems[i].addEventListener('mousedown', this._handleStepElemMouseDown);
       }
       this.mainView.changeOptions({
         isScaleClickable: true,
@@ -137,7 +137,7 @@ class ScaleView implements IScaleView {
     if (this.scale) {
       const stepElems = Array.from(this.scale.children) as HTMLElement[];
       for (let i = 0; i < stepElems.length; i += 1) {
-        stepElems[i].removeEventListener('mousedown', this.handleStepElemMouseDown);
+        stepElems[i].removeEventListener('mousedown', this._handleStepElemMouseDown);
       }
       this.mainView.changeOptions({
         isScaleClickable: false,
@@ -155,7 +155,7 @@ class ScaleView implements IScaleView {
 
   // При клике на элементы шкалы значений вызывает moveActiveThumb и
   // убирает активный ползунок
-  private handleStepElemMouseDown(evt: MouseEvent): void {
+  private _handleStepElemMouseDown(evt: MouseEvent): void {
     evt.preventDefault();
     evt.stopPropagation();
 

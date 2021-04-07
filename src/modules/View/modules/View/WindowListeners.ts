@@ -16,33 +16,33 @@ class WindowListeners implements IWindowListeners {
     this.barView = views.bar;
     this.scaleView = views.scale;
 
-    this.handleWindowResize = this.handleWindowResize.bind(this);
-    this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
+    this._handleWindowResize = this._handleWindowResize.bind(this);
+    this._handleDocumentKeyDown = this._handleDocumentKeyDown.bind(this);
   }
 
   // Добавить обработчик onKeydown и useKeyboard = true
   addKeyboardListener(): void {
-    document.addEventListener('keydown', this.handleDocumentKeyDown);
+    document.addEventListener('keydown', this._handleDocumentKeyDown);
   }
 
   // Убирает слушатель клавиатуры и useKeyboard = false
   removeKeyboardListener() {
-    document.removeEventListener('keydown', this.handleDocumentKeyDown);
+    document.removeEventListener('keydown', this._handleDocumentKeyDown);
   }
 
   // Изменяет значение isResponsive, добавляет/убирает слушатели window resize
   // Возвращает новое значение isResponsive
   setIsResponsive(newIsResponsive: boolean): void {
     if (newIsResponsive) {
-      window.removeEventListener('resize', this.handleWindowResize);
-      window.addEventListener('resize', this.handleWindowResize);
+      window.removeEventListener('resize', this._handleWindowResize);
+      window.addEventListener('resize', this._handleWindowResize);
     } else {
-      window.removeEventListener('resize', this.handleWindowResize);
+      window.removeEventListener('resize', this._handleWindowResize);
     }
   }
 
   // При нажатии клавиш wasd и стрелок вызывается moveActiveThumb(1/-1)
-  private handleDocumentKeyDown(evt: KeyboardEvent): void {
+  private _handleDocumentKeyDown(evt: KeyboardEvent): void {
     const isThisNextKey = evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
       || evt.key === 'd' || evt.key === 's';
     const isThisPrevKey = evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
@@ -58,7 +58,7 @@ class WindowListeners implements IWindowListeners {
   }
 
   // Используется в слушателях window-resize
-  private handleWindowResize(): void {
+  private _handleWindowResize(): void {
     if (this.barView) {
       const bar = this.barView.getBar();
       if (bar) {
