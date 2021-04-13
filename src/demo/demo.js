@@ -1,3 +1,6 @@
+// import './demo.html';
+import './demo.css';
+
 class SliderControlPanel {
   constructor(options) {
     this.sliderName = options.sliderName;
