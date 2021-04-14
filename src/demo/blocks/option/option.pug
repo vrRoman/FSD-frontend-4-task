@@ -1,37 +1,35 @@
 mixin option(optionName, elemName, inputType)
-    -
-      const type = inputType
-          ? inputType
-          : 'checkbox'
+  -
+    const type = inputType
+        ? inputType
+        : 'checkbox'
 
-      let labelName;
-      let inputName;
-      let desc = '';
+    let labelName;
+    let inputName;
+    let desc = '';
 
-      if (typeof optionName === 'string') {
-        labelName = optionName;
-        inputName = optionName.toLowerCase();
-      } else {
-        labelName = optionName.label;
-        inputName = optionName.input;
-        if (!inputName) {
-          inputName = labelName.toLowerCase();
-        }
-        if (optionName.description) {
-          desc = `(${optionName.description})`;
-        }
+    if (typeof optionName === 'string') {
+      labelName = optionName;
+      inputName = optionName.toLowerCase();
+    } else {
+      labelName = optionName.label;
+      inputName = optionName.input;
+      if (!inputName) {
+        inputName = labelName.toLowerCase();
       }
+      if (optionName.description) {
+        desc = `(${optionName.description})`;
+      }
+    }
 
-      const id = elemName
-          ? `${elemName}-${inputName}`
-          : inputName;
+    const id = elemName
+        ? `${elemName}-${inputName}`
+        : inputName;
 
-    .option
-        label(for=id)
-            if (labelName)
-                span= `${labelName}${desc}`
-            input(
-                type=type
-                id=id
-                class=`js-${id}`
-            )
+  .option
+    label(for=id)
+      if (labelName)
+        span= `${labelName}${desc}`
+      input(type=type
+        id=id
+        class=`js-${id}`)
