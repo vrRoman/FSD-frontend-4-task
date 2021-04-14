@@ -1,4 +1,4 @@
-// import './demo.html';
+import './demo.pug';
 import './demo.css';
 
 class SliderControlPanel {

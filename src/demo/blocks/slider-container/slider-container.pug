@@ -1,0 +1,30 @@
+include ../slider-config/slider-config
+
+mixin slider-container(sliderName, heading, hasConfigOptionsDesc)
+    -
+      let hasScaleValueDesc = false;
+      if (hasConfigOptionsDesc !== undefined) {
+          hasScaleValueDesc = hasConfigOptionsDesc;
+      }
+
+      let title;
+      let desc;
+      if (heading) {
+        title = heading;
+        if (typeof heading !== 'string') {
+          title = heading.title;
+          desc = heading.description;
+        }
+      }
+
+    .slider-container
+        if (title)
+            h2.slider-container__title= title
+        if (desc)
+            span= desc
+
+        .slider-container__slider
+            div(class=`js-${sliderName}`)
+
+        .slider-container__config
+            +slider-config(sliderName, hasScaleValueDesc)

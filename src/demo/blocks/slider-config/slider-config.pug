@@ -1,0 +1,25 @@
+include ../option/option
+
+mixin slider-config(sliderName, hasScaleValueDesc)
+    .slider-config
+        +option('isRange', sliderName)
+        +option('hasTooltip', sliderName)
+        +option('hasScale', sliderName)
+        +option('hasValueInfo', sliderName)
+        +option('isVertical', sliderName)
+        +option('isResponsive', sliderName)
+        +option('isScaleClickable', sliderName)
+        +option('useKeyboard', sliderName)
+
+        div(class=`${sliderName ? `${sliderName} - value` : 'value'}`)
+            span value
+            +option('value1', sliderName, 'text')
+            +option('value2', sliderName, 'text')
+        +option('stepSize', sliderName, 'text')
+        +option('min', sliderName, 'text')
+        +option('max', sliderName, 'text')
+        +option('length', sliderName, 'text')
+        +option({
+          label: 'scaleValue',
+          description: hasScaleValueDesc ? 'если массив, вводить значения через запятую' : null,
+        }, sliderName, 'text')

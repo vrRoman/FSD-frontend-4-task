@@ -97,6 +97,10 @@ const demoConf = {
         test: /\.css/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.pug$/,
+        use: ['pug-loader'],
+      },
     ],
   },
 
@@ -108,7 +112,7 @@ const demoConf = {
     }),
 
     new HtmlWebpackPlugin({
-      template: './src/demo/demo.html',
+      template: './src/demo/demo.pug',
       filename: 'demo.html',
       inject: false,
       hash: true,
