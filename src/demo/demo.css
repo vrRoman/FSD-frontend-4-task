@@ -23,7 +23,7 @@ html {
   margin-bottom: 20px;
 }
 
-.slider-container:after {
+.slider-container::after {
   content: '';
   width: 90%;
   height: 2px;
