@@ -8,7 +8,7 @@
     "build:prod": "webpack --config webpack.prod.config.js",
     "start": "webpack-dev-server --config webpack.dev.config.js",
     "test": "karma start karma.conf.js",
-    "lint": "npx eslint ./"
+    "lint": "npx eslint \"**/*.ts\" ; npx eslint \"**/*.js\" ; npx stylelint \"**/*.scss\" ; npx pug-lint ./"
   },
   "repository": {
     "type": "git",
