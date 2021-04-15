@@ -21,7 +21,7 @@ mixin slider-container(sliderName, heading, hasConfigOptionsDesc)
     if (title)
       h2.slider-container__title= title
     if (desc)
-      span= desc
+      span.slider-container__desc= desc
 
     .slider-container__slider
       div(class=`js-${sliderName}`)

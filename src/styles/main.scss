@@ -5,8 +5,8 @@
 
   position: relative;
   color: $sl-main-text-color;
-  font-family: $sl-font-family;
   font-size: $sl-font-size;
+  font-family: $sl-font-family;
   line-height: 12px;
 
   &__bar {
@@ -14,8 +14,8 @@
   }
 
   &__progress-bar {
-    opacity: 0.5;
     background-color: $sl-main-color;
+    opacity: 0.5;
   }
 
   &__thumb {
@@ -23,9 +23,9 @@
     box-sizing: border-box;
     width: 10px;
     height: 10px;
-    cursor: pointer;
-    border-radius: 50%;
     background-color: $sl-main-color;
+    border-radius: 50%;
+    cursor: pointer;
   }
 
   &__thumb_active {

@@ -1,5 +1,5 @@
 import './demo.pug';
-import './demo.css';
+import './demo.scss';
 
 class SliderControlPanel {
   constructor(options) {

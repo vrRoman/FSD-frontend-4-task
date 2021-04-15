@@ -14,7 +14,7 @@ const sliderConf = {
   },
 
   entry: {
-    index: '@/slider.ts',
+    index: '@/index.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist/slider'),

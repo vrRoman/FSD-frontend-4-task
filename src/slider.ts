@@ -1,5 +1,3 @@
-import './styles/main.scss';
-
 import Model from './modules/Model/Model';
 import IModel, { Value } from './modules/Model/interfacesAndTypes';
 import View from './modules/View/modules/View/View';

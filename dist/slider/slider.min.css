@@ -1,0 +1,146 @@
+.slider-config {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 45%;
+}
+.slider-container {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+}
+.slider-container::after {
+  width: 90%;
+  height: 2px;
+  margin: 30px auto;
+  background-color: #e5ffff;
+  content: "";
+}
+.slider-container__title {
+  width: 100%;
+  text-align: center;
+}
+.slider-container__desc {
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.slider-container__slider {
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 100%;
+  box-sizing: border-box;
+  width: 50vw;
+  min-width: 300px;
+  height: 50vw;
+  padding: 50px;
+}
+html {
+  color: black;
+  background: white;
+  font-family: arial, sans-serif;
+  font-size: 18px;
+}
+
+.slider {
+  position: relative;
+  color: #151515;
+  font-size: 10px;
+  font-family: arial, sans-serif;
+  line-height: 12px;
+}
+.slider__bar {
+  background-color: #e5ffff;
+}
+.slider__progress-bar {
+  background-color: #a1e3ea;
+  opacity: 0.5;
+}
+.slider__thumb {
+  top: 0;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  background-color: #a1e3ea;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.slider__thumb_active {
+  border: 1px solid #8cc7cd;
+}
+.slider__tooltip {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.slider__tooltip-value {
+  position: absolute;
+  padding: 2px;
+  background-color: #e0f8f8;
+}
+.slider__scale {
+  z-index: -1;
+  color: #2a2a2a;
+}
+.slider__value-info {
+  position: absolute;
+}
+.slider:not(.slider_vertical) {
+  width: 100%;
+}
+.slider:not(.slider_vertical) .slider__bar {
+  height: 5px;
+}
+.slider:not(.slider_vertical) .slider__progress-bar {
+  height: 100%;
+}
+.slider:not(.slider_vertical) .slider__thumb {
+  top: -2.5px;
+}
+.slider:not(.slider_vertical) .slider__tooltip {
+  top: -20px;
+  justify-content: center;
+}
+.slider:not(.slider_vertical) .slider__thumb_active .slider__tooltip {
+  top: -21px;
+}
+.slider:not(.slider_vertical) .slider__scale {
+  height: 12px;
+  padding-top: 10px;
+}
+.slider:not(.slider_vertical) .slider__value-info {
+  top: -30px;
+  left: 0;
+}
+.slider_vertical {
+  height: 100%;
+}
+.slider_vertical .slider__bar {
+  width: 5px;
+}
+.slider_vertical .slider__progress-bar {
+  width: 100%;
+}
+.slider_vertical .slider__thumb {
+  left: -2.5px;
+}
+.slider_vertical .slider__tooltip {
+  right: -20px;
+  align-items: center;
+}
+.slider_vertical .slider__thumb_active .slider__tooltip {
+  right: -21px;
+}
+.slider_vertical .slider__scale {
+  width: 12px;
+  padding-left: 10px;
+}
+.slider_vertical .slider__value-info {
+  top: 0;
+  left: 40px;
+  width: 100px;
+}
+
+/*# sourceMappingURL=slider.min.css.map*/

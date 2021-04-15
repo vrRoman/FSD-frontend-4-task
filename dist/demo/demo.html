@@ -1,0 +1,139 @@
+Html Webpack Plugin:
+<pre>
+  Error: Child compilation failed:
+  Module build failed (from ./node_modules/pug-loader/index.js):
+  Error: Cannot find module 'pug'
+  Require stack:
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/pug-loader/index.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/loader-runner/lib/loadLoader.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/loader-runner/lib/LoaderRunner.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/NormalModule.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/NormalModuleFactory.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/Compiler.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/webpack.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/utils/validate-options.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/utils/convert-argv.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/cli.js
+  - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/bin/webpack.js
+  
+  - loader:925 Function.Module._resolveFilename
+    node:internal/modules/cjs/loader:925:15
+  
+  - v8-compile-cache.js:164 Function.resolve
+    [FSD-frontend-4-task]/[v8-compile-cache]/v8-compile-cache.js:164:23
+  
+  
+  - Error: Cannot find module 'pug'
+  
+  - Require stack:
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/pug-loader/index.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/loader-runner/lib/loadLoader.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/loader-runner/lib/LoaderRunner.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/NormalModule.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/NormalModuleFactory.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/Compiler.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/webpack.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/utils/validate-options.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/utils/convert-argv.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/cli.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/bin/webpack.js
+  
+  - ModuleBuildError: Module build failed (from ./node_modules/pug-loader/index.js):
+  
+  - Error: Cannot find module 'pug'
+  
+  - Require stack:
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/pug-loader/index.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/loader-runner/lib/loadLoader.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/loader-runner/lib/LoaderRunner.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/NormalModule.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/NormalModuleFactory.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/Compiler.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/lib/webpack.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/utils/validate-options.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/utils/convert-argv.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack-cli/bin/cli.js
+  
+  - - /home/roman/Desktop/FSD-frontend-4-task/node_modules/webpack/bin/webpack.js
+  
+  - loader:925 Function.Module._resolveFilename
+    node:internal/modules/cjs/loader:925:15
+  
+  - v8-compile-cache.js:164 Function.resolve
+    [FSD-frontend-4-task]/[v8-compile-cache]/v8-compile-cache.js:164:23
+  
+  - index.js:11 Object.module.exports
+    [FSD-frontend-4-task]/[pug-loader]/index.js:11:28
+  
+  - NormalModule.js:316 
+    [FSD-frontend-4-task]/[webpack]/lib/NormalModule.js:316:20
+  
+  - LoaderRunner.js:367 
+    [FSD-frontend-4-task]/[loader-runner]/lib/LoaderRunner.js:367:11
+  
+  - LoaderRunner.js:233 
+    [FSD-frontend-4-task]/[loader-runner]/lib/LoaderRunner.js:233:18
+  
+  - LoaderRunner.js:143 runSyncOrAsync
+    [FSD-frontend-4-task]/[loader-runner]/lib/LoaderRunner.js:143:3
+  
+  - LoaderRunner.js:232 iterateNormalLoaders
+    [FSD-frontend-4-task]/[loader-runner]/lib/LoaderRunner.js:232:2
+  
+  - LoaderRunner.js:205 Array.<anonymous>
+    [FSD-frontend-4-task]/[loader-runner]/lib/LoaderRunner.js:205:4
+  
+  - CachedInputFileSystem.js:55 Storage.finished
+    [FSD-frontend-4-task]/[enhanced-resolve]/lib/CachedInputFileSystem.js:55:16
+  
+  - CachedInputFileSystem.js:91 
+    [FSD-frontend-4-task]/[enhanced-resolve]/lib/CachedInputFileSystem.js:91:9
+  
+  - graceful-fs.js:123 
+    [FSD-frontend-4-task]/[graceful-fs]/graceful-fs.js:123:16
+  
+  - read_file_context:75 FSReqCallback.readFileAfterClose [as oncomplete]
+    node:internal/fs/read_file_context:75:3
+  
+  - child-compiler.js:131 
+    [FSD-frontend-4-task]/[html-webpack-plugin]/lib/child-compiler.js:131:18
+  
+  - Compiler.js:343 
+    [FSD-frontend-4-task]/[webpack]/lib/Compiler.js:343:11
+  
+  - Compiler.js:681 
+    [FSD-frontend-4-task]/[webpack]/lib/Compiler.js:681:15
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [FSD-frontend-4-task]/[tapable]/lib/Hook.js:154:20
+  
+  - Compiler.js:678 
+    [FSD-frontend-4-task]/[webpack]/lib/Compiler.js:678:31
+  
+  
+  - Hook.js:154 AsyncSeriesHook.lazyCompileHook
+    [FSD-frontend-4-task]/[tapable]/lib/Hook.js:154:20
+  
+</pre>
