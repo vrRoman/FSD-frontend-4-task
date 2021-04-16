@@ -26,7 +26,7 @@ mixin option(optionName, elemName, inputType)
         ? `${elemName}-${inputName}`
         : inputName;
 
-  .option
+  .option(data-name=labelName)
     label(for=id)
       if (labelName)
         span= `${labelName}${desc}`
