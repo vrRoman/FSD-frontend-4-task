@@ -101,6 +101,21 @@ const demoConf = {
         test: /\.pug$/,
         use: ['pug-loader'],
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: true,
+              reloadAll: true,
+            },
+          },
+          'css-loader',
+          'resolve-url-loader',
+          'sass-loader',
+        ],
+      },
     ],
   },
 
