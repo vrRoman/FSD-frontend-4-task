@@ -12,10 +12,13 @@ import { SliderOptions, SliderOptionsOptionalParams } from './options/options';
 declare global {
   // eslint-disable-next-line
   interface JQuery {
-    slider: (
-      options?: SliderOptionsOptionalParams | 'changeOptions',
-      newOptions?: any
-    ) => IModel | IView | IViewModel | IPresenter | Value | JQuery<HTMLElement>
+    slider(options?: SliderOptionsOptionalParams): JQuery
+    slider(action: 'changeOptions', newOptions: SliderOptionsOptionalParams): JQuery
+    slider(action: 'value'): Value
+    slider(action: 'model'): IModel
+    slider(action: 'view'): IView
+    slider(action: 'viewModel'): IViewModel
+    slider(action: 'presenter'): IPresenter
   }
 }
 
@@ -71,17 +74,23 @@ declare global {
         $(this).data('presenter', presenter);
       });
     }
-    if (options === 'changeOptions' && newOptions) {
+    if (options === 'changeOptions') {
       this.data('presenter').changeOptions(newOptions);
-    } else if (options === 'value') {
+      return this;
+    }
+    if (options === 'value') {
       return this.data('model').getValue();
-    } else if (options === 'model') {
+    }
+    if (options === 'model') {
       return this.data('model');
-    } else if (options === 'view') {
+    }
+    if (options === 'view') {
       return this.data('view');
-    } else if (options === 'viewModel') {
+    }
+    if (options === 'viewModel') {
       return this.data('viewModel');
-    } else if (options === 'presenter') {
+    }
+    if (options === 'presenter') {
       return this.data('presenter');
     }
     return this;
