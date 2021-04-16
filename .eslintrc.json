@@ -40,6 +40,9 @@
             }
         }
     },
+    "globals": {
+        "JQuery": "readonly"
+    },
     "overrides": [
         {
             "files": ["*conf.js"],
