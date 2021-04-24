@@ -3,6 +3,7 @@ import IModel, { Value } from './modules/Model/interfacesAndTypes';
 import View from './modules/View/modules/View/View';
 import IView from './modules/View/modules/View/interfaces';
 import { IViewModel } from './modules/View/modules/ViewModel/interfacesAndTypes';
+import { IObserver } from './ObserverAndSubject/interfacesAndTypes';
 import Presenter from './modules/Presenter/Presenter';
 import IPresenter from './modules/Presenter/interface';
 
@@ -14,6 +15,7 @@ declare global {
   interface JQuery {
     slider(options?: SliderOptionsOptionalParams): JQuery
     slider(action: 'changeOptions', newOptions: SliderOptionsOptionalParams): JQuery
+    slider(action: 'subscribe', observer: IObserver): JQuery
     slider(action: 'value'): Value
     slider(action: 'model'): IModel
     slider(action: 'view'): IView
@@ -44,10 +46,10 @@ declare global {
   };
 
   // eslint-disable-next-line no-param-reassign
-  $.fn.slider = function start(options?: SliderOptionsOptionalParams
-    | 'changeOptions' | 'value' | 'model' | 'view' | 'viewModel' | 'presenter',
-                               newOptions?: SliderOptionsOptionalParams) {
-    if (typeof options === 'object' || !options) {
+  $.fn.slider = function start(action?: SliderOptionsOptionalParams
+    | 'changeOptions' | 'subscribe' | 'value' | 'model' | 'view' | 'viewModel' | 'presenter',
+                               additionalInfo?: SliderOptionsOptionalParams | IObserver) {
+    if (typeof action === 'object' || !action) {
       if (this.data('slider')) {
         $.error('Slider has already been called for this element');
       }
@@ -55,7 +57,7 @@ declare global {
       return this.each(function init() {
         const settings = {
           ...defaultOptions,
-          ...options,
+          ...action,
         };
 
         const model: IModel = new Model(settings);
@@ -74,23 +76,29 @@ declare global {
         $(this).data('presenter', presenter);
       });
     }
-    if (options === 'changeOptions') {
-      this.data('presenter').changeOptions(newOptions);
+    if (action === 'changeOptions') {
+      this.data('presenter').changeOptions(additionalInfo);
       return this;
     }
-    if (options === 'value') {
+    if (action === 'subscribe') {
+      if (additionalInfo) {
+        $(this).data('model').subscribe(additionalInfo);
+        $(this).data('viewModel').subscribe(additionalInfo);
+      }
+    }
+    if (action === 'value') {
       return this.data('model').getValue();
     }
-    if (options === 'model') {
+    if (action === 'model') {
       return this.data('model');
     }
-    if (options === 'view') {
+    if (action === 'view') {
       return this.data('view');
     }
-    if (options === 'viewModel') {
+    if (action === 'viewModel') {
       return this.data('viewModel');
     }
-    if (options === 'presenter') {
+    if (action === 'presenter') {
       return this.data('presenter');
     }
     return this;
