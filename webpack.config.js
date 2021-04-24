@@ -3,9 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const sliderConf = {
-  mode: 'production',
-
+module.exports = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -14,15 +12,25 @@ const sliderConf = {
   },
 
   entry: {
-    index: '@/slider.ts',
+    index: '@/index.ts',
   },
   output: {
-    path: path.resolve(__dirname, 'dist/slider'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'slider.min.js',
   },
 
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
       {
         test: /\.ts$/,
         exclude: /node_modules/,
@@ -47,6 +55,10 @@ const sliderConf = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.pug$/,
+        use: ['pug-loader'],
+      },
     ],
   },
 
@@ -56,71 +68,21 @@ const sliderConf = {
     new MiniCssExtractPlugin({
       filename: 'slider.min.css',
     }),
-  ],
-
-  optimization: {
-    minimize: false,
-  },
-};
-
-const demoConf = {
-  mode: 'production',
-
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
-    extensions: ['.ts', '.js'],
-  },
-
-  entry: {
-    index: '@/demo/demo.js',
-  },
-  output: {
-    path: path.resolve(__dirname, 'dist/demo'),
-    filename: 'demo.js',
-  },
-
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
-      },
-      {
-        test: /\.css/,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-
-  plugins: [
-    new CleanWebpackPlugin(),
-
-    new MiniCssExtractPlugin({
-      filename: 'slider.css',
-    }),
 
     new HtmlWebpackPlugin({
-      template: './src/demo/demo.html',
+      template: './src/demo/demo.pug',
       filename: 'demo.html',
       inject: false,
       hash: true,
     }),
   ],
 
-  optimization: {
-    minimize: false,
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    open: true,
+    index: 'demo.html',
+    port: 9000,
+    hot: true,
   },
 };
-
-module.exports = [
-  demoConf,
-  sliderConf,
-];

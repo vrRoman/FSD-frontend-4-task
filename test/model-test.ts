@@ -4,7 +4,7 @@ import Presenter from '../src/modules/Presenter/Presenter';
 import IModel from '../src/modules/Model/interfacesAndTypes';
 import IView from '../src/modules/View/modules/View/interfaces';
 import IPresenter from '../src/modules/Presenter/interface';
-import { PresenterOptions } from '../src/modules/Presenter/options';
+import PresenterOptions from '../src/modules/Presenter/options';
 import { ViewOptions } from '../src/modules/View/options';
 import { ModelOptions } from '../src/modules/Model/options';
 

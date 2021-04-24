@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Sat Nov 07 2020 07:44:35 GMT+0300 (Moscow Standard Time)
 
-const webpackConfig = require('./webpack.dev.config')
+const webpackConfig = require('./webpack.config')
 
 module.exports = function(config) {
   config.set({
@@ -40,8 +40,7 @@ module.exports = function(config) {
     webpack: {
       module: webpackConfig.module,
       resolve: webpackConfig.resolve,
-      mode: webpackConfig.mode,
-      devtool: webpackConfig.devtool,
+      mode: 'production',
     },
 
 
