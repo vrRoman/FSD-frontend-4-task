@@ -1,8 +1,9 @@
 import IModel from '../../../modules/Model/interfacesAndTypes';
 import { IViewModel } from '../../../modules/View/modules/ViewModel/interfacesAndTypes';
+import { IObserver, SubjectAction } from '../../../ObserverAndSubject/interfacesAndTypes';
 import FocusOutEvent = JQuery.FocusOutEvent;
 
-class SliderConfig {
+class SliderConfig implements IObserver {
   private readonly inputElSelector: string;
   private elem: HTMLElement;
   private $slider: JQuery;
@@ -22,6 +23,85 @@ class SliderConfig {
     this.handleScaleValueInputFocusOut = this.handleScaleValueInputFocusOut.bind(this);
 
     this.init();
+  }
+
+  update(action: SubjectAction) {
+    switch (action.type) {
+      case 'UPDATE_IS-RANGE':
+        this.updateSecondValueInputEl();
+        this.updateCheckbox('isRange');
+        break;
+      case 'UPDATE_HAS-TOOLTIP':
+        this.updateCheckbox('hasTooltip');
+        break;
+      case 'UPDATE_HAS-SCALE':
+        this.updateCheckbox('hasScale');
+        break;
+      case 'UPDATE_HAS-VALUE-INFO':
+        this.updateCheckbox('hasValueInfo');
+        break;
+      case 'UPDATE_IS-VERTICAL':
+        this.updateCheckbox('isVertical');
+        break;
+      case 'UPDATE_IS-RESPONSIVE':
+        this.updateCheckbox('isResponsive');
+        break;
+      case 'UPDATE_IS-SCALE-CLICKABLE':
+        this.updateCheckbox('isScaleClickable');
+        break;
+      case 'UPDATE_USE-KEYBOARD':
+        this.updateCheckbox('useKeyboard');
+        break;
+      case 'UPDATE_VALUE':
+        this.updateTextInput('value1');
+        this.updateTextInput('value2');
+        break;
+      case 'UPDATE_STEP-SIZE':
+        this.updateTextInput('stepSize');
+        break;
+      case 'UPDATE_MIN-MAX':
+        this.updateTextInput('min');
+        this.updateTextInput('max');
+        break;
+      case 'UPDATE_LENGTH':
+        this.updateTextInput('length');
+        break;
+      case 'UPDATE_SCALE-VALUE':
+        this.updateTextInput('scaleValue');
+        break;
+      default: break;
+    }
+  }
+
+  updateTextInput(
+    optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max' | 'length' | 'scaleValue',
+  ) {
+    const elem = this.getInputEl(optionName);
+    const curVal = this.getTextInputValue(optionName);
+    const newVal = Array.isArray(curVal)
+        ? curVal.map((val) => String(val))
+        : curVal;
+    if (elem) {
+      $(elem).val(newVal);
+    } else {
+      throw new Error('elem is null');
+    }
+  }
+
+  private updateCheckbox(optionName: string) {
+    this.inputElements.forEach((el) => {
+      const { name } = el.dataset;
+      if (name === optionName) {
+        const curVal = this.getCheckboxValue(name);
+        if (curVal !== null) {
+          $(el).prop('checked', curVal);
+        }
+      }
+    });
+  }
+
+  private subscribeToSlider() {
+    this.$slider.slider('subscribe', this);
   }
 
   private initTextInputs() {
@@ -207,6 +287,7 @@ class SliderConfig {
   private init() {
     this.initCheckboxes();
     this.initTextInputs();
+    this.subscribeToSlider();
   }
 
   private initCheckboxes() {
@@ -272,7 +353,11 @@ class SliderConfig {
   // eslint-disable-next-line no-dupe-class-members
   private getTextInputValue(optionName: 'length'): string
   // eslint-disable-next-line no-dupe-class-members
-  private getTextInputValue(optionName: 'scaleValue'): number | Array<number | string>
+  private getTextInputValue(
+    optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max' | 'length' | 'scaleValue'
+  ): number | string | Array<number | string>
+  // eslint-disable-next-line no-dupe-class-members
+  private getTextInputValue(optionName: 'scaleValue'): number
   // eslint-disable-next-line no-dupe-class-members
   private getTextInputValue(optionName: string): number | string | Array<string | number> | null {
     let module: IModel | IViewModel;
