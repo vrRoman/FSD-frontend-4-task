@@ -26,10 +26,10 @@ mixin option(optionName, elemName, inputType)
         ? `${elemName}-${inputName}`
         : inputName;
 
-  .option(data-name=labelName)
+  .option.js-option
     label(for=id)
       if (labelName)
         span= `${labelName}${desc}`
-      input(type=type
-        id=id
-        class=`js-${id}`)
+      input.option__input.js-option__input(data-name=labelName
+        type=type
+        id=id)

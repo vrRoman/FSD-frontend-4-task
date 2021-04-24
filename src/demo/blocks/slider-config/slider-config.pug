@@ -1,7 +1,7 @@
 include ../option/option
 
 mixin slider-config(sliderName, hasScaleValueDesc)
-  .slider-config
+  .slider-config.js-slider-config
     +option('isRange', sliderName)
     +option('hasTooltip', sliderName)
     +option('hasScale', sliderName)
@@ -11,7 +11,7 @@ mixin slider-config(sliderName, hasScaleValueDesc)
     +option('isScaleClickable', sliderName)
     +option('useKeyboard', sliderName)
 
-    div(class=sliderName ? `${sliderName} - value`: 'value')
+    div(class=sliderName ? `${sliderName}-value`: 'value')
       span value
       +option('value1', sliderName, 'text')
       +option('value2', sliderName, 'text')

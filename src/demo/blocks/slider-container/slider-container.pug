@@ -1,10 +1,10 @@
 include ../slider-config/slider-config
 
-mixin slider-container(sliderName, heading, hasConfigOptionsDesc)
+mixin slider-container(configOptions, sliderOptions, heading)
   -
     let hasScaleValueDesc = false;
-    if (hasConfigOptionsDesc !== undefined) {
-        hasScaleValueDesc = hasConfigOptionsDesc;
+    if (configOptions.hasConfigOptionsDesc !== undefined) {
+        hasScaleValueDesc = configOptions.hasConfigOptionsDesc;
     }
 
     let title;
@@ -17,14 +17,14 @@ mixin slider-container(sliderName, heading, hasConfigOptionsDesc)
       }
     }
 
-  .slider-container
+  .slider-container.js-slider-container(data-slider-options=sliderOptions || {})
     if (title)
       h2.slider-container__title= title
     if (desc)
       span.slider-container__desc= desc
 
     .slider-container__slider
-      div(class=`js-${sliderName}`)
+      .slider.js-slider(class=`${configOptions.sliderName} js-${configOptions.sliderName}`)
 
     .slider-container__config
-      +slider-config(sliderName, hasScaleValueDesc)
+      +slider-config(configOptions.sliderName, hasScaleValueDesc)
