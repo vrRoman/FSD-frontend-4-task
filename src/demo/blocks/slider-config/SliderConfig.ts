@@ -1,9 +1,9 @@
-import IModel from '../../../modules/Model/interfacesAndTypes';
-import { IViewModel } from '../../../modules/View/modules/ViewModel/interfacesAndTypes';
+import ISliderConfig, { optionNames } from './interfaceAndTypes';
 import { IObserver, SubjectAction } from '../../../ObserverAndSubject/interfacesAndTypes';
-import FocusOutEvent = JQuery.FocusOutEvent;
+import IModel, { Value } from '../../../modules/Model/interfacesAndTypes';
+import { IViewModel } from '../../../modules/View/modules/ViewModel/interfacesAndTypes';
 
-class SliderConfig implements IObserver {
+class SliderConfig implements IObserver, ISliderConfig {
   private readonly inputElSelector: string;
   private elem: HTMLElement;
   private $slider: JQuery;
@@ -28,7 +28,7 @@ class SliderConfig implements IObserver {
   update(action: SubjectAction) {
     switch (action.type) {
       case 'UPDATE_IS-RANGE':
-        this.updateSecondValueInputEl();
+        this.updateSecondValueInput();
         this.updateCheckbox('isRange');
         break;
       case 'UPDATE_HAS-TOOLTIP':
@@ -62,6 +62,8 @@ class SliderConfig implements IObserver {
       case 'UPDATE_MIN-MAX':
         this.updateTextInput('min');
         this.updateTextInput('max');
+        this.updateTextInput('value1');
+        this.updateTextInput('value2');
         break;
       case 'UPDATE_LENGTH':
         this.updateTextInput('length');
@@ -73,9 +75,19 @@ class SliderConfig implements IObserver {
     }
   }
 
-  updateTextInput(
-    optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max' | 'length' | 'scaleValue',
-  ) {
+  updateCheckbox(optionName: string) {
+    this.inputElements.forEach((el) => {
+      const { name } = el.dataset;
+      if (name === optionName) {
+        const curVal = this.getCheckboxValue(name);
+        if (curVal !== null) {
+          $(el).prop('checked', curVal);
+        }
+      }
+    });
+  }
+
+  updateTextInput(optionName: optionNames) {
     const elem = this.getInputEl(optionName);
     const curVal = this.getTextInputValue(optionName);
     const newVal = Array.isArray(curVal)
@@ -88,193 +100,7 @@ class SliderConfig implements IObserver {
     }
   }
 
-  private updateCheckbox(optionName: string) {
-    this.inputElements.forEach((el) => {
-      const { name } = el.dataset;
-      if (name === optionName) {
-        const curVal = this.getCheckboxValue(name);
-        if (curVal !== null) {
-          $(el).prop('checked', curVal);
-        }
-      }
-    });
-  }
-
-  private subscribeToSlider() {
-    this.$slider.slider('subscribe', this);
-  }
-
-  private initTextInputs() {
-    this.initValueInputs();
-
-    this.initMinMaxInputs();
-
-    this.initStepSizeInput();
-
-    this.initLengthInput();
-
-    this.initScaleValueInput();
-  }
-
-  private handleScaleValueInputFocusOut(ev: FocusOutEvent) {
-    const val = String($(ev.target).val());
-    let newScaleValue: number | Array<string | number>;
-    if (val !== '') {
-      const isValArr = val.indexOf(',') !== -1;
-      if (isValArr) {
-        newScaleValue = val.split(',');
-      } else {
-        const isValNum = !Number.isNaN(Number(val));
-        if (isValNum) {
-          newScaleValue = Number(val);
-        } else {
-          newScaleValue = [val];
-        }
-      }
-
-      this.$slider.slider('changeOptions', {
-        scaleValue: newScaleValue,
-      });
-    } else {
-      this.$slider.slider('changeOptions', {
-        scaleValue: this.getTextInputValue('scaleValue'),
-      });
-    }
-  }
-
-  private initScaleValueInput() {
-    const scaleValueEl = this.getInputEl('scaleValue');
-    if (scaleValueEl) {
-      const curVal = this.getTextInputValue('scaleValue');
-      const val = Array.isArray(curVal)
-          ? curVal.map((el) => String(el))
-          : curVal;
-
-      $(scaleValueEl).val(val);
-      $(scaleValueEl).on('focusout', this.handleScaleValueInputFocusOut);
-    }
-  }
-
-  private handleLengthInputFocusOut(ev: FocusOutEvent) {
-    const inputVal = String($(ev.target).val());
-    const newVal = inputVal === ''
-        ? this.getTextInputValue('length')
-        : inputVal;
-    if (newVal !== '') {
-      this.$slider.slider('changeOptions', {
-        length: newVal,
-      });
-    }
-  }
-
-  private initLengthInput() {
-    const lengthEl = this.getInputEl('length');
-    if (lengthEl) {
-      $(lengthEl).val(this.getTextInputValue('length'));
-      $(lengthEl).on('focusout', this.handleLengthInputFocusOut);
-    }
-  }
-
-  private handleStepSizeInputFocusOut(ev: FocusOutEvent) {
-    const val = $(ev.target).val() === ''
-        ? this.getTextInputValue('stepSize')
-        : Number($(ev.target).val());
-    const isValCorrect = !Number.isNaN(val);
-    if (isValCorrect) {
-      this.$slider.slider('changeOptions', {
-        stepSize: val,
-      });
-    }
-  }
-
-  private initStepSizeInput() {
-    const stepSizeEl = this.getInputEl('stepSize');
-    if (stepSizeEl) {
-      $(stepSizeEl).val(this.getTextInputValue('stepSize'));
-      $(stepSizeEl).on('focusout', this.handleStepSizeInputFocusOut);
-    }
-  }
-
-  private initMinMaxInputs() {
-    const minEl = this.getInputEl('min');
-    const maxEl = this.getInputEl('max');
-
-    if (minEl) {
-      if (maxEl) {
-        $(minEl).val(this.getTextInputValue('min'));
-        $(maxEl).val(this.getTextInputValue('max'));
-        $(minEl).on('focusout', this.handleMinMaxInputFocusOut);
-        $(maxEl).on('focusout', this.handleMinMaxInputFocusOut);
-      } else {
-        throw new Error('maxEl is null');
-      }
-    } else {
-      throw new Error('minEl is null');
-    }
-  }
-
-  private handleMinMaxInputFocusOut(ev: FocusOutEvent) {
-    const isValCorrect = $(ev.target).val() && !Number.isNaN(Number($(ev.target).val()));
-    if (isValCorrect) {
-      this.$slider.slider('changeOptions', {
-        [ev.target.dataset.name]: Number($(ev.target).val()),
-      });
-    }
-  }
-
-  private initValueInputs() {
-    const firstValueEl = this.getInputEl('value1');
-    const firstVal = this.getTextInputValue('value1');
-    const secValueEl = this.getInputEl('value2');
-    const secVal = this.getTextInputValue('value2');
-
-    if (!firstValueEl) {
-      throw new Error('firstValueEl is null');
-    }
-    if (!secValueEl) {
-      throw new Error('secValueEl is null');
-    }
-
-    $(firstValueEl).val(firstVal);
-    $(secValueEl).val(secVal);
-
-    $(firstValueEl).on('focusout', this.handleValueInputFocusOut);
-    $(secValueEl).on('focusout', this.handleValueInputFocusOut);
-
-    this.updateSecondValueInputEl();
-  }
-
-  private handleValueInputFocusOut() {
-    const firstEl = this.getInputEl('value1');
-    if (firstEl) {
-      const firstVal = $(firstEl).val() !== ''
-          ? Number($(firstEl).val())
-          : this.getTextInputValue('value1');
-      if (Array.isArray(this.$slider.slider('value'))) {
-        const secEl = this.getInputEl('value2');
-        if (secEl) {
-          const secVal = $(secEl).val() !== ''
-              ? Number($(secEl).val())
-              : this.getTextInputValue('value2');
-          const isValuesValid = !Number.isNaN(firstVal) && !Number.isNaN(secVal);
-          if (isValuesValid) {
-            this.$slider.slider('changeOptions', {
-              value: [firstVal, secVal],
-            });
-          }
-        }
-      } else {
-        const isValValid = !Number.isNaN(Number(firstVal));
-        if (isValValid) {
-          this.$slider.slider('changeOptions', {
-            value: firstVal,
-          });
-        }
-      }
-    }
-  }
-
-  private getInputElements(): Array<HTMLElement> {
+  getInputElements(): Array<HTMLElement> {
     const result: Array<HTMLElement> = [];
     const nodeList = this.elem.querySelectorAll<HTMLElement>(this.inputElSelector);
     nodeList.forEach((el) => {
@@ -284,27 +110,7 @@ class SliderConfig implements IObserver {
     return result;
   }
 
-  private init() {
-    this.initCheckboxes();
-    this.initTextInputs();
-    this.subscribeToSlider();
-  }
-
-  private initCheckboxes() {
-    this.inputElements.forEach((el) => {
-      const { name } = el.dataset;
-      if (name) {
-        const curVal = this.getCheckboxValue(name);
-        if (curVal !== null) {
-          $(el).prop('checked', curVal);
-
-          $(el).on('change', this.handleCheckboxChange);
-        }
-      }
-    });
-  }
-
-  private getCheckboxValue(optionName: string): boolean | null {
+  getCheckboxValue(optionName: string): boolean | null {
     let module: IModel | IViewModel;
     let value: boolean | null = null;
 
@@ -347,19 +153,15 @@ class SliderConfig implements IObserver {
     return value;
   }
 
-  private getTextInputValue(
-    optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max'
-  ): number
+  getTextInputValue(optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max'): number
   // eslint-disable-next-line no-dupe-class-members
-  private getTextInputValue(optionName: 'length'): string
+  getTextInputValue(optionName: 'length'): string
   // eslint-disable-next-line no-dupe-class-members
-  private getTextInputValue(
-    optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max' | 'length' | 'scaleValue'
-  ): number | string | Array<number | string>
+  getTextInputValue(optionName: 'scaleValue'): number | Array<string | number>
   // eslint-disable-next-line no-dupe-class-members
-  private getTextInputValue(optionName: 'scaleValue'): number
+  getTextInputValue(optionName: optionNames): number | string | Array<number | string>
   // eslint-disable-next-line no-dupe-class-members
-  private getTextInputValue(optionName: string): number | string | Array<string | number> | null {
+  getTextInputValue(optionName: string): number | string | Array<string | number> | null {
     let module: IModel | IViewModel;
     let value: number | string | Array<string | number> | null = null;
     const modelValue = this.$slider.slider('value');
@@ -404,16 +206,7 @@ class SliderConfig implements IObserver {
     return value;
   }
 
-  private handleCheckboxChange(evt: JQuery.ChangeEvent) {
-    if (evt.target.dataset.name) {
-      this.$slider.slider('changeOptions', {
-        [evt.target.dataset.name]: evt.target.checked,
-      });
-      this.updateSecondValueInputEl();
-    }
-  }
-
-  private getInputEl(optionName: string): HTMLElement | null {
+  getInputEl(optionName: string): HTMLElement | null {
     let result: null | HTMLElement = null;
     this.inputElements.forEach((el) => {
       if (el.dataset.name === optionName) {
@@ -423,7 +216,52 @@ class SliderConfig implements IObserver {
     return result;
   }
 
-  private updateSecondValueInputEl() {
+  private init() {
+    this.initCheckboxes();
+    this.initTextInputs();
+    this.$slider.slider('subscribe', this);
+  }
+
+  private initCheckboxes() {
+    this.inputElements.forEach((el) => {
+      const { name } = el.dataset;
+      if (name) {
+        const curVal = this.getCheckboxValue(name);
+        if (curVal !== null) {
+          $(el).prop('checked', curVal);
+
+          $(el).on('change', this.handleCheckboxChange);
+        }
+      }
+    });
+  }
+
+  private initTextInputs() {
+    this.initSpecificTextInput('value1', () => this.handleValueInputFocusOut('value1'));
+    this.initSpecificTextInput('value2', () => this.handleValueInputFocusOut('value2'));
+    this.updateSecondValueInput();
+    this.initSpecificTextInput('min', this.handleMinMaxInputFocusOut);
+    this.initSpecificTextInput('max', this.handleMinMaxInputFocusOut);
+    this.initSpecificTextInput('stepSize', this.handleStepSizeInputFocusOut);
+    this.initSpecificTextInput('length', this.handleLengthInputFocusOut);
+    this.initSpecificTextInput('scaleValue', this.handleScaleValueInputFocusOut);
+  }
+
+  private initSpecificTextInput(
+    optionName: optionNames,
+    onFocusOut: (ev: JQuery.FocusOutEvent) => void,
+  ) {
+    const elem = this.getInputEl(optionName);
+    if (elem === null) {
+      throw new Error('elem is null');
+    }
+
+    this.updateTextInput(optionName);
+
+    $(elem).on('focusout', onFocusOut);
+  }
+
+  private updateSecondValueInput() {
     const secValEl = this.getInputEl('value2');
     const secValElValue = this.getTextInputValue('value2');
     if (secValEl) {
@@ -431,6 +269,101 @@ class SliderConfig implements IObserver {
       $(secValEl).prop('disabled', !this.getCheckboxValue('isRange'));
     } else {
       throw new Error('Input with name `value2` is null');
+    }
+  }
+
+  private handleCheckboxChange(evt: JQuery.ChangeEvent) {
+    if (evt.target.dataset.name) {
+      this.$slider.slider('changeOptions', {
+        [evt.target.dataset.name]: evt.target.checked,
+      });
+      this.updateSecondValueInput();
+    }
+  }
+
+  private handleValueInputFocusOut(optionName: 'value1' | 'value2') {
+    const elem = this.getInputEl(optionName);
+    if (elem === null) {
+      throw new Error('elem is null');
+    }
+
+    const sliderValue = this.$slider.slider('value');
+    const val = $(elem).val() === ''
+        ? this.getTextInputValue(optionName)
+        : Number($(elem).val());
+    let newSliderValue: Value;
+
+    if (Array.isArray(sliderValue)) {
+      if (optionName === 'value1') {
+        newSliderValue = [val, sliderValue[1]];
+      } else {
+        newSliderValue = [sliderValue[0], val];
+      }
+    } else {
+      newSliderValue = val;
+    }
+
+    this.$slider.slider('changeOptions', {
+      value: newSliderValue,
+    });
+  }
+
+  private handleMinMaxInputFocusOut(ev: JQuery.FocusOutEvent) {
+    const isValCorrect = $(ev.target).val() && !Number.isNaN(Number($(ev.target).val()));
+    if (isValCorrect) {
+      this.$slider.slider('changeOptions', {
+        [ev.target.dataset.name]: Number($(ev.target).val()),
+      });
+    }
+  }
+
+  private handleStepSizeInputFocusOut(ev: JQuery.FocusOutEvent) {
+    const val = $(ev.target).val() === ''
+      ? this.getTextInputValue('stepSize')
+      : Number($(ev.target).val());
+    const isValCorrect = !Number.isNaN(val);
+    if (isValCorrect) {
+      this.$slider.slider('changeOptions', {
+        stepSize: val,
+      });
+    }
+  }
+
+  private handleLengthInputFocusOut(ev: JQuery.FocusOutEvent) {
+    const inputVal = String($(ev.target).val());
+    const newVal = inputVal === ''
+      ? this.getTextInputValue('length')
+      : inputVal;
+    if (newVal !== '') {
+      this.$slider.slider('changeOptions', {
+        length: newVal,
+      });
+    }
+  }
+
+  private handleScaleValueInputFocusOut(ev: JQuery.FocusOutEvent) {
+    const val = String($(ev.target).val());
+    let newScaleValue: number | Array<string | number>;
+    if (val !== '') {
+      const isValArr = val.indexOf(',') !== -1;
+      if (isValArr) {
+        newScaleValue = val.split(',');
+      } else {
+        const isValNum = !Number.isNaN(Number(val));
+        if (isValNum) {
+          newScaleValue = Number(val);
+        } else {
+          newScaleValue = [val];
+        }
+      }
+
+      this.$slider.slider('changeOptions', {
+        scaleValue: newScaleValue,
+      });
+    } else {
+      this.$slider.slider('changeOptions', {
+        scaleValue: this.getTextInputValue('scaleValue'),
+      });
     }
   }
 }
