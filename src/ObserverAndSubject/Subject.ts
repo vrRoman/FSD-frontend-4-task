@@ -1,4 +1,4 @@
-import { ISubject, SubjectAction } from './interfacesAndTypes';
+import { IObserver, ISubject, SubjectAction } from './interfacesAndTypes';
 
 
 class Subject implements ISubject {
@@ -9,11 +9,11 @@ class Subject implements ISubject {
   }
 
   // Подписывает на обновления
-  subscribe(observer: Object) {
+  subscribe(observer: IObserver) {
     this.observers.push(observer);
   }
   // Убирает подписку
-  unsubscribe(observer: Object) {
+  unsubscribe(observer: IObserver) {
     this.observers.filter((obs) => obs !== observer);
   }
   // Вызывает у всех подписчиков метод update
