@@ -1,10 +1,9 @@
 import { SliderOptions } from '../../options/options';
 import { ModelOptions, ModelOptionsOptionalParams } from './options';
 import IModel, { IModelData, Value } from './interfacesAndTypes';
-import ObserverAndSubject from '../../ObserverAndSubject/Subject';
+import Subject from '../../ObserverAndSubject/Subject';
 
-
-class Model extends ObserverAndSubject implements IModel {
+class Model extends Subject implements IModel {
   private data: IModelData
 
   constructor(options: ModelOptions | SliderOptions) {
