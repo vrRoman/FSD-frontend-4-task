@@ -12,9 +12,9 @@ body
   +slider-container({
     sliderName: 'slider1',
     hasConfigOptionsDesc: true,
-  }, null, 'Default options')
+  }, 'Default options', null)
 
-  +slider-container({ sliderName: 'slider2' }, {
+  +slider-container({ sliderName: 'slider2' }, 'Custom options', {
     value: [2, 84],
     isRange: true,
     stepSize: 1,
@@ -27,13 +27,9 @@ body
     scaleValue: ['start', 'half', 'end'],
     isVertical: true,
     isResponsive: true,
-  }, 'Custom options')
+  })
 
   +slider-container({ sliderName: 'slider3' }, {
-    onChange() {
-      console.log($('.js-slider3').slider('value'));
-    },
-  }, {
     title: 'On change',
     description: 'onChange() { console.log($(\'.js-slider3\').slider(\'value\')) }',
   })
@@ -45,3 +41,11 @@ body
     crossorigin='anonymous')
   script(src='../slider/slider.min.js')
   script(src='demo.js')
+  script.
+    (function setOnChange($sliderWithOnChange) {
+      $sliderWithOnChange.slider('changeOptions', {
+        onChange() {
+          console.log($sliderWithOnChange.slider('value'))
+        }
+      });
+    })($('.js-slider3'));
