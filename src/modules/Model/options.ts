@@ -8,12 +8,6 @@ type ModelOptions = {
   min: number
 }
 
-type ModelOptionsOptionalParams = {
-  value?: Value
-  isRange?: boolean
-  stepSize?: number
-  max?: number
-  min?: number
-}
+type ModelOptionsOptionalParams = Partial<ModelOptions>;
 
 export { ModelOptions, ModelOptionsOptionalParams };

@@ -4,7 +4,7 @@ import IPresenter from './interface';
 import { SliderOptions, SliderOptionsOptionalParams } from '../../options/options';
 import { ModelOptionsOptionalParams } from '../Model/options';
 import { ViewOptionsOptionalParams } from '../View/options';
-import { PresenterOptions, PresenterOptionsOptionalParams } from './options';
+import PresenterOptions from './options';
 
 import { SubjectAction } from '../../ObserverAndSubject/interfacesAndTypes';
 import Observer from '../../ObserverAndSubject/Observer';
@@ -64,7 +64,7 @@ class Presenter extends Observer implements IPresenter {
     const newPresenterOptions: { [key: string]: any } = {};
     presenterOptions.forEach((prop) => {
       if (Object.prototype.hasOwnProperty.call(newOptions, prop)) {
-        newPresenterOptions[prop] = newOptions[prop as keyof PresenterOptionsOptionalParams];
+        newPresenterOptions[prop] = newOptions[prop as keyof PresenterOptions];
       }
     });
 

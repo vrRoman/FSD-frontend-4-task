@@ -35,26 +35,6 @@ type ViewOptions = {
   valueInfoClass?: string | string[]
 }
 
-type ViewOptionsOptionalParams = {
-  length?: string
-  hasTooltip?: boolean
-  hasScale?: boolean
-  scaleValue?: Array<number | string> | number
-  hasValueInfo?: boolean
-  isVertical?: boolean
-  isResponsive?: boolean
-  useKeyboard?: boolean
-  isScaleClickable?: boolean
-  sliderClass?: string | string[]
-  sliderVerticalClass?: string | string[]
-  barClass?: string | string[]
-  progressBarClass?: string | string[]
-  thumbClass?: string | string[]
-  activeThumbClass?: string | string[]
-  tooltipClass?: string | string[]
-  tooltipValueClass?: string | string[]
-  scaleClass?: string | string[]
-  valueInfoClass?: string | string[]
-}
+type ViewOptionsOptionalParams = Partial<ViewOptions>
 
 export { ViewOptions, ViewOptionsOptionalParams };

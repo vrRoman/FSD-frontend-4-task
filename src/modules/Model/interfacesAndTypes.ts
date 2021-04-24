@@ -3,14 +3,6 @@ import { ModelOptionsOptionalParams } from './options';
 
 type Value = [number, number] | number
 
-type ModelProps = {
-  value?: Value
-  isRange?: boolean
-  stepSize?: number
-  min?: number
-  max?: number
-}
-
 interface IModelData {
   value: Value
   isRange: boolean
@@ -18,6 +10,8 @@ interface IModelData {
   min: number
   max: number
 }
+
+type ModelProps = Partial<IModelData>
 
 interface IModel extends ISubject {
   changeOptions(newOptions: ModelOptionsOptionalParams): void
