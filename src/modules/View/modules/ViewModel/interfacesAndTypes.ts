@@ -70,7 +70,6 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setIsScaleClickable(newIsScaleClickable: boolean): void
 }
 
-
 export {
   IViewModel,
   IViewModelGetMethods,

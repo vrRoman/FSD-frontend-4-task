@@ -1,6 +1,5 @@
 import { IObserver, ISubject, SubjectAction } from './interfacesAndTypes';
 
-
 abstract class Subject implements ISubject {
   private observers: Array<any>;
 
@@ -12,10 +11,12 @@ abstract class Subject implements ISubject {
   subscribe(observer: IObserver) {
     this.observers.push(observer);
   }
+
   // Убирает подписку
   unsubscribe(observer: IObserver) {
     this.observers.filter((obs) => obs !== observer);
   }
+
   // Вызывает у всех подписчиков метод update
   protected notify(action: SubjectAction) {
     this.observers.forEach((observer) => {
@@ -23,6 +24,5 @@ abstract class Subject implements ISubject {
     });
   }
 }
-
 
 export default Subject;

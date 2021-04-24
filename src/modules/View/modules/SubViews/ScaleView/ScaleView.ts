@@ -4,11 +4,13 @@ import { ModelProps } from '../../../../Model/interfacesAndTypes';
 import IView from '../../View/interfaces';
 import areNumbersDefined from '../../../../../utils/areNumbersDefined';
 
-
 class ScaleView implements IScaleView {
   private readonly viewModel: IViewModelGetMethods
+
   private readonly mainView: IView
+
   private readonly target: HTMLElement
+
   private scale: HTMLElement | undefined
 
   constructor(target: HTMLElement, viewModel: IViewModelGetMethods, mainView: IView) {
@@ -17,7 +19,7 @@ class ScaleView implements IScaleView {
     this.mainView = mainView;
     this.scale = undefined;
 
-    this._handleStepElemMouseDown = this._handleStepElemMouseDown.bind(this);
+    this.handleStepElemMouseDown = this.handleStepElemMouseDown.bind(this);
   }
 
   // Создает шкалу значений в зависимости от scaleValue.
@@ -51,18 +53,16 @@ class ScaleView implements IScaleView {
 
           if (Array.isArray(scaleValue)) {
             steps = scaleValue;
+          } else if (scaleValue === 1) {
+            steps.push(minAndMax[0]);
           } else {
-            if (scaleValue === 1) {
-              steps.push(minAndMax[0]);
-            } else {
-              const maxDiapason = minAndMax[1] - minAndMax[0];
-              for (let i = 0; i < scaleValue; i += 1) {
-                steps.push(
-                  Number(
-                    (minAndMax[0] + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
-                  ),
-                );
-              }
+            const maxDiapason = minAndMax[1] - minAndMax[0];
+            for (let i = 0; i < scaleValue; i += 1) {
+              steps.push(
+                Number(
+                  (minAndMax[0] + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
+                ),
+              );
             }
           }
 
@@ -129,19 +129,20 @@ class ScaleView implements IScaleView {
     if (this.scale) {
       const stepElems = Array.from(this.scale.children) as HTMLElement[];
       for (let i = 0; i < stepElems.length; i += 1) {
-        stepElems[i].addEventListener('mousedown', this._handleStepElemMouseDown);
+        stepElems[i].addEventListener('mousedown', this.handleStepElemMouseDown);
       }
       this.mainView.changeOptions({
         isScaleClickable: true,
       });
     }
   }
+
   // Убирает слушатель клика у элементов шкалы значений и обращается к viewModel
   removeInteractivity() {
     if (this.scale) {
       const stepElems = Array.from(this.scale.children) as HTMLElement[];
       for (let i = 0; i < stepElems.length; i += 1) {
-        stepElems[i].removeEventListener('mousedown', this._handleStepElemMouseDown);
+        stepElems[i].removeEventListener('mousedown', this.handleStepElemMouseDown);
       }
       this.mainView.changeOptions({
         isScaleClickable: false,
@@ -159,7 +160,7 @@ class ScaleView implements IScaleView {
 
   // При клике на элементы шкалы значений вызывает moveActiveThumb и
   // убирает активный ползунок
-  private _handleStepElemMouseDown(evt: MouseEvent): void {
+  private handleStepElemMouseDown(evt: MouseEvent): void {
     evt.preventDefault();
     evt.stopPropagation();
 

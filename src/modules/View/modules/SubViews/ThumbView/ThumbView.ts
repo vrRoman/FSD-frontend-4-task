@@ -3,11 +3,13 @@ import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IView from '../../View/interfaces';
 import areNumbersDefined from '../../../../../utils/areNumbersDefined';
 
-
 class ThumbView implements IThumbView {
   private readonly target: HTMLElement
+
   private readonly viewModel: IViewModelGetMethods
+
   private readonly mainView: IView
+
   private thumb: Thumb | undefined
 
   constructor(target: HTMLElement, viewModel: IViewModelGetMethods, mainView: IView) {
@@ -16,9 +18,9 @@ class ThumbView implements IThumbView {
     this.mainView = mainView;
     this.thumb = undefined;
 
-    this._handleThumbMouseDown = this._handleThumbMouseDown.bind(this);
-    this._handleThumbMouseUp = this._handleThumbMouseUp.bind(this);
-    this._handleThumbMouseMove = this._handleThumbMouseMove.bind(this);
+    this.handleThumbMouseDown = this.handleThumbMouseDown.bind(this);
+    this.handleThumbMouseUp = this.handleThumbMouseUp.bind(this);
+    this.handleThumbMouseMove = this.handleThumbMouseMove.bind(this);
     this.removeActiveThumb = this.removeActiveThumb.bind(this);
   }
 
@@ -108,13 +110,11 @@ class ThumbView implements IThumbView {
           } else {
             throw new Error('valuePosition is number, but thumb is array.');
           }
+        } else if (Array.isArray(this.thumb)) {
+          valPos = valuePosition;
+          thumb = this.thumb;
         } else {
-          if (Array.isArray(this.thumb)) {
-            valPos = valuePosition;
-            thumb = this.thumb;
-          } else {
-            throw new Error('valuePosition is array, but thumb is not array.');
-          }
+          throw new Error('valuePosition is array, but thumb is not array.');
         }
 
         thumb.forEach((_, index) => {
@@ -237,22 +237,20 @@ class ThumbView implements IThumbView {
   addListener() {
     if (Array.isArray(this.thumb)) {
       for (let i = 0; i <= 1; i += 1) {
-        this.thumb[i].addEventListener('mousedown', this._handleThumbMouseDown);
-        this.thumb[i].addEventListener('touchstart', this._handleThumbMouseDown);
+        this.thumb[i].addEventListener('mousedown', this.handleThumbMouseDown);
+        this.thumb[i].addEventListener('touchstart', this.handleThumbMouseDown);
       }
-    } else {
-      if (this.thumb) {
-        this.thumb.addEventListener('mousedown', this._handleThumbMouseDown);
-        this.thumb.addEventListener('touchstart', this._handleThumbMouseDown);
-      }
+    } else if (this.thumb) {
+      this.thumb.addEventListener('mousedown', this.handleThumbMouseDown);
+      this.thumb.addEventListener('touchstart', this.handleThumbMouseDown);
     }
   }
 
   // При нажатии на ползунок убирает z-index предыдущего активного ползунка,
   // вызывает this.setActiveThumb, обращается к mainView для изменения clientX/Y, добавляет
-  // обработчики _handleThumbMouseMove, _handleThumbMouseUp и убирает слушатель
+  // обработчики handleThumbMouseMove, handleThumbMouseUp и убирает слушатель
   // document-mouseup-removeActiveThumb
-  private _handleThumbMouseDown(evt: MouseEvent | TouchEvent) {
+  private handleThumbMouseDown(evt: MouseEvent | TouchEvent) {
     const activeThumb = this.viewModel.getActiveThumb();
     evt.preventDefault();
     evt.stopPropagation();
@@ -275,10 +273,10 @@ class ThumbView implements IThumbView {
       this.setActiveThumb(thumbNumber);
 
       if (activeThumb) {
-        // Тут возможно this._clientX/Y = evt.clientX/Y, но я сделал так,
+        // Тут возможно this.clientX/Y = evt.clientX/Y, но я сделал так,
         // чтобы положение курсора все время было в середине thumb. Т.е.
         // определение прошлого положения курсора зависит не от самого
-        // курсора, а от thumb(аналогично в _handleThumbMouseMove)
+        // курсора, а от thumb(аналогично в handleThumbMouseMove)
         const clientX = activeThumb.getBoundingClientRect().left
           + activeThumb.offsetWidth / 2;
 
@@ -288,31 +286,31 @@ class ThumbView implements IThumbView {
         this.mainView.setClientCoords([clientX, clientY]);
       }
 
-      document.addEventListener('mousemove', this._handleThumbMouseMove);
-      document.addEventListener('touchmove', this._handleThumbMouseMove);
-      document.addEventListener('mouseup', this._handleThumbMouseUp);
-      document.addEventListener('touchend', this._handleThumbMouseUp);
+      document.addEventListener('mousemove', this.handleThumbMouseMove);
+      document.addEventListener('touchmove', this.handleThumbMouseMove);
+      document.addEventListener('mouseup', this.handleThumbMouseUp);
+      document.addEventListener('touchend', this.handleThumbMouseUp);
 
       document.removeEventListener('mouseup', this.removeActiveThumb);
       document.removeEventListener('touchend', this.removeActiveThumb);
-      }
+    }
   }
 
-  // При отжатии кнопки после ползунка убирает обработчики _handleThumbMouseMove и
-  // _handleThumbMouseUp, добавляет слушатель document-mouseup, который убирает
+  // При отжатии кнопки после ползунка убирает обработчики handleThumbMouseMove и
+  // handleThumbMouseUp, добавляет слушатель document-mouseup, который убирает
   // активный тамб при клике в любое место документа
-  private _handleThumbMouseUp() {
-    document.removeEventListener('mousemove', this._handleThumbMouseMove);
-    document.removeEventListener('touchmove', this._handleThumbMouseMove);
-    document.removeEventListener('mouseup', this._handleThumbMouseUp);
-    document.removeEventListener('touchend', this._handleThumbMouseUp);
+  private handleThumbMouseUp() {
+    document.removeEventListener('mousemove', this.handleThumbMouseMove);
+    document.removeEventListener('touchmove', this.handleThumbMouseMove);
+    document.removeEventListener('mouseup', this.handleThumbMouseUp);
+    document.removeEventListener('touchend', this.handleThumbMouseUp);
     document.addEventListener('mouseup', this.removeActiveThumb);
     document.addEventListener('touchend', this.removeActiveThumb);
   }
 
   // При перемещении мыши вызывается moveActiveThumb с numOfSteps,
   // зависящим от смещения мыши, обращается к mainView для смены coords
-  private _handleThumbMouseMove(evt: MouseEvent | TouchEvent) {
+  private handleThumbMouseMove(evt: MouseEvent | TouchEvent) {
     const stepLength = this.viewModel.getStepLength();
     const activeThumb = this.viewModel.getActiveThumb();
 
@@ -339,18 +337,16 @@ class ThumbView implements IThumbView {
               activeThumb.getBoundingClientRect().top + activeThumb.offsetHeight / 2,
             ]);
           }
-        } else {
-          if (Math.abs(clientX - this.viewModel.getClientCoords()[0]) >= stepLength) {
-            const numOfSteps = Math.trunc(
-              (clientX - this.viewModel.getClientCoords()[0]) / stepLength,
-            );
-            this.moveActiveThumb(numOfSteps);
+        } else if (Math.abs(clientX - this.viewModel.getClientCoords()[0]) >= stepLength) {
+          const numOfSteps = Math.trunc(
+            (clientX - this.viewModel.getClientCoords()[0]) / stepLength,
+          );
+          this.moveActiveThumb(numOfSteps);
 
-            this.mainView.setClientCoords([
-              activeThumb.getBoundingClientRect().left + activeThumb.offsetWidth / 2,
-              this.viewModel.getClientCoords()[1],
-            ]);
-          }
+          this.mainView.setClientCoords([
+            activeThumb.getBoundingClientRect().left + activeThumb.offsetWidth / 2,
+            this.viewModel.getClientCoords()[1],
+          ]);
         }
       }
     }

@@ -39,6 +39,5 @@ interface IModel extends ISubject {
   getMaxDiapason(): number
 }
 
-
 export default IModel;
 export { ModelProps, Value, IModelData };

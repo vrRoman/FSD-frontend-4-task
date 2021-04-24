@@ -1,10 +1,11 @@
 import ISliderContainerView from './interface';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 
-
 class SliderContainerView implements ISliderContainerView {
   private readonly target;
+
   private readonly viewModel;
+
   private slider: HTMLElement | undefined;
 
   constructor(target: HTMLElement, viewModel: IViewModelGetMethods) {
@@ -47,16 +48,13 @@ class SliderContainerView implements ISliderContainerView {
         } else {
           this.slider.classList.add(sliderVerticalClass);
         }
+      } else if (Array.isArray(sliderVerticalClass)) {
+        this.slider.classList.remove(...sliderVerticalClass);
       } else {
-        if (Array.isArray(sliderVerticalClass)) {
-          this.slider.classList.remove(...sliderVerticalClass);
-        } else {
-          this.slider.classList.remove(sliderVerticalClass);
-        }
+        this.slider.classList.remove(sliderVerticalClass);
       }
     }
   }
 }
-
 
 export default SliderContainerView;

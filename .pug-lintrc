@@ -3,7 +3,6 @@
   "disallowAttributeInterpolation": true,
   "disallowBlockExpansion": true,
   "disallowClassAttributeWithStaticValue": true,
-  "disallowClassLiteralsBeforeAttributes": true,
   "disallowClassLiteralsBeforeIdLiterals": true,
   "disallowDuplicateAttributes": true,
   "disallowHtmlText": true,

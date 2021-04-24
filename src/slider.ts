@@ -6,9 +6,7 @@ import { IViewModel } from './modules/View/modules/ViewModel/interfacesAndTypes'
 import { IObserver } from './ObserverAndSubject/interfacesAndTypes';
 import Presenter from './modules/Presenter/Presenter';
 import IPresenter from './modules/Presenter/interface';
-
 import { SliderOptions, SliderOptionsOptionalParams } from './options/options';
-
 
 declare global {
   // eslint-disable-next-line
@@ -23,7 +21,6 @@ declare global {
     slider(action: 'presenter'): IPresenter
   }
 }
-
 
 (function initialization($) {
   const defaultOptions: SliderOptions = {
@@ -46,9 +43,11 @@ declare global {
   };
 
   // eslint-disable-next-line no-param-reassign
-  $.fn.slider = function start(action?: SliderOptionsOptionalParams
+  $.fn.slider = function start(
+    action?: SliderOptionsOptionalParams
     | 'changeOptions' | 'subscribe' | 'value' | 'model' | 'view' | 'viewModel' | 'presenter',
-                               additionalInfo?: SliderOptionsOptionalParams | IObserver) {
+    additionalInfo?: SliderOptionsOptionalParams | IObserver,
+  ) {
     if (typeof action === 'object' || !action) {
       if (this.data('slider')) {
         $.error('Slider has already been called for this element');

@@ -3,8 +3,11 @@ import IBarView from './interface';
 
 class BarView implements IBarView {
   private readonly target: HTMLElement
+
   private readonly viewModel: IViewModelGetMethods
+
   private bar: HTMLElement | undefined
+
   private progressBar: HTMLElement | undefined
 
   constructor(target: HTMLElement, viewModel: IViewModelGetMethods) {
@@ -121,6 +124,5 @@ class BarView implements IBarView {
     }
   }
 }
-
 
 export default BarView;

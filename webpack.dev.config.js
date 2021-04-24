@@ -74,7 +74,7 @@ const demoConf = {
   },
 
   entry: {
-    index: '@/demo/demo.js',
+    index: '@/demo/demo.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist/demo'),
@@ -83,6 +83,11 @@ const demoConf = {
 
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: ['ts-loader'],
+      },
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,

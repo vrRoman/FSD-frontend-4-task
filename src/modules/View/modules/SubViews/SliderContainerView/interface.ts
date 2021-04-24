@@ -4,5 +4,4 @@ interface ISliderContainerView {
   updateVertical(): void;
 }
 
-
 export default ISliderContainerView;

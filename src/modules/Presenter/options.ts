@@ -6,5 +6,4 @@ type PresenterOptionsOptionalParams = {
   onChange?: Function
 }
 
-
 export { PresenterOptions, PresenterOptionsOptionalParams };

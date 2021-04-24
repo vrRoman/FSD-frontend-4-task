@@ -3,8 +3,11 @@ import { SliderOptionsOptionalParams } from '../../../options/options';
 
 class SliderContainer {
   private readonly sliderSelector: string;
+
   private readonly configSelector: string;
+
   private readonly sliderOptions: SliderOptionsOptionalParams;
+
   private elem: HTMLElement;
 
   constructor(elem: HTMLElement) {
@@ -26,7 +29,7 @@ class SliderContainer {
     if (configEl !== null) {
       if (sliderEl !== null) {
         $(sliderEl).slider(this.sliderOptions);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
         const sliderConfig = new SliderConfig(configEl, sliderEl);
       } else {
         throw new Error('sliderEl is null');

@@ -10,7 +10,6 @@ import { PresenterOptions } from '../src/modules/Presenter/options';
 import { ViewOptions } from '../src/modules/View/options';
 import { ModelOptions } from '../src/modules/Model/options';
 
-
 const defaultModelOptions: ModelOptions = {
   value: 0,
   isRange: false,
@@ -96,6 +95,7 @@ describe('Presenter with different options in model and view', () => {
   it('onChange', () => {
     model = new Model(defaultModelOptions);
     view = new View(defaultViewOptions, document.body);
+    // eslint-disable-next-line no-unused-vars
     presenter = new Presenter(model, view, {
       ...defaultPresenterOptions,
       onChange: () => {

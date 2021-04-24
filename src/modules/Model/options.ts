@@ -16,5 +16,4 @@ type ModelOptionsOptionalParams = {
   min?: number
 }
 
-
 export { ModelOptions, ModelOptionsOptionalParams };

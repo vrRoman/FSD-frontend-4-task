@@ -7,7 +7,6 @@ import { SliderOptions } from '../../../../options/options';
 import { ViewOptions, ViewOptionsOptionalParams } from '../../options';
 import { SubjectAction } from '../../../../ObserverAndSubject/interfacesAndTypes';
 
-
 import SliderContainerView from '../SubViews/SliderContainerView/SliderContainerView';
 import ISliderContainerView from '../SubViews/SliderContainerView/interface';
 
@@ -29,17 +28,23 @@ import Observer from '../../../../ObserverAndSubject/Observer';
 import WindowListeners from './WindowListeners';
 import { ModelProps } from '../../../Model/interfacesAndTypes';
 
-
 class View extends Observer implements IView {
-  private readonly _parent: HTMLElement
+  private readonly parent: HTMLElement
+
+  private readonly viewModel: IViewModel
+
   private presenter: IPresenter | undefined
-  private viewModel: IViewModel
 
   private sliderContainerView: ISliderContainerView | undefined
+
   private barView: IBarView | undefined
+
   private scaleView: IScaleView | undefined
+
   private thumbView: IThumbView | undefined
+
   private tooltipView: ITooltipView | undefined
+
   private valueInfoView: IValueInfoView | undefined
 
   private windowListeners: IWindowListeners | undefined
@@ -79,7 +84,7 @@ class View extends Observer implements IView {
 
     this.viewModel = viewModel;
     this.presenter = undefined;
-    this._parent = parent;
+    this.parent = parent;
 
     this.sliderContainerView = undefined;
     this.barView = undefined;
@@ -96,7 +101,7 @@ class View extends Observer implements IView {
     let elem: HTMLElement | [HTMLElement, HTMLElement] | undefined;
     switch (elemName) {
       case 'parent':
-        elem = this._parent;
+        elem = this.parent;
         break;
       case 'slider':
         elem = this.sliderContainerView ? this.sliderContainerView.get() : undefined;
@@ -126,7 +131,7 @@ class View extends Observer implements IView {
   }
 
   drawSlider() {
-    this.sliderContainerView = new SliderContainerView(this._parent, this.viewModel);
+    this.sliderContainerView = new SliderContainerView(this.parent, this.viewModel);
     const slider = this.sliderContainerView.create();
 
     this.barView = new BarView(slider, this.viewModel);
@@ -235,9 +240,11 @@ class View extends Observer implements IView {
         break;
     }
   }
+
   setPresenter(presenter: IPresenter) {
     this.presenter = presenter;
   }
+
   // Меняет настройки, передавая в viewModel
   changeOptions(newOptions: ViewOptionsOptionalParams) {
     if (newOptions.length !== undefined) {
@@ -270,6 +277,7 @@ class View extends Observer implements IView {
       }
     }
   }
+
   // Обновляет визуальные настройки слайдера
   update(action: SubjectAction) {
     switch (action.type) {
@@ -370,22 +378,26 @@ class View extends Observer implements IView {
   setModelProps(modelProps: ModelProps) {
     this.viewModel.setModelProps(modelProps);
   }
+
   // Обращается к thumbView
   moveActiveThumb(steps: number = 1) {
     if (this.thumbView) {
       this.thumbView.moveActiveThumb(steps);
     }
   }
+
   // Убирает класс активного ползунка и обращается к viewModel для удаления активного ползунка
   removeActiveThumb(): void {
     this.viewModel.removeActiveThumb();
   }
+
   // Передает вызов в presenter
   onThumbMove(numOfSteps: number, numOfThumb: 0 | 1) {
     if (this.presenter) {
       this.presenter.onThumbMove(numOfSteps, numOfThumb);
     }
   }
+
   // Передает значение в viewModel
   setClientCoords(coords: [number, number]) {
     this.viewModel.setClientCoords(coords);
@@ -395,6 +407,4 @@ class View extends Observer implements IView {
     return this.viewModel;
   }
 }
-
-
 export default View;

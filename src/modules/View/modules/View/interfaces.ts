@@ -10,7 +10,6 @@ import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
 import { ModelProps } from '../../../Model/interfacesAndTypes';
 
-
 type ElemName = 'parent' | 'slider' | 'bar' | 'progressBar'
   | 'thumb' | 'tooltip' | 'scale' | 'valueInfo'
 
@@ -45,7 +44,6 @@ interface IWindowListeners {
   removeKeyboardListener(): void
   setIsResponsive(newIsResponsive: boolean): void
 }
-
 
 export default IView;
 export { ElemName, Views, IWindowListeners };

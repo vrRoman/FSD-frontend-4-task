@@ -2,10 +2,11 @@ import IValueInfoView from './interface';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import isModelPropsValuesDefined from '../../../../../utils/isModelPropsValuesDefined';
 
-
 class ValueInfoView implements IValueInfoView {
   private readonly target: HTMLElement
+
   private readonly viewModel: IViewModelGetMethods
+
   private valueInfo: HTMLElement | undefined
 
   constructor(target: HTMLElement, viewModel: IViewModelGetMethods) {
@@ -69,6 +70,5 @@ class ValueInfoView implements IValueInfoView {
     return this.valueInfo;
   }
 }
-
 
 export default ValueInfoView;

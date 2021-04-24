@@ -46,11 +46,11 @@ class Model extends Subject implements IModel {
   // Округляет и возвращает входящее значение
   roundValue(value: Value): Value {
     const symbolsAfterCommaStepSize = this.getStepSize().toString().includes('.')
-        ? this.getStepSize().toString().split('.').pop()
-        : null;
+      ? this.getStepSize().toString().split('.').pop()
+      : null;
     const numOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
-        ? symbolsAfterCommaStepSize.length
-        : 0;
+      ? symbolsAfterCommaStepSize.length
+      : 0;
     if (Array.isArray(value)) {
       return [
         Number(value[0].toFixed(numOfSymbolsAfterCommaStepSize)),
@@ -81,6 +81,7 @@ class Model extends Subject implements IModel {
     });
     return this.getMin();
   }
+
   // Меняет max
   // Если макс = мин, то ничего не делать.
   setMax(newMax: number): number {
@@ -118,6 +119,7 @@ class Model extends Subject implements IModel {
 
     return this.data.value;
   }
+
   // Меняет isRange и вызывает checkAndFixValue
   setIsRange(newIsRange: boolean): boolean {
     this.data.isRange = newIsRange;
@@ -133,6 +135,7 @@ class Model extends Subject implements IModel {
 
     return this.data.isRange;
   }
+
   // Меняет stepSize и вызывает checkAndFixStepSize
   setStepSize(newStepSize: number): number {
     this.data.stepSize = newStepSize;
@@ -158,10 +161,8 @@ class Model extends Subject implements IModel {
         if (this.data.value[valueNumber] < this.data.value[0]) {
           [this.data.value[valueNumber]] = this.data.value;
         }
-      } else {
-        if (this.data.value[valueNumber] > this.data.value[1]) {
-          [, this.data.value[valueNumber]] = this.data.value;
-        }
+      } else if (this.data.value[valueNumber] > this.data.value[1]) {
+        [, this.data.value[valueNumber]] = this.data.value;
       }
     }
 
@@ -246,26 +247,30 @@ class Model extends Subject implements IModel {
     return [this.data.min, this.data.max];
   }
 
-
   getValue(): Value {
     if (typeof this.data.value === 'number') {
       return this.data.value;
     }
     return [...this.data.value];
   }
+
   getIsRange(): boolean {
     return this.data.isRange;
   }
+
   getMin(): number {
     return this.data.min;
   }
+
   getMax(): number {
     return this.data.max;
   }
+
   // Возвращает max - min
   getMaxDiapason(): number {
     return this.data.max - this.data.min;
   }
+
   getStepSize(): number {
     return this.data.stepSize;
   }

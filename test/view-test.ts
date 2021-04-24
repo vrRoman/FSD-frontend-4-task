@@ -38,13 +38,11 @@ const defaultModelOptions: ModelOptions = {
   max: 10,
 };
 
-
 describe('View with different options and get slider elements methods', () => {
   let model: IModel;
   beforeEach(() => {
     model = new Model(defaultModelOptions);
   });
-
 
   it('length in % with all elements and isResponsive', () => {
     const viewOptions: ViewOptions = {
@@ -75,7 +73,6 @@ describe('View with different options and get slider elements methods', () => {
     expect(view).toBeDefined();
   });
 
-
   it('getParent', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
 
@@ -84,6 +81,7 @@ describe('View with different options and get slider elements methods', () => {
   });
   it('getSlider', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
+    // eslint-disable-next-line no-unused-vars
     const presenter = new Presenter(model, view, {});
 
     console.log('Slider: ', view.getElem('slider'));
@@ -91,6 +89,7 @@ describe('View with different options and get slider elements methods', () => {
   });
   it('getBar', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
+    // eslint-disable-next-line no-unused-vars
     const presenter = new Presenter(model, view, {});
 
     console.log('Bar: ', view.getElem('bar'));
@@ -99,6 +98,7 @@ describe('View with different options and get slider elements methods', () => {
   it('getProgressBar isRange false', () => {
     model.setValue(3);
     const view = new View(defaultViewOptionsWithClass, document.body);
+    // eslint-disable-next-line no-unused-vars
     const presenter = new Presenter(model, view, {});
     console.log('ProgressBar isRange=false', view.getElem('progressBar'));
     expect(view.getElem('progressBar')).toBeDefined();
@@ -107,6 +107,7 @@ describe('View with different options and get slider elements methods', () => {
     model.setIsRange(true);
     model.setValue([3, 5]);
     const view = new View(defaultViewOptionsWithClass, document.body);
+    // eslint-disable-next-line no-unused-vars
     const presenter = new Presenter(model, view, {});
     console.log('ProgressBar isRange=true: ', view.getElem('progressBar'));
     expect(view.getElem('progressBar')).toBeDefined();
@@ -114,6 +115,7 @@ describe('View with different options and get slider elements methods', () => {
 
   it('getThumb, isRange false', () => {
     const view = new View(defaultViewOptionsWithClass, document.body);
+    // eslint-disable-next-line no-unused-vars
     const presenter = new Presenter(model, view, {});
     console.log('Thumb not array: ', view.getElem('thumb'));
     expect(view.getElem('thumb')).toBeDefined();
@@ -122,6 +124,7 @@ describe('View with different options and get slider elements methods', () => {
     model.setIsRange(true);
     model.setValue([0, 2]);
     const view: IView = new View(defaultViewOptionsWithClass, document.body);
+    // eslint-disable-next-line no-unused-vars
     const presenter = new Presenter(model, view, {});
     console.log('Thumb array: ', view.getElem('thumb'));
     expect(Array.isArray(view.getElem('thumb'))).toBe(true);
@@ -145,6 +148,7 @@ describe('View with different options and get slider elements methods', () => {
     model.setIsRange(true);
     model.setValue([1, 6]);
     view = new View(viewOptions, document.body);
+    // eslint-disable-next-line no-unused-vars
     presenter = new Presenter(model, view, {});
     console.log('Tooltip array: ', view.getElem('tooltip'));
     expect(Array.isArray(view.getElem('tooltip'))).toBe(true);
@@ -159,6 +163,7 @@ describe('View with different options and get slider elements methods', () => {
       hasScale: true,
     };
     view = new View(viewOptions, document.body);
+    // eslint-disable-next-line no-unused-vars
     presenter = new Presenter(model, view, {});
     console.log('scale: ', view.getElem('scale'));
     expect(view.getElem('scale')).toBeDefined();
@@ -173,6 +178,7 @@ describe('View with different options and get slider elements methods', () => {
       hasValueInfo: true,
     };
     view = new View(viewOptions, document.body);
+    // eslint-disable-next-line no-unused-vars
     presenter = new Presenter(model, view, {});
     console.log('ValueInfo: ', view.getElem('valueInfo'));
     expect(view.getElem('valueInfo')).toBeDefined();
@@ -188,7 +194,6 @@ describe('View get values', () => {
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
   });
-
 
   it('getUseKeyboard', () => {
     expect(view.getViewModel().getUseKeyboard()).toBe(true);
@@ -253,6 +258,7 @@ describe('View get values', () => {
     };
     document.body.style.width = '100px';
     view = new View(viewOptions, document.body);
+    // eslint-disable-next-line no-unused-vars
     presenter = new Presenter(model, view, {});
     // Учитывая margin-left и margin-right по 15
     expect(view.getViewModel().getLengthInPx()).toBe(100);
@@ -280,7 +286,6 @@ describe('View methods', () => {
     view = new View(defaultViewOptionsWithClass, document.body);
     presenter = new Presenter(model, view, {});
   });
-
 
   it('add scale interactivity', () => {
     view = new View({
@@ -321,7 +326,6 @@ describe('View methods', () => {
     console.log('Removed keyboard listener: ', view.getElem('slider'));
     expect(view.getViewModel().getUseKeyboard()).toBe(false);
   });
-
 
   it('setActiveThumb', () => {
     view.setActiveThumb();
@@ -494,6 +498,7 @@ describe('View methods', () => {
       ...defaultViewOptionsWithClass,
       hasValueInfo: true,
     }, document.body);
+    // eslint-disable-next-line no-unused-vars
     presenter = new Presenter(model, view, {});
     view.changeOptions({
       hasValueInfo: false,

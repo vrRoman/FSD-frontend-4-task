@@ -5,7 +5,9 @@ import isModelPropsValuesDefined from '../../../../../utils/isModelPropsValuesDe
 
 class TooltipView implements ITooltipView {
   private readonly target: Thumb
+
   private readonly viewModel: IViewModelGetMethods
+
   private tooltip: Tooltip | undefined
 
   constructor(target: Thumb, viewModel: IViewModelGetMethods) {
@@ -92,10 +94,8 @@ class TooltipView implements ITooltipView {
               this.tooltip[i].innerHTML = `<div class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</div>`;
             }
           }
-        } else {
-          if (!Array.isArray(value)) {
-            this.tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
-          }
+        } else if (!Array.isArray(value)) {
+          this.tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
         }
       }
     }

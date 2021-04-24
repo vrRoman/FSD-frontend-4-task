@@ -6,36 +6,35 @@ import { ModelOptionsOptionalParams } from '../Model/options';
 import { ViewOptionsOptionalParams } from '../View/options';
 import { PresenterOptions, PresenterOptionsOptionalParams } from './options';
 
-
 import { SubjectAction } from '../../ObserverAndSubject/interfacesAndTypes';
 import Observer from '../../ObserverAndSubject/Observer';
 
-
 class Presenter extends Observer implements IPresenter {
-  private _model: IModel;
-  private _view: IView;
+  private model: IModel;
+
+  private view: IView;
 
   onChange: Function | undefined
 
   constructor(model: IModel, view: IView, presenterOptions: PresenterOptions | SliderOptions) {
     super(model);
 
-    this._model = model;
-    this._view = view;
+    this.model = model;
+    this.view = view;
     this.onChange = presenterOptions.onChange;
 
-    this._provideInfoToView();
+    this.provideInfoToView();
 
-    this._view.drawSlider();
+    this.view.drawSlider();
   }
 
   onThumbMove(numOfSteps: number = 1, thumbNumber: 0 | 1 = 1) {
-    this._model.addStepsToValue(numOfSteps, thumbNumber, true);
+    this.model.addStepsToValue(numOfSteps, thumbNumber, true);
   }
 
   // Обновляет view
   update(action: SubjectAction): void {
-    this._view.updateModelPropsInSlider(action);
+    this.view.updateModelPropsInSlider(action);
     if (this.onChange) {
       this.onChange();
     }
@@ -71,10 +70,10 @@ class Presenter extends Observer implements IPresenter {
 
     // Передача новых опций
     if (Object.keys(newModelOptions).length !== 0) {
-      this._model.changeOptions(newModelOptions);
+      this.model.changeOptions(newModelOptions);
     }
     if (Object.keys(newViewOptions).length !== 0) {
-      this._view.changeOptions(newViewOptions);
+      this.view.changeOptions(newViewOptions);
     }
     if (Object.keys(newPresenterOptions).length !== 0) {
       if (newPresenterOptions.onChange) {
@@ -84,16 +83,16 @@ class Presenter extends Observer implements IPresenter {
   }
 
   // Передает во View modelProps и Presenter
-  private _provideInfoToView() {
-    this._view.setModelProps({
-      value: this._model.getValue(),
-      min: this._model.getMin(),
-      max: this._model.getMax(),
-      isRange: this._model.getIsRange(),
-      stepSize: this._model.getStepSize(),
+  private provideInfoToView() {
+    this.view.setModelProps({
+      value: this.model.getValue(),
+      min: this.model.getMin(),
+      max: this.model.getMax(),
+      isRange: this.model.getIsRange(),
+      stepSize: this.model.getStepSize(),
     });
 
-    this._view.setPresenter(this);
+    this.view.setPresenter(this);
   }
 }
 

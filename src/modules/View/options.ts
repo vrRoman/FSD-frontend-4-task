@@ -57,5 +57,4 @@ type ViewOptionsOptionalParams = {
   valueInfoClass?: string | string[]
 }
 
-
 export { ViewOptions, ViewOptionsOptionalParams };

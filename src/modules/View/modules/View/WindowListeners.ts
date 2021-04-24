@@ -6,9 +6,12 @@ import IScaleView from '../SubViews/ScaleView/interface';
 
 class WindowListeners implements IWindowListeners {
   private readonly viewModel: IViewModel
-  private thumbView: IThumbView | undefined
-  private barView: IBarView | undefined
-  private scaleView: IScaleView | undefined
+
+  private readonly thumbView: IThumbView | undefined
+
+  private readonly barView: IBarView | undefined
+
+  private readonly scaleView: IScaleView | undefined
 
   constructor(viewModel: IViewModel, views: Views) {
     this.viewModel = viewModel;
@@ -16,33 +19,33 @@ class WindowListeners implements IWindowListeners {
     this.barView = views.bar;
     this.scaleView = views.scale;
 
-    this._handleWindowResize = this._handleWindowResize.bind(this);
-    this._handleDocumentKeyDown = this._handleDocumentKeyDown.bind(this);
+    this.handleWindowResize = this.handleWindowResize.bind(this);
+    this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
   }
 
   // Добавить обработчик onKeydown и useKeyboard = true
   addKeyboardListener(): void {
-    document.addEventListener('keydown', this._handleDocumentKeyDown);
+    document.addEventListener('keydown', this.handleDocumentKeyDown);
   }
 
   // Убирает слушатель клавиатуры и useKeyboard = false
   removeKeyboardListener() {
-    document.removeEventListener('keydown', this._handleDocumentKeyDown);
+    document.removeEventListener('keydown', this.handleDocumentKeyDown);
   }
 
   // Изменяет значение isResponsive, добавляет/убирает слушатели window resize
   // Возвращает новое значение isResponsive
   setIsResponsive(newIsResponsive: boolean): void {
     if (newIsResponsive) {
-      window.removeEventListener('resize', this._handleWindowResize);
-      window.addEventListener('resize', this._handleWindowResize);
+      window.removeEventListener('resize', this.handleWindowResize);
+      window.addEventListener('resize', this.handleWindowResize);
     } else {
-      window.removeEventListener('resize', this._handleWindowResize);
+      window.removeEventListener('resize', this.handleWindowResize);
     }
   }
 
   // При нажатии клавиш wasd и стрелок вызывается moveActiveThumb(1/-1)
-  private _handleDocumentKeyDown(evt: KeyboardEvent): void {
+  private handleDocumentKeyDown(evt: KeyboardEvent): void {
     const isThisNextKey = evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
       || evt.key === 'd' || evt.key === 's';
     const isThisPrevKey = evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
@@ -58,7 +61,7 @@ class WindowListeners implements IWindowListeners {
   }
 
   // Используется в слушателях window-resize
-  private _handleWindowResize(): void {
+  private handleWindowResize(): void {
     if (this.barView) {
       const bar = this.barView.getBar();
       if (bar) {
@@ -75,6 +78,5 @@ class WindowListeners implements IWindowListeners {
     }
   }
 }
-
 
 export default WindowListeners;

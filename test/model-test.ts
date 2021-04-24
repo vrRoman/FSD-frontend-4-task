@@ -16,7 +16,6 @@ const defaultOptions = {
   max: 10,
 };
 
-
 describe('model get methods and props', () => {
   let model: IModel;
 
@@ -41,7 +40,6 @@ describe('model get methods and props', () => {
     expect(model.getMaxDiapason()).toBe(10);
   });
 });
-
 
 describe('Model value, stepSize, min/max checking', () => {
   it('value is array when isRange = true', () => {
@@ -129,7 +127,6 @@ describe('Model value, stepSize, min/max checking', () => {
     expect(modelMinMax.getValue()).toBe(0);
   });
 });
-
 
 describe('model props change', () => {
   let model: IModel;

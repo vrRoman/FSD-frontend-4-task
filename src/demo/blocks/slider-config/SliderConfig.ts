@@ -5,8 +5,11 @@ import { IViewModel } from '../../../modules/View/modules/ViewModel/interfacesAn
 
 class SliderConfig implements IObserver, ISliderConfig {
   private readonly inputElSelector: string;
+
   private elem: HTMLElement;
+
   private $slider: JQuery;
+
   private inputElements: Array<HTMLElement>;
 
   constructor(configElem: HTMLElement, sliderElem: HTMLElement) {
@@ -91,8 +94,8 @@ class SliderConfig implements IObserver, ISliderConfig {
     const elem = this.getInputEl(optionName);
     const curVal = this.getTextInputValue(optionName);
     const newVal = Array.isArray(curVal)
-        ? curVal.map((val) => String(val))
-        : curVal;
+      ? curVal.map((val) => String(val))
+      : curVal;
     if (elem) {
       $(elem).val(newVal);
     } else {
@@ -154,12 +157,16 @@ class SliderConfig implements IObserver, ISliderConfig {
   }
 
   getTextInputValue(optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max'): number
+
   // eslint-disable-next-line no-dupe-class-members
   getTextInputValue(optionName: 'length'): string
+
   // eslint-disable-next-line no-dupe-class-members
   getTextInputValue(optionName: 'scaleValue'): number | Array<string | number>
+
   // eslint-disable-next-line no-dupe-class-members
   getTextInputValue(optionName: optionNames): number | string | Array<number | string>
+
   // eslint-disable-next-line no-dupe-class-members
   getTextInputValue(optionName: string): number | string | Array<string | number> | null {
     let module: IModel | IViewModel;
@@ -289,8 +296,8 @@ class SliderConfig implements IObserver, ISliderConfig {
 
     const sliderValue = this.$slider.slider('value');
     const val = $(elem).val() === ''
-        ? this.getTextInputValue(optionName)
-        : Number($(elem).val());
+      ? this.getTextInputValue(optionName)
+      : Number($(elem).val());
     let newSliderValue: Value;
 
     if (Array.isArray(sliderValue)) {
