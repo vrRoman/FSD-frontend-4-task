@@ -1,10 +1,10 @@
 import { IObserver, ISubject, SubjectAction } from './interfacesAndTypes';
 
 
-class Subject implements ISubject {
+abstract class Subject implements ISubject {
   private observers: Array<any>;
 
-  constructor() {
+  protected constructor() {
     this.observers = [];
   }
 
