@@ -52,13 +52,17 @@ class ScaleView implements IScaleView {
           if (Array.isArray(scaleValue)) {
             steps = scaleValue;
           } else {
-            const maxDiapason = minAndMax[1] - minAndMax[0];
-            for (let i = 0; i < scaleValue; i += 1) {
-              steps.push(
-                Number(
-                  (minAndMax[0] + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
-                ),
-              );
+            if (scaleValue === 1) {
+              steps.push(minAndMax[0]);
+            } else {
+              const maxDiapason = minAndMax[1] - minAndMax[0];
+              for (let i = 0; i < scaleValue; i += 1) {
+                steps.push(
+                  Number(
+                    (minAndMax[0] + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
+                  ),
+                );
+              }
             }
           }
 
