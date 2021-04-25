@@ -1,4 +1,4 @@
-import IView, { ElemName, IWindowListeners } from './interfaces';
+import IView, { ElemName, ElemNamesNotArrays, IWindowListeners } from './interfaces';
 import IPresenter from '../../../Presenter/interface';
 import ViewModel from '../ViewModel/ViewModel';
 import { IViewModel, ViewClasses } from '../ViewModel/interfacesAndTypes';
@@ -97,6 +97,12 @@ class View extends Observer implements IView {
   }
 
   // Возвращает элемент, который указан в elemName
+  getElem(elemName: ElemNamesNotArrays): HTMLElement | undefined
+
+  // eslint-disable-next-line no-dupe-class-members
+  getElem(elemName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement] | undefined
+
+  // eslint-disable-next-line no-dupe-class-members
   getElem(elemName: ElemName): HTMLElement | [HTMLElement, HTMLElement] | undefined {
     let elem: HTMLElement | [HTMLElement, HTMLElement] | undefined;
     switch (elemName) {

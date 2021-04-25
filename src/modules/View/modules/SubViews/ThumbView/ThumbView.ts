@@ -95,6 +95,23 @@ class ThumbView implements IThumbView {
     this.thumb = undefined;
   }
 
+  updateClientCoords() {
+    const activeThumb = this.viewModel.getActiveThumb();
+    if (activeThumb) {
+      // Тут возможно this.clientX/Y = evt.clientX/Y, но я сделал так,
+      // чтобы положение курсора все время было в середине thumb. Т.е.
+      // определение прошлого положения курсора зависит не от самого
+      // курсора, а от thumb
+      const clientX = activeThumb.getBoundingClientRect().left
+        + activeThumb.offsetWidth / 2;
+
+      const clientY = activeThumb.getBoundingClientRect().top
+        + activeThumb.offsetHeight / 2;
+
+      this.mainView.setClientCoords([clientX, clientY]);
+    }
+  }
+
   // Обновляет положение ползунков
   update() {
     if (this.thumb) {
@@ -261,7 +278,7 @@ class ThumbView implements IThumbView {
         activeThumb.style.zIndex = '';
       }
 
-      let thumbNumber: 0|1 | undefined;
+      let thumbNumber: 0 | 1 | undefined;
       if (Array.isArray(this.thumb)) {
         if (target.isEqualNode(this.thumb[0])) {
           thumbNumber = 0;
@@ -272,19 +289,7 @@ class ThumbView implements IThumbView {
 
       this.setActiveThumb(thumbNumber);
 
-      if (activeThumb) {
-        // Тут возможно this.clientX/Y = evt.clientX/Y, но я сделал так,
-        // чтобы положение курсора все время было в середине thumb. Т.е.
-        // определение прошлого положения курсора зависит не от самого
-        // курсора, а от thumb(аналогично в handleThumbMouseMove)
-        const clientX = activeThumb.getBoundingClientRect().left
-          + activeThumb.offsetWidth / 2;
-
-        const clientY = activeThumb.getBoundingClientRect().top
-          + activeThumb.offsetHeight / 2;
-
-        this.mainView.setClientCoords([clientX, clientY]);
-      }
+      this.updateClientCoords();
 
       document.addEventListener('mousemove', this.handleThumbMouseMove);
       document.addEventListener('touchmove', this.handleThumbMouseMove);
@@ -325,29 +330,35 @@ class ThumbView implements IThumbView {
           clientX = evt.touches[0].clientX;
           clientY = evt.touches[0].clientY;
         }
-        if (this.viewModel.getIsVertical()) {
-          if (Math.abs(clientY - this.viewModel.getClientCoords()[1]) >= stepLength) {
-            const numOfSteps = Math.trunc(
-              (clientY - this.viewModel.getClientCoords()[1]) / stepLength,
-            );
-            this.moveActiveThumb(numOfSteps);
 
-            this.mainView.setClientCoords([
-              this.viewModel.getClientCoords()[0],
-              activeThumb.getBoundingClientRect().top + activeThumb.offsetHeight / 2,
-            ]);
-          }
-        } else if (Math.abs(clientX - this.viewModel.getClientCoords()[0]) >= stepLength) {
-          const numOfSteps = Math.trunc(
-            (clientX - this.viewModel.getClientCoords()[0]) / stepLength,
-          );
-          this.moveActiveThumb(numOfSteps);
+        const isVertical = this.viewModel.getIsVertical();
+        const oldCoord = isVertical
+          ? this.viewModel.getClientCoords()[1]
+          : this.viewModel.getClientCoords()[0];
+        let curCoord = isVertical ? clientY : clientX;
 
-          this.mainView.setClientCoords([
-            activeThumb.getBoundingClientRect().left + activeThumb.offsetWidth / 2,
-            this.viewModel.getClientCoords()[1],
-          ]);
+        const bar = this.mainView.getElem('bar');
+        if (bar === undefined) {
+          throw new Error('bar is undefined');
         }
+        const barMaxCoord = isVertical
+          ? bar.getBoundingClientRect().bottom
+          : bar.getBoundingClientRect().right;
+        const barMinCoord = isVertical
+          ? bar.getBoundingClientRect().top
+          : bar.getBoundingClientRect().left;
+        if (curCoord >= barMaxCoord) {
+          curCoord += stepLength;
+        } else if (curCoord <= barMinCoord) {
+          curCoord -= stepLength;
+        }
+
+        const numOfSteps = Math.trunc(((curCoord - oldCoord) * 2) / stepLength);
+
+        this.moveActiveThumb(numOfSteps);
+        this.updateClientCoords();
+      } else {
+        throw new Error('activeThumb is undefined');
       }
     }
   }

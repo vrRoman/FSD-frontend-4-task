@@ -10,8 +10,8 @@ import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
 import { ModelProps } from '../../../Model/interfacesAndTypes';
 
-type ElemName = 'parent' | 'slider' | 'bar' | 'progressBar'
-  | 'thumb' | 'tooltip' | 'scale' | 'valueInfo'
+type ElemNamesNotArrays = 'parent' | 'slider' | 'bar' | 'progressBar' | 'scale' | 'valueInfo'
+type ElemName = ElemNamesNotArrays | 'thumb' | 'tooltip'
 
 type Views = {
   bar?: IBarView
@@ -36,7 +36,9 @@ interface IView extends IObserver {
   setClientCoords(coords: [number, number]): void
 
   getViewModel(): IViewModel
-  getElem(elemName: ElemName): HTMLElement | [HTMLElement, HTMLElement] | undefined
+
+  getElem(elemName: ElemNamesNotArrays): HTMLElement | undefined
+  getElem(elemName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement] | undefined
 }
 
 interface IWindowListeners {
@@ -46,4 +48,4 @@ interface IWindowListeners {
 }
 
 export default IView;
-export { ElemName, Views, IWindowListeners };
+export { ElemNamesNotArrays, ElemName, Views, IWindowListeners };
