@@ -371,6 +371,7 @@ class View extends Observer implements IView {
     if (this.thumbView) {
       const thumb = this.thumbView.get();
       if (thumb) {
+        this.removeActiveThumb();
         if (Array.isArray(thumb)) {
           this.viewModel.setActiveThumb(thumb[numOfThumb]);
         } else {
@@ -392,7 +393,7 @@ class View extends Observer implements IView {
     }
   }
 
-  // Убирает класс активного ползунка и обращается к viewModel для удаления активного ползунка
+  // Обращается к viewModel для удаления активного ползунка
   removeActiveThumb(): void {
     this.viewModel.removeActiveThumb();
   }

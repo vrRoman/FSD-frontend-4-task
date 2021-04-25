@@ -21,7 +21,7 @@ class ThumbView implements IThumbView {
     this.handleThumbMouseDown = this.handleThumbMouseDown.bind(this);
     this.handleThumbMouseUp = this.handleThumbMouseUp.bind(this);
     this.handleThumbMouseMove = this.handleThumbMouseMove.bind(this);
-    this.removeActiveThumb = this.removeActiveThumb.bind(this);
+    this.handleDocumentMouseUp = this.handleDocumentMouseUp.bind(this);
   }
 
   // Создает и возвращает ползунок(ки) в баре
@@ -152,11 +152,12 @@ class ThumbView implements IThumbView {
     return this.thumb;
   }
 
-  // Вызывает this.removeActiveThumb, добавляет класс новому activeThumb, увеличивает z-index
+  // Убирает активный ползунок, добавляет класс новому activeThumb, увеличивает z-index
   // нового активного ползунка, обращается к mainView
   setActiveThumb(numOfThumb: number = 1) {
     if (this.thumb) {
       this.removeActiveThumb();
+      this.mainView.removeActiveThumb();
 
       const activeThumb = Array.isArray(this.thumb) ? this.thumb[numOfThumb] : this.thumb;
       const { activeThumbClass } = this.viewModel.getClasses();
@@ -263,10 +264,15 @@ class ThumbView implements IThumbView {
     }
   }
 
+  private handleDocumentMouseUp() {
+    this.removeActiveThumb();
+    this.mainView.removeActiveThumb();
+  }
+
   // При нажатии на ползунок убирает z-index предыдущего активного ползунка,
   // вызывает this.setActiveThumb, обращается к mainView для изменения clientX/Y, добавляет
   // обработчики handleThumbMouseMove, handleThumbMouseUp и убирает слушатель
-  // document-mouseup-removeActiveThumb
+  // handleDocumentMouseUp
   private handleThumbMouseDown(evt: MouseEvent | TouchEvent) {
     const activeThumb = this.viewModel.getActiveThumb();
     evt.preventDefault();
@@ -307,8 +313,8 @@ class ThumbView implements IThumbView {
       document.addEventListener('mouseup', this.handleThumbMouseUp);
       document.addEventListener('touchend', this.handleThumbMouseUp);
 
-      document.removeEventListener('mouseup', this.removeActiveThumb);
-      document.removeEventListener('touchend', this.removeActiveThumb);
+      document.removeEventListener('mouseup', this.handleDocumentMouseUp);
+      document.removeEventListener('touchend', this.handleDocumentMouseUp);
     }
   }
 
@@ -320,8 +326,8 @@ class ThumbView implements IThumbView {
     document.removeEventListener('touchmove', this.handleThumbMouseMove);
     document.removeEventListener('mouseup', this.handleThumbMouseUp);
     document.removeEventListener('touchend', this.handleThumbMouseUp);
-    document.addEventListener('mouseup', this.removeActiveThumb);
-    document.addEventListener('touchend', this.removeActiveThumb);
+    document.addEventListener('mouseup', this.handleDocumentMouseUp);
+    document.addEventListener('touchend', this.handleDocumentMouseUp);
   }
 
   // При перемещении мыши вызывается moveActiveThumb с numOfSteps,
