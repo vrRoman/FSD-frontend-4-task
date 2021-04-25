@@ -186,8 +186,45 @@ class ScaleView implements IScaleView {
     const stepElem = <HTMLElement>evt.currentTarget;
     const stepLength = this.viewModel.getStepLength();
 
+    let leftOrTop: 'left' | 'top';
+    let offsetWidthOrHeight: 'offsetWidth' | 'offsetHeight';
+    if (this.viewModel.getIsVertical()) {
+      leftOrTop = 'top';
+      offsetWidthOrHeight = 'offsetHeight';
+    } else {
+      leftOrTop = 'left';
+      offsetWidthOrHeight = 'offsetWidth';
+    }
+
     if (!this.viewModel.getActiveThumb()) {
-      this.mainView.setActiveThumb();
+      let thumbNum: 0 | 1 = 1;
+      const thumb = this.mainView.getElem('thumb');
+      if (Array.isArray(thumb)) {
+        const stepElemPos = parseFloat(stepElem.style[leftOrTop])
+          + stepElem[offsetWidthOrHeight] / 2;
+        const firstThumbPos = parseFloat(thumb[0].style[leftOrTop])
+          + thumb[0][offsetWidthOrHeight] / 2;
+        const secondThumbPos = parseFloat(thumb[1].style[leftOrTop])
+          + thumb[1][offsetWidthOrHeight] / 2;
+
+        if (firstThumbPos === secondThumbPos) {
+          const length = this.viewModel.getLengthInPx();
+          if (length) {
+            if (stepElemPos < length / 2) {
+              thumbNum = 0;
+            } else {
+              thumbNum = 1;
+            }
+          }
+        } else if (secondThumbPos === stepElemPos) {
+          thumbNum = 0;
+        } if (firstThumbPos === stepElemPos) {
+          thumbNum = 1;
+        } else if (Math.abs(firstThumbPos - stepElemPos) < Math.abs(secondThumbPos - stepElemPos)) {
+          thumbNum = 0;
+        }
+      }
+      this.mainView.setActiveThumb(thumbNum);
     }
 
     if (stepLength) {
@@ -196,23 +233,13 @@ class ScaleView implements IScaleView {
       if (modelProps && modelProps.stepSize !== undefined) {
         const activeThumb = this.viewModel.getActiveThumb();
         if (activeThumb) {
-          let leftOrTop: 'left' | 'top';
-          let offsetWidthOrHeigth: 'offsetWidth' | 'offsetHeight';
-          if (this.viewModel.getIsVertical()) {
-            leftOrTop = 'top';
-            offsetWidthOrHeigth = 'offsetHeight';
-          } else {
-            leftOrTop = 'left';
-            offsetWidthOrHeigth = 'offsetWidth';
-          }
           const stepValue = (
-            parseFloat(stepElem.style[leftOrTop]) + stepElem[offsetWidthOrHeigth] / 2
+            parseFloat(stepElem.style[leftOrTop]) + stepElem[offsetWidthOrHeight] / 2
           ) / (stepLength / modelProps.stepSize);
           const thumbValue = (
-            parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeigth] / 2
+            parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeight] / 2
           ) / (stepLength / modelProps.stepSize);
           this.mainView.moveActiveThumb((stepValue - thumbValue) / modelProps.stepSize);
-          this.mainView.removeActiveThumb();
         }
       }
     }

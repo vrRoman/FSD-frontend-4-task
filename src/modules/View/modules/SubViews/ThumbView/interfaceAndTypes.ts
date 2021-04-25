@@ -9,7 +9,6 @@ interface IThumbView {
   setActiveThumb(numOfThumb?: number): void
   removeActiveThumb(): void
   moveActiveThumb(numOfSteps?: number): void
-  addListener() : void
 }
 
 export { IThumbView, Thumb };

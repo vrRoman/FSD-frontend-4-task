@@ -209,7 +209,9 @@ class ThumbView implements IThumbView {
       if (activeThumb) {
         let isActiveThumbFirst: boolean = false;
         if (Array.isArray(this.thumb)) {
-          if (this.thumb[0].isEqualNode(activeThumb)) {
+          if (this.thumb[0].isEqualNode(this.thumb[1])) {
+            isActiveThumbFirst = numOfSteps < 0;
+          } else if (this.thumb[0].isEqualNode(activeThumb)) {
             isActiveThumbFirst = true;
           }
         }
@@ -252,7 +254,7 @@ class ThumbView implements IThumbView {
   }
 
   // Добавляет слушатель thumb onMouseDown к ползунку(ам)
-  addListener() {
+  private addListener() {
     if (Array.isArray(this.thumb)) {
       for (let i = 0; i <= 1; i += 1) {
         this.thumb[i].addEventListener('mousedown', this.handleThumbMouseDown);
@@ -262,6 +264,9 @@ class ThumbView implements IThumbView {
       this.thumb.addEventListener('mousedown', this.handleThumbMouseDown);
       this.thumb.addEventListener('touchstart', this.handleThumbMouseDown);
     }
+
+    document.addEventListener('mouseup', this.handleThumbMouseUp);
+    document.addEventListener('touchend', this.handleThumbMouseUp);
   }
 
   private handleDocumentMouseUp() {
@@ -291,7 +296,7 @@ class ThumbView implements IThumbView {
         if (firstThumbPos === this.thumb[1].style[leftOrTop]) {
           const length = this.viewModel.getLengthInPx();
           const shouldBeSecondThumb = length !== undefined
-            && parseInt(firstThumbPos, 10) + this.thumb[0].offsetWidth < length / 2;
+            && parseFloat(firstThumbPos) + this.thumb[0].offsetWidth < length / 2;
           if (shouldBeSecondThumb) {
             thumbNumber = 1;
           } else {
@@ -308,11 +313,10 @@ class ThumbView implements IThumbView {
 
       this.updateClientCoords();
 
-      document.addEventListener('mousemove', this.handleThumbMouseMove);
-      document.addEventListener('touchmove', this.handleThumbMouseMove);
       document.addEventListener('mouseup', this.handleThumbMouseUp);
       document.addEventListener('touchend', this.handleThumbMouseUp);
-
+      document.addEventListener('mousemove', this.handleThumbMouseMove);
+      document.addEventListener('touchmove', this.handleThumbMouseMove);
       document.removeEventListener('mouseup', this.handleDocumentMouseUp);
       document.removeEventListener('touchend', this.handleDocumentMouseUp);
     }
