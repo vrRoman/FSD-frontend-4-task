@@ -71,7 +71,7 @@ module.exports = {
 
     new HtmlWebpackPlugin({
       template: './src/demo/demo.pug',
-      filename: 'demo.html',
+      filename: 'index.html',
       inject: false,
       hash: true,
     }),
@@ -81,7 +81,6 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
     open: true,
-    index: 'demo.html',
     port: 9000,
     hot: true,
   },

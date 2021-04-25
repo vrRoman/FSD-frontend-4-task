@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "predeploy": "npm run build:prod",
+    "deploy": "gh-pages -d dist",
     "build:dev": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "start": "webpack-dev-server",
@@ -39,6 +41,7 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-fsd": "^1.0.1",
     "eslint-plugin-import": "^2.22.1",
+    "gh-pages": "*",
     "html-webpack-plugin": "^4.5.2",
     "karma": "^5.2.3",
     "karma-chrome-launcher": "^3.1.0",

@@ -1,6 +1,6 @@
 # Слайдер. Плагин для JQuery
 
-### [Демо слайдера](https://vrroman.github.io/FSD-frontend-4-task/demo/demo.html)
+### [Демо слайдера](https://vrroman.github.io/FSD-frontend-4-task/)
 ---
 ## Развертывание
 #### Установка библиотек
