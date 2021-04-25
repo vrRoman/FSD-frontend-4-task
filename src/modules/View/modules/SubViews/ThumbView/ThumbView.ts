@@ -279,8 +279,19 @@ class ThumbView implements IThumbView {
       }
 
       let thumbNumber: 0 | 1 | undefined;
+      const leftOrTop = this.viewModel.getIsVertical() ? 'top' : 'left';
       if (Array.isArray(this.thumb)) {
-        if (target.isEqualNode(this.thumb[0])) {
+        const firstThumbPos = this.thumb[0].style[leftOrTop];
+        if (firstThumbPos === this.thumb[1].style[leftOrTop]) {
+          const length = this.viewModel.getLengthInPx();
+          const shouldBeSecondThumb = length !== undefined
+            && parseInt(firstThumbPos, 10) + this.thumb[0].offsetWidth < length / 2;
+          if (shouldBeSecondThumb) {
+            thumbNumber = 1;
+          } else {
+            thumbNumber = 0;
+          }
+        } else if (target.isEqualNode(this.thumb[0])) {
           thumbNumber = 0;
         } else {
           thumbNumber = 1;
