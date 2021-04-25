@@ -52,7 +52,7 @@ class ScaleView implements IScaleView {
           const scaleValue = this.viewModel.getScaleValue();
 
           if (Array.isArray(scaleValue)) {
-            steps = scaleValue.map((el) => String(el));
+            steps = scaleValue;
           } else {
             let stepNumber = minAndMax[0];
             steps.push(stepNumber);
@@ -70,7 +70,7 @@ class ScaleView implements IScaleView {
             if (Array.isArray(scaleValue)) {
               position = (length / (steps.length - 1)) * i;
             } else {
-              position = Number(steps[i]) * oneValueLength;
+              position = (Number(steps[i]) * oneValueLength) - (Number(steps[0]) * oneValueLength);
             }
             stepElem.innerText = String(steps[i]);
             stepElem.style.position = 'absolute';
@@ -105,17 +105,33 @@ class ScaleView implements IScaleView {
 
   // Обновляет положение элементов шкалы значений
   update() {
-    const length = this.viewModel.getLengthInPx();
-    if (this.scale && length) {
+    const modelProps = this.viewModel.getModelProps();
+
+    if (modelProps === undefined) {
+      throw new Error('modelProps is undefined');
+    }
+
+    if (this.scale) {
       const stepElems = Array.from(this.scale.children) as HTMLElement[];
+      const minMaxLength = [modelProps.min, modelProps.max, this.viewModel.getLengthInPx()];
 
-      for (let i = 0; i < stepElems.length; i += 1) {
-        const position = (length / (stepElems.length - 1)) * i;
-
-        if (this.viewModel.getIsVertical()) {
-          stepElems[i].style.top = `${position - stepElems[i].offsetHeight / 2}px`;
-        } else {
-          stepElems[i].style.left = `${position - stepElems[i].offsetWidth / 2}px`;
+      if (areNumbersDefined(minMaxLength)) {
+        const [min, max, length] = minMaxLength;
+        const scaleValue = this.viewModel.getScaleValue();
+        for (let i = 0; i < stepElems.length; i += 1) {
+          const oneValueLength = length / (max - min);
+          let position: number;
+          if (Array.isArray(scaleValue)) {
+            position = (length / (stepElems.length - 1)) * i;
+          } else {
+            position = (Number(stepElems[i].innerText) * oneValueLength)
+              - (Number(stepElems[0].innerText) * oneValueLength);
+          }
+          if (this.viewModel.getIsVertical()) {
+            stepElems[i].style.top = `${position - stepElems[i].offsetHeight / 2}px`;
+          } else {
+            stepElems[i].style.left = `${position - stepElems[i].offsetWidth / 2}px`;
+          }
         }
       }
     }
