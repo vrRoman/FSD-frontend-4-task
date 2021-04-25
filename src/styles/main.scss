@@ -91,7 +91,7 @@
     }
   }
 
-  &_vertical {
+  #{$selector}_vertical {
     height: 100%;
 
     #{$selector}__bar {
@@ -107,12 +107,14 @@
     }
 
     #{$selector}__tooltip {
+      top: unset;
       right: -20px;
       align-items: center;
     }
 
     #{$selector}__thumb_active {
       #{$selector}__tooltip {
+        top: unset;
         right: -21px;
       }
     }
