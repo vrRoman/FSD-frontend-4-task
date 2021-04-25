@@ -36,10 +36,9 @@ declare global {
     scaleValue: 2,
     hasValueInfo: false,
     isVertical: false,
-    isResponsive: false,
-
+    isResponsive: true,
     useKeyboard: true,
-    isScaleClickable: false,
+    isScaleClickable: true,
   };
 
   // eslint-disable-next-line no-param-reassign
