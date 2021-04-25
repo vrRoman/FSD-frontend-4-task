@@ -52,24 +52,27 @@ class ScaleView implements IScaleView {
           const scaleValue = this.viewModel.getScaleValue();
 
           if (Array.isArray(scaleValue)) {
-            steps = scaleValue;
-          } else if (scaleValue === 1) {
-            steps.push(minAndMax[0]);
+            steps = scaleValue.map((el) => String(el));
           } else {
-            const maxDiapason = minAndMax[1] - minAndMax[0];
-            for (let i = 0; i < scaleValue; i += 1) {
-              steps.push(
-                Number(
-                  (minAndMax[0] + ((maxDiapason / (scaleValue - 1)) * i)).toFixed(3),
-                ),
-              );
+            let stepNumber = minAndMax[0];
+            steps.push(stepNumber);
+            while (stepNumber < minAndMax[1] - scaleValue) {
+              stepNumber += scaleValue;
+              steps.push(Number(stepNumber.toFixed(3)));
             }
+            steps.push(minAndMax[1]);
           }
 
           for (let i = 0; i < steps.length; i += 1) {
             const stepElem = document.createElement('div');
-            const position = (length / (steps.length - 1)) * i;
-            stepElem.innerText = `${steps[i]}`;
+            const oneValueLength = length / (minAndMax[1] - minAndMax[0]);
+            let position: number;
+            if (Array.isArray(scaleValue)) {
+              position = (length / (steps.length - 1)) * i;
+            } else {
+              position = Number(steps[i]) * oneValueLength;
+            }
+            stepElem.innerText = String(steps[i]);
             stepElem.style.position = 'absolute';
             scale.appendChild(stepElem);
             if (this.viewModel.getIsVertical()) {

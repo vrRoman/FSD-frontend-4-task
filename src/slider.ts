@@ -33,7 +33,7 @@ declare global {
     length: '100%',
     hasTooltip: false,
     hasScale: false,
-    scaleValue: 3,
+    scaleValue: 2,
     hasValueInfo: false,
     isVertical: false,
     isResponsive: false,
