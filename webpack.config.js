@@ -22,6 +22,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /favicons\//,
+        loader: 'file-loader',
+        options: {
+          name: 'favicons/[name].[ext]',
+        },
+      },
+      {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {

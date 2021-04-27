@@ -7,3 +7,5 @@ const importAll = (requireContext: __WebpackModuleApi.RequireContext) => {
 };
 
 importAll(require.context('./', true, /\.s[ac]ss$/));
+importAll(require.context('./', true, /\.(png|svg|ico)$/));
+importAll(require.context('./', true, /\.(xml|webmanifest)$/));
