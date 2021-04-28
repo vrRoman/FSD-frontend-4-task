@@ -1,7 +1,7 @@
 import { IThumbView, Thumb } from './interfaceAndTypes';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IView from '../../View/interfaces';
-import areNumbersDefined from '../../../../../utils/areNumbersDefined';
+import areNumbersDefined from '../../../../../utilities/areNumbersDefined';
 
 class ThumbView implements IThumbView {
   private readonly target: HTMLElement
@@ -52,28 +52,28 @@ class ThumbView implements IThumbView {
       return thumb;
     }
     if (Array.isArray(valuePosition)) {
-      const thumbElems: Array<HTMLElement> = [];
+      const thumbElements: Array<HTMLElement> = [];
       for (let i = 0; i < valuePosition.length; i += 1) {
-        const thumbElem = document.createElement('div');
+        const newThumbElement = document.createElement('div');
         if (Array.isArray(thumbClass)) {
-          thumbElem.classList.add(...thumbClass);
+          newThumbElement.classList.add(...thumbClass);
         } else {
-          thumbElem.classList.add(thumbClass);
+          newThumbElement.classList.add(thumbClass);
         }
-        thumbElem.style.position = 'absolute';
+        newThumbElement.style.position = 'absolute';
 
-        this.target.appendChild(thumbElem);
+        this.target.appendChild(newThumbElement);
 
         if (this.viewModel.getIsVertical()) {
-          thumbElem.style.top = `${valuePosition[i] - thumbElem.offsetHeight / 2}px`;
+          newThumbElement.style.top = `${valuePosition[i] - newThumbElement.offsetHeight / 2}px`;
         } else {
-          thumbElem.style.left = `${valuePosition[i] - thumbElem.offsetWidth / 2}px`;
+          newThumbElement.style.left = `${valuePosition[i] - newThumbElement.offsetWidth / 2}px`;
         }
 
-        thumbElems.push(thumbElem);
+        thumbElements.push(newThumbElement);
       }
 
-      this.thumb = [thumbElems[0], thumbElems[1]];
+      this.thumb = [thumbElements[0], thumbElements[1]];
 
       this.addListener();
       return this.thumb;
@@ -85,8 +85,8 @@ class ThumbView implements IThumbView {
   remove() {
     if (this.thumb) {
       if (Array.isArray(this.thumb)) {
-        this.thumb.forEach((elem) => {
-          elem.remove();
+        this.thumb.forEach((element) => {
+          element.remove();
         });
       } else {
         this.thumb.remove();
@@ -95,10 +95,10 @@ class ThumbView implements IThumbView {
     this.thumb = undefined;
   }
 
-  updateClientCoords() {
+  updateClientCoordinates() {
     const activeThumb = this.viewModel.getActiveThumb();
     if (activeThumb) {
-      // Тут возможно this.clientX/Y = evt.clientX/Y, но я сделал так,
+      // Тут возможно this.clientX/Y = event.clientX/Y, но я сделал так,
       // чтобы положение курсора все время было в середине thumb. Т.е.
       // определение прошлого положения курсора зависит не от самого
       // курсора, а от thumb
@@ -108,39 +108,39 @@ class ThumbView implements IThumbView {
       const clientY = activeThumb.getBoundingClientRect().top
         + activeThumb.offsetHeight / 2;
 
-      this.mainView.setClientCoords([clientX, clientY]);
+      this.mainView.setClientCoordinates([clientX, clientY]);
     }
   }
 
   // Обновляет положение ползунков
   update() {
     if (this.thumb) {
-      const valuePosition = this.viewModel.getValuePosition();
-      let valPos: number[];
-      let thumb: HTMLElement[];
+      const currentValuePosition = this.viewModel.getValuePosition();
+      let valuePositionArray: number[];
+      let thumbArray: HTMLElement[];
 
-      if (valuePosition !== undefined) {
-        if (typeof valuePosition === 'number') {
+      if (currentValuePosition !== undefined) {
+        if (typeof currentValuePosition === 'number') {
           if (!Array.isArray(this.thumb)) {
-            valPos = [valuePosition];
-            thumb = [this.thumb];
+            valuePositionArray = [currentValuePosition];
+            thumbArray = [this.thumb];
           } else {
             throw new Error('valuePosition is number, but thumb is array.');
           }
         } else if (Array.isArray(this.thumb)) {
-          valPos = valuePosition;
-          thumb = this.thumb;
+          valuePositionArray = currentValuePosition;
+          thumbArray = this.thumb;
         } else {
           throw new Error('valuePosition is array, but thumb is not array.');
         }
 
-        thumb.forEach((_, index) => {
+        thumbArray.forEach((_, index) => {
           if (this.viewModel.getIsVertical()) {
-            thumb[index].style.top = `${valPos[index] - thumb[index].offsetHeight / 2}px`;
-            thumb[index].style.left = '';
+            thumbArray[index].style.top = `${valuePositionArray[index] - thumbArray[index].offsetHeight / 2}px`;
+            thumbArray[index].style.left = '';
           } else {
-            thumb[index].style.left = `${valPos[index] - thumb[index].offsetWidth / 2}px`;
-            thumb[index].style.top = '';
+            thumbArray[index].style.left = `${valuePositionArray[index] - thumbArray[index].offsetWidth / 2}px`;
+            thumbArray[index].style.top = '';
           }
         });
       }
@@ -154,12 +154,12 @@ class ThumbView implements IThumbView {
 
   // Убирает активный ползунок, добавляет класс новому activeThumb, увеличивает z-index
   // нового активного ползунка, обращается к mainView
-  setActiveThumb(numOfThumb: number = 1) {
+  setActiveThumb(thumbNumber: number = 1) {
     if (this.thumb) {
       this.removeActiveThumb();
       this.mainView.removeActiveThumb();
 
-      const activeThumb = Array.isArray(this.thumb) ? this.thumb[numOfThumb] : this.thumb;
+      const activeThumb = Array.isArray(this.thumb) ? this.thumb[thumbNumber] : this.thumb;
       const { activeThumbClass } = this.viewModel.getClasses();
       if (activeThumb) {
         if (Array.isArray(activeThumbClass)) {
@@ -180,7 +180,7 @@ class ThumbView implements IThumbView {
           }
         }
 
-        this.mainView.setActiveThumb(numOfThumb);
+        this.mainView.setActiveThumb(thumbNumber);
       }
     }
   }
@@ -198,8 +198,8 @@ class ThumbView implements IThumbView {
     }
   }
 
-  // Перемещает ползунок на numOfSteps шагов
-  moveActiveThumb(numOfSteps: number = 1) {
+  // Перемещает ползунок на numberOfSteps шагов
+  moveActiveThumb(numberOfSteps: number = 1) {
     const stepLengthAndLength = [this.viewModel.getStepLength(), this.viewModel.getLengthInPx()];
 
     if (areNumbersDefined(stepLengthAndLength)) {
@@ -210,7 +210,7 @@ class ThumbView implements IThumbView {
         let isActiveThumbFirst: boolean = false;
         if (Array.isArray(this.thumb)) {
           if (this.thumb[0].isEqualNode(this.thumb[1])) {
-            isActiveThumbFirst = numOfSteps < 0;
+            isActiveThumbFirst = numberOfSteps < 0;
           } else if (this.thumb[0].isEqualNode(activeThumb)) {
             isActiveThumbFirst = true;
           }
@@ -226,29 +226,29 @@ class ThumbView implements IThumbView {
           leftOrTop = 'left';
         }
 
-        let maxPos: number = length - activeThumb[offsetWidthOrHeight] / 2;
-        let minPos: number = -activeThumb[offsetWidthOrHeight] / 2;
+        let maxPosition: number = length - activeThumb[offsetWidthOrHeight] / 2;
+        let minPosition: number = -activeThumb[offsetWidthOrHeight] / 2;
         if (Array.isArray(this.thumb)) {
           if (isActiveThumbFirst) {
-            maxPos = parseFloat(this.thumb[1].style[leftOrTop]);
+            maxPosition = parseFloat(this.thumb[1].style[leftOrTop]);
           } else {
-            minPos = parseFloat(this.thumb[0].style[leftOrTop]);
+            minPosition = parseFloat(this.thumb[0].style[leftOrTop]);
           }
         }
 
-        const offset: number = stepLength * numOfSteps;
-        const pos: number = parseFloat(activeThumb.style[leftOrTop]) + offset;
-        if (pos <= maxPos) {
-          if (pos >= minPos) {
-            activeThumb.style[leftOrTop] = `${pos}px`;
+        const offset: number = stepLength * numberOfSteps;
+        const position: number = parseFloat(activeThumb.style[leftOrTop]) + offset;
+        if (position <= maxPosition) {
+          if (position >= minPosition) {
+            activeThumb.style[leftOrTop] = `${position}px`;
           } else {
-            activeThumb.style[leftOrTop] = `${minPos}px`;
+            activeThumb.style[leftOrTop] = `${minPosition}px`;
           }
         } else {
-          activeThumb.style[leftOrTop] = `${maxPos}px`;
+          activeThumb.style[leftOrTop] = `${maxPosition}px`;
         }
         const thumbNumber: 0 | 1 = isActiveThumbFirst ? 0 : 1;
-        this.mainView.onThumbMove(numOfSteps, thumbNumber);
+        this.mainView.onThumbMove(numberOfSteps, thumbNumber);
       }
     }
   }
@@ -278,12 +278,12 @@ class ThumbView implements IThumbView {
   // вызывает this.setActiveThumb, обращается к mainView для изменения clientX/Y, добавляет
   // обработчики handleThumbMouseMove, handleThumbMouseUp и убирает слушатель
   // handleDocumentMouseUp
-  private handleThumbMouseDown(evt: MouseEvent | TouchEvent) {
+  private handleThumbMouseDown(event: MouseEvent | TouchEvent) {
     const activeThumb = this.viewModel.getActiveThumb();
-    evt.preventDefault();
-    evt.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
 
-    const target = <HTMLElement>evt.target;
+    const target = <HTMLElement>event.target;
     if (target) {
       if (activeThumb) {
         activeThumb.style.zIndex = '';
@@ -292,11 +292,11 @@ class ThumbView implements IThumbView {
       let thumbNumber: 0 | 1 | undefined;
       const leftOrTop = this.viewModel.getIsVertical() ? 'top' : 'left';
       if (Array.isArray(this.thumb)) {
-        const firstThumbPos = this.thumb[0].style[leftOrTop];
-        if (firstThumbPos === this.thumb[1].style[leftOrTop]) {
+        const firstThumbPosition = this.thumb[0].style[leftOrTop];
+        if (firstThumbPosition === this.thumb[1].style[leftOrTop]) {
           const length = this.viewModel.getLengthInPx();
           const shouldBeSecondThumb = length !== undefined
-            && parseFloat(firstThumbPos) + this.thumb[0].offsetWidth < length / 2;
+            && parseFloat(firstThumbPosition) + this.thumb[0].offsetWidth < length / 2;
           if (shouldBeSecondThumb) {
             thumbNumber = 1;
           } else {
@@ -311,7 +311,7 @@ class ThumbView implements IThumbView {
 
       this.setActiveThumb(thumbNumber);
 
-      this.updateClientCoords();
+      this.updateClientCoordinates();
 
       document.addEventListener('mouseup', this.handleThumbMouseUp);
       document.addEventListener('touchend', this.handleThumbMouseUp);
@@ -334,9 +334,9 @@ class ThumbView implements IThumbView {
     document.addEventListener('touchend', this.handleDocumentMouseUp);
   }
 
-  // При перемещении мыши вызывается moveActiveThumb с numOfSteps,
-  // зависящим от смещения мыши, обращается к mainView для смены coords
-  private handleThumbMouseMove(evt: MouseEvent | TouchEvent) {
+  // При перемещении мыши вызывается moveActiveThumb с numberOfSteps,
+  // зависящим от смещения мыши, обращается к mainView для смены coordinates
+  private handleThumbMouseMove(event: MouseEvent | TouchEvent) {
     const stepLength = this.viewModel.getStepLength();
     const activeThumb = this.viewModel.getActiveThumb();
 
@@ -344,40 +344,40 @@ class ThumbView implements IThumbView {
       if (activeThumb) {
         let clientX;
         let clientY;
-        if ('clientX' in evt) {
-          clientX = evt.clientX;
-          clientY = evt.clientY;
+        if ('clientX' in event) {
+          clientX = event.clientX;
+          clientY = event.clientY;
         } else {
-          clientX = evt.touches[0].clientX;
-          clientY = evt.touches[0].clientY;
+          clientX = event.touches[0].clientX;
+          clientY = event.touches[0].clientY;
         }
 
         const isVertical = this.viewModel.getIsVertical();
-        const oldCoord = isVertical
-          ? this.viewModel.getClientCoords()[1]
-          : this.viewModel.getClientCoords()[0];
-        let curCoord = isVertical ? clientY : clientX;
+        const oldCoordinate = isVertical
+          ? this.viewModel.getClientCoordinates()[1]
+          : this.viewModel.getClientCoordinates()[0];
+        let currentCoordinate = isVertical ? clientY : clientX;
 
-        const bar = this.mainView.getElem('bar');
+        const bar = this.mainView.getElement('bar');
         if (bar === undefined) {
           throw new Error('bar is undefined');
         }
-        const barMaxCoord = isVertical
+        const barMaxCoordinate = isVertical
           ? bar.getBoundingClientRect().bottom
           : bar.getBoundingClientRect().right;
-        const barMinCoord = isVertical
+        const barMinCoordinate = isVertical
           ? bar.getBoundingClientRect().top
           : bar.getBoundingClientRect().left;
-        if (curCoord >= barMaxCoord) {
-          curCoord += stepLength;
-        } else if (curCoord <= barMinCoord) {
-          curCoord -= stepLength;
+        if (currentCoordinate >= barMaxCoordinate) {
+          currentCoordinate += stepLength;
+        } else if (currentCoordinate <= barMinCoordinate) {
+          currentCoordinate -= stepLength;
         }
 
-        const numOfSteps = Math.trunc(((curCoord - oldCoord) * 2) / stepLength);
+        const numberOfSteps = Math.trunc(((currentCoordinate - oldCoordinate) * 2) / stepLength);
 
-        this.moveActiveThumb(numOfSteps);
-        this.updateClientCoords();
+        this.moveActiveThumb(numberOfSteps);
+        this.updateClientCoordinates();
       } else {
         throw new Error('activeThumb is undefined');
       }

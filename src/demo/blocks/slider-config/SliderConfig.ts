@@ -6,16 +6,16 @@ import { IViewModel } from '../../../modules/View/modules/ViewModel/interfacesAn
 class SliderConfig implements IObserver, ISliderConfig {
   private readonly inputElSelector: string;
 
-  private elem: HTMLElement;
+  private element: HTMLElement;
 
   private $slider: JQuery;
 
   private inputElements: Array<HTMLElement>;
 
-  constructor(configElem: HTMLElement, sliderElem: HTMLElement) {
+  constructor(configElement: HTMLElement, sliderElement: HTMLElement) {
     this.inputElSelector = '.js-option .js-option__input';
-    this.elem = configElem;
-    this.$slider = $(sliderElem);
+    this.element = configElement;
+    this.$slider = $(sliderElement);
     this.inputElements = this.getInputElements();
 
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -79,35 +79,35 @@ class SliderConfig implements IObserver, ISliderConfig {
   }
 
   updateCheckbox(optionName: string) {
-    this.inputElements.forEach((el) => {
-      const { name } = el.dataset;
+    this.inputElements.forEach((element) => {
+      const { name } = element.dataset;
       if (name === optionName) {
-        const curVal = this.getCheckboxValue(name);
-        if (curVal !== null) {
-          $(el).prop('checked', curVal);
+        const currentValue = this.getCheckboxValue(name);
+        if (currentValue !== null) {
+          $(element).prop('checked', currentValue);
         }
       }
     });
   }
 
   updateTextInput(optionName: optionNames) {
-    const elem = this.getInputEl(optionName);
-    const curVal = this.getTextInputValue(optionName);
-    const newVal = Array.isArray(curVal)
-      ? curVal.map((val) => String(val))
-      : curVal;
-    if (elem) {
-      $(elem).val(newVal);
+    const element = this.getInputElement(optionName);
+    const currentValue = this.getTextInputValue(optionName);
+    const newValue = Array.isArray(currentValue)
+      ? currentValue.map((value) => String(value))
+      : currentValue;
+    if (element) {
+      $(element).val(newValue);
     } else {
-      throw new Error('elem is null');
+      throw new Error('element is null');
     }
   }
 
   getInputElements(): Array<HTMLElement> {
     const result: Array<HTMLElement> = [];
-    const nodeList = this.elem.querySelectorAll<HTMLElement>(this.inputElSelector);
-    nodeList.forEach((el) => {
-      result.push(el);
+    const nodeList = this.element.querySelectorAll<HTMLElement>(this.inputElSelector);
+    nodeList.forEach((element) => {
+      result.push(element);
     });
 
     return result;
@@ -213,11 +213,11 @@ class SliderConfig implements IObserver, ISliderConfig {
     return value;
   }
 
-  getInputEl(optionName: string): HTMLElement | null {
+  getInputElement(optionName: string): HTMLElement | null {
     let result: null | HTMLElement = null;
-    this.inputElements.forEach((el) => {
-      if (el.dataset.name === optionName) {
-        result = el;
+    this.inputElements.forEach((element) => {
+      if (element.dataset.name === optionName) {
+        result = element;
       }
     });
     return result;
@@ -230,14 +230,14 @@ class SliderConfig implements IObserver, ISliderConfig {
   }
 
   private initCheckboxes() {
-    this.inputElements.forEach((el) => {
-      const { name } = el.dataset;
+    this.inputElements.forEach((element) => {
+      const { name } = element.dataset;
       if (name) {
-        const curVal = this.getCheckboxValue(name);
-        if (curVal !== null) {
-          $(el).prop('checked', curVal);
+        const currentValue = this.getCheckboxValue(name);
+        if (currentValue !== null) {
+          $(element).prop('checked', currentValue);
 
-          $(el).on('change', this.handleCheckboxChange);
+          $(element).on('change', this.handleCheckboxChange);
         }
       }
     });
@@ -256,58 +256,58 @@ class SliderConfig implements IObserver, ISliderConfig {
 
   private initSpecificTextInput(
     optionName: optionNames,
-    onFocusOut: (ev: JQuery.FocusOutEvent) => void,
+    onFocusOut: (event: JQuery.FocusOutEvent) => void,
   ) {
-    const elem = this.getInputEl(optionName);
-    if (elem === null) {
-      throw new Error('elem is null');
+    const element = this.getInputElement(optionName);
+    if (element === null) {
+      throw new Error('element is null');
     }
 
     this.updateTextInput(optionName);
 
-    $(elem).on('focusout', onFocusOut);
+    $(element).on('focusout', onFocusOut);
   }
 
   private updateSecondValueInput() {
-    const secValEl = this.getInputEl('value2');
-    const secValElValue = this.getTextInputValue('value2');
-    if (secValEl) {
-      $(secValEl).val(secValElValue);
-      $(secValEl).prop('disabled', !this.getCheckboxValue('isRange'));
+    const secondValueElement = this.getInputElement('value2');
+    const secondValueElementValue = this.getTextInputValue('value2');
+    if (secondValueElement) {
+      $(secondValueElement).val(secondValueElementValue);
+      $(secondValueElement).prop('disabled', !this.getCheckboxValue('isRange'));
     } else {
       throw new Error('Input with name `value2` is null');
     }
   }
 
-  private handleCheckboxChange(evt: JQuery.ChangeEvent) {
-    if (evt.target.dataset.name) {
+  private handleCheckboxChange(event: JQuery.ChangeEvent) {
+    if (event.target.dataset.name) {
       this.$slider.slider('changeOptions', {
-        [evt.target.dataset.name]: evt.target.checked,
+        [event.target.dataset.name]: event.target.checked,
       });
       this.updateSecondValueInput();
     }
   }
 
   private handleValueInputFocusOut(optionName: 'value1' | 'value2') {
-    const elem = this.getInputEl(optionName);
-    if (elem === null) {
-      throw new Error('elem is null');
+    const element = this.getInputElement(optionName);
+    if (element === null) {
+      throw new Error('element is null');
     }
 
     const sliderValue = this.$slider.slider('value');
-    const val = $(elem).val() === ''
+    const value = $(element).val() === ''
       ? this.getTextInputValue(optionName)
-      : Number($(elem).val());
+      : Number($(element).val());
     let newSliderValue: Value;
 
     if (Array.isArray(sliderValue)) {
       if (optionName === 'value1') {
-        newSliderValue = [val, sliderValue[1]];
+        newSliderValue = [value, sliderValue[1]];
       } else {
-        newSliderValue = [sliderValue[0], val];
+        newSliderValue = [sliderValue[0], value];
       }
     } else {
-      newSliderValue = val;
+      newSliderValue = value;
     }
 
     this.$slider.slider('changeOptions', {
@@ -315,52 +315,52 @@ class SliderConfig implements IObserver, ISliderConfig {
     });
   }
 
-  private handleMinMaxInputFocusOut(ev: JQuery.FocusOutEvent) {
-    const isValCorrect = $(ev.target).val() && !Number.isNaN(Number($(ev.target).val()));
-    if (isValCorrect) {
+  private handleMinMaxInputFocusOut(event: JQuery.FocusOutEvent) {
+    const isValueCorrect = $(event.target).val() && !Number.isNaN(Number($(event.target).val()));
+    if (isValueCorrect) {
       this.$slider.slider('changeOptions', {
-        [ev.target.dataset.name]: Number($(ev.target).val()),
+        [event.target.dataset.name]: Number($(event.target).val()),
       });
     }
   }
 
-  private handleStepSizeInputFocusOut(ev: JQuery.FocusOutEvent) {
-    const val = $(ev.target).val() === ''
+  private handleStepSizeInputFocusOut(event: JQuery.FocusOutEvent) {
+    const value = $(event.target).val() === ''
       ? this.getTextInputValue('stepSize')
-      : Number($(ev.target).val());
-    const isValCorrect = !Number.isNaN(val);
-    if (isValCorrect) {
+      : Number($(event.target).val());
+    const isValueCorrect = !Number.isNaN(value);
+    if (isValueCorrect) {
       this.$slider.slider('changeOptions', {
-        stepSize: val,
+        stepSize: value,
       });
     }
   }
 
-  private handleLengthInputFocusOut(ev: JQuery.FocusOutEvent) {
-    const inputVal = String($(ev.target).val());
-    const newVal = inputVal === ''
+  private handleLengthInputFocusOut(event: JQuery.FocusOutEvent) {
+    const inputValue = String($(event.target).val());
+    const newValue = inputValue === ''
       ? this.getTextInputValue('length')
-      : inputVal;
-    if (newVal !== '') {
+      : inputValue;
+    if (newValue !== '') {
       this.$slider.slider('changeOptions', {
-        length: newVal,
+        length: newValue,
       });
     }
   }
 
-  private handleScaleValueInputFocusOut(ev: JQuery.FocusOutEvent) {
-    const val = String($(ev.target).val());
+  private handleScaleValueInputFocusOut(event: JQuery.FocusOutEvent) {
+    const value = String($(event.target).val());
     let newScaleValue: number | Array<string | number>;
-    if (val !== '') {
-      const isValArr = val.indexOf(',') !== -1;
-      if (isValArr) {
-        newScaleValue = val.split(',');
+    if (value !== '') {
+      const isValueArray = value.indexOf(',') !== -1;
+      if (isValueArray) {
+        newScaleValue = value.split(',');
       } else {
-        const isValNum = !Number.isNaN(Number(val));
-        if (isValNum) {
-          newScaleValue = Number(val);
+        const isValueNumber = !Number.isNaN(Number(value));
+        if (isValueNumber) {
+          newScaleValue = Number(value);
         } else {
-          newScaleValue = [val];
+          newScaleValue = [value];
         }
       }
 

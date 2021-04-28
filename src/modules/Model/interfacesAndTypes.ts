@@ -1,5 +1,5 @@
 import { ISubject } from '../../ObserverAndSubject/interfacesAndTypes';
-import { ModelOptionsOptionalParams } from './options';
+import { ModelOptionsPartial } from './options';
 
 type Value = [number, number] | number
 
@@ -11,16 +11,16 @@ interface IModelData {
   max: number
 }
 
-type ModelProps = Partial<IModelData>
+type ModelProperties = Partial<IModelData>
 
 interface IModel extends ISubject {
-  changeOptions(newOptions: ModelOptionsOptionalParams): void
+  changeOptions(newOptions: ModelOptionsPartial): void
   setValue(newValue: Value, shouldRound?: boolean): Value
   setMin(newMin: number): number
   setMax(newMax: number): number
   setIsRange(newRange: boolean): boolean
   setStepSize(newStepSize: number): number
-  addStepsToValue(numOfSteps: number, valueNumber?: 0 | 1, shouldRound?: boolean): Value
+  addStepsToValue(numberOfSteps: number, valueNumber?: 0 | 1, shouldRound?: boolean): Value
   roundValue(value: Value): Value
   checkAndFixValue(): Value
   checkAndFixStepSize(): number
@@ -34,4 +34,4 @@ interface IModel extends ISubject {
 }
 
 export default IModel;
-export { ModelProps, Value, IModelData };
+export { ModelProperties, Value, IModelData };

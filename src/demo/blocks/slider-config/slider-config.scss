@@ -9,12 +9,12 @@
 
   &__value {
     display: grid;
-    grid-template-areas: 'desc .' 'desc .';
+    grid-template-areas: 'description .' 'description .';
     align-items: center;
     justify-content: flex-start;
 
-    &-desc {
-      grid-area: desc;
+    &-description {
+      grid-area: description;
       margin-right: 30px;
     }
   }

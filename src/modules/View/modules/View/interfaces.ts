@@ -1,4 +1,4 @@
-import { ViewOptionsOptionalParams } from '../../options';
+import { ViewOptionsPartial } from '../../options';
 import IPresenter from '../../../Presenter/interface';
 import { IObserver, SubjectAction } from '../../../../ObserverAndSubject/interfacesAndTypes';
 import { IViewModel } from '../ViewModel/interfacesAndTypes';
@@ -8,10 +8,10 @@ import IScaleView from '../SubViews/ScaleView/interface';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
 import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
-import { ModelProps } from '../../../Model/interfacesAndTypes';
+import { ModelProperties } from '../../../Model/interfacesAndTypes';
 
-type ElemNamesNotArrays = 'parent' | 'slider' | 'bar' | 'progressBar' | 'scale' | 'valueInfo'
-type ElemName = ElemNamesNotArrays | 'thumb' | 'tooltip'
+type ElementNamesNotArrays = 'parent' | 'slider' | 'bar' | 'progressBar' | 'scale' | 'valueInfo'
+type ElementName = ElementNamesNotArrays | 'thumb' | 'tooltip'
 
 type Views = {
   bar?: IBarView
@@ -24,21 +24,21 @@ type Views = {
 
 interface IView extends IObserver {
   drawSlider(): void
-  updateModelPropsInSlider(action: SubjectAction): void
+  updateModelPropertiesInSlider(action: SubjectAction): void
   setPresenter(presenter: IPresenter): void
-  changeOptions(newOptions: ViewOptionsOptionalParams): void
+  changeOptions(newOptions: ViewOptionsPartial): void
 
-  setModelProps(modelProps: ModelProps): void
-  setActiveThumb(numOfThumb?: number): void
-  moveActiveThumb(steps?: number): void
+  setModelProperties(modelProperties: ModelProperties): void
+  setActiveThumb(thumbNumber?: number): void
+  moveActiveThumb(numberOfSteps?: number): void
   removeActiveThumb(): void
-  onThumbMove(numOfSteps: number, numOfThumb: 0 | 1): void
-  setClientCoords(coords: [number, number]): void
+  onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1): void
+  setClientCoordinates(coordinates: [number, number]): void
 
   getViewModel(): IViewModel
 
-  getElem(elemName: ElemNamesNotArrays): HTMLElement | undefined
-  getElem(elemName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement] | undefined
+  getElement(elementName: ElementNamesNotArrays): HTMLElement | undefined
+  getElement(elementName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement] | undefined
 }
 
 interface IWindowListeners {
@@ -48,4 +48,6 @@ interface IWindowListeners {
 }
 
 export default IView;
-export { ElemNamesNotArrays, ElemName, Views, IWindowListeners };
+export {
+  ElementNamesNotArrays, ElementName, Views, IWindowListeners,
+};

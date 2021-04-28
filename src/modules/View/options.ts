@@ -35,6 +35,6 @@ type ViewOptions = {
   valueInfoClass?: string | string[]
 }
 
-type ViewOptionsOptionalParams = Partial<ViewOptions>
+type ViewOptionsPartial = Partial<ViewOptions>
 
-export { ViewOptions, ViewOptionsOptionalParams };
+export { ViewOptions, ViewOptionsPartial };

@@ -45,11 +45,11 @@ class WindowListeners implements IWindowListeners {
   }
 
   // При нажатии клавиш wasd и стрелок вызывается moveActiveThumb(1/-1)
-  private handleDocumentKeyDown(evt: KeyboardEvent): void {
-    const isThisNextKey = evt.key === 'ArrowRight' || evt.key === 'ArrowBottom'
-      || evt.key === 'd' || evt.key === 's';
-    const isThisPrevKey = evt.key === 'ArrowLeft' || evt.key === 'ArrowTop'
-      || evt.key === 'a' || evt.key === 'w';
+  private handleDocumentKeyDown(event: KeyboardEvent): void {
+    const isThisNextKey = event.key === 'ArrowRight' || event.key === 'ArrowBottom'
+      || event.key === 'd' || event.key === 's';
+    const isThisPrevKey = event.key === 'ArrowLeft' || event.key === 'ArrowTop'
+      || event.key === 'a' || event.key === 'w';
 
     if (this.thumbView) {
       if (isThisNextKey) {

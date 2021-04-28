@@ -1,4 +1,4 @@
-import { ModelProps } from '../modules/Model/interfacesAndTypes';
+import { ModelProperties } from '../modules/Model/interfacesAndTypes';
 
 type actionModelType = 'UPDATE_VALUE' | 'UPDATE_IS-RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEP-SIZE';
 type actionViewType = 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_IS-RESPONSIVE' | 'UPDATE_HAS-TOOLTIP'
@@ -8,7 +8,7 @@ type actionViewType = 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_IS-RESPON
 type SubjectAction = {
   type: actionModelType | actionViewType
 
-  updatedProps?: ModelProps
+  updatedProperties?: ModelProperties
 }
 
 interface ISubject {

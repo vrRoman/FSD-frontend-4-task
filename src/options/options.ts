@@ -1,11 +1,11 @@
-import { ModelOptions, ModelOptionsOptionalParams } from '../modules/Model/options';
-import { ViewOptions, ViewOptionsOptionalParams } from '../modules/View/options';
+import { ModelOptions, ModelOptionsPartial } from '../modules/Model/options';
+import { ViewOptions, ViewOptionsPartial } from '../modules/View/options';
 import PresenterOptions from '../modules/Presenter/options';
 
 type SliderOptions = ModelOptions & ViewOptions & PresenterOptions
 
-type SliderOptionsOptionalParams = ModelOptionsOptionalParams
-  & ViewOptionsOptionalParams
+type SliderOptionsPartial = ModelOptionsPartial
+  & ViewOptionsPartial
   & PresenterOptions
 
-export { SliderOptions, SliderOptionsOptionalParams };
+export { SliderOptions, SliderOptionsPartial };

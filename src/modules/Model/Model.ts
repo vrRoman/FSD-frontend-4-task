@@ -1,5 +1,5 @@
 import { SliderOptions } from '../../options/options';
-import { ModelOptions, ModelOptionsOptionalParams } from './options';
+import { ModelOptions, ModelOptionsPartial } from './options';
 import IModel, { IModelData, Value } from './interfacesAndTypes';
 import Subject from '../../ObserverAndSubject/Subject';
 
@@ -25,7 +25,7 @@ class Model extends Subject implements IModel {
   }
 
   // Меняет настройки
-  changeOptions(newOptions: ModelOptionsOptionalParams) {
+  changeOptions(newOptions: ModelOptionsPartial) {
     if (newOptions.value !== undefined) {
       this.setValue(newOptions.value);
     }
@@ -48,16 +48,16 @@ class Model extends Subject implements IModel {
     const symbolsAfterCommaStepSize = this.getStepSize().toString().includes('.')
       ? this.getStepSize().toString().split('.').pop()
       : null;
-    const numOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
+    const numberOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
       ? symbolsAfterCommaStepSize.length
       : 0;
     if (Array.isArray(value)) {
       return [
-        Number(value[0].toFixed(numOfSymbolsAfterCommaStepSize)),
-        Number(value[1].toFixed(numOfSymbolsAfterCommaStepSize)),
+        Number(value[0].toFixed(numberOfSymbolsAfterCommaStepSize)),
+        Number(value[1].toFixed(numberOfSymbolsAfterCommaStepSize)),
       ];
     }
-    return Number(value.toFixed(numOfSymbolsAfterCommaStepSize));
+    return Number(value.toFixed(numberOfSymbolsAfterCommaStepSize));
   }
 
   // Меняет min
@@ -72,7 +72,7 @@ class Model extends Subject implements IModel {
     this.checkAndFixStepSize();
     this.notify({
       type: 'UPDATE_MIN-MAX',
-      updatedProps: {
+      updatedProperties: {
         min: this.getMin(),
         max: this.getMax(),
         value: this.getValue(),
@@ -94,7 +94,7 @@ class Model extends Subject implements IModel {
     this.checkAndFixStepSize();
     this.notify({
       type: 'UPDATE_MIN-MAX',
-      updatedProps: {
+      updatedProperties: {
         min: this.getMin(),
         max: this.getMax(),
         value: this.getValue(),
@@ -112,7 +112,7 @@ class Model extends Subject implements IModel {
 
     this.notify({
       type: 'UPDATE_VALUE',
-      updatedProps: {
+      updatedProperties: {
         value: this.getValue(),
       },
     });
@@ -127,7 +127,7 @@ class Model extends Subject implements IModel {
 
     this.notify({
       type: 'UPDATE_IS-RANGE',
-      updatedProps: {
+      updatedProperties: {
         value: this.getValue(),
         isRange: this.getIsRange(),
       },
@@ -142,7 +142,7 @@ class Model extends Subject implements IModel {
     this.checkAndFixStepSize();
     this.notify({
       type: 'UPDATE_STEP-SIZE',
-      updatedProps: {
+      updatedProperties: {
         stepSize: this.getStepSize(),
       },
     });
@@ -152,11 +152,13 @@ class Model extends Subject implements IModel {
 
   // Добавляет указанное количество шагов к нужному значению(если не
   // диапазон или нужно большее значение, то указывать не обязательно)
-  addStepsToValue(numOfSteps: number, valueNumber: 0 | 1 = 1, shouldRound: boolean = false): Value {
+  addStepsToValue(
+    numberOfSteps: number, valueNumber: 0 | 1 = 1, shouldRound: boolean = false,
+  ): Value {
     if (typeof this.data.value === 'number') {
-      this.data.value += numOfSteps * this.data.stepSize;
+      this.data.value += numberOfSteps * this.data.stepSize;
     } else {
-      this.data.value[valueNumber] += numOfSteps * this.data.stepSize;
+      this.data.value[valueNumber] += numberOfSteps * this.data.stepSize;
       if (valueNumber === 1) {
         if (this.data.value[valueNumber] < this.data.value[0]) {
           [this.data.value[valueNumber]] = this.data.value;
@@ -174,7 +176,7 @@ class Model extends Subject implements IModel {
 
     this.notify({
       type: 'UPDATE_VALUE',
-      updatedProps: {
+      updatedProperties: {
         value: this.getValue(),
       },
     });

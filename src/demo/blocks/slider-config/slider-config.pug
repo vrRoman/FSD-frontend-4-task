@@ -1,6 +1,6 @@
 include ../option/option
 
-mixin slider-config(sliderName, hasScaleValueDesc)
+mixin slider-config(sliderName, hasScaleValueDescription)
   .slider-config.js-slider-config
     +option('isRange', sliderName)
     +option('hasTooltip', sliderName)
@@ -12,7 +12,7 @@ mixin slider-config(sliderName, hasScaleValueDesc)
     +option('useKeyboard', sliderName)
 
     .slider-config__value
-      span.slider-config__value-desc value
+      span.slider-config__value-description value
       +option('value1', sliderName, 'text')
       +option('value2', sliderName, 'text')
     +option('stepSize', sliderName, 'text')
@@ -21,5 +21,5 @@ mixin slider-config(sliderName, hasScaleValueDesc)
     +option('length', sliderName, 'text')
     +option({
       label: 'scaleValue',
-      description: hasScaleValueDesc ? 'если массив, вводить значения через запятую' : null,
+      description: hasScaleValueDescription ? 'если массив, вводить значения через запятую' : null,
     }, sliderName, 'text')

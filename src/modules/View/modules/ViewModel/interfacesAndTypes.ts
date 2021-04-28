@@ -1,4 +1,4 @@
-import { ModelProps } from '../../../Model/interfacesAndTypes';
+import { ModelProperties } from '../../../Model/interfacesAndTypes';
 import { ISubject } from '../../../../ObserverAndSubject/interfacesAndTypes';
 
 type ViewClasses = {
@@ -27,7 +27,7 @@ interface IViewModelData {
   useKeyboard: boolean
   isScaleClickable: boolean
 
-  modelProps: ModelProps | undefined
+  modelProperties: ModelProperties | undefined
 
   activeThumb: HTMLElement | undefined
   clientX: number
@@ -35,8 +35,8 @@ interface IViewModelData {
 }
 
 interface IViewModelGetMethods {
-  getClientCoords(): [number, number]
-  getModelProps(): ModelProps | undefined
+  getClientCoordinates(): [number, number]
+  getModelProperties(): ModelProperties | undefined
   getActiveThumb(): HTMLElement | undefined
   getClasses(): ViewClasses
   getLength(): string
@@ -56,8 +56,8 @@ interface IViewModelGetMethods {
 interface IViewModel extends ISubject, IViewModelGetMethods {
   removeActiveThumb(): void
   setActiveThumb(newActiveThumb: HTMLElement): void
-  setModelProps(newModelProps: ModelProps): void
-  setClientCoords(coords: [number, number]): void
+  setModelProperties(newModelProperties: ModelProperties): void
+  setClientCoordinates(coordinates: [number, number]): void
   setLength(newLength: string): void
   setLengthInPx(newLength: number): void
   setIsVertical(newIsVertical: boolean): void

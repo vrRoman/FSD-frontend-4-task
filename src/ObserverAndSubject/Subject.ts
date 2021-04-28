@@ -13,8 +13,8 @@ abstract class Subject implements ISubject {
   }
 
   // Убирает подписку
-  unsubscribe(observer: IObserver) {
-    this.observers.filter((obs) => obs !== observer);
+  unsubscribe(observerToRemove: IObserver) {
+    this.observers.filter((observer) => observer !== observerToRemove);
   }
 
   // Вызывает у всех подписчиков метод update

@@ -1,10 +1,10 @@
-import IView, { ElemName, ElemNamesNotArrays, IWindowListeners } from './interfaces';
+import IView, { ElementName, ElementNamesNotArrays, IWindowListeners } from './interfaces';
 import IPresenter from '../../../Presenter/interface';
 import ViewModel from '../ViewModel/ViewModel';
 import { IViewModel, ViewClasses } from '../ViewModel/interfacesAndTypes';
 
 import { SliderOptions } from '../../../../options/options';
-import { ViewOptions, ViewOptionsOptionalParams } from '../../options';
+import { ViewOptions, ViewOptionsPartial } from '../../options';
 import { SubjectAction } from '../../../../ObserverAndSubject/interfacesAndTypes';
 
 import SliderContainerView from '../SubViews/SliderContainerView/SliderContainerView';
@@ -26,7 +26,7 @@ import ValueInfoView from '../SubViews/ValueInfoView/ValueInfoView';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
 import Observer from '../../../../ObserverAndSubject/Observer';
 import WindowListeners from './WindowListeners';
-import { ModelProps } from '../../../Model/interfacesAndTypes';
+import { ModelProperties } from '../../../Model/interfacesAndTypes';
 
 class View extends Observer implements IView {
   private readonly parent: HTMLElement
@@ -63,7 +63,7 @@ class View extends Observer implements IView {
       valueInfoClass: viewOptions.valueInfoClass ? viewOptions.valueInfoClass : 'slider__value-info',
     };
     const viewModel: IViewModel = new ViewModel({
-      modelProps: undefined,
+      modelProperties: undefined,
       classes,
       length: viewOptions.length,
       lengthInPx: undefined,
@@ -96,44 +96,44 @@ class View extends Observer implements IView {
     this.windowListeners = undefined;
   }
 
-  // Возвращает элемент, который указан в elemName
-  getElem(elemName: ElemNamesNotArrays): HTMLElement | undefined
+  // Возвращает элемент, который указан в elementName
+  getElement(elementName: ElementNamesNotArrays): HTMLElement | undefined
 
   // eslint-disable-next-line no-dupe-class-members
-  getElem(elemName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement] | undefined
+  getElement(elementName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement] | undefined
 
   // eslint-disable-next-line no-dupe-class-members
-  getElem(elemName: ElemName): HTMLElement | [HTMLElement, HTMLElement] | undefined {
-    let elem: HTMLElement | [HTMLElement, HTMLElement] | undefined;
-    switch (elemName) {
+  getElement(elementName: ElementName): HTMLElement | [HTMLElement, HTMLElement] | undefined {
+    let element: HTMLElement | [HTMLElement, HTMLElement] | undefined;
+    switch (elementName) {
       case 'parent':
-        elem = this.parent;
+        element = this.parent;
         break;
       case 'slider':
-        elem = this.sliderContainerView ? this.sliderContainerView.get() : undefined;
+        element = this.sliderContainerView ? this.sliderContainerView.get() : undefined;
         break;
       case 'bar':
-        elem = this.barView ? this.barView.getBar() : undefined;
+        element = this.barView ? this.barView.getBar() : undefined;
         break;
       case 'progressBar':
-        elem = this.barView ? this.barView.getProgressBar() : undefined;
+        element = this.barView ? this.barView.getProgressBar() : undefined;
         break;
       case 'thumb':
-        elem = this.thumbView ? this.thumbView.get() : undefined;
+        element = this.thumbView ? this.thumbView.get() : undefined;
         break;
       case 'tooltip':
-        elem = this.tooltipView ? this.tooltipView.get() : undefined;
+        element = this.tooltipView ? this.tooltipView.get() : undefined;
         break;
       case 'scale':
-        elem = this.scaleView ? this.scaleView.get() : undefined;
+        element = this.scaleView ? this.scaleView.get() : undefined;
         break;
       case 'valueInfo':
-        elem = this.valueInfoView ? this.valueInfoView.get() : undefined;
+        element = this.valueInfoView ? this.valueInfoView.get() : undefined;
         break;
       default:
-        elem = undefined;
+        element = undefined;
     }
-    return elem;
+    return element;
   }
 
   drawSlider() {
@@ -178,12 +178,12 @@ class View extends Observer implements IView {
   }
 
   // В зависимости от action, обновляет view
-  updateModelPropsInSlider(action: SubjectAction) {
+  updateModelPropertiesInSlider(action: SubjectAction) {
     switch (action.type) {
       case 'UPDATE_VALUE':
-        if (action.updatedProps) {
-          this.setModelProps({
-            value: action.updatedProps.value,
+        if (action.updatedProperties) {
+          this.setModelProperties({
+            value: action.updatedProperties.value,
           });
         }
         if (this.thumbView) this.thumbView.update();
@@ -193,10 +193,10 @@ class View extends Observer implements IView {
         break;
 
       case 'UPDATE_IS-RANGE':
-        if (action.updatedProps) {
-          this.setModelProps({
-            value: action.updatedProps.value,
-            isRange: action.updatedProps.isRange,
+        if (action.updatedProperties) {
+          this.setModelProperties({
+            value: action.updatedProperties.value,
+            isRange: action.updatedProperties.isRange,
           });
         }
         if (this.thumbView) {
@@ -216,12 +216,12 @@ class View extends Observer implements IView {
         break;
 
       case 'UPDATE_MIN-MAX':
-        if (action.updatedProps) {
-          this.setModelProps({
-            value: action.updatedProps.value,
-            min: action.updatedProps.min,
-            max: action.updatedProps.max,
-            stepSize: action.updatedProps.stepSize,
+        if (action.updatedProperties) {
+          this.setModelProperties({
+            value: action.updatedProperties.value,
+            min: action.updatedProperties.min,
+            max: action.updatedProperties.max,
+            stepSize: action.updatedProperties.stepSize,
           });
         }
         if (this.thumbView) this.thumbView.update();
@@ -235,9 +235,9 @@ class View extends Observer implements IView {
         break;
 
       case 'UPDATE_STEP-SIZE':
-        if (action.updatedProps) {
-          this.setModelProps({
-            stepSize: action.updatedProps.stepSize,
+        if (action.updatedProperties) {
+          this.setModelProperties({
+            stepSize: action.updatedProperties.stepSize,
           });
         }
         break;
@@ -252,7 +252,7 @@ class View extends Observer implements IView {
   }
 
   // Меняет настройки, передавая в viewModel
-  changeOptions(newOptions: ViewOptionsOptionalParams) {
+  changeOptions(newOptions: ViewOptionsPartial) {
     if (newOptions.length !== undefined) {
       this.viewModel.setLength(newOptions.length);
     }
@@ -367,13 +367,13 @@ class View extends Observer implements IView {
   }
 
   // Обращается к viewModel для изменения active thumb
-  setActiveThumb(numOfThumb: number = 1): void {
+  setActiveThumb(thumbNumber: number = 1): void {
     if (this.thumbView) {
       const thumb = this.thumbView.get();
       if (thumb) {
         this.removeActiveThumb();
         if (Array.isArray(thumb)) {
-          this.viewModel.setActiveThumb(thumb[numOfThumb]);
+          this.viewModel.setActiveThumb(thumb[thumbNumber]);
         } else {
           this.viewModel.setActiveThumb(thumb);
         }
@@ -382,8 +382,8 @@ class View extends Observer implements IView {
   }
 
   // Обращается к viewModel
-  setModelProps(modelProps: ModelProps) {
-    this.viewModel.setModelProps(modelProps);
+  setModelProperties(modelProperties: ModelProperties) {
+    this.viewModel.setModelProperties(modelProperties);
   }
 
   // Обращается к thumbView
@@ -399,15 +399,15 @@ class View extends Observer implements IView {
   }
 
   // Передает вызов в presenter
-  onThumbMove(numOfSteps: number, numOfThumb: 0 | 1) {
+  onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1) {
     if (this.presenter) {
-      this.presenter.onThumbMove(numOfSteps, numOfThumb);
+      this.presenter.onThumbMove(numberOfSteps, thumbNumber);
     }
   }
 
   // Передает значение в viewModel
-  setClientCoords(coords: [number, number]) {
-    this.viewModel.setClientCoords(coords);
+  setClientCoordinates(coordinates: [number, number]) {
+    this.viewModel.setClientCoordinates(coordinates);
   }
 
   getViewModel(): IViewModel {

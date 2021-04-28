@@ -8,6 +8,6 @@ type ModelOptions = {
   min: number
 }
 
-type ModelOptionsOptionalParams = Partial<ModelOptions>;
+type ModelOptionsPartial = Partial<ModelOptions>;
 
-export { ModelOptions, ModelOptionsOptionalParams };
+export { ModelOptions, ModelOptionsPartial };

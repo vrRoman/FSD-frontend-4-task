@@ -53,7 +53,7 @@ describe('Presenter with different options in model and view', () => {
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);
-    console.log('View all true, isVertical=false and isResponsive with %: ', view.getElem('slider'));
+    console.log('View all true, isVertical=false and isResponsive with %: ', view.getElement('slider'));
   });
   it('View all true, isVertical=false and isResponsive with vh', () => {
     model = new Model(defaultModelOptions);
@@ -102,6 +102,6 @@ describe('Presenter with different options in model and view', () => {
         console.log(model.getValue());
       },
     });
-    console.log('onChange: ', view.getElem('slider'));
+    console.log('onChange: ', view.getElement('slider'));
   });
 });

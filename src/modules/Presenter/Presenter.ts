@@ -1,9 +1,9 @@
 import IModel from '../Model/interfacesAndTypes';
 import IView from '../View/modules/View/interfaces';
 import IPresenter from './interface';
-import { SliderOptions, SliderOptionsOptionalParams } from '../../options/options';
-import { ModelOptionsOptionalParams } from '../Model/options';
-import { ViewOptionsOptionalParams } from '../View/options';
+import { SliderOptions, SliderOptionsPartial } from '../../options/options';
+import { ModelOptionsPartial } from '../Model/options';
+import { ViewOptionsPartial } from '../View/options';
 import PresenterOptions from './options';
 
 import { SubjectAction } from '../../ObserverAndSubject/interfacesAndTypes';
@@ -28,20 +28,20 @@ class Presenter extends Observer implements IPresenter {
     this.view.drawSlider();
   }
 
-  onThumbMove(numOfSteps: number = 1, thumbNumber: 0 | 1 = 1) {
-    this.model.addStepsToValue(numOfSteps, thumbNumber, true);
+  onThumbMove(numberOfSteps: number = 1, thumbNumber: 0 | 1 = 1) {
+    this.model.addStepsToValue(numberOfSteps, thumbNumber, true);
   }
 
   // Обновляет view
   update(action: SubjectAction): void {
-    this.view.updateModelPropsInSlider(action);
+    this.view.updateModelPropertiesInSlider(action);
     if (this.onChange) {
       this.onChange();
     }
   }
 
   // Меняет настройки слайдера
-  changeOptions(newOptions: SliderOptionsOptionalParams): void {
+  changeOptions(newOptions: SliderOptionsPartial): void {
     // Распределение настроек по модулям
     const modelOptions = ['value', 'isRange', 'stepSize', 'max', 'min'];
     const viewOptions = ['length', 'isVertical', 'isResponsive',
@@ -50,21 +50,21 @@ class Presenter extends Observer implements IPresenter {
     const presenterOptions = ['onChange'];
 
     const newModelOptions: { [key: string]: any } = {};
-    modelOptions.forEach((prop) => {
-      if (Object.prototype.hasOwnProperty.call(newOptions, prop)) {
-        newModelOptions[prop] = newOptions[prop as keyof ModelOptionsOptionalParams];
+    modelOptions.forEach((property) => {
+      if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
+        newModelOptions[property] = newOptions[property as keyof ModelOptionsPartial];
       }
     });
     const newViewOptions: { [key: string]: any } = {};
-    viewOptions.forEach((prop) => {
-      if (Object.prototype.hasOwnProperty.call(newOptions, prop)) {
-        newViewOptions[prop] = newOptions[prop as keyof ViewOptionsOptionalParams];
+    viewOptions.forEach((property) => {
+      if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
+        newViewOptions[property] = newOptions[property as keyof ViewOptionsPartial];
       }
     });
     const newPresenterOptions: { [key: string]: any } = {};
-    presenterOptions.forEach((prop) => {
-      if (Object.prototype.hasOwnProperty.call(newOptions, prop)) {
-        newPresenterOptions[prop] = newOptions[prop as keyof PresenterOptions];
+    presenterOptions.forEach((property) => {
+      if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
+        newPresenterOptions[property] = newOptions[property as keyof PresenterOptions];
       }
     });
 
@@ -82,9 +82,9 @@ class Presenter extends Observer implements IPresenter {
     }
   }
 
-  // Передает во View modelProps и Presenter
+  // Передает во View modelProperties и Presenter
   private provideInfoToView() {
-    this.view.setModelProps({
+    this.view.setModelProperties({
       value: this.model.getValue(),
       min: this.model.getMin(),
       max: this.model.getMax(),

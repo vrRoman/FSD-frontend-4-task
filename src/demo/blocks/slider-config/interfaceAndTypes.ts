@@ -5,7 +5,7 @@ interface ISliderConfig {
   updateTextInput(optionName: string): void
   getInputElements(): Array<HTMLElement>
   getCheckboxValue(optionName: string): boolean | null
-  getInputEl(optionName: string): HTMLElement | null
+  getInputElement(optionName: string): HTMLElement | null
 
   getTextInputValue(optionName: 'value1' | 'value2' | 'stepSize' | 'min' | 'max'): number
   getTextInputValue(optionName: 'length'): string

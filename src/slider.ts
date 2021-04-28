@@ -6,13 +6,13 @@ import { IViewModel } from './modules/View/modules/ViewModel/interfacesAndTypes'
 import { IObserver } from './ObserverAndSubject/interfacesAndTypes';
 import Presenter from './modules/Presenter/Presenter';
 import IPresenter from './modules/Presenter/interface';
-import { SliderOptions, SliderOptionsOptionalParams } from './options/options';
+import { SliderOptions, SliderOptionsPartial } from './options/options';
 
 declare global {
   // eslint-disable-next-line
   interface JQuery {
-    slider(options?: SliderOptionsOptionalParams): JQuery
-    slider(action: 'changeOptions', newOptions: SliderOptionsOptionalParams): JQuery
+    slider(options?: SliderOptionsPartial): JQuery
+    slider(action: 'changeOptions', newOptions: SliderOptionsPartial): JQuery
     slider(action: 'subscribe', observer: IObserver): JQuery
     slider(action: 'value'): Value
     slider(action: 'model'): IModel
@@ -43,9 +43,9 @@ declare global {
 
   // eslint-disable-next-line no-param-reassign
   $.fn.slider = function start(
-    action?: SliderOptionsOptionalParams
+    action?: SliderOptionsPartial
     | 'changeOptions' | 'subscribe' | 'value' | 'model' | 'view' | 'viewModel' | 'presenter',
-    additionalInfo?: SliderOptionsOptionalParams | IObserver,
+    additionalInfo?: SliderOptionsPartial | IObserver,
   ) {
     if (typeof action === 'object' || !action) {
       if (this.data('slider')) {
@@ -62,7 +62,7 @@ declare global {
         const view: IView = new View(settings, this);
         const presenter: IPresenter = new Presenter(model, view, settings);
 
-        const slider = view.getElem('slider');
+        const slider = view.getElement('slider');
         if (slider) {
           $(this).data('slider', slider);
         } else {

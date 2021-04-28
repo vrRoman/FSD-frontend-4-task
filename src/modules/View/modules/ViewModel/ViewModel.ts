@@ -1,9 +1,9 @@
-import { ModelProps } from '../../../Model/interfacesAndTypes';
+import { ModelProperties } from '../../../Model/interfacesAndTypes';
 import Subject from '../../../../ObserverAndSubject/Subject';
 import {
   IViewModel, IViewModelData, IViewModelGetMethods, ViewClasses,
 } from './interfacesAndTypes';
-import isModelPropsValuesDefined from '../../../../utils/isModelPropsValuesDefined';
+import isModelPropertiesValuesDefined from '../../../../utilities/isModelPropertiesValuesDefined';
 
 class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   private data: IViewModelData
@@ -24,15 +24,15 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     this.data.activeThumb = newActiveThumb;
   }
 
-  setModelProps(newModelProps: ModelProps) {
-    this.data.modelProps = {
-      ...this.data.modelProps,
-      ...newModelProps,
+  setModelProperties(newModelProperties: ModelProperties) {
+    this.data.modelProperties = {
+      ...this.data.modelProperties,
+      ...newModelProperties,
     };
   }
 
-  setClientCoords(coords: [number, number]) {
-    [this.data.clientX, this.data.clientY] = coords;
+  setClientCoordinates(coordinates: [number, number]) {
+    [this.data.clientX, this.data.clientY] = coordinates;
   }
 
   setLength(newLength: string) {
@@ -102,13 +102,13 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     });
   }
 
-  getClientCoords(): [number, number] {
+  getClientCoordinates(): [number, number] {
     return [this.data.clientX, this.data.clientY];
   }
 
-  getModelProps(): ModelProps | undefined {
+  getModelProperties(): ModelProperties | undefined {
     return {
-      ...this.data.modelProps,
+      ...this.data.modelProperties,
     };
   }
 
@@ -168,20 +168,20 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getValuePosition(): number | [number, number] | undefined {
     let valuePosition: number | [number, number] | undefined;
 
-    if (isModelPropsValuesDefined(this.data.modelProps)) {
-      const maxDiapason: number = this.data.modelProps.max - this.data.modelProps.min;
-      const { value } = this.data.modelProps;
+    if (isModelPropertiesValuesDefined(this.data.modelProperties)) {
+      const maxDiapason: number = this.data.modelProperties.max - this.data.modelProperties.min;
+      const { value } = this.data.modelProperties;
 
       if (this.data.lengthInPx !== undefined) {
         if (typeof value === 'number') {
           valuePosition = (this.data.lengthInPx / maxDiapason)
-            * (value - this.data.modelProps.min);
+            * (value - this.data.modelProperties.min);
         } else if (Array.isArray(value)) {
           valuePosition = [
             (this.data.lengthInPx / maxDiapason)
-            * (value[0] - this.data.modelProps.min),
+            * (value[0] - this.data.modelProperties.min),
             (this.data.lengthInPx / maxDiapason)
-            * (value[1] - this.data.modelProps.min),
+            * (value[1] - this.data.modelProperties.min),
           ];
         }
       }
@@ -193,10 +193,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   getStepLength(): number | undefined {
     const length = this.getLengthInPx();
     if (length !== undefined) {
-      if (isModelPropsValuesDefined(this.data.modelProps)) {
-        const numOfSteps = (this.data.modelProps.max - this.data.modelProps.min)
-          / this.data.modelProps.stepSize;
-        return length / numOfSteps;
+      if (isModelPropertiesValuesDefined(this.data.modelProperties)) {
+        const numberOfSteps = (this.data.modelProperties.max - this.data.modelProperties.min)
+          / this.data.modelProperties.stepSize;
+        return length / numberOfSteps;
       }
     }
     return undefined;

@@ -1,4 +1,4 @@
-mixin option(optionName, elemName, inputType)
+mixin option(optionName, elementName, inputType)
   -
     const type = inputType
         ? inputType
@@ -6,7 +6,7 @@ mixin option(optionName, elemName, inputType)
 
     let labelName;
     let inputName;
-    let desc = '';
+    let description = '';
 
     if (typeof optionName === 'string') {
       labelName = optionName;
@@ -18,18 +18,18 @@ mixin option(optionName, elemName, inputType)
         inputName = labelName.toLowerCase();
       }
       if (optionName.description) {
-        desc = `(${optionName.description})`;
+        description = `(${optionName.description})`;
       }
     }
 
-    const id = elemName
-        ? `${elemName}-${inputName}`
+    const id = elementName
+        ? `${elementName}-${inputName}`
         : inputName;
 
   .option.js-option
     label(for=id)
       if (labelName)
-        span= `${labelName}${desc}`
+        span= `${labelName}${description}`
       input.option__input.js-option__input(data-name=labelName
         type=type
         id=id)

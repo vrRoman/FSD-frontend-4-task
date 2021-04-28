@@ -16,7 +16,7 @@ const defaultOptions = {
   max: 10,
 };
 
-describe('model get methods and props', () => {
+describe('model get methods and properties', () => {
   let model: IModel;
 
   beforeEach(() => {
@@ -128,7 +128,7 @@ describe('Model value, stepSize, min/max checking', () => {
   });
 });
 
-describe('model props change', () => {
+describe('model properties change', () => {
   let model: IModel;
   beforeEach(() => {
     model = new Model(defaultOptions);
@@ -177,7 +177,7 @@ describe('model props change', () => {
     model.addStepsToValue(2, 0);
     expect(model.getValue()).toEqual([2, 8]);
   });
-  it('addStepsToValue with negative numOfSteps', () => {
+  it('addStepsToValue with negative numberOfSteps', () => {
     model.setValue(7);
     model.addStepsToValue(-3);
     expect(model.getValue()).toBe(4);
@@ -241,28 +241,28 @@ describe('Model change isRange, value with Observer', () => {
 
   it('Change value, isRange=false', () => {
     model.setValue(4);
-    console.log('Changed value to 4, isRange=false', view.getElem('slider'));
+    console.log('Changed value to 4, isRange=false', view.getElement('slider'));
   });
   it('Change isRange to true', () => {
     model.setIsRange(true);
-    console.log('Changed isRange to true', view.getElem('slider'));
+    console.log('Changed isRange to true', view.getElement('slider'));
   });
   it('Change isRange to false', () => {
     model.setIsRange(true);
     model.setIsRange(false);
-    console.log('Changed isRange to false', view.getElem('slider'));
+    console.log('Changed isRange to false', view.getElement('slider'));
   });
   it('Changed value when isRange true', () => {
     model.setIsRange(true);
     model.setValue([4, 9.5]);
-    console.log('Changed value to [4, 9.5], isRange=true', view.getElem('slider'));
+    console.log('Changed value to [4, 9.5], isRange=true', view.getElement('slider'));
   });
   it('setMin', () => {
     presenter.onChange = () => {
       console.log(view.getViewModel().getValuePosition());
     };
     model.setMin(2);
-    console.log('setMin to 2', view.getElem('slider'));
+    console.log('setMin to 2', view.getElement('slider'));
 
     model = new Model(defaultOptions);
     view = new View({
@@ -276,14 +276,14 @@ describe('Model change isRange, value with Observer', () => {
       console.log(view.getViewModel().getValuePosition());
     };
     model.setMin(-1);
-    console.log('setMin to -1', view.getElem('slider'));
+    console.log('setMin to -1', view.getElement('slider'));
   });
   it('setMax', () => {
     presenter.onChange = () => {
       console.log(view.getViewModel().getValuePosition());
     };
     model.setMax(8);
-    console.log('setMax to 8', view.getElem('slider'));
+    console.log('setMax to 8', view.getElement('slider'));
 
     model = new Model(defaultOptions);
     view = new View({
@@ -297,7 +297,7 @@ describe('Model change isRange, value with Observer', () => {
       console.log(view.getViewModel().getValuePosition());
     };
     model.setMax(15);
-    console.log('setMax to 15', view.getElem('slider'));
+    console.log('setMax to 15', view.getElement('slider'));
 
     model = new Model(defaultOptions);
     view = new View({
@@ -311,6 +311,6 @@ describe('Model change isRange, value with Observer', () => {
       console.log(view.getViewModel().getValuePosition());
     };
     model.setMax(-1);
-    console.log('setMax to -1', view.getElem('slider'));
+    console.log('setMax to -1', view.getElement('slider'));
   });
 });

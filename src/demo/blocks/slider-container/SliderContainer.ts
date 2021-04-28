@@ -1,41 +1,41 @@
 import SliderConfig from '../slider-config/SliderConfig';
-import { SliderOptionsOptionalParams } from '../../../options/options';
+import { SliderOptionsPartial } from '../../../options/options';
 
 class SliderContainer {
   private readonly sliderSelector: string;
 
   private readonly configSelector: string;
 
-  private readonly sliderOptions: SliderOptionsOptionalParams;
+  private readonly sliderOptions: SliderOptionsPartial;
 
-  private elem: HTMLElement;
+  private element: HTMLElement;
 
-  constructor(elem: HTMLElement) {
+  constructor(element: HTMLElement) {
     this.sliderSelector = '.js-slider';
     this.configSelector = '.js-slider-config';
-    this.elem = elem;
-    this.sliderOptions = JSON.parse(this.elem.dataset.sliderOptions || '{}');
+    this.element = element;
+    this.sliderOptions = JSON.parse(this.element.dataset.sliderOptions || '{}');
 
     this.init();
   }
 
-  getHTMLEl(selector: string): HTMLElement | null {
-    return this.elem.querySelector<HTMLElement>(selector);
+  getHTMLElement(selector: string): HTMLElement | null {
+    return this.element.querySelector<HTMLElement>(selector);
   }
 
   private init() {
-    const configEl = this.getHTMLEl(this.configSelector);
-    const sliderEl = this.getHTMLEl(this.sliderSelector);
-    if (configEl !== null) {
-      if (sliderEl !== null) {
-        $(sliderEl).slider(this.sliderOptions);
+    const configElement = this.getHTMLElement(this.configSelector);
+    const sliderElement = this.getHTMLElement(this.sliderSelector);
+    if (configElement !== null) {
+      if (sliderElement !== null) {
+        $(sliderElement).slider(this.sliderOptions);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-        const sliderConfig = new SliderConfig(configEl, sliderEl);
+        const sliderConfig = new SliderConfig(configElement, sliderElement);
       } else {
-        throw new Error('sliderEl is null');
+        throw new Error('sliderElement is null');
       }
     } else {
-      throw new Error('configEl is null');
+      throw new Error('configElement is null');
     }
   }
 }

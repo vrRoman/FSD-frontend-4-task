@@ -1,6 +1,6 @@
 import IValueInfoView from './interface';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
-import isModelPropsValuesDefined from '../../../../../utils/isModelPropsValuesDefined';
+import isModelPropertiesValuesDefined from '../../../../../utilities/isModelPropertiesValuesDefined';
 
 class ValueInfoView implements IValueInfoView {
   private readonly target: HTMLElement
@@ -18,10 +18,10 @@ class ValueInfoView implements IValueInfoView {
   // Создает элемент с текущим значением. По умолчанию, если isRange=false, то
   // указывается просто model.value, иначе записывается в виде value[0] - value[1]
   create(): HTMLElement | undefined {
-    const modelProps = this.viewModel.getModelProps();
-    if (isModelPropsValuesDefined(modelProps)) {
+    const modelProperties = this.viewModel.getModelProperties();
+    if (isModelPropertiesValuesDefined(modelProperties)) {
       const valueInfo = document.createElement('div');
-      const { value } = modelProps;
+      const { value } = modelProperties;
       const { valueInfoClass } = this.viewModel.getClasses();
 
       if (Array.isArray(valueInfoClass)) {
@@ -54,13 +54,13 @@ class ValueInfoView implements IValueInfoView {
 
   // Обновляет значение в valueInfo
   update() {
-    const modelProps = this.viewModel.getModelProps();
-    if (isModelPropsValuesDefined(modelProps)) {
+    const modelProperties = this.viewModel.getModelProperties();
+    if (isModelPropertiesValuesDefined(modelProperties)) {
       if (this.valueInfo) {
-        if (typeof modelProps.value === 'number') {
-          this.valueInfo.innerText = `${modelProps.value}`;
+        if (typeof modelProperties.value === 'number') {
+          this.valueInfo.innerText = `${modelProperties.value}`;
         } else {
-          this.valueInfo.innerText = `${modelProps.value[0]} - ${modelProps.value[1]}`;
+          this.valueInfo.innerText = `${modelProperties.value[0]} - ${modelProperties.value[1]}`;
         }
       }
     }

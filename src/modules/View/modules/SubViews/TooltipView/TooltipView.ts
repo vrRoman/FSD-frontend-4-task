@@ -1,7 +1,7 @@
 import { ITooltipView, Tooltip } from './interfaceAndTypes';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import { Thumb } from '../ThumbView/interfaceAndTypes';
-import isModelPropsValuesDefined from '../../../../../utils/isModelPropsValuesDefined';
+import isModelPropertiesValuesDefined from '../../../../../utilities/isModelPropertiesValuesDefined';
 
 class TooltipView implements ITooltipView {
   private readonly target: Thumb
@@ -18,14 +18,14 @@ class TooltipView implements ITooltipView {
 
   // Создает и возвращает подсказки
   create(): Tooltip | undefined {
-    const modelProps = this.viewModel.getModelProps();
+    const modelProperties = this.viewModel.getModelProperties();
 
-    if (isModelPropsValuesDefined(modelProps)) {
-      const { value } = modelProps;
+    if (isModelPropertiesValuesDefined(modelProperties)) {
+      const { value } = modelProperties;
       const { tooltipClass, tooltipValueClass } = this.viewModel.getClasses();
 
       if (Array.isArray(this.target)) {
-        const tooltipElems: Array<HTMLElement> = [];
+        const tooltipElements: Array<HTMLElement> = [];
 
         for (let i = 0; i < this.target.length; i += 1) {
           const tooltip = document.createElement('div');
@@ -41,10 +41,10 @@ class TooltipView implements ITooltipView {
 
           this.target[i].appendChild(tooltip);
 
-          tooltipElems.push(tooltip);
+          tooltipElements.push(tooltip);
         }
 
-        this.tooltip = [tooltipElems[0], tooltipElems[1]];
+        this.tooltip = [tooltipElements[0], tooltipElements[1]];
       } else {
         const tooltip = document.createElement('div');
         if (Array.isArray(tooltipClass)) {
@@ -81,10 +81,10 @@ class TooltipView implements ITooltipView {
 
   // Обновляет значение в подсказках
   update() {
-    const modelProps = this.viewModel.getModelProps();
+    const modelProperties = this.viewModel.getModelProperties();
 
-    if (isModelPropsValuesDefined(modelProps)) {
-      const { value } = modelProps;
+    if (isModelPropertiesValuesDefined(modelProperties)) {
+      const { value } = modelProperties;
       if (this.tooltip) {
         const { tooltipValueClass } = this.viewModel.getClasses();
 

@@ -2,29 +2,29 @@ include ../slider-config/slider-config
 
 mixin slider-container(configOptions, heading, sliderOptions)
   -
-    let hasScaleValueDesc = false;
-    if (configOptions.hasConfigOptionsDesc !== undefined) {
-        hasScaleValueDesc = configOptions.hasConfigOptionsDesc;
+    let hasScaleValueDescription = false;
+    if (configOptions.hasConfigOptionsDescription !== undefined) {
+        hasScaleValueDescription = configOptions.hasConfigOptionsDescription;
     }
 
     let title;
-    let desc;
+    let description;
     if (heading) {
       title = heading;
       if (typeof heading !== 'string') {
         title = heading.title;
-        desc = heading.description;
+        description = heading.description;
       }
     }
 
   .slider-container.js-slider-container(data-slider-options=sliderOptions || {})
     if (title)
       h2.slider-container__title= title
-    if (desc)
-      span.slider-container__desc= desc
+    if (description)
+      span.slider-container__description= description
 
     .slider-container__slider
       .slider.js-slider(class=`${configOptions.sliderName} js-${configOptions.sliderName}`)
 
     .slider-container__config
-      +slider-config(configOptions.sliderName, hasScaleValueDesc)
+      +slider-config(configOptions.sliderName, hasScaleValueDescription)
