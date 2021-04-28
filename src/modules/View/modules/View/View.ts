@@ -74,7 +74,6 @@ class View extends Observer implements IView {
       hasValueInfo: viewOptions.hasValueInfo,
       hasScale: viewOptions.hasScale,
       scaleValue: viewOptions.scaleValue,
-      isResponsive: viewOptions.isResponsive,
       useKeyboard: viewOptions.useKeyboard,
       isScaleClickable: viewOptions.isScaleClickable,
       activeThumb: undefined,
@@ -176,7 +175,8 @@ class View extends Observer implements IView {
     if (this.viewModel.getUseKeyboard()) {
       this.windowListeners.addKeyboardListener();
     }
-    this.windowListeners.setIsResponsive(this.viewModel.getIsResponsive());
+
+    this.windowListeners.updateResponsive();
   }
 
   // В зависимости от action, обновляет view
@@ -257,6 +257,9 @@ class View extends Observer implements IView {
   changeOptions(newOptions: ViewOptionsPartial) {
     if (newOptions.length !== undefined) {
       this.viewModel.setLength(newOptions.length);
+      if (this.windowListeners) {
+        this.windowListeners.updateResponsive();
+      }
     }
     if (newOptions.hasTooltip !== undefined) {
       this.viewModel.setHasTooltip(newOptions.hasTooltip);
@@ -272,9 +275,6 @@ class View extends Observer implements IView {
     }
     if (newOptions.isVertical !== undefined) {
       this.viewModel.setIsVertical(newOptions.isVertical);
-    }
-    if (newOptions.isResponsive !== undefined) {
-      this.viewModel.setIsResponsive(newOptions.isResponsive);
     }
     if (newOptions.useKeyboard !== undefined) {
       this.viewModel.setUseKeyboard(newOptions.useKeyboard);
@@ -302,11 +302,6 @@ class View extends Observer implements IView {
         if (this.barView) this.barView.updateProgressBar();
         if (this.thumbView) this.thumbView.update();
         if (this.scaleView) this.scaleView.updateVertical();
-        break;
-      case 'UPDATE_IS-RESPONSIVE':
-        if (this.windowListeners) {
-          this.windowListeners.setIsResponsive(this.viewModel.getIsResponsive());
-        }
         break;
       case 'UPDATE_HAS-TOOLTIP':
         if (this.tooltipView) {

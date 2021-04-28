@@ -33,14 +33,17 @@ class WindowListeners implements IWindowListeners {
     document.removeEventListener('keydown', this.handleDocumentKeyDown);
   }
 
-  // Изменяет значение isResponsive, добавляет/убирает слушатели window resize
-  // Возвращает новое значение isResponsive
-  setIsResponsive(newIsResponsive: boolean): void {
-    if (newIsResponsive) {
+  updateResponsive() {
+    const lengthStyle = this.viewModel.getLength();
+    const lengthWithoutMeasureUnit = String(parseFloat(lengthStyle));
+    const measureUnit = lengthStyle.replace(lengthWithoutMeasureUnit, '');
+
+    const staticUnits = ['px', 'mm', 'cm', 'pt', 'pc'] as const;
+    if (staticUnits.find((unit) => unit === measureUnit)) {
       window.removeEventListener('resize', this.handleWindowResize);
-      window.addEventListener('resize', this.handleWindowResize);
     } else {
       window.removeEventListener('resize', this.handleWindowResize);
+      window.addEventListener('resize', this.handleWindowResize);
     }
   }
 

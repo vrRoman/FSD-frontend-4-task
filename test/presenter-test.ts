@@ -24,7 +24,6 @@ const defaultViewOptions: ViewOptions = {
   scaleValue: 3,
   hasValueInfo: false,
   isVertical: false,
-  isResponsive: false,
   useKeyboard: true,
   isScaleClickable: true,
 };
@@ -36,40 +35,6 @@ describe('Presenter with different options in model and view', () => {
   let view: IView;
   let presenter: IPresenter;
 
-  it('View all true, isVertical=false and isResponsive with %', () => {
-    model = new Model({
-      ...defaultModelOptions,
-      min: -2,
-    });
-    view = new View({
-      length: '80%',
-      isVertical: false,
-      hasTooltip: true,
-      hasScale: true,
-      scaleValue: 3,
-      hasValueInfo: true,
-      isResponsive: true,
-      isScaleClickable: true,
-      useKeyboard: true,
-    }, document.body);
-    presenter = new Presenter(model, view, defaultPresenterOptions);
-    console.log('View all true, isVertical=false and isResponsive with %: ', view.getElement('slider'));
-  });
-  it('View all true, isVertical=false and isResponsive with vh', () => {
-    model = new Model(defaultModelOptions);
-    view = new View({
-      length: '30vh',
-      isVertical: true,
-      hasTooltip: true,
-      hasScale: true,
-      scaleValue: 3,
-      hasValueInfo: true,
-      isResponsive: true,
-      isScaleClickable: true,
-      useKeyboard: true,
-    }, document.body);
-    presenter = new Presenter(model, view, defaultPresenterOptions);
-  });
   it('model isRange true, stepSize', () => {
     model = new Model({
       value: [2, 8.25],
@@ -85,7 +50,6 @@ describe('Presenter with different options in model and view', () => {
       hasScale: true,
       scaleValue: 3,
       hasValueInfo: true,
-      isResponsive: true,
       isScaleClickable: true,
       useKeyboard: true,
     }, document.body);

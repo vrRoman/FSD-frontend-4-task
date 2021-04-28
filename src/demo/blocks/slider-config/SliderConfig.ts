@@ -46,9 +46,6 @@ class SliderConfig implements IObserver, ISliderConfig {
       case 'UPDATE_IS-VERTICAL':
         this.updateCheckbox('isVertical');
         break;
-      case 'UPDATE_IS-RESPONSIVE':
-        this.updateCheckbox('isResponsive');
-        break;
       case 'UPDATE_IS-SCALE-CLICKABLE':
         this.updateCheckbox('isScaleClickable');
         break;
@@ -137,10 +134,6 @@ class SliderConfig implements IObserver, ISliderConfig {
       case 'isVertical':
         module = this.$slider.slider('viewModel');
         value = module.getIsVertical();
-        break;
-      case 'isResponsive':
-        module = this.$slider.slider('viewModel');
-        value = module.getIsResponsive();
         break;
       case 'isScaleClickable':
         module = this.$slider.slider('viewModel');

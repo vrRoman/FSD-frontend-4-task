@@ -81,13 +81,6 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     });
   }
 
-  setIsResponsive(newIsResponsive: boolean) {
-    this.data.isResponsive = newIsResponsive;
-    this.notify({
-      type: 'UPDATE_IS-RESPONSIVE',
-    });
-  }
-
   setUseKeyboard(newUseKeyboard: boolean) {
     this.data.useKeyboard = newUseKeyboard;
     this.notify({
@@ -151,10 +144,6 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       return [...this.data.scaleValue];
     }
     return this.data.scaleValue;
-  }
-
-  getIsResponsive(): boolean {
-    return this.data.isResponsive;
   }
 
   getUseKeyboard(): boolean {

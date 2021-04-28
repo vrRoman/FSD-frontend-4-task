@@ -16,7 +16,6 @@ const defaultViewOptionsWithClass: ViewOptions = {
   scaleValue: 3,
   hasValueInfo: false,
   isVertical: false,
-  isResponsive: false,
   isScaleClickable: true,
   useKeyboard: true,
   sliderClass: ['slider'],
@@ -44,20 +43,19 @@ describe('View with different options and get slider elements methods', () => {
     model = new Model(defaultModelOptions);
   });
 
-  it('length in % with all elements and isResponsive', () => {
+  it('length in % with all elements', () => {
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       length: '90%',
       hasTooltip: true,
       hasScale: true,
       hasValueInfo: true,
-      isResponsive: true,
     };
     model.setValue(2);
     const view = new View(viewOptions, document.body);
     expect(view).toBeDefined();
   });
-  it('vertical and isResponsive with vh', () => {
+  it('vertical', () => {
     const viewOptions: ViewOptions = {
       ...defaultViewOptionsWithClass,
       length: '20vh',
@@ -65,7 +63,6 @@ describe('View with different options and get slider elements methods', () => {
       hasScale: true,
       hasValueInfo: true,
       isVertical: true,
-      isResponsive: true,
     };
     model.setIsRange(true);
     model.setValue([3, 7.25]);
@@ -203,16 +200,6 @@ describe('View get values', () => {
   });
   it('getStepLength', () => {
     expect(view.getViewModel().getStepLength()).toBe(20);
-  });
-  it('getIsResponsive', () => {
-    expect(view.getViewModel().getIsResponsive()).toBe(false);
-
-    const viewOptions: ViewOptions = {
-      ...defaultViewOptionsWithClass,
-      isResponsive: true,
-    };
-    view = new View(viewOptions, document.body);
-    expect(view.getViewModel().getIsResponsive()).toBe(true);
   });
   it('getValuePosition', () => {
     expect(view.getViewModel().getValuePosition()).toBe(0);
@@ -357,22 +344,6 @@ describe('View methods', () => {
     view.removeActiveThumb();
     console.log('RemoveActiveThumb with isRange true', view.getElement('slider'));
     expect(view.getViewModel().getActiveThumb()).toBe(undefined);
-  });
-
-  it('changeIsResponsive', () => {
-    view = new View({
-      ...defaultViewOptionsWithClass,
-      length: '70%',
-    }, document.body);
-
-    view.changeOptions({
-      isResponsive: true,
-    });
-    expect(view.getViewModel().getIsResponsive()).toBe(true);
-    view.changeOptions({
-      isResponsive: false,
-    });
-    expect(view.getViewModel().getIsResponsive()).toBe(false);
   });
   it('changeLength', () => {
     view.changeOptions({

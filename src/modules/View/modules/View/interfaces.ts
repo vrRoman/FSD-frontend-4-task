@@ -44,7 +44,7 @@ interface IView extends IObserver {
 interface IWindowListeners {
   addKeyboardListener(): void
   removeKeyboardListener(): void
-  setIsResponsive(newIsResponsive: boolean): void
+  updateResponsive(): void
 }
 
 export default IView;

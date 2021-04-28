@@ -36,7 +36,6 @@ declare global {
     scaleValue: 2,
     hasValueInfo: false,
     isVertical: false,
-    isResponsive: true,
     useKeyboard: true,
     isScaleClickable: true,
   };

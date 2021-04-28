@@ -12,9 +12,6 @@ type ViewOptions = {
   hasValueInfo: boolean
   // Вертикальный слайдер
   isVertical: boolean
-  // Отзывчивость слайдера. Рекомендуется отключать(false), если length задана в
-  // статических ед. измерения(например, px)
-  isResponsive: boolean
   // Если true, то при нажатии стрелок и ad активный ползунок будет перемещаться
   useKeyboard: boolean
   // Если true, то шкала значений будет кликабельна и активный

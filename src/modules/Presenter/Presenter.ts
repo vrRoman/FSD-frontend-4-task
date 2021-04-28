@@ -44,8 +44,8 @@ class Presenter extends Observer implements IPresenter {
   changeOptions(newOptions: SliderOptionsPartial): void {
     // Распределение настроек по модулям
     const modelOptions = ['value', 'isRange', 'stepSize', 'max', 'min'];
-    const viewOptions = ['length', 'isVertical', 'isResponsive',
-      'hasTooltip', 'hasScale', 'scaleValue', 'hasValueInfo',
+    const viewOptions = ['length', 'isVertical', 'hasTooltip',
+      'hasScale', 'scaleValue', 'hasValueInfo',
       'useKeyboard', 'isScaleClickable'];
     const presenterOptions = ['onChange'];
 

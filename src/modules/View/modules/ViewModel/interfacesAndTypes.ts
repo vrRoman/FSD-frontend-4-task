@@ -27,7 +27,6 @@ interface IViewModelData {
   hasValueInfo: boolean
   hasScale: boolean
   scaleValue: Array<number | string> | number
-  isResponsive: boolean
   useKeyboard: boolean
   isScaleClickable: boolean
 
@@ -50,7 +49,6 @@ interface IViewModelGetMethods {
   getHasValueInfo(): boolean
   getHasScale(): boolean
   getScaleValue(): Array<number | string> | number
-  getIsResponsive(): boolean
   getUseKeyboard(): boolean
   getIsScaleClickable(): boolean
   getValuePosition(): number | [number, number] | undefined
@@ -69,7 +67,6 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setScaleValue(newScaleValue: Array<number | string> | number): void
   setHasTooltip(newHasTooltip: boolean): void
   setHasValueInfo(newHasValueInfo: boolean): void
-  setIsResponsive(newResponsive: boolean): void
   setUseKeyboard(newUseKeyboard: boolean): void
   setIsScaleClickable(newIsScaleClickable: boolean): void
 }
