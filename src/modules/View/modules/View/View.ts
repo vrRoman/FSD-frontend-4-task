@@ -51,18 +51,19 @@ class View extends Observer implements IView {
 
   constructor(viewOptions: ViewOptions | SliderOptions, parent: HTMLElement) {
     const classes: ViewClasses = {
-      sliderClass: viewOptions.sliderClass ? viewOptions.sliderClass : 'slider',
-      sliderVerticalClass: viewOptions.sliderVerticalClass ? viewOptions.sliderVerticalClass : 'slider_vertical',
-      barClass: viewOptions.barClass ? viewOptions.barClass : 'slider__bar',
-      progressBarClass: viewOptions.progressBarClass ? viewOptions.progressBarClass : 'slider__progress-bar',
-      thumbClass: viewOptions.thumbClass ? viewOptions.thumbClass : 'slider__thumb',
-      activeThumbClass: viewOptions.activeThumbClass ? viewOptions.activeThumbClass : 'slider__thumb_active',
-      tooltipClass: viewOptions.tooltipClass ? viewOptions.tooltipClass : 'slider__tooltip',
-      tooltipValueClass: viewOptions.tooltipValueClass ? viewOptions.tooltipValueClass : 'slider__tooltip-value',
-      scaleClass: viewOptions.scaleClass ? viewOptions.scaleClass : 'slider__scale',
-      scaleElementClass: viewOptions.scaleElementClass ? viewOptions.scaleElementClass : 'slider__scale-element',
-      clickableScaleElementClass: viewOptions.clickableScaleElementClass ? viewOptions.clickableScaleElementClass : 'slider__scale-element_clickable',
-      valueInfoClass: viewOptions.valueInfoClass ? viewOptions.valueInfoClass : 'slider__value-info',
+      sliderClass: viewOptions.sliderClass || 'slider',
+      sliderVerticalClass: viewOptions.sliderVerticalClass || 'slider_vertical',
+      barClass: viewOptions.barClass || 'slider__bar',
+      clickableBarClass: viewOptions.clickableBarClass || 'slider__bar_clickable',
+      progressBarClass: viewOptions.progressBarClass || 'slider__progress-bar',
+      thumbClass: viewOptions.thumbClass || 'slider__thumb',
+      activeThumbClass: viewOptions.activeThumbClass || 'slider__thumb_active',
+      tooltipClass: viewOptions.tooltipClass || 'slider__tooltip',
+      tooltipValueClass: viewOptions.tooltipValueClass || 'slider__tooltip-value',
+      scaleClass: viewOptions.scaleClass || 'slider__scale',
+      scaleElementClass: viewOptions.scaleElementClass || 'slider__scale-element',
+      clickableScaleElementClass: viewOptions.clickableScaleElementClass || 'slider__scale-element_clickable',
+      valueInfoClass: viewOptions.valueInfoClass || 'slider__value-info',
     };
     const viewModel: IViewModel = new ViewModel({
       modelProperties: undefined,
@@ -76,6 +77,7 @@ class View extends Observer implements IView {
       scaleValue: viewOptions.scaleValue,
       useKeyboard: viewOptions.useKeyboard,
       isScaleClickable: viewOptions.isScaleClickable,
+      isBarClickable: viewOptions.isBarClickable,
       activeThumb: undefined,
       clientX: 0,
       clientY: 0,
@@ -141,7 +143,7 @@ class View extends Observer implements IView {
     this.sliderContainerView = new SliderContainerView(this.parent, this.viewModel);
     const slider = this.sliderContainerView.create();
 
-    this.barView = new BarView(slider, this.viewModel);
+    this.barView = new BarView(slider, this.viewModel, this);
     const bar = this.barView.createBar();
     const length = this.viewModel.getIsVertical() ? bar.offsetHeight : bar.offsetWidth;
     this.viewModel.setLengthInPx(length);
@@ -157,7 +159,7 @@ class View extends Observer implements IView {
       }
     }
 
-    this.scaleView = new ScaleView(bar, this.viewModel, this);
+    this.scaleView = new ScaleView(slider, this.viewModel, this);
     if (this.viewModel.getHasScale()) {
       this.scaleView.create();
     }
@@ -284,6 +286,11 @@ class View extends Observer implements IView {
         this.viewModel.setIsScaleClickable(newOptions.isScaleClickable);
       }
     }
+    if (newOptions.isBarClickable !== undefined) {
+      if (this.viewModel.getIsBarClickable() !== newOptions.isBarClickable) {
+        this.viewModel.setIsBarClickable(newOptions.isBarClickable);
+      }
+    }
   }
 
   // Обновляет визуальные настройки слайдера
@@ -358,6 +365,15 @@ class View extends Observer implements IView {
           }
         }
         break;
+      case 'UPDATE_IS-BAR-CLICKABLE':
+        if (this.barView) {
+          if (this.viewModel.getIsBarClickable()) {
+            this.barView.addInteractivity();
+          } else {
+            this.barView.removeInteractivity();
+          }
+        }
+        break;
       default:
         break;
     }
@@ -409,6 +425,31 @@ class View extends Observer implements IView {
 
   getViewModel(): IViewModel {
     return this.viewModel;
+  }
+
+  getThumbNumberThatCloserToPosition(position: number): 0 | 1 {
+    let thumbNumber: 0 | 1 = 1;
+    const thumbPosition = this.viewModel.getValuePosition();
+    const length = this.viewModel.getLengthInPx();
+
+    if (length === undefined) {
+      return 0;
+    }
+    if (!Array.isArray(thumbPosition)) {
+      return 0;
+    }
+
+    if (thumbPosition[0] === thumbPosition[1]) {
+      if (position < length / 2) {
+        thumbNumber = 0;
+      }
+    } else if (thumbPosition[1] === position) {
+      thumbNumber = 0;
+    } else if (Math.abs(thumbPosition[0] - position) < Math.abs(thumbPosition[1] - position)) {
+      thumbNumber = 0;
+    }
+
+    return thumbNumber;
   }
 }
 export default View;

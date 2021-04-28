@@ -17,6 +17,7 @@ const defaultViewOptionsWithClass: ViewOptions = {
   hasValueInfo: false,
   isVertical: false,
   isScaleClickable: true,
+  isBarClickable: true,
   useKeyboard: true,
   sliderClass: ['slider'],
   sliderVerticalClass: ['slider_vertical', 'slider_vertical_some-class'],

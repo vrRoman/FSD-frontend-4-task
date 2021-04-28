@@ -7,6 +7,7 @@ type ViewClasses = {
   sliderClass: elementClass
   sliderVerticalClass: elementClass
   barClass: elementClass
+  clickableBarClass: elementClass
   progressBarClass: elementClass
   thumbClass: elementClass
   activeThumbClass: elementClass
@@ -29,6 +30,7 @@ interface IViewModelData {
   scaleValue: Array<number | string> | number
   useKeyboard: boolean
   isScaleClickable: boolean
+  isBarClickable: boolean
 
   modelProperties: ModelProperties | undefined
 
@@ -51,6 +53,7 @@ interface IViewModelGetMethods {
   getScaleValue(): Array<number | string> | number
   getUseKeyboard(): boolean
   getIsScaleClickable(): boolean
+  getIsBarClickable(): boolean
   getValuePosition(): number | [number, number] | undefined
   getStepLength(): number | undefined
 }
@@ -69,6 +72,7 @@ interface IViewModel extends ISubject, IViewModelGetMethods {
   setHasValueInfo(newHasValueInfo: boolean): void
   setUseKeyboard(newUseKeyboard: boolean): void
   setIsScaleClickable(newIsScaleClickable: boolean): void
+  setIsBarClickable(newIsBarClickable: boolean): void
 }
 
 export {

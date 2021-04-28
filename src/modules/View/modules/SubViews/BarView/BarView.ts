@@ -1,21 +1,27 @@
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IBarView from './interface';
+import IView from '../../View/interfaces';
 
 class BarView implements IBarView {
   private readonly target: HTMLElement
 
   private readonly viewModel: IViewModelGetMethods
 
+  private readonly mainView: IView
+
   private bar: HTMLElement | undefined
 
   private progressBar: HTMLElement | undefined
 
-  constructor(target: HTMLElement, viewModel: IViewModelGetMethods) {
+  constructor(target: HTMLElement, viewModel: IViewModelGetMethods, mainView: IView) {
     this.target = target;
     this.bar = undefined;
     this.progressBar = undefined;
 
     this.viewModel = viewModel;
+    this.mainView = mainView;
+
+    this.handleBarMouseDown = this.handleBarMouseDown.bind(this);
   }
 
   // Возвращает элемент бара
@@ -58,6 +64,11 @@ class BarView implements IBarView {
 
     this.target.appendChild(bar);
     this.bar = bar;
+
+    if (this.viewModel.getIsBarClickable()) {
+      this.addInteractivity();
+    }
+
     return bar;
   }
 
@@ -121,6 +132,78 @@ class BarView implements IBarView {
         this.bar.style.width = this.viewModel.getLength();
         this.bar.style.height = '';
       }
+    }
+  }
+
+  addInteractivity() {
+    if (this.bar) {
+      const { clickableBarClass } = this.viewModel.getClasses();
+      if (Array.isArray(clickableBarClass)) {
+        this.bar.classList.add(...clickableBarClass);
+      } else {
+        this.bar.classList.add(clickableBarClass);
+      }
+      this.bar.addEventListener('mousedown', this.handleBarMouseDown);
+    }
+  }
+
+  removeInteractivity() {
+    if (this.bar) {
+      const { clickableBarClass } = this.viewModel.getClasses();
+      if (Array.isArray(clickableBarClass)) {
+        this.bar.classList.remove(...clickableBarClass);
+      } else {
+        this.bar.classList.remove(clickableBarClass);
+      }
+      this.bar.removeEventListener('mousedown', this.handleBarMouseDown);
+    }
+  }
+
+  private handleBarMouseDown(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.bar) {
+      const length = this.viewModel.getLengthInPx();
+      const stepLength = this.viewModel.getStepLength();
+      if (length === undefined) {
+        throw new Error('length is undefined');
+      }
+      if (stepLength === undefined) {
+        throw new Error('stepLength is undefined');
+      }
+
+      let clientXOrY: 'clientX' | 'clientY';
+      let leftOrTop: 'left' | 'top';
+      let offsetWidthOrHeight: 'offsetWidth' | 'offsetHeight';
+      if (this.viewModel.getIsVertical()) {
+        clientXOrY = 'clientY';
+        leftOrTop = 'top';
+        offsetWidthOrHeight = 'offsetHeight';
+      } else {
+        clientXOrY = 'clientX';
+        leftOrTop = 'left';
+        offsetWidthOrHeight = 'offsetWidth';
+      }
+
+      const clickPosition = event[clientXOrY] - this.bar.getBoundingClientRect()[leftOrTop];
+
+      if (!this.viewModel.getActiveThumb()) {
+        this.mainView.setActiveThumb(
+          this.mainView.getThumbNumberThatCloserToPosition(clickPosition),
+        );
+      }
+
+      const activeThumb = this.viewModel.getActiveThumb();
+      if (activeThumb === undefined) {
+        throw new Error('activeThumb is undefined');
+      }
+
+      const activeThumbPosition = parseFloat(activeThumb.style[leftOrTop])
+        + activeThumb[offsetWidthOrHeight] / 2;
+      const numberOfSteps = Math.round((clickPosition - activeThumbPosition) / stepLength);
+
+      this.mainView.moveActiveThumb(numberOfSteps);
     }
   }
 }

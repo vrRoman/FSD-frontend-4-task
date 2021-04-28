@@ -49,6 +49,9 @@ class SliderConfig implements IObserver, ISliderConfig {
       case 'UPDATE_IS-SCALE-CLICKABLE':
         this.updateCheckbox('isScaleClickable');
         break;
+      case 'UPDATE_IS-BAR-CLICKABLE':
+        this.updateCheckbox('isBarClickable');
+        break;
       case 'UPDATE_USE-KEYBOARD':
         this.updateCheckbox('useKeyboard');
         break;
@@ -138,6 +141,10 @@ class SliderConfig implements IObserver, ISliderConfig {
       case 'isScaleClickable':
         module = this.$slider.slider('viewModel');
         value = module.getIsScaleClickable();
+        break;
+      case 'isBarClickable':
+        module = this.$slider.slider('viewModel');
+        value = module.getIsBarClickable();
         break;
       case 'useKeyboard':
         module = this.$slider.slider('viewModel');

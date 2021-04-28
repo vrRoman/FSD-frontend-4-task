@@ -46,7 +46,7 @@ class Presenter extends Observer implements IPresenter {
     const modelOptions = ['value', 'isRange', 'stepSize', 'max', 'min'];
     const viewOptions = ['length', 'isVertical', 'hasTooltip',
       'hasScale', 'scaleValue', 'hasValueInfo',
-      'useKeyboard', 'isScaleClickable'];
+      'useKeyboard', 'isScaleClickable', 'isBarClickable'];
     const presenterOptions = ['onChange'];
 
     const newModelOptions: { [key: string]: any } = {};

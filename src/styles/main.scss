@@ -11,6 +11,10 @@
 
   &__bar {
     background-color: $sl-secondary-color;
+
+    &_clickable {
+      cursor: pointer;
+    }
   }
 
   &__progress-bar {

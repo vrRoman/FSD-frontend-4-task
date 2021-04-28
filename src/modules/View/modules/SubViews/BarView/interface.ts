@@ -7,6 +7,8 @@ interface IBarView {
   createProgressBar(): HTMLElement | undefined
   updateProgressBar(): void
   updateBar(): void
+  addInteractivity(): void
+  removeInteractivity(): void
 }
 
 export default IBarView;

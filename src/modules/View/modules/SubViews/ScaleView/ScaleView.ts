@@ -206,7 +206,7 @@ class ScaleView implements IScaleView {
     event.preventDefault();
     event.stopPropagation();
 
-    const stepElements = <HTMLElement>event.currentTarget;
+    const stepElement = <HTMLElement>event.currentTarget;
     const stepLength = this.viewModel.getStepLength();
 
     let leftOrTop: 'left' | 'top';
@@ -220,37 +220,11 @@ class ScaleView implements IScaleView {
     }
 
     if (!this.viewModel.getActiveThumb()) {
-      let thumbNumber: 0 | 1 = 1;
-      const thumb = this.mainView.getElement('thumb');
-      if (Array.isArray(thumb)) {
-        const stepElementPosition = parseFloat(stepElements.style[leftOrTop])
-          + stepElements[offsetWidthOrHeight] / 2;
-        const firstThumbPosition = parseFloat(thumb[0].style[leftOrTop])
-          + thumb[0][offsetWidthOrHeight] / 2;
-        const secondThumbPosition = parseFloat(thumb[1].style[leftOrTop])
-          + thumb[1][offsetWidthOrHeight] / 2;
-
-        if (firstThumbPosition === secondThumbPosition) {
-          const length = this.viewModel.getLengthInPx();
-          if (length) {
-            if (stepElementPosition < length / 2) {
-              thumbNumber = 0;
-            } else {
-              thumbNumber = 1;
-            }
-          }
-        } else if (secondThumbPosition === stepElementPosition) {
-          thumbNumber = 0;
-        } if (firstThumbPosition === stepElementPosition) {
-          thumbNumber = 1;
-        } else if (
-          Math.abs(firstThumbPosition - stepElementPosition)
-          < Math.abs(secondThumbPosition - stepElementPosition)
-        ) {
-          thumbNumber = 0;
-        }
-      }
-      this.mainView.setActiveThumb(thumbNumber);
+      const stepElementPosition = parseFloat(stepElement.style[leftOrTop])
+        + stepElement[offsetWidthOrHeight] / 2;
+      this.mainView.setActiveThumb(
+        this.mainView.getThumbNumberThatCloserToPosition(stepElementPosition),
+      );
     }
 
     if (stepLength) {
@@ -260,7 +234,7 @@ class ScaleView implements IScaleView {
         const activeThumb = this.viewModel.getActiveThumb();
         if (activeThumb) {
           const stepValue = (
-            parseFloat(stepElements.style[leftOrTop]) + stepElements[offsetWidthOrHeight] / 2
+            parseFloat(stepElement.style[leftOrTop]) + stepElement[offsetWidthOrHeight] / 2
           ) / (stepLength / modelProperties.stepSize);
           const thumbValue = (
             parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeight] / 2

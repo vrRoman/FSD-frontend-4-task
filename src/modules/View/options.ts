@@ -18,11 +18,14 @@ type ViewOptions = {
   // ползунок(если isRange=true, по умолчанию = thumb[1]) будет
   // перемещаться на соответствующее значение
   isScaleClickable: boolean
+  // Если true, то при клике на бар будет перемещаться ползунок
+  isBarClickable: boolean
 
   // Классы элементов слайдера
   sliderClass?: string | string[]
   sliderVerticalClass?: string | string[]
   barClass?: string | string[]
+  clickableBarClass?: string | string[]
   progressBarClass?: string | string[]
   thumbClass?: string | string[]
   activeThumbClass?: string | string[]

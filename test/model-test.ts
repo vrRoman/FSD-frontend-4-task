@@ -227,7 +227,8 @@ describe('Model change isRange, value with Observer', () => {
     scaleValue: 3,
     hasValueInfo: false,
     isVertical: false,
-    isScaleClickable: false,
+    isScaleClickable: true,
+    isBarClickable: true,
     useKeyboard: true,
   };
   const defaultPresenterOptions: PresenterOptions = {};

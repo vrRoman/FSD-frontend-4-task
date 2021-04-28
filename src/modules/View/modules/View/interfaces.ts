@@ -35,8 +35,8 @@ interface IView extends IObserver {
   onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1): void
   setClientCoordinates(coordinates: [number, number]): void
 
+  getThumbNumberThatCloserToPosition(position: number): 0 | 1
   getViewModel(): IViewModel
-
   getElement(elementName: ElementNamesNotArrays): HTMLElement | undefined
   getElement(elementName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement] | undefined
 }

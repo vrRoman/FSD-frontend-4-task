@@ -95,6 +95,13 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     });
   }
 
+  setIsBarClickable(newIsBarClickable: boolean) {
+    this.data.isBarClickable = newIsBarClickable;
+    this.notify({
+      type: 'UPDATE_IS-BAR-CLICKABLE',
+    });
+  }
+
   getClientCoordinates(): [number, number] {
     return [this.data.clientX, this.data.clientY];
   }
@@ -152,6 +159,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
 
   getIsScaleClickable(): boolean {
     return this.data.isScaleClickable;
+  }
+
+  getIsBarClickable(): boolean {
+    return this.data.isBarClickable;
   }
 
   getValuePosition(): number | [number, number] | undefined {

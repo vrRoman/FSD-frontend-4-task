@@ -26,6 +26,7 @@ const defaultViewOptions: ViewOptions = {
   isVertical: false,
   useKeyboard: true,
   isScaleClickable: true,
+  isBarClickable: true,
 };
 const defaultPresenterOptions: PresenterOptions = {
 };
@@ -51,6 +52,7 @@ describe('Presenter with different options in model and view', () => {
       scaleValue: 3,
       hasValueInfo: true,
       isScaleClickable: true,
+      isBarClickable: true,
       useKeyboard: true,
     }, document.body);
     presenter = new Presenter(model, view, defaultPresenterOptions);

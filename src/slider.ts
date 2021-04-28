@@ -38,6 +38,7 @@ declare global {
     isVertical: false,
     useKeyboard: true,
     isScaleClickable: true,
+    isBarClickable: true,
   };
 
   // eslint-disable-next-line no-param-reassign
