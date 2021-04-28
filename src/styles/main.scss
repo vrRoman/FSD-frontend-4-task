@@ -48,6 +48,12 @@
   &__scale {
     z-index: $sl-smallest-z-index;
     color: $sl-secondary-text-color;
+
+    &-element {
+      &_clickable {
+        cursor: pointer;
+      }
+    }
   }
 
   &__value-info {

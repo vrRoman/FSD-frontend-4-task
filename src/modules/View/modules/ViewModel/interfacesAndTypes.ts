@@ -1,17 +1,21 @@
 import { ModelProperties } from '../../../Model/interfacesAndTypes';
 import { ISubject } from '../../../../ObserverAndSubject/interfacesAndTypes';
 
+type elementClass = string | string[]
+
 type ViewClasses = {
-  sliderClass: string | string[]
-  sliderVerticalClass: string | string[]
-  barClass: string | string[]
-  progressBarClass: string | string[]
-  thumbClass: string | string[]
-  activeThumbClass: string | string[]
-  tooltipClass: string | string[]
-  tooltipValueClass: string | string[]
-  scaleClass: string | string[]
-  valueInfoClass: string | string[]
+  sliderClass: elementClass
+  sliderVerticalClass: elementClass
+  barClass: elementClass
+  progressBarClass: elementClass
+  thumbClass: elementClass
+  activeThumbClass: elementClass
+  tooltipClass: elementClass
+  tooltipValueClass: elementClass
+  scaleClass: elementClass
+  scaleElementClass: elementClass
+  clickableScaleElementClass: elementClass
+  valueInfoClass: elementClass
 }
 
 interface IViewModelData {

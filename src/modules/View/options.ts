@@ -32,6 +32,8 @@ type ViewOptions = {
   tooltipClass?: string | string[]
   tooltipValueClass?: string | string[]
   scaleClass?: string | string[]
+  scaleElementClass?: string | string[]
+  clickableScaleElementClass?: string | string[]
   valueInfoClass?: string | string[]
 }
 

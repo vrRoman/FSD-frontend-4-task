@@ -73,6 +73,14 @@ class ScaleView implements IScaleView {
             } else {
               position = (Number(steps[i]) * oneValueLength) - (Number(steps[0]) * oneValueLength);
             }
+
+            const { scaleElementClass } = this.viewModel.getClasses();
+            if (Array.isArray(scaleElementClass)) {
+              stepElement.classList.add(...scaleElementClass);
+            } else {
+              stepElement.classList.add(scaleElementClass);
+            }
+
             stepElement.innerText = String(steps[i]);
             stepElement.style.position = 'absolute';
             scale.appendChild(stepElement);
@@ -150,7 +158,13 @@ class ScaleView implements IScaleView {
   addInteractivity() {
     if (this.scale) {
       const stepElements = Array.from(this.scale.children) as HTMLElement[];
+      const { clickableScaleElementClass } = this.viewModel.getClasses();
       for (let i = 0; i < stepElements.length; i += 1) {
+        if (Array.isArray(clickableScaleElementClass)) {
+          stepElements[i].classList.add(...clickableScaleElementClass);
+        } else {
+          stepElements[i].classList.add(clickableScaleElementClass);
+        }
         stepElements[i].addEventListener('mousedown', this.handleStepElementMouseDown);
       }
       this.mainView.changeOptions({
@@ -163,7 +177,13 @@ class ScaleView implements IScaleView {
   removeInteractivity() {
     if (this.scale) {
       const stepElements = Array.from(this.scale.children) as HTMLElement[];
+      const { clickableScaleElementClass } = this.viewModel.getClasses();
       for (let i = 0; i < stepElements.length; i += 1) {
+        if (Array.isArray(clickableScaleElementClass)) {
+          stepElements[i].classList.remove(...clickableScaleElementClass);
+        } else {
+          stepElements[i].classList.remove(clickableScaleElementClass);
+        }
         stepElements[i].removeEventListener('mousedown', this.handleStepElementMouseDown);
       }
       this.mainView.changeOptions({

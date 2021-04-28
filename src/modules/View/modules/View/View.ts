@@ -60,6 +60,8 @@ class View extends Observer implements IView {
       tooltipClass: viewOptions.tooltipClass ? viewOptions.tooltipClass : 'slider__tooltip',
       tooltipValueClass: viewOptions.tooltipValueClass ? viewOptions.tooltipValueClass : 'slider__tooltip-value',
       scaleClass: viewOptions.scaleClass ? viewOptions.scaleClass : 'slider__scale',
+      scaleElementClass: viewOptions.scaleElementClass ? viewOptions.scaleElementClass : 'slider__scale-element',
+      clickableScaleElementClass: viewOptions.clickableScaleElementClass ? viewOptions.clickableScaleElementClass : 'slider__scale-element_clickable',
       valueInfoClass: viewOptions.valueInfoClass ? viewOptions.valueInfoClass : 'slider__value-info',
     };
     const viewModel: IViewModel = new ViewModel({
