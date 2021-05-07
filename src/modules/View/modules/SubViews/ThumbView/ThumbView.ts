@@ -356,8 +356,16 @@ class ThumbView implements IThumbView {
         const oldCoordinate = isVertical
           ? this.viewModel.getClientCoordinates()[1]
           : this.viewModel.getClientCoordinates()[0];
-        let currentCoordinate = isVertical ? clientY : clientX;
+        const currentCoordinate = isVertical ? clientY : clientX;
 
+        // Math.round - если дробная часть numberOfSteps >= его половины, то округляется к большему
+        // Т.е. если пройдена половина пути, то тамб передвигается
+        let numberOfSteps = Math.round(
+          (currentCoordinate - Math.round(oldCoordinate)) / stepLength,
+        );
+
+        // Если курсор выходит за бар, тогда к numberOfSteps добавить/убавить
+        // число шагов, за которые вышел курсор
         const bar = this.mainView.getElement('bar');
         if (bar === undefined) {
           throw new Error('bar is undefined');
@@ -369,15 +377,15 @@ class ThumbView implements IThumbView {
           ? bar.getBoundingClientRect().top
           : bar.getBoundingClientRect().left;
         if (currentCoordinate >= barMaxCoordinate) {
-          currentCoordinate += stepLength;
+          numberOfSteps += Math.ceil((currentCoordinate - barMaxCoordinate) / stepLength);
         } else if (currentCoordinate <= barMinCoordinate) {
-          currentCoordinate -= stepLength;
+          numberOfSteps -= Math.ceil((barMinCoordinate - currentCoordinate) / stepLength);
         }
 
-        const numberOfSteps = Math.trunc(((currentCoordinate - oldCoordinate) * 2) / stepLength);
-
-        this.moveActiveThumb(numberOfSteps);
-        this.updateClientCoordinates();
+        if (numberOfSteps !== 0) {
+          this.moveActiveThumb(numberOfSteps);
+          this.updateClientCoordinates();
+        }
       } else {
         throw new Error('activeThumb is undefined');
       }
