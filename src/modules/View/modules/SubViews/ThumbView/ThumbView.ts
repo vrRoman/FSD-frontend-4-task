@@ -283,8 +283,8 @@ class ThumbView implements IThumbView {
     event.preventDefault();
     event.stopPropagation();
 
-    const target = <HTMLElement>event.target;
-    if (target) {
+    const { target } = event;
+    if (target instanceof HTMLElement) {
       if (activeThumb) {
         activeThumb.style.zIndex = '';
       }

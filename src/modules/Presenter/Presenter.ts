@@ -2,8 +2,6 @@ import IModel from '../Model/interfacesAndTypes';
 import IView from '../View/modules/View/interfaces';
 import IPresenter from './interface';
 import { SliderOptions, SliderOptionsPartial } from '../../options/options';
-import { ModelOptionsPartial } from '../Model/options';
-import { ViewOptionsPartial } from '../View/options';
 import PresenterOptions from './options';
 
 import { SubjectAction } from '../../ObserverAndSubject/interfacesAndTypes';
@@ -43,28 +41,28 @@ class Presenter extends Observer implements IPresenter {
   // Меняет настройки слайдера
   changeOptions(newOptions: SliderOptionsPartial): void {
     // Распределение настроек по модулям
-    const modelOptions = ['value', 'isRange', 'stepSize', 'max', 'min'];
+    const modelOptions = ['value', 'isRange', 'stepSize', 'max', 'min'] as const;
     const viewOptions = ['length', 'isVertical', 'hasTooltip',
       'hasScale', 'scaleValue', 'hasValueInfo',
-      'useKeyboard', 'isScaleClickable', 'isBarClickable'];
-    const presenterOptions = ['onChange'];
+      'useKeyboard', 'isScaleClickable', 'isBarClickable'] as const;
+    const presenterOptions = ['onChange'] as const;
 
     const newModelOptions: { [key: string]: any } = {};
     modelOptions.forEach((property) => {
       if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
-        newModelOptions[property] = newOptions[property as keyof ModelOptionsPartial];
+        newModelOptions[property] = newOptions[property];
       }
     });
     const newViewOptions: { [key: string]: any } = {};
     viewOptions.forEach((property) => {
       if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
-        newViewOptions[property] = newOptions[property as keyof ViewOptionsPartial];
+        newViewOptions[property] = newOptions[property];
       }
     });
     const newPresenterOptions: { [key: string]: any } = {};
     presenterOptions.forEach((property) => {
       if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
-        newPresenterOptions[property] = newOptions[property as keyof PresenterOptions];
+        newPresenterOptions[property] = newOptions[property];
       }
     });
 
