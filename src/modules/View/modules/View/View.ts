@@ -311,8 +311,8 @@ class View extends Observer implements IView {
       case 'UPDATE_IS-VERTICAL':
         if (this.sliderContainerView) this.sliderContainerView.updateVertical();
         if (this.barView) this.barView.updateBar();
-        if (this.barView) this.barView.updateProgressBar();
         if (this.barView) this.viewModel.setLengthInPx(this.barView.getOffsetLength() || 0);
+        if (this.barView) this.barView.updateProgressBar();
         if (this.thumbView) this.thumbView.update();
         if (this.scaleView) this.scaleView.updateVertical();
         break;

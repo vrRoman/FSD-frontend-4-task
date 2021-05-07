@@ -35,7 +35,6 @@ class ScaleView implements IScaleView {
         const length = this.viewModel.getLengthInPx();
         if (length) {
           const scale = document.createElement('div');
-          scale.style.position = 'absolute';
           this.target.appendChild(scale);
 
           const { scaleClass } = this.viewModel.getClasses();
