@@ -258,9 +258,14 @@ class View extends Observer implements IView {
   // Меняет настройки, передавая в viewModel
   changeOptions(newOptions: ViewOptionsPartial) {
     if (newOptions.length !== undefined) {
-      this.viewModel.setLength(newOptions.length);
-      if (this.windowListeners) {
-        this.windowListeners.updateResponsive();
+      const availableUnits = ['px', 'mm', 'cm', 'pt', 'pc', 'em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax'];
+      const lengthWithoutMeasureUnit = String(parseFloat(newOptions.length));
+      const measureUnit = newOptions.length.replace(lengthWithoutMeasureUnit, '');
+      if (availableUnits.find((unit) => unit === measureUnit)) {
+        this.viewModel.setLength(newOptions.length);
+        if (this.windowListeners) {
+          this.windowListeners.updateResponsive();
+        }
       }
     }
     if (newOptions.hasTooltip !== undefined) {
