@@ -13,11 +13,11 @@ mixin slider-config(sliderName, hasScaleValueDescription)
 
     .slider-config__value
       span.slider-config__value-description value
-      +option('value1', sliderName, 'text')
-      +option('value2', sliderName, 'text')
-    +option('stepSize', sliderName, 'text')
-    +option('min', sliderName, 'text')
-    +option('max', sliderName, 'text')
+      +option('value1', sliderName, 'number')
+      +option('value2', sliderName, 'number')
+    +option('stepSize', sliderName, 'number')
+    +option('min', sliderName, 'number')
+    +option('max', sliderName, 'number')
     +option('length', sliderName, 'text')
     +option({
       label: 'scaleValue',

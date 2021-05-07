@@ -313,15 +313,18 @@ class SliderConfig implements IObserver, ISliderConfig {
     this.$slider.slider('changeOptions', {
       value: newSliderValue,
     });
+    $(element).val(this.getTextInputValue(optionName));
   }
 
   private handleMinMaxInputFocusOut(event: JQuery.FocusOutEvent) {
     const isValueCorrect = $(event.target).val() && !Number.isNaN(Number($(event.target).val()));
+    const { name } = event.target.dataset;
     if (isValueCorrect) {
       this.$slider.slider('changeOptions', {
-        [event.target.dataset.name]: Number($(event.target).val()),
+        [name]: Number($(event.target).val()),
       });
     }
+    $(event.target).val(this.getTextInputValue(name));
   }
 
   private handleStepSizeInputFocusOut(event: JQuery.FocusOutEvent) {
@@ -334,6 +337,7 @@ class SliderConfig implements IObserver, ISliderConfig {
         stepSize: value,
       });
     }
+    $(event.target).val(this.getTextInputValue('stepSize'));
   }
 
   private handleLengthInputFocusOut(event: JQuery.FocusOutEvent) {
@@ -346,6 +350,7 @@ class SliderConfig implements IObserver, ISliderConfig {
         length: newValue,
       });
     }
+    $(event.target).val(this.getTextInputValue('length'));
   }
 
   private handleScaleValueInputFocusOut(event: JQuery.FocusOutEvent) {
@@ -372,6 +377,12 @@ class SliderConfig implements IObserver, ISliderConfig {
         scaleValue: this.getTextInputValue('scaleValue'),
       });
     }
+
+    const currentValue = this.getTextInputValue('scaleValue');
+    const convertedValue = Array.isArray(currentValue)
+      ? currentValue.map((element) => String(element))
+      : currentValue;
+    $(event.target).val(convertedValue);
   }
 }
 
