@@ -50,7 +50,9 @@
   }
 
   &__scale {
+    position: absolute;
     z-index: $sl-smallest-z-index;
+    box-sizing: border-box;
     color: $sl-secondary-text-color;
 
     &-element {
@@ -91,6 +93,8 @@
     }
 
     #{$selector}__scale {
+      bottom: -100%;
+      left: 0;
       height: 12px;
       padding-top: 10px;
     }
@@ -130,6 +134,8 @@
     }
 
     #{$selector}__scale {
+      top: 0;
+      right: -100%;
       width: 12px;
       padding-left: 10px;
     }
