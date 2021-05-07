@@ -66,7 +66,6 @@ class ValueInfoView implements IValueInfoView {
     }
   }
 
-
   get(): HTMLElement | undefined {
     return this.valueInfo;
   }
