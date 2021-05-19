@@ -6,7 +6,8 @@ import { IViewModel } from './modules/View/modules/ViewModel/interfacesAndTypes'
 import { IObserver } from './ObserverAndSubject/interfacesAndTypes';
 import Presenter from './modules/Presenter/Presenter';
 import IPresenter from './modules/Presenter/interface';
-import { SliderOptions, SliderOptionsPartial } from './options/options';
+import { SliderOptionsPartial } from './options/options';
+import { defaultSliderOptions } from './options/defaultOptions';
 
 declare global {
   // eslint-disable-next-line
@@ -23,24 +24,6 @@ declare global {
 }
 
 (function initialization($) {
-  const defaultOptions: SliderOptions = {
-    value: 0,
-    isRange: false,
-    stepSize: 1,
-    min: 0,
-    max: 10,
-
-    length: '100%',
-    hasTooltip: false,
-    hasScale: false,
-    scaleValue: 2,
-    hasValueInfo: false,
-    isVertical: false,
-    useKeyboard: true,
-    isScaleClickable: true,
-    isBarClickable: true,
-  };
-
   // eslint-disable-next-line no-param-reassign
   $.fn.slider = function start(
     action?: SliderOptionsPartial
@@ -54,7 +37,7 @@ declare global {
 
       return this.each(function init() {
         const settings = {
-          ...defaultOptions,
+          ...defaultSliderOptions,
           ...action,
         };
 
