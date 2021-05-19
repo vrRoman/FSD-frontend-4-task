@@ -1,4 +1,4 @@
-import { ModelProperties } from '../../../Model/interfacesAndTypes';
+import { IModelData } from '../../../Model/interfacesAndTypes';
 import { ISubject } from '../../../../ObserverAndSubject/interfacesAndTypes';
 
 type elementClass = string | string[]
@@ -22,7 +22,7 @@ type ViewClasses = {
 interface IViewModelData {
   classes: ViewClasses
   length: string
-  lengthInPx: number | undefined
+  lengthInPx: number
   isVertical: boolean
   hasTooltip: boolean
   hasValueInfo: boolean
@@ -32,20 +32,20 @@ interface IViewModelData {
   isScaleClickable: boolean
   isBarClickable: boolean
 
-  modelProperties: ModelProperties | undefined
+  modelData: IModelData | null
 
-  activeThumb: HTMLElement | undefined
+  activeThumb: HTMLElement | null
   clientX: number
   clientY: number
 }
 
 interface IViewModelGetMethods {
   getClientCoordinates(): [number, number]
-  getModelProperties(): ModelProperties | undefined
-  getActiveThumb(): HTMLElement | undefined
+  getModelData(): IModelData | null
+  getActiveThumb(): HTMLElement | null
   getClasses(): ViewClasses
   getLength(): string
-  getLengthInPx(): number | undefined
+  getLengthInPx(): number
   getIsVertical(): boolean
   getHasTooltip(): boolean
   getHasValueInfo(): boolean
@@ -54,14 +54,13 @@ interface IViewModelGetMethods {
   getUseKeyboard(): boolean
   getIsScaleClickable(): boolean
   getIsBarClickable(): boolean
-  getValuePosition(): number | [number, number] | undefined
-  getStepLength(): number | undefined
+  getValuePosition(): number | [number, number] | null
+  getStepLength(): number | null
 }
 
 interface IViewModel extends ISubject, IViewModelGetMethods {
-  removeActiveThumb(): void
-  setActiveThumb(newActiveThumb: HTMLElement): void
-  setModelProperties(newModelProperties: ModelProperties): void
+  setActiveThumb(newActiveThumb: HTMLElement | null): void
+  setModelData(newModelData: IModelData | null): void
   setClientCoordinates(coordinates: [number, number]): void
   setLength(newLength: string): void
   setLengthInPx(newLength: number): void

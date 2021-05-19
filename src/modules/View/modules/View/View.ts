@@ -26,7 +26,7 @@ import ValueInfoView from '../SubViews/ValueInfoView/ValueInfoView';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
 import Observer from '../../../../ObserverAndSubject/Observer';
 import WindowListeners from './WindowListeners';
-import { ModelProperties } from '../../../Model/interfacesAndTypes';
+import { ModelDataPartial } from '../../../Model/interfacesAndTypes';
 
 class View extends Observer implements IView {
   private readonly parent: HTMLElement
@@ -66,7 +66,7 @@ class View extends Observer implements IView {
       valueInfoClass: viewOptions.valueInfoClass || 'slider__value-info',
     };
     const viewModel: IViewModel = new ViewModel({
-      modelProperties: undefined,
+      modelData: undefined,
       classes,
       length: viewOptions.length,
       lengthInPx: undefined,
@@ -401,8 +401,8 @@ class View extends Observer implements IView {
   }
 
   // Обращается к viewModel
-  setModelProperties(modelProperties: ModelProperties) {
-    this.viewModel.setModelProperties(modelProperties);
+  setModelProperties(modelProperties: ModelDataPartial) {
+    this.viewModel.setModelData(modelProperties);
   }
 
   // Обращается к thumbView

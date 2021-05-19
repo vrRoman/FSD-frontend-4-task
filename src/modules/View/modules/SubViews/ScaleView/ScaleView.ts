@@ -1,6 +1,6 @@
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IScaleView from './interface';
-import { ModelProperties } from '../../../../Model/interfacesAndTypes';
+import { ModelDataPartial } from '../../../../Model/interfacesAndTypes';
 import IView from '../../View/interfaces';
 import areNumbersDefined from '../../../../../utilities/areNumbersDefined';
 import isModelPropertiesValuesDefined from '../../../../../utilities/isModelPropertiesValuesDefined';
@@ -26,7 +26,7 @@ class ScaleView implements IScaleView {
 
   // Создает шкалу значений в зависимости от scaleValue.
   create(): HTMLElement | undefined {
-    const modelProperties: ModelProperties | undefined = this.viewModel.getModelProperties();
+    const modelProperties: ModelDataPartial | undefined = this.viewModel.getModelData();
 
     if (modelProperties) {
       const minAndMax = [modelProperties.min, modelProperties.max];
@@ -115,7 +115,7 @@ class ScaleView implements IScaleView {
 
   // Обновляет положение элементов шкалы значений
   update() {
-    const modelProperties = this.viewModel.getModelProperties();
+    const modelProperties = this.viewModel.getModelData();
 
     if (modelProperties === undefined) {
       throw new Error('modelProperties is undefined');
@@ -239,7 +239,7 @@ class ScaleView implements IScaleView {
     }
 
     if (stepLength) {
-      const modelProperties = this.viewModel.getModelProperties();
+      const modelProperties = this.viewModel.getModelData();
 
       if (isModelPropertiesValuesDefined(modelProperties)) {
         const activeThumb = this.viewModel.getActiveThumb();

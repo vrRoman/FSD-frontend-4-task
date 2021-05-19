@@ -1,4 +1,4 @@
-import { ModelProperties } from '../modules/Model/interfacesAndTypes';
+import { ModelDataPartial } from '../modules/Model/interfacesAndTypes';
 
 type actionModelType = 'UPDATE_VALUE' | 'UPDATE_IS-RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEP-SIZE';
 type actionViewType = 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_HAS-TOOLTIP'
@@ -8,7 +8,7 @@ type actionViewType = 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_HAS-TOOLT
 type SubjectAction = {
   type: actionModelType | actionViewType
 
-  updatedProperties?: ModelProperties
+  updatedProperties?: ModelDataPartial
 }
 
 interface ISubject {

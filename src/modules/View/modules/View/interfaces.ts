@@ -8,7 +8,7 @@ import IScaleView from '../SubViews/ScaleView/interface';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
 import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
-import { ModelProperties } from '../../../Model/interfacesAndTypes';
+import { ModelDataPartial } from '../../../Model/interfacesAndTypes';
 
 type ElementNamesNotArrays = 'parent' | 'slider' | 'bar' | 'progressBar' | 'scale' | 'valueInfo'
 type ElementName = ElementNamesNotArrays | 'thumb' | 'tooltip'
@@ -28,7 +28,7 @@ interface IView extends IObserver {
   setPresenter(presenter: IPresenter): void
   changeOptions(newOptions: ViewOptionsPartial): void
 
-  setModelProperties(modelProperties: ModelProperties): void
+  setModelProperties(modelProperties: ModelDataPartial): void
   setActiveThumb(thumbNumber?: number): void
   moveActiveThumb(numberOfSteps?: number): void
   removeActiveThumb(): void

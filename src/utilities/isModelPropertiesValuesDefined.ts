@@ -1,7 +1,7 @@
-import { ModelProperties, IModelData } from '../modules/Model/interfacesAndTypes';
+import { ModelDataPartial, IModelData } from '../modules/Model/interfacesAndTypes';
 
 function isModelPropertiesValuesDefined(
-  modelProperties: ModelProperties | undefined,
+  modelProperties: ModelDataPartial | undefined | null,
 ): modelProperties is IModelData {
   let valueDefined = true;
 

@@ -18,7 +18,7 @@ class TooltipView implements ITooltipView {
 
   // Создает и возвращает подсказки
   create(): Tooltip | undefined {
-    const modelProperties = this.viewModel.getModelProperties();
+    const modelProperties = this.viewModel.getModelData();
 
     if (isModelPropertiesValuesDefined(modelProperties)) {
       const { value } = modelProperties;
@@ -81,7 +81,7 @@ class TooltipView implements ITooltipView {
 
   // Обновляет значение в подсказках
   update() {
-    const modelProperties = this.viewModel.getModelProperties();
+    const modelProperties = this.viewModel.getModelData();
 
     if (isModelPropertiesValuesDefined(modelProperties)) {
       const { value } = modelProperties;

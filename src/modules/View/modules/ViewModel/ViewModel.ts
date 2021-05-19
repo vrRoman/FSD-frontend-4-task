@@ -1,9 +1,8 @@
-import { ModelProperties } from '../../../Model/interfacesAndTypes';
+import { IModelData } from '../../../Model/interfacesAndTypes';
 import Subject from '../../../../ObserverAndSubject/Subject';
 import {
   IViewModel, IViewModelData, IViewModelGetMethods, ViewClasses,
 } from './interfacesAndTypes';
-import isModelPropertiesValuesDefined from '../../../../utilities/isModelPropertiesValuesDefined';
 
 class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   private data: IViewModelData
@@ -14,21 +13,12 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     this.data = data;
   }
 
-  // Убирает активный полузнок
-  removeActiveThumb() {
-    this.data.activeThumb = undefined;
-  }
-
-  // Перезаписывает активный ползунок
-  setActiveThumb(newActiveThumb: HTMLElement) {
+  setActiveThumb(newActiveThumb: HTMLElement | null) {
     this.data.activeThumb = newActiveThumb;
   }
 
-  setModelProperties(newModelProperties: ModelProperties) {
-    this.data.modelProperties = {
-      ...this.data.modelProperties,
-      ...newModelProperties,
-    };
+  setModelData(newModelData: IModelData | null) {
+    this.data.modelData = newModelData;
   }
 
   setClientCoordinates(coordinates: [number, number]) {
@@ -106,13 +96,16 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return [this.data.clientX, this.data.clientY];
   }
 
-  getModelProperties(): ModelProperties | undefined {
-    return {
-      ...this.data.modelProperties,
-    };
+  getModelData(): IModelData | null {
+    if (this.data.modelData) {
+      return {
+        ...this.data.modelData,
+      };
+    }
+    return null;
   }
 
-  getActiveThumb(): HTMLElement | undefined {
+  getActiveThumb(): HTMLElement | null {
     return this.data.activeThumb;
   }
 
@@ -126,7 +119,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return this.data.length;
   }
 
-  getLengthInPx(): number | undefined {
+  getLengthInPx(): number {
     return this.data.lengthInPx;
   }
 
@@ -165,41 +158,35 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return this.data.isBarClickable;
   }
 
-  getValuePosition(): number | [number, number] | undefined {
-    let valuePosition: number | [number, number] | undefined;
+  getValuePosition(): number | [number, number] | null {
+    let valuePosition: number | [number, number] | null = null;
 
-    if (isModelPropertiesValuesDefined(this.data.modelProperties)) {
-      const maxDiapason: number = this.data.modelProperties.max - this.data.modelProperties.min;
-      const { value } = this.data.modelProperties;
+    if (this.data.modelData) {
+      const maxDiapason: number = this.data.modelData.max - this.data.modelData.min;
+      const { value } = this.data.modelData;
 
-      if (this.data.lengthInPx !== undefined) {
-        if (typeof value === 'number') {
-          valuePosition = (this.data.lengthInPx / maxDiapason)
-            * (value - this.data.modelProperties.min);
-        } else if (Array.isArray(value)) {
-          valuePosition = [
-            (this.data.lengthInPx / maxDiapason)
-            * (value[0] - this.data.modelProperties.min),
-            (this.data.lengthInPx / maxDiapason)
-            * (value[1] - this.data.modelProperties.min),
-          ];
-        }
+      if (typeof value === 'number') {
+        valuePosition = (this.data.lengthInPx / maxDiapason)
+          * (value - this.data.modelData.min);
+      } else if (Array.isArray(value)) {
+        valuePosition = [
+          (this.data.lengthInPx / maxDiapason)
+          * (value[0] - this.data.modelData.min),
+          (this.data.lengthInPx / maxDiapason)
+          * (value[1] - this.data.modelData.min),
+        ];
       }
     }
     return valuePosition;
   }
 
-  // Получить длину шага
-  getStepLength(): number | undefined {
-    const length = this.getLengthInPx();
-    if (length !== undefined) {
-      if (isModelPropertiesValuesDefined(this.data.modelProperties)) {
-        const numberOfSteps = (this.data.modelProperties.max - this.data.modelProperties.min)
-          / this.data.modelProperties.stepSize;
-        return length / numberOfSteps;
-      }
+  getStepLength(): number | null {
+    if (this.data.modelData) {
+      const numberOfSteps = (this.data.modelData.max - this.data.modelData.min)
+        / this.data.modelData.stepSize;
+      return this.getLengthInPx() / numberOfSteps;
     }
-    return undefined;
+    return null;
   }
 }
 

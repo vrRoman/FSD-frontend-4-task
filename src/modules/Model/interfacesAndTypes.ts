@@ -11,7 +11,7 @@ interface IModelData {
   max: number
 }
 
-type ModelProperties = Partial<IModelData>
+type ModelDataPartial = Partial<IModelData>
 
 interface IModel extends ISubject {
   changeOptions(newOptions: ModelOptionsPartial): void
@@ -31,4 +31,4 @@ interface IModel extends ISubject {
 }
 
 export default IModel;
-export { ModelProperties, Value, IModelData };
+export { ModelDataPartial, Value, IModelData };
