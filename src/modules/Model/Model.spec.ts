@@ -1,6 +1,6 @@
-import Model from '../src/modules/Model/Model';
-import IModel from '../src/modules/Model/interfacesAndTypes';
-import { defaultModelOptions } from '../src/options/defaultOptions';
+import Model from './Model';
+import IModel from './interfacesAndTypes';
+import { defaultModelOptions } from '../../options/defaultOptions';
 
 describe('Model', () => {
   let model: IModel;
