@@ -2,6 +2,7 @@ import { SliderOptions } from '../../options/options';
 import { ModelOptions, ModelOptionsPartial } from './options';
 import IModel, { IModelData, Value } from './interfacesAndTypes';
 import Subject from '../../ObserverAndSubject/Subject';
+import areNumbersDefined from '../../utilities/areNumbersDefined';
 
 class Model extends Subject implements IModel {
   private data: IModelData
@@ -26,68 +27,31 @@ class Model extends Subject implements IModel {
 
   // Меняет настройки
   changeOptions(newOptions: ModelOptionsPartial) {
-    if (newOptions.value !== undefined) {
-      this.setValue(newOptions.value);
+    const minAndMax = [newOptions.min, newOptions.max];
+    if (areNumbersDefined(minAndMax)) {
+      this.setMinAndMax(minAndMax[0], minAndMax[1]);
+    } else {
+      if (newOptions.min !== undefined) {
+        this.setMin(newOptions.min);
+      }
+      if (newOptions.max !== undefined) {
+        this.setMax(newOptions.max);
+      }
     }
     if (newOptions.isRange !== undefined) {
       this.setIsRange(newOptions.isRange);
     }
+    if (newOptions.value !== undefined) {
+      this.setValue(newOptions.value);
+    }
     if (newOptions.stepSize !== undefined) {
       this.setStepSize(newOptions.stepSize);
     }
-    if (newOptions.min !== undefined) {
-      this.setMin(newOptions.min);
-    }
-    if (newOptions.max !== undefined) {
-      this.setMax(newOptions.max);
-    }
   }
 
-  // Округляет и возвращает входящее значение
-  roundValue(value: Value): Value {
-    const symbolsAfterCommaStepSize = this.getStepSize().toString().includes('.')
-      ? this.getStepSize().toString().split('.').pop()
-      : null;
-    const numberOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
-      ? symbolsAfterCommaStepSize.length
-      : 0;
-    if (Array.isArray(value)) {
-      return [
-        Number(value[0].toFixed(numberOfSymbolsAfterCommaStepSize)),
-        Number(value[1].toFixed(numberOfSymbolsAfterCommaStepSize)),
-      ];
-    }
-    return Number(value.toFixed(numberOfSymbolsAfterCommaStepSize));
-  }
-
-  // Меняет min
-  // Если макс = мин, то ничего не делать.
-  setMin(newMin: number): number {
-    if (this.data.max === newMin) {
-      return this.getMin();
-    }
+  // Меняет и проверяет min и max, проверяет значение, размер шага
+  setMinAndMax(newMin: number, newMax: number): [number, number] {
     this.data.min = newMin;
-    this.checkAndFixMinMax();
-    this.checkAndFixValue();
-    this.checkAndFixStepSize();
-    this.notify({
-      type: 'UPDATE_MIN-MAX',
-      updatedProperties: {
-        min: this.getMin(),
-        max: this.getMax(),
-        value: this.getValue(),
-        stepSize: this.getStepSize(),
-      },
-    });
-    return this.getMin();
-  }
-
-  // Меняет max
-  // Если макс = мин, то ничего не делать.
-  setMax(newMax: number): number {
-    if (this.data.min === newMax) {
-      return this.getMax();
-    }
     this.data.max = newMax;
     this.checkAndFixMinMax();
     this.checkAndFixValue();
@@ -101,6 +65,18 @@ class Model extends Subject implements IModel {
         stepSize: this.getStepSize(),
       },
     });
+    return [this.data.min, this.data.max];
+  }
+
+  // Вызывает this.setMinAndMax и возвращает новый min
+  setMin(newMin: number): number {
+    this.setMinAndMax(newMin, this.getMax());
+    return this.getMin();
+  }
+
+  // Вызывает this.setMinAndMax и возвращает новый max
+  setMax(newMax: number): number {
+    this.setMinAndMax(this.getMin(), newMax);
     return this.getMax();
   }
 
@@ -184,6 +160,51 @@ class Model extends Subject implements IModel {
     return this.data.value;
   }
 
+  getValue(): Value {
+    if (typeof this.data.value === 'number') {
+      return this.data.value;
+    }
+    return [...this.data.value];
+  }
+
+  getIsRange(): boolean {
+    return this.data.isRange;
+  }
+
+  getMin(): number {
+    return this.data.min;
+  }
+
+  getMax(): number {
+    return this.data.max;
+  }
+
+  // Возвращает max - min
+  getMaxDiapason(): number {
+    return this.data.max - this.data.min;
+  }
+
+  getStepSize(): number {
+    return this.data.stepSize;
+  }
+
+  // Округляет до количества знаков после запятой как у stepSize и возвращает новое значение
+  private roundValue(value: Value): Value {
+    const symbolsAfterCommaStepSize = this.getStepSize().toString().includes('.')
+      ? this.getStepSize().toString().split('.').pop()
+      : null;
+    const numberOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
+      ? symbolsAfterCommaStepSize.length
+      : 0;
+    if (Array.isArray(value)) {
+      return [
+        Number(value[0].toFixed(numberOfSymbolsAfterCommaStepSize)),
+        Number(value[1].toFixed(numberOfSymbolsAfterCommaStepSize)),
+      ];
+    }
+    return Number(value.toFixed(numberOfSymbolsAfterCommaStepSize));
+  }
+
   // Если значение - одно число и это диапазон, то значение становится
   // массивом с двумя одинаковыми значениями.
   // Если значение - массив и это не диапазон, то значением становится
@@ -191,7 +212,7 @@ class Model extends Subject implements IModel {
   // Если это диапазон и первое значение больше второго, поменять их местами.
   // Если значения больше максимального, то
   // приравнять с максимальным, и наоборот для минимального.
-  checkAndFixValue(): Value {
+  private checkAndFixValue(): Value {
     if (this.data.isRange) {
       if (typeof this.data.value === 'number') {
         this.data.value = [this.data.value, this.data.value];
@@ -229,7 +250,7 @@ class Model extends Subject implements IModel {
   // Если размер шага < 1, то он равен 1.
   // Если размер шага > наибольшего диапазона значений, то он равняется
   // разнице максимального значения и минимального.
-  checkAndFixStepSize(): number {
+  private checkAndFixStepSize(): number {
     if (this.data.stepSize < 1) {
       this.data.stepSize = 1;
     }
@@ -241,40 +262,12 @@ class Model extends Subject implements IModel {
   }
 
   // Если макс. значение > мин., то поменять местами.
-  checkAndFixMinMax(): number[] {
+  private checkAndFixMinMax(): number[] {
     if (this.data.max < this.data.min) {
       [this.data.max, this.data.min] = [this.data.min, this.data.max];
     }
 
     return [this.data.min, this.data.max];
-  }
-
-  getValue(): Value {
-    if (typeof this.data.value === 'number') {
-      return this.data.value;
-    }
-    return [...this.data.value];
-  }
-
-  getIsRange(): boolean {
-    return this.data.isRange;
-  }
-
-  getMin(): number {
-    return this.data.min;
-  }
-
-  getMax(): number {
-    return this.data.max;
-  }
-
-  // Возвращает max - min
-  getMaxDiapason(): number {
-    return this.data.max - this.data.min;
-  }
-
-  getStepSize(): number {
-    return this.data.stepSize;
   }
 }
 
