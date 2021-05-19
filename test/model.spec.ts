@@ -404,6 +404,15 @@ describe('Model', () => {
       expect(model.getValue()).toBe(10);
     });
 
+    test('when new value < min', () => {
+      model = new Model({
+        ...defaultModelOptions,
+        stepSize: 3,
+      });
+      model.addStepsToValue(-6);
+      expect(model.getValue()).toBe(0);
+    });
+
     test('when has valueNumber and not range', () => {
       model.addStepsToValue(6, 1);
       expect(model.getValue()).toBe(6);
@@ -478,6 +487,16 @@ describe('Model', () => {
       });
       model.addStepsToValue(2.4, 1, true);
       expect(model.getValue()).toBe(6.5);
+    });
+
+    test('when shouldRound and range', () => {
+      model = new Model({
+        ...defaultModelOptions,
+        stepSize: 2.7,
+        isRange: true,
+      });
+      model.addStepsToValue(2.4, 1, true);
+      expect(model.getValue()).toEqual([0, 6.5]);
     });
   });
 
