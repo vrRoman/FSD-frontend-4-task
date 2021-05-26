@@ -1,5 +1,5 @@
 import IModel from '../Model/interfacesAndTypes';
-import IView from '../View/modules/View/interfaces';
+import IView from '../View/modules/View/interfacesAndTypes';
 import IPresenter from './interface';
 import { SliderOptions, SliderOptionsPartial } from '../../options/options';
 import PresenterOptions from './options';
@@ -12,27 +12,49 @@ class Presenter extends Observer implements IPresenter {
 
   private view: IView;
 
-  onChange: Function | undefined
+  onChange: Function | null
 
   constructor(model: IModel, view: IView, presenterOptions: PresenterOptions | SliderOptions) {
     super(model);
 
     this.model = model;
     this.view = view;
-    this.onChange = presenterOptions.onChange;
+    this.onChange = presenterOptions.onChange || null;
 
     this.provideInfoToView();
 
-    this.view.drawSlider();
+    this.view.renderSlider();
   }
 
   onThumbMove(numberOfSteps: number = 1, thumbNumber: 0 | 1 = 1) {
     this.model.addStepsToValue(numberOfSteps, thumbNumber, true);
   }
 
-  // Обновляет view
+  // Изменяет значения модели во view
   update(action: SubjectAction): void {
-    this.view.updateModelPropertiesInSlider(action);
+    switch (action.type) {
+      case 'UPDATE_VALUE':
+        this.view.setModelData({ value: this.model.getValue() });
+        break;
+      case 'UPDATE_IS-RANGE':
+        this.view.setModelData({
+          value: this.model.getValue(),
+          isRange: this.model.getIsRange(),
+        });
+        break;
+      case 'UPDATE_MIN-MAX':
+        this.view.setModelData({
+          min: this.model.getMin(),
+          max: this.model.getMax(),
+          value: this.model.getValue(),
+          stepSize: this.model.getStepSize(),
+        });
+        break;
+      case 'UPDATE_STEP-SIZE':
+        this.view.setModelData({ stepSize: this.model.getStepSize() });
+        break;
+      default: break;
+    }
     if (this.onChange) {
       this.onChange();
     }
@@ -82,7 +104,7 @@ class Presenter extends Observer implements IPresenter {
 
   // Передает во View modelProperties и Presenter
   private provideInfoToView() {
-    this.view.setModelProperties({
+    this.view.setModelData({
       value: this.model.getValue(),
       min: this.model.getMin(),
       max: this.model.getMax(),
