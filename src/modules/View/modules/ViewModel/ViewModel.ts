@@ -189,18 +189,15 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     let valuePosition: number | [number, number] = 0;
 
     if (this.data.modelData) {
-      const maxDiapason: number = this.data.modelData.max - this.data.modelData.min;
-      const { value } = this.data.modelData;
+      const { min, max, value } = this.data.modelData;
+      const maxDiapason: number = max - min;
 
       if (typeof value === 'number') {
-        valuePosition = (this.data.lengthInPx / maxDiapason)
-          * (value - this.data.modelData.min);
+        valuePosition = (this.data.lengthInPx / maxDiapason) * (value - this.data.modelData.min);
       } else if (Array.isArray(value)) {
         valuePosition = [
-          (this.data.lengthInPx / maxDiapason)
-          * (value[0] - this.data.modelData.min),
-          (this.data.lengthInPx / maxDiapason)
-          * (value[1] - this.data.modelData.min),
+          (this.data.lengthInPx / maxDiapason) * (value[0] - min),
+          (this.data.lengthInPx / maxDiapason) * (value[1] - min),
         ];
       }
     }
@@ -209,8 +206,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
 
   getStepLength(): number {
     if (this.data.modelData) {
-      const numberOfSteps = (this.data.modelData.max - this.data.modelData.min)
-        / this.data.modelData.stepSize;
+      const { min, max, stepSize } = this.data.modelData;
+      const numberOfSteps = (max - min) / stepSize;
       return this.getLengthInPx() / numberOfSteps;
     }
     return 0;
