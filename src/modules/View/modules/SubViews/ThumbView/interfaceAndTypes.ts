@@ -1,13 +1,14 @@
 type Thumb = HTMLElement | [HTMLElement, HTMLElement]
 
 interface IThumbView {
-  create(): Thumb | undefined
-  remove(): void
-  updateClientCoordinates(): void
+  get(): Thumb
+  create(): Thumb
+  recreate(): Thumb
   update(): void
-  get(): Thumb | undefined
-  setActiveThumb(thumbNumber?: number): void
-  removeActiveThumb(): void
+  mount(): void
+  unmount(): void
+  updateClientCoordinates(): void
+  setActiveThumb(thumbNumber?: number | null): void
   moveActiveThumb(numberOfSteps?: number): void
 }
 

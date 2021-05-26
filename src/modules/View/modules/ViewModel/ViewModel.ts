@@ -13,83 +13,110 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     this.data = data;
   }
 
-  setActiveThumb(newActiveThumb: HTMLElement | null) {
+  setActiveThumb(newActiveThumb: null): null
+
+  setActiveThumb(newActiveThumb: HTMLElement): HTMLElement
+
+  setActiveThumb(newActiveThumb: HTMLElement | null): HTMLElement | null {
     this.data.activeThumb = newActiveThumb;
+    return this.data.activeThumb;
   }
 
-  setModelData(newModelData: IModelData | null) {
+  setModelData(newModelData: null): null
+
+  setModelData(newModelData: IModelData): IModelData
+
+  setModelData(newModelData: IModelData | null): IModelData | null {
     this.data.modelData = newModelData;
+    this.notify({
+      type: 'UPDATE_MODEL-DATA',
+    });
+    return this.data.modelData;
   }
 
-  setClientCoordinates(coordinates: [number, number]) {
+  setClientCoordinates(coordinates: [number, number]): [number, number] {
     [this.data.clientX, this.data.clientY] = coordinates;
+    return [this.data.clientX, this.data.clientY];
   }
 
-  setLength(newLength: string) {
+  setLength(newLength: string): string {
     this.data.length = newLength;
     this.notify({
       type: 'UPDATE_LENGTH',
     });
+    return this.data.length;
   }
 
-  setLengthInPx(newLength: number) {
+  setLengthInPx(newLength: number): number {
     this.data.lengthInPx = newLength;
+    this.notify({
+      type: 'UPDATE_LENGTH-IN-PX',
+    });
+    return this.data.lengthInPx;
   }
 
-  setIsVertical(newIsVertical: boolean) {
+  setIsVertical(newIsVertical: boolean): boolean {
     this.data.isVertical = newIsVertical;
     this.notify({
       type: 'UPDATE_IS-VERTICAL',
     });
+    return this.data.isVertical;
   }
 
-  setHasScale(newHasScale: boolean) {
+  setHasScale(newHasScale: boolean): boolean {
     this.data.hasScale = newHasScale;
     this.notify({
       type: 'UPDATE_HAS-SCALE',
     });
+    return this.data.hasScale;
   }
 
-  setScaleValue(newScaleValue: Array<number | string> | number) {
+  setScaleValue(newScaleValue: Array<number | string> | number): Array<number | string> | number {
     this.data.scaleValue = newScaleValue;
     this.notify({
       type: 'UPDATE_SCALE-VALUE',
     });
+    return this.data.scaleValue;
   }
 
-  setHasTooltip(newHasTooltip: boolean) {
+  setHasTooltip(newHasTooltip: boolean): boolean {
     this.data.hasTooltip = newHasTooltip;
     this.notify({
       type: 'UPDATE_HAS-TOOLTIP',
     });
+    return this.data.hasTooltip;
   }
 
-  setHasValueInfo(newHasValueInfo: boolean) {
+  setHasValueInfo(newHasValueInfo: boolean): boolean {
     this.data.hasValueInfo = newHasValueInfo;
     this.notify({
       type: 'UPDATE_HAS-VALUE-INFO',
     });
+    return this.data.hasValueInfo;
   }
 
-  setUseKeyboard(newUseKeyboard: boolean) {
+  setUseKeyboard(newUseKeyboard: boolean): boolean {
     this.data.useKeyboard = newUseKeyboard;
     this.notify({
       type: 'UPDATE_USE-KEYBOARD',
     });
+    return this.data.useKeyboard;
   }
 
-  setIsScaleClickable(newIsScaleClickable: boolean) {
+  setIsScaleClickable(newIsScaleClickable: boolean): boolean {
     this.data.isScaleClickable = newIsScaleClickable;
     this.notify({
       type: 'UPDATE_IS-SCALE-CLICKABLE',
     });
+    return this.data.isScaleClickable;
   }
 
-  setIsBarClickable(newIsBarClickable: boolean) {
+  setIsBarClickable(newIsBarClickable: boolean): boolean {
     this.data.isBarClickable = newIsBarClickable;
     this.notify({
       type: 'UPDATE_IS-BAR-CLICKABLE',
     });
+    return this.data.isBarClickable;
   }
 
   getClientCoordinates(): [number, number] {
@@ -158,8 +185,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return this.data.isBarClickable;
   }
 
-  getValuePosition(): number | [number, number] | null {
-    let valuePosition: number | [number, number] | null = null;
+  getValuePosition(): number | [number, number] {
+    let valuePosition: number | [number, number] = 0;
 
     if (this.data.modelData) {
       const maxDiapason: number = this.data.modelData.max - this.data.modelData.min;
@@ -180,13 +207,13 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return valuePosition;
   }
 
-  getStepLength(): number | null {
+  getStepLength(): number {
     if (this.data.modelData) {
       const numberOfSteps = (this.data.modelData.max - this.data.modelData.min)
         / this.data.modelData.stepSize;
       return this.getLengthInPx() / numberOfSteps;
     }
-    return null;
+    return 0;
   }
 }
 

@@ -1,73 +1,69 @@
 import IValueInfoView from './interface';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
-import isModelPropertiesValuesDefined from '../../../../../utilities/isModelPropertiesValuesDefined';
+import { addClass } from '../../../../../utilities/changeClassList';
+import IView from '../../View/interfacesAndTypes';
 
 class ValueInfoView implements IValueInfoView {
   private readonly target: HTMLElement
 
   private readonly viewModel: IViewModelGetMethods
 
-  private valueInfo: HTMLElement | undefined
+  private valueInfo: HTMLElement
 
-  constructor(target: HTMLElement, viewModel: IViewModelGetMethods) {
+  private isMounted: boolean;
+
+  constructor(target: HTMLElement, mainView: IView) {
     this.target = target;
-    this.viewModel = viewModel;
-    this.valueInfo = undefined;
+    this.viewModel = mainView.getViewModel();
+
+    this.valueInfo = this.create();
+    this.isMounted = false;
   }
 
-  // Создает элемент с текущим значением. По умолчанию, если isRange=false, то
+  get(): HTMLElement {
+    return this.valueInfo;
+  }
+
+  // По умолчанию, если isRange = false, то
   // указывается просто model.value, иначе записывается в виде value[0] - value[1]
-  create(): HTMLElement | undefined {
-    const modelProperties = this.viewModel.getModelData();
-    if (isModelPropertiesValuesDefined(modelProperties)) {
-      const valueInfo = document.createElement('div');
-      const { value } = modelProperties;
-      const { valueInfoClass } = this.viewModel.getClasses();
+  create(): HTMLElement {
+    const modelProperties = this.viewModel.getModelData() || { value: 0 };
+    const valueInfo = document.createElement('div');
+    const { value } = modelProperties;
+    const { valueInfoClass } = this.viewModel.getClasses();
 
-      if (Array.isArray(valueInfoClass)) {
-        valueInfo.classList.add(...valueInfoClass);
-      } else {
-        valueInfo.classList.add(valueInfoClass);
-      }
+    addClass(valueInfo, valueInfoClass);
 
-      this.target.appendChild(valueInfo);
-
-      if (typeof value === 'number') {
-        valueInfo.innerText = `${value}`;
-      } else {
-        valueInfo.innerText = `${value[0]} - ${value[1]}`;
-      }
-
-      this.valueInfo = valueInfo;
-      return valueInfo;
+    if (typeof value === 'number') {
+      valueInfo.innerText = `${value}`;
+    } else {
+      valueInfo.innerText = `${value[0]} - ${value[1]}`;
     }
-    return undefined;
-  }
 
-  // Удаляет элемент со значением
-  remove(): void {
-    if (this.valueInfo) {
-      this.valueInfo.remove();
-      this.valueInfo = undefined;
-    }
+    this.valueInfo = valueInfo;
+    return valueInfo;
   }
 
   // Обновляет значение в valueInfo
   update() {
-    const modelProperties = this.viewModel.getModelData();
-    if (isModelPropertiesValuesDefined(modelProperties)) {
-      if (this.valueInfo) {
-        if (typeof modelProperties.value === 'number') {
-          this.valueInfo.innerText = `${modelProperties.value}`;
-        } else {
-          this.valueInfo.innerText = `${modelProperties.value[0]} - ${modelProperties.value[1]}`;
-        }
-      }
+    const modelProperties = this.viewModel.getModelData() || { value: 0 };
+    const { value } = modelProperties;
+    if (typeof value === 'number') {
+      this.valueInfo.innerText = `${value}`;
+    } else {
+      this.valueInfo.innerText = `${value[0]} - ${value[1]}`;
     }
   }
 
-  get(): HTMLElement | undefined {
-    return this.valueInfo;
+  mount() {
+    if (this.isMounted) return;
+    this.isMounted = true;
+    this.target.appendChild(this.valueInfo);
+  }
+
+  unmount() {
+    this.isMounted = false;
+    this.valueInfo.remove();
   }
 }
 

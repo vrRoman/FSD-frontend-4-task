@@ -85,7 +85,7 @@ describe('ViewModel', () => {
       expect(viewModel.getIsBarClickable()).toBe(true);
     });
     test('getValuePosition', () => {
-      expect(viewModel.getValuePosition()).toBeNull();
+      expect(viewModel.getValuePosition()).toBe(0);
     });
     test('getValuePosition when modelData defined', () => {
       viewModel = new ViewModel({
@@ -102,7 +102,7 @@ describe('ViewModel', () => {
       expect(viewModel.getValuePosition()).toBeCloseTo(66.67);
     });
     test('getStepLength', () => {
-      expect(viewModel.getStepLength()).toBeNull();
+      expect(viewModel.getStepLength()).toBe(0);
     });
     test('getStepLength when modelData defined', () => {
       viewModel = new ViewModel({

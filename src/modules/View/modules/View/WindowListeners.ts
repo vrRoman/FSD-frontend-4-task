@@ -1,4 +1,4 @@
-import { IWindowListeners, Views } from './interfaces';
+import { IWindowListeners, ViewsPartial } from './interfacesAndTypes';
 import { IViewModel } from '../ViewModel/interfacesAndTypes';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
 import IBarView from '../SubViews/BarView/interface';
@@ -13,7 +13,7 @@ class WindowListeners implements IWindowListeners {
 
   private readonly scaleView: IScaleView | undefined
 
-  constructor(viewModel: IViewModel, views: Views) {
+  constructor(viewModel: IViewModel, views: ViewsPartial) {
     this.viewModel = viewModel;
     this.thumbView = views.thumb;
     this.barView = views.bar;

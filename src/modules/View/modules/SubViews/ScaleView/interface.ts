@@ -1,11 +1,13 @@
 interface IScaleView {
-  create(): HTMLElement | undefined
-  remove(): void
+  get(): HTMLElement
+  getStepsValues(): Array<number | string> | null
+  create(): HTMLElement
+  recreate(): HTMLElement
   update(): void
-  get(): HTMLElement | undefined
+  mount(): void
+  unmount(): void
   addInteractivity(): void
   removeInteractivity(): void
-  updateVertical(): void
 }
 
 export default IScaleView;

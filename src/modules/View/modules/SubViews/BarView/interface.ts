@@ -1,12 +1,14 @@
 interface IBarView {
-  getBar(): HTMLElement | undefined
-  getProgressBar(): HTMLElement | undefined
-  getOffsetLength(): number | undefined
+  getBar(): HTMLElement
+  getProgressBar(): HTMLElement
+  getOffsetLength(): number
 
   createBar(): HTMLElement
-  createProgressBar(): HTMLElement | undefined
+  createProgressBar(): HTMLElement
   updateProgressBar(): void
   updateBar(): void
+  mountBar(): void
+  mountProgressBar(): void
   addInteractivity(): void
   removeInteractivity(): void
 }

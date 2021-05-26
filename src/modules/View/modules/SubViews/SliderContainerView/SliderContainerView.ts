@@ -1,59 +1,48 @@
 import ISliderContainerView from './interface';
+import IView from '../../View/interfacesAndTypes';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
+import { addClass, removeClass } from '../../../../../utilities/changeClassList';
 
 class SliderContainerView implements ISliderContainerView {
-  private readonly target;
+  private readonly target: HTMLElement;
 
-  private readonly viewModel;
+  private readonly viewModel: IViewModelGetMethods;
 
-  private slider: HTMLElement | undefined;
+  private slider: HTMLElement;
 
-  constructor(target: HTMLElement, viewModel: IViewModelGetMethods) {
+  constructor(target: HTMLElement, mainView: IView) {
     this.target = target;
-    this.viewModel = viewModel;
-    this.slider = undefined;
+    this.viewModel = mainView.getViewModel();
+    this.slider = this.create();
+  }
+
+  get(): HTMLElement {
+    return this.slider;
   }
 
   create(): HTMLElement {
     const slider = document.createElement('div');
     const { sliderClass, sliderVerticalClass } = this.viewModel.getClasses();
-    if (Array.isArray(sliderClass)) {
-      slider.classList.add(...sliderClass);
-    } else {
-      slider.classList.add(sliderClass);
-    }
+    addClass(slider, sliderClass);
     if (this.viewModel.getIsVertical()) {
-      if (Array.isArray(sliderVerticalClass)) {
-        slider.classList.add(...sliderVerticalClass);
-      } else {
-        slider.classList.add(sliderVerticalClass);
-      }
+      addClass(slider, sliderVerticalClass);
     }
-
-    this.target.appendChild(slider);
     this.slider = slider;
-    return slider;
-  }
-
-  get(): HTMLElement | undefined {
     return this.slider;
   }
 
-  updateVertical() {
-    if (this.slider) {
-      const { sliderVerticalClass } = this.viewModel.getClasses();
-      if (this.viewModel.getIsVertical()) {
-        if (Array.isArray(sliderVerticalClass)) {
-          this.slider.classList.add(...sliderVerticalClass);
-        } else {
-          this.slider.classList.add(sliderVerticalClass);
-        }
-      } else if (Array.isArray(sliderVerticalClass)) {
-        this.slider.classList.remove(...sliderVerticalClass);
-      } else {
-        this.slider.classList.remove(sliderVerticalClass);
-      }
+  // Обновляет классы контейнера
+  update() {
+    const { sliderVerticalClass } = this.viewModel.getClasses();
+    if (this.viewModel.getIsVertical()) {
+      addClass(this.slider, sliderVerticalClass);
+    } else {
+      removeClass(this.slider, sliderVerticalClass);
     }
+  }
+
+  mount() {
+    this.target.appendChild(this.slider);
   }
 }
 

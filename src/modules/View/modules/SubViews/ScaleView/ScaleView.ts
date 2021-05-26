@@ -1,214 +1,175 @@
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IScaleView from './interface';
-import { ModelDataPartial } from '../../../../Model/interfacesAndTypes';
-import IView from '../../View/interfaces';
-import areNumbersDefined from '../../../../../utilities/areNumbersDefined';
-import isModelPropertiesValuesDefined from '../../../../../utilities/isModelPropertiesValuesDefined';
-import isArrayOfHTMLElements from '../../../../../utilities/isArrayOfHTMLElements';
+import IView from '../../View/interfacesAndTypes';
+import { addClass, removeClass } from '../../../../../utilities/changeClassList';
 
 class ScaleView implements IScaleView {
+  private readonly target: HTMLElement
+
   private readonly viewModel: IViewModelGetMethods
 
   private readonly mainView: IView
 
-  private readonly target: HTMLElement
+  private scale: HTMLElement
 
-  private scale: HTMLElement | undefined
+  private isMounted: boolean
 
-  constructor(target: HTMLElement, viewModel: IViewModelGetMethods, mainView: IView) {
+  private steps: Array<{
+    element: HTMLElement,
+    value: number | string,
+  }>
+
+  constructor(target: HTMLElement, mainView: IView) {
     this.target = target;
-    this.viewModel = viewModel;
     this.mainView = mainView;
-    this.scale = undefined;
+    this.viewModel = this.mainView.getViewModel();
 
     this.handleStepElementMouseDown = this.handleStepElementMouseDown.bind(this);
+
+    this.steps = [];
+    this.scale = this.create();
+    this.isMounted = false;
   }
 
-  // Создает шкалу значений в зависимости от scaleValue.
-  create(): HTMLElement | undefined {
-    const modelProperties: ModelDataPartial | undefined = this.viewModel.getModelData();
-
-    if (modelProperties) {
-      const minAndMax = [modelProperties.min, modelProperties.max];
-
-      if (areNumbersDefined(minAndMax)) {
-        const length = this.viewModel.getLengthInPx();
-        if (length) {
-          const scale = document.createElement('div');
-          this.target.appendChild(scale);
-
-          const { scaleClass } = this.viewModel.getClasses();
-          if (Array.isArray(scaleClass)) {
-            scale.classList.add(...scaleClass);
-          } else {
-            scale.classList.add(scaleClass);
-          }
-
-          if (this.viewModel.getIsVertical()) {
-            scale.style.height = `${length}px`;
-          } else {
-            scale.style.width = `${length}px`;
-          }
-
-          let steps: Array<number | string> = [];
-          const scaleValue = this.viewModel.getScaleValue();
-
-          if (Array.isArray(scaleValue)) {
-            steps = scaleValue;
-          } else {
-            let stepNumber = minAndMax[0];
-            steps.push(stepNumber);
-            while (stepNumber < minAndMax[1] - scaleValue) {
-              stepNumber += scaleValue;
-              steps.push(Number(stepNumber.toFixed(3)));
-            }
-            steps.push(minAndMax[1]);
-          }
-
-          for (let i = 0; i < steps.length; i += 1) {
-            const stepElement = document.createElement('div');
-            const oneValueLength = length / (minAndMax[1] - minAndMax[0]);
-            let position: number;
-            if (Array.isArray(scaleValue)) {
-              position = (length / (steps.length - 1)) * i;
-            } else {
-              position = (Number(steps[i]) * oneValueLength) - (Number(steps[0]) * oneValueLength);
-            }
-
-            const { scaleElementClass } = this.viewModel.getClasses();
-            if (Array.isArray(scaleElementClass)) {
-              stepElement.classList.add(...scaleElementClass);
-            } else {
-              stepElement.classList.add(scaleElementClass);
-            }
-
-            stepElement.innerText = String(steps[i]);
-            stepElement.style.position = 'absolute';
-            scale.appendChild(stepElement);
-            if (this.viewModel.getIsVertical()) {
-              stepElement.style.top = `${position - stepElement.offsetHeight / 2}px`;
-            } else {
-              stepElement.style.left = `${position - stepElement.offsetWidth / 2}px`;
-            }
-          }
-
-          this.scale = scale;
-
-          if (this.viewModel.getIsScaleClickable()) {
-            this.addInteractivity();
-          }
-
-          return scale;
-        }
-      }
-    }
-    return undefined;
-  }
-
-  // Удаляет scale
-  remove() {
-    if (this.scale) {
-      this.scale.remove();
-      this.scale = undefined;
-    }
-  }
-
-  // Обновляет положение элементов шкалы значений
-  update() {
-    const modelProperties = this.viewModel.getModelData();
-
-    if (modelProperties === undefined) {
-      throw new Error('modelProperties is undefined');
-    }
-
-    if (this.scale) {
-      const stepElements = Array.from(this.scale.children);
-      if (isArrayOfHTMLElements(stepElements)) {
-        const minMaxLength = [
-          modelProperties.min, modelProperties.max, this.viewModel.getLengthInPx(),
-        ];
-        if (areNumbersDefined(minMaxLength)) {
-          const [min, max, length] = minMaxLength;
-          const scaleValue = this.viewModel.getScaleValue();
-          for (let i = 0; i < stepElements.length; i += 1) {
-            const oneValueLength = length / (max - min);
-            let position: number;
-            if (Array.isArray(scaleValue)) {
-              position = (length / (stepElements.length - 1)) * i;
-            } else {
-              position = (Number(stepElements[i].innerText) * oneValueLength)
-                - (Number(stepElements[0].innerText) * oneValueLength);
-            }
-            if (this.viewModel.getIsVertical()) {
-              stepElements[i].style.top = `${position - stepElements[i].offsetHeight / 2}px`;
-            } else {
-              stepElements[i].style.left = `${position - stepElements[i].offsetWidth / 2}px`;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Возвращает элемент scale
-  get(): HTMLElement | undefined {
+  get(): HTMLElement {
     return this.scale;
   }
 
-  // Добавляет stepElementOnDown при клике на элементы шкалы значений и вызывает у view
-  // changeIsScaleClickable(true)
+  // Возвращает номера/названия шагов
+  getStepsValues(): Array<number | string> {
+    const modelData = this.viewModel.getModelData();
+    if (modelData === null) {
+      return [];
+    }
+
+    const scaleValue = this.viewModel.getScaleValue();
+    const { min, max } = modelData;
+    let stepValues: Array<number | string> = [];
+
+    if (Array.isArray(scaleValue)) {
+      stepValues = scaleValue;
+    } else {
+      let stepNumber = min;
+      stepValues.push(stepNumber);
+      while (stepNumber < max - scaleValue) {
+        stepNumber += scaleValue;
+        stepValues.push(Number(stepNumber.toFixed(3)));
+      }
+      stepValues.push(max);
+    }
+    return stepValues;
+  }
+
+  create(): HTMLElement {
+    const scale = document.createElement('div');
+    const stepsValues = this.getStepsValues();
+    const { scaleClass, scaleElementClass } = this.viewModel.getClasses();
+    const { widthOrHeight } = this.mainView.getElementProperties();
+    const length = this.viewModel.getLengthInPx();
+
+    addClass(scale, scaleClass);
+    scale.style[widthOrHeight] = `${length}px`;
+
+    for (let i = 0; i < stepsValues.length; i += 1) {
+      const stepElement = document.createElement('div');
+      addClass(stepElement, scaleElementClass);
+      stepElement.style.position = 'absolute';
+      this.steps.push({
+        element: stepElement,
+        value: stepsValues[i],
+      });
+      stepElement.innerText = String(stepsValues[i]);
+      scale.appendChild(stepElement);
+    }
+
+    this.scale = scale;
+    if (this.viewModel.getIsScaleClickable()) {
+      this.addInteractivity();
+    }
+
+    return this.scale;
+  }
+
+  // Пересоздает шкалу, если она уже в DOM, то убирает ее и заново добавляет
+  recreate(): HTMLElement {
+    this.steps = [];
+    if (this.isMounted) {
+      this.unmount();
+      this.scale = this.create();
+      this.mount();
+    } else {
+      this.scale = this.create();
+    }
+    return this.scale;
+  }
+
+  // Обновляет положение и длину шкалы и ее элементов
+  update() {
+    const modelData = this.viewModel.getModelData();
+    if (modelData === null) return;
+
+    const { min, max } = modelData;
+    const length = this.viewModel.getLengthInPx();
+    const scaleValue = this.viewModel.getScaleValue();
+    const {
+      widthOrHeight,
+      offsetWidthOrHeight,
+      leftOrTop,
+      opposites,
+    } = this.mainView.getElementProperties();
+
+    this.scale.style[widthOrHeight] = `${length}px`;
+    this.scale.style[opposites.widthOrHeight] = '';
+
+    for (let i = 0; i < this.steps.length; i += 1) {
+      const { element, value } = this.steps[i];
+      const oneValueLength = length / (max - min);
+      let position: number;
+      if (Array.isArray(scaleValue)) {
+        position = (length / (this.steps.length - 1)) * i;
+      } else {
+        position = (Number(value) * oneValueLength)
+          - (Number(this.steps[0].value) * oneValueLength);
+      }
+      element.style[leftOrTop] = `${position - element[offsetWidthOrHeight] / 2}px`;
+      element.style[opposites.leftOrTop] = '';
+    }
+  }
+
+  mount() {
+    if (!this.isMounted) {
+      this.isMounted = true;
+      this.target.appendChild(this.scale);
+      this.update();
+    }
+  }
+
+  unmount() {
+    this.isMounted = false;
+    this.scale.remove();
+  }
+
+  // При клике на элементы шкалы будет двигаться ползунок
   addInteractivity() {
-    if (this.scale) {
-      const stepElements = Array.from(this.scale.children);
-      if (isArrayOfHTMLElements(stepElements)) {
-        const { clickableScaleElementClass } = this.viewModel.getClasses();
-        for (let i = 0; i < stepElements.length; i += 1) {
-          if (Array.isArray(clickableScaleElementClass)) {
-            stepElements[i].classList.add(...clickableScaleElementClass);
-          } else {
-            stepElements[i].classList.add(clickableScaleElementClass);
-          }
-          stepElements[i].addEventListener('mousedown', this.handleStepElementMouseDown);
-        }
-        this.mainView.changeOptions({
-          isScaleClickable: true,
-        });
-      }
+    const { clickableScaleElementClass } = this.viewModel.getClasses();
+    for (let i = 0; i < this.steps.length; i += 1) {
+      const { element } = this.steps[i];
+      addClass(element, clickableScaleElementClass);
+      element.addEventListener('mousedown', this.handleStepElementMouseDown);
     }
   }
 
-  // Убирает слушатель клика у элементов шкалы значений и обращается к viewModel
+  // Убирает слушатель клика у элементов шкалы
   removeInteractivity() {
-    if (this.scale) {
-      const stepElements = Array.from(this.scale.children);
-
-      if (isArrayOfHTMLElements(stepElements)) {
-        const { clickableScaleElementClass } = this.viewModel.getClasses();
-        for (let i = 0; i < stepElements.length; i += 1) {
-          if (Array.isArray(clickableScaleElementClass)) {
-            stepElements[i].classList.remove(...clickableScaleElementClass);
-          } else {
-            stepElements[i].classList.remove(clickableScaleElementClass);
-          }
-          stepElements[i].removeEventListener('mousedown', this.handleStepElementMouseDown);
-        }
-        this.mainView.changeOptions({
-          isScaleClickable: false,
-        });
-      }
+    const { clickableScaleElementClass } = this.viewModel.getClasses();
+    for (let i = 0; i < this.steps.length; i += 1) {
+      const { element } = this.steps[i];
+      removeClass(element, clickableScaleElementClass);
+      element.removeEventListener('mousedown', this.handleStepElementMouseDown);
     }
   }
 
-  // Меняет плоскость шкалы значений
-  updateVertical() {
-    if (this.viewModel.getHasScale()) {
-      this.remove();
-      this.create();
-    }
-  }
-
-  // При клике на элементы шкалы значений вызывает moveActiveThumb и
-  // убирает активный ползунок
+  // Передвигает либо активный ползунок, либо тот, который ближе к элементу
   private handleStepElementMouseDown(event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -218,42 +179,29 @@ class ScaleView implements IScaleView {
       return;
     }
 
+    const modelProperties = this.viewModel.getModelData();
+    if (modelProperties === null) return;
+
     const stepLength = this.viewModel.getStepLength();
+    const { leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
+    const { stepSize } = modelProperties;
+    let activeThumb = this.viewModel.getActiveThumb();
 
-    let leftOrTop: 'left' | 'top';
-    let offsetWidthOrHeight: 'offsetWidth' | 'offsetHeight';
-    if (this.viewModel.getIsVertical()) {
-      leftOrTop = 'top';
-      offsetWidthOrHeight = 'offsetHeight';
-    } else {
-      leftOrTop = 'left';
-      offsetWidthOrHeight = 'offsetWidth';
-    }
-
-    if (!this.viewModel.getActiveThumb()) {
+    if (!activeThumb) {
       const stepElementPosition = parseFloat(stepElement.style[leftOrTop])
         + stepElement[offsetWidthOrHeight] / 2;
-      this.mainView.setActiveThumb(
+      activeThumb = this.mainView.setActiveThumb(
         this.mainView.getThumbNumberThatCloserToPosition(stepElementPosition),
       );
     }
 
-    if (stepLength) {
-      const modelProperties = this.viewModel.getModelData();
-
-      if (isModelPropertiesValuesDefined(modelProperties)) {
-        const activeThumb = this.viewModel.getActiveThumb();
-        if (activeThumb) {
-          const stepValue = (
-            parseFloat(stepElement.style[leftOrTop]) + stepElement[offsetWidthOrHeight] / 2
-          ) / (stepLength / modelProperties.stepSize);
-          const thumbValue = (
-            parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeight] / 2
-          ) / (stepLength / modelProperties.stepSize);
-          this.mainView.moveActiveThumb((stepValue - thumbValue) / modelProperties.stepSize);
-        }
-      }
-    }
+    const stepValue = (
+      parseFloat(stepElement.style[leftOrTop]) + stepElement[offsetWidthOrHeight] / 2
+    ) / (stepLength / stepSize);
+    const thumbValue = (
+      parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeight] / 2
+    ) / (stepLength / stepSize);
+    this.mainView.moveActiveThumb((stepValue - thumbValue) / stepSize);
   }
 }
 

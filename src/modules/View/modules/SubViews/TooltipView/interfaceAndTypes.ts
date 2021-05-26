@@ -1,10 +1,11 @@
 type Tooltip = HTMLElement | [HTMLElement, HTMLElement]
 
 interface ITooltipView {
-  create(): Tooltip | undefined
-  remove(): void
+  get(): Tooltip
+  create(): Tooltip
   update(): void
-  get(): Tooltip | undefined
+  mount(): void
+  unmount(): void
 }
 
 export { ITooltipView, Tooltip };

@@ -54,24 +54,26 @@ interface IViewModelGetMethods {
   getUseKeyboard(): boolean
   getIsScaleClickable(): boolean
   getIsBarClickable(): boolean
-  getValuePosition(): number | [number, number] | null
-  getStepLength(): number | null
+  getValuePosition(): number | [number, number]
+  getStepLength(): number
 }
 
 interface IViewModel extends ISubject, IViewModelGetMethods {
-  setActiveThumb(newActiveThumb: HTMLElement | null): void
-  setModelData(newModelData: IModelData | null): void
-  setClientCoordinates(coordinates: [number, number]): void
-  setLength(newLength: string): void
-  setLengthInPx(newLength: number): void
-  setIsVertical(newIsVertical: boolean): void
-  setHasScale(newHasScale: boolean): void
-  setScaleValue(newScaleValue: Array<number | string> | number): void
-  setHasTooltip(newHasTooltip: boolean): void
-  setHasValueInfo(newHasValueInfo: boolean): void
-  setUseKeyboard(newUseKeyboard: boolean): void
-  setIsScaleClickable(newIsScaleClickable: boolean): void
-  setIsBarClickable(newIsBarClickable: boolean): void
+  setActiveThumb(newActiveThumb: null): null
+  setActiveThumb(newActiveThumb: HTMLElement): HTMLElement
+  setModelData(newModelData: null): null
+  setModelData(newModelData: IModelData): IModelData
+  setClientCoordinates(coordinates: [number, number]): [number, number]
+  setLength(newLength: string): string
+  setLengthInPx(newLength: number): number
+  setIsVertical(newIsVertical: boolean): boolean
+  setHasScale(newHasScale: boolean): boolean
+  setScaleValue(newScaleValue: Array<number | string> | number): Array<number | string> | number
+  setHasTooltip(newHasTooltip: boolean): boolean
+  setHasValueInfo(newHasValueInfo: boolean): boolean
+  setUseKeyboard(newUseKeyboard: boolean): boolean
+  setIsScaleClickable(newIsScaleClickable: boolean): boolean
+  setIsBarClickable(newIsBarClickable: boolean): boolean
 }
 
 export {

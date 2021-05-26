@@ -1,8 +1,9 @@
 interface IValueInfoView {
-  create(): HTMLElement | undefined
-  remove(): void
+  get(): HTMLElement
+  create(): HTMLElement
   update(): void
-  get(): HTMLElement | undefined
+  mount(): void
+  unmount(): void
 }
 
 export default IValueInfoView;

@@ -1,7 +1,8 @@
 interface ISliderContainerView {
-  create(): HTMLElement;
-  get(): HTMLElement | undefined;
-  updateVertical(): void;
+  get(): HTMLElement
+  create(): HTMLElement
+  update(): void
+  mount(): void
 }
 
 export default ISliderContainerView;
