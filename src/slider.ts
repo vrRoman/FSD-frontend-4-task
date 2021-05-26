@@ -1,7 +1,7 @@
 import Model from './modules/Model/Model';
 import IModel, { Value } from './modules/Model/interfacesAndTypes';
 import View from './modules/View/modules/View/View';
-import IView from './modules/View/modules/View/interfaces';
+import IView from './modules/View/modules/View/interfacesAndTypes';
 import { IViewModel } from './modules/View/modules/ViewModel/interfacesAndTypes';
 import { IObserver } from './ObserverAndSubject/interfacesAndTypes';
 import Presenter from './modules/Presenter/Presenter';
