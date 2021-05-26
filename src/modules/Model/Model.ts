@@ -2,7 +2,7 @@ import { SliderOptions } from '../../options/options';
 import { ModelOptions, ModelOptionsPartial } from './options';
 import IModel, { IModelData, Value } from './interfacesAndTypes';
 import Subject from '../../ObserverAndSubject/Subject';
-import areNumbersDefined from '../../utilities/areNumbersDefined';
+import areElementsDefined from '../../utilities/areElementsDefined';
 
 class Model extends Subject implements IModel {
   private data: IModelData
@@ -28,7 +28,7 @@ class Model extends Subject implements IModel {
   // Меняет настройки
   changeOptions(newOptions: ModelOptionsPartial) {
     const minAndMax = [newOptions.min, newOptions.max];
-    if (areNumbersDefined(minAndMax)) {
+    if (areElementsDefined(minAndMax)) {
       this.setMinAndMax(minAndMax[0], minAndMax[1]);
     } else {
       if (newOptions.min !== undefined) {
