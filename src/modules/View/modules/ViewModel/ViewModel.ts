@@ -194,7 +194,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
 
       if (typeof value === 'number') {
         valuePosition = (this.data.lengthInPx / maxDiapason) * (value - this.data.modelData.min);
-      } else if (Array.isArray(value)) {
+      } else {
         valuePosition = [
           (this.data.lengthInPx / maxDiapason) * (value[0] - min),
           (this.data.lengthInPx / maxDiapason) * (value[1] - min),
