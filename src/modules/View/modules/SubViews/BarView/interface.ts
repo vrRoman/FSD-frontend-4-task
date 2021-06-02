@@ -3,8 +3,6 @@ interface IBarView {
   getProgressBar(): HTMLElement
   getOffsetLength(): number
 
-  createBar(): HTMLElement
-  createProgressBar(): HTMLElement
   updateProgressBar(): void
   updateBar(): void
   mountBar(): void

@@ -47,34 +47,6 @@ class BarView implements IBarView {
     return this.bar.offsetWidth;
   }
 
-  createBar(): HTMLElement {
-    const bar: HTMLElement = document.createElement('div');
-    const { barClass } = this.viewModel.getClasses();
-
-    addClass(bar, barClass);
-    bar.style.position = 'relative';
-
-    this.bar = bar;
-
-    if (this.viewModel.getIsBarClickable()) {
-      this.addInteractivity();
-    }
-
-    return bar;
-  }
-
-  createProgressBar(): HTMLElement {
-    const progressBar: HTMLElement = document.createElement('div');
-    const { progressBarClass } = this.viewModel.getClasses();
-
-    addClass(progressBar, progressBarClass);
-    progressBar.style.position = 'absolute';
-
-    this.progressBar = progressBar;
-
-    return progressBar;
-  }
-
   mountBar() {
     if (!this.isBarMounted) {
       this.target.appendChild(this.bar);
@@ -127,6 +99,34 @@ class BarView implements IBarView {
     this.bar.removeEventListener('mousedown', this.handleBarMouseDown);
   }
 
+  private createBar(): HTMLElement {
+    const bar: HTMLElement = document.createElement('div');
+    const { barClass } = this.viewModel.getClasses();
+
+    addClass(bar, barClass);
+    bar.style.position = 'relative';
+
+    this.bar = bar;
+
+    if (this.viewModel.getIsBarClickable()) {
+      this.addInteractivity();
+    }
+
+    return bar;
+  }
+
+  private createProgressBar(): HTMLElement {
+    const progressBar: HTMLElement = document.createElement('div');
+    const { progressBarClass } = this.viewModel.getClasses();
+
+    addClass(progressBar, progressBarClass);
+    progressBar.style.position = 'absolute';
+
+    this.progressBar = progressBar;
+
+    return progressBar;
+  }
+
   private handleBarMouseDown(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -147,7 +147,9 @@ class BarView implements IBarView {
 
     const activeThumbPosition = parseFloat(activeThumb.style[leftOrTop])
       + activeThumb[offsetWidthOrHeight] / 2;
-    const numberOfSteps = Math.round((clickPosition - activeThumbPosition) / stepLength);
+    const numberOfSteps = stepLength === 0
+      ? 0
+      : Math.round((clickPosition - activeThumbPosition) / stepLength);
     this.mainView.moveActiveThumb(numberOfSteps);
   }
 }
