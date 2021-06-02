@@ -1,7 +1,7 @@
 import { ViewOptionsPartial } from '../../options';
 import IPresenter from '../../../Presenter/interface';
 import { IObserver } from '../../../../ObserverAndSubject/interfacesAndTypes';
-import { IViewModelGetMethods } from '../ViewModel/interfacesAndTypes';
+import { IViewModel } from '../ViewModel/interfacesAndTypes';
 import IBarView from '../SubViews/BarView/interface';
 import ISliderContainerView from '../SubViews/SliderContainerView/interface';
 import IScaleView from '../SubViews/ScaleView/interface';
@@ -46,7 +46,7 @@ interface IView extends IObserver {
   getElementProperties(): ElementProperties
   getWindowListeners(): IWindowListeners
   getThumbNumberThatCloserToPosition(position: number): 0 | 1
-  getViewModel(): IViewModelGetMethods
+  getViewModel(): IViewModel
   getElement(elementName: ElementNamesNotArrays): HTMLElement
   getElement(elementName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement]
   getViews(): Views
