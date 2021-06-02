@@ -11,13 +11,14 @@ type SubjectAction = {
   updatedProperties?: ModelDataPartial
 }
 
-interface ISubject {
-  subscribe(observer: Object): void
-  unsubscribe(observer: Object): void
-}
-
 interface IObserver {
   update(action: SubjectAction): void
+}
+
+interface ISubject {
+  getObservers(): Array<IObserver>
+  subscribe(...observers: Array<IObserver>): void
+  unsubscribe(...observers: Array<IObserver>): void
 }
 
 export { SubjectAction, ISubject, IObserver };
