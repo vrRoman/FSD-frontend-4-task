@@ -20,17 +20,6 @@ class SliderContainerView implements ISliderContainerView {
     return this.slider;
   }
 
-  create(): HTMLElement {
-    const slider = document.createElement('div');
-    const { sliderClass, sliderVerticalClass } = this.viewModel.getClasses();
-    addClass(slider, sliderClass);
-    if (this.viewModel.getIsVertical()) {
-      addClass(slider, sliderVerticalClass);
-    }
-    this.slider = slider;
-    return this.slider;
-  }
-
   // Обновляет классы контейнера
   update() {
     const { sliderVerticalClass } = this.viewModel.getClasses();
@@ -43,6 +32,15 @@ class SliderContainerView implements ISliderContainerView {
 
   mount() {
     this.target.appendChild(this.slider);
+  }
+
+  private create(): HTMLElement {
+    const slider = document.createElement('div');
+    const { sliderClass } = this.viewModel.getClasses();
+    addClass(slider, sliderClass);
+    this.slider = slider;
+    this.update();
+    return this.slider;
   }
 }
 
