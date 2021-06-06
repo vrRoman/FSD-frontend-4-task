@@ -60,36 +60,6 @@ class ScaleView implements IScaleView {
     return stepValues;
   }
 
-  create(): HTMLElement {
-    const scale = document.createElement('div');
-    const stepsValues = this.getStepsValues();
-    const { scaleClass, scaleElementClass } = this.viewModel.getClasses();
-    const { widthOrHeight } = this.mainView.getElementProperties();
-    const length = this.viewModel.getLengthInPx();
-
-    addClass(scale, scaleClass);
-    scale.style[widthOrHeight] = `${length}px`;
-
-    for (let i = 0; i < stepsValues.length; i += 1) {
-      const stepElement = document.createElement('div');
-      addClass(stepElement, scaleElementClass);
-      stepElement.style.position = 'absolute';
-      this.steps.push({
-        element: stepElement,
-        value: stepsValues[i],
-      });
-      stepElement.innerText = String(stepsValues[i]);
-      scale.appendChild(stepElement);
-    }
-
-    this.scale = scale;
-    if (this.viewModel.getIsScaleClickable()) {
-      this.addInteractivity();
-    }
-
-    return this.scale;
-  }
-
   // Пересоздает шкалу, если она уже в DOM, то убирает ее и заново добавляет
   recreate(): HTMLElement {
     this.steps = [];
@@ -169,8 +139,38 @@ class ScaleView implements IScaleView {
     }
   }
 
+  private create(): HTMLElement {
+    const scale = document.createElement('div');
+    const stepsValues = this.getStepsValues();
+    const { scaleClass, scaleElementClass } = this.viewModel.getClasses();
+    const { widthOrHeight } = this.mainView.getElementProperties();
+    const length = this.viewModel.getLengthInPx();
+
+    addClass(scale, scaleClass);
+    scale.style[widthOrHeight] = `${length}px`;
+
+    for (let i = 0; i < stepsValues.length; i += 1) {
+      const stepElement = document.createElement('div');
+      addClass(stepElement, scaleElementClass);
+      stepElement.style.position = 'absolute';
+      this.steps.push({
+        element: stepElement,
+        value: stepsValues[i],
+      });
+      stepElement.innerText = String(stepsValues[i]);
+      scale.appendChild(stepElement);
+    }
+
+    this.scale = scale;
+    if (this.viewModel.getIsScaleClickable()) {
+      this.addInteractivity();
+    }
+
+    return this.scale;
+  }
+
   // Передвигает либо активный ползунок, либо тот, который ближе к элементу
-  private handleStepElementMouseDown(event: MouseEvent): void {
+  private handleStepElementMouseDown(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
