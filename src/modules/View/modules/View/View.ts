@@ -52,7 +52,7 @@ class View extends Observer implements IView {
 
   private readonly valueInfoView: IValueInfoView
 
-  private tooltipView: ITooltipView
+  private readonly tooltipView: ITooltipView
 
   private presenter: IPresenter | null
 
@@ -318,10 +318,8 @@ class View extends Observer implements IView {
         }
         break;
       case 'UPDATE_LENGTH-IN-PX':
-        this.scaleView.recreate();
-        this.thumbView.recreate();
-        this.tooltipView = new TooltipView(this.thumbView.get(), this);
-        if (this.viewModel.getHasTooltip()) this.tooltipView.mount();
+        this.scaleView.update();
+        this.thumbView.update();
         break;
       default: break;
     }
@@ -357,8 +355,7 @@ class View extends Observer implements IView {
 
       if (newModelData.isRange !== undefined) {
         this.thumbView.recreate();
-        this.tooltipView = new TooltipView(this.thumbView.get(), this);
-        if (this.viewModel.getHasTooltip()) this.tooltipView.mount();
+        this.tooltipView.recreate(this.thumbView.get());
         this.barView.updateProgressBar();
         this.valueInfoView.update();
       }
