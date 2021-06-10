@@ -5,9 +5,9 @@ import { addClass } from '../../../../../utilities/changeClassList';
 import IView from '../../View/interfacesAndTypes';
 
 class TooltipView implements ITooltipView {
-  private readonly target: Thumb
-
   private readonly viewModel: IViewModelGetMethods
+
+  private target: Thumb
 
   private tooltip: Tooltip
 
@@ -22,39 +22,6 @@ class TooltipView implements ITooltipView {
   }
 
   get(): Tooltip {
-    return this.tooltip;
-  }
-
-  create(): Tooltip {
-    const modelProperties = this.viewModel.getModelData() || { value: 0 };
-    const { value } = modelProperties;
-    const { tooltipClass, tooltipValueClass } = this.viewModel.getClasses();
-
-    if (Array.isArray(this.target)) {
-      const tooltipElements: Array<HTMLElement> = [];
-
-      for (let i = 0; i < this.target.length; i += 1) {
-        const tooltip = document.createElement('div');
-        addClass(tooltip, tooltipClass);
-
-        if (Array.isArray(value)) {
-          tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</div>`;
-        }
-
-        tooltipElements.push(tooltip);
-      }
-
-      this.tooltip = [tooltipElements[0], tooltipElements[1]];
-    } else {
-      const tooltip = document.createElement('div');
-      addClass(tooltip, tooltipClass);
-
-      if (!Array.isArray(value)) {
-        tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
-      }
-
-      this.tooltip = tooltip;
-    }
     return this.tooltip;
   }
 
@@ -106,6 +73,55 @@ class TooltipView implements ITooltipView {
     } else {
       this.tooltip.remove();
     }
+  }
+
+  recreate(newTarget?: Thumb): Tooltip {
+    if (newTarget) {
+      this.target = newTarget;
+    }
+
+    if (this.isMounted) {
+      this.unmount();
+      this.tooltip = this.create();
+      this.mount();
+    } else {
+      this.tooltip = this.create();
+    }
+
+    return this.tooltip;
+  }
+
+  private create(): Tooltip {
+    const modelProperties = this.viewModel.getModelData() || { value: 0 };
+    const { value } = modelProperties;
+    const { tooltipClass, tooltipValueClass } = this.viewModel.getClasses();
+
+    if (Array.isArray(this.target)) {
+      const tooltipElements: Array<HTMLElement> = [];
+
+      for (let i = 0; i < this.target.length; i += 1) {
+        const tooltip = document.createElement('div');
+        addClass(tooltip, tooltipClass);
+
+        if (Array.isArray(value)) {
+          tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</div>`;
+        }
+
+        tooltipElements.push(tooltip);
+      }
+
+      this.tooltip = [tooltipElements[0], tooltipElements[1]];
+    } else {
+      const tooltip = document.createElement('div');
+      addClass(tooltip, tooltipClass);
+
+      if (!Array.isArray(value)) {
+        tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
+      }
+
+      this.tooltip = tooltip;
+    }
+    return this.tooltip;
   }
 }
 
