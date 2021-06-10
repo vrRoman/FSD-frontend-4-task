@@ -32,32 +32,6 @@ class ThumbView implements IThumbView {
     return this.thumb;
   }
 
-  create(): Thumb {
-    const valuePosition = this.viewModel.getValuePosition();
-    const { thumbClass } = this.viewModel.getClasses();
-
-    if (typeof valuePosition === 'number') {
-      const thumb = document.createElement('div');
-
-      addClass(thumb, thumbClass);
-      thumb.style.position = 'absolute';
-
-      this.thumb = thumb;
-    } else {
-      const thumbElements: Array<HTMLElement> = [];
-      for (let i = 0; i < valuePosition.length; i += 1) {
-        const newThumbElement = document.createElement('div');
-        addClass(newThumbElement, thumbClass);
-        newThumbElement.style.position = 'absolute';
-        thumbElements.push(newThumbElement);
-      }
-
-      this.thumb = [thumbElements[0], thumbElements[1]];
-    }
-    this.addListener();
-    return this.thumb;
-  }
-
   recreate(): Thumb {
     if (this.isMounted) {
       this.unmount();
@@ -121,22 +95,9 @@ class ThumbView implements IThumbView {
     }
   }
 
-  updateClientCoordinates() {
-    const activeThumb = this.viewModel.getActiveThumb();
-    if (activeThumb) {
-      const clientX = activeThumb.getBoundingClientRect().left
-        + activeThumb.offsetWidth / 2;
-
-      const clientY = activeThumb.getBoundingClientRect().top
-        + activeThumb.offsetHeight / 2;
-
-      this.mainView.setClientCoordinates([clientX, clientY]);
-    }
-  }
-
   // Убирает текущий активный ползунок, добавляет класс новому activeThumb, увеличивает z-index
   // нового активного ползунка, обращается к mainView
-  setActiveThumb(thumbNumber: number | null = 1) {
+  setActiveThumb(thumbNumber: 0 | 1 | null = 1) {
     const { activeThumbClass } = this.viewModel.getClasses();
     const oldActiveThumb = this.viewModel.getActiveThumb();
     if (oldActiveThumb) {
@@ -162,47 +123,85 @@ class ThumbView implements IThumbView {
     }
   }
 
-  // Перемещает ползунок на numberOfSteps шагов
+  // Перемещает активный ползунок на numberOfSteps шагов
   moveActiveThumb(numberOfSteps: number = 1) {
     const stepLength = this.viewModel.getStepLength();
     const activeThumb = this.viewModel.getActiveThumb();
+    if (activeThumb === null) {
+      return;
+    }
 
-    if (activeThumb) {
-      const length = this.viewModel.getLengthInPx();
-      const { offsetWidthOrHeight, leftOrTop } = this.mainView.getElementProperties();
+    const length = this.viewModel.getLengthInPx();
+    const { offsetWidthOrHeight, leftOrTop } = this.mainView.getElementProperties();
 
-      let isActiveThumbFirst: boolean = false;
-      if (Array.isArray(this.thumb)) {
-        if (this.thumb[0].isSameNode(this.thumb[1])) {
-          isActiveThumbFirst = numberOfSteps < 0;
-        } else if (this.thumb[0].isSameNode(activeThumb)) {
-          isActiveThumbFirst = true;
-        }
+    let isActiveThumbFirst: boolean = false;
+    if (Array.isArray(this.thumb)) {
+      if (this.thumb[0].isSameNode(activeThumb)) {
+        isActiveThumbFirst = true;
       }
+    }
 
-      let maxPosition: number = length - activeThumb[offsetWidthOrHeight] / 2;
-      let minPosition: number = -activeThumb[offsetWidthOrHeight] / 2;
-      if (Array.isArray(this.thumb)) {
-        if (isActiveThumbFirst) {
-          maxPosition = parseFloat(this.thumb[1].style[leftOrTop]);
-        } else {
-          minPosition = parseFloat(this.thumb[0].style[leftOrTop]);
-        }
-      }
-
-      const offset: number = stepLength * numberOfSteps;
-      const position: number = parseFloat(activeThumb.style[leftOrTop]) + offset;
-      if (position <= maxPosition) {
-        if (position >= minPosition) {
-          activeThumb.style[leftOrTop] = `${position}px`;
-        } else {
-          activeThumb.style[leftOrTop] = `${minPosition}px`;
-        }
+    let maxPosition: number = length - activeThumb[offsetWidthOrHeight] / 2;
+    let minPosition: number = -activeThumb[offsetWidthOrHeight] / 2;
+    if (Array.isArray(this.thumb)) {
+      if (isActiveThumbFirst) {
+        maxPosition = parseFloat(this.thumb[1].style[leftOrTop]);
       } else {
-        activeThumb.style[leftOrTop] = `${maxPosition}px`;
+        minPosition = parseFloat(this.thumb[0].style[leftOrTop]);
       }
-      const thumbNumber: 0 | 1 = isActiveThumbFirst ? 0 : 1;
-      this.mainView.onThumbMove(numberOfSteps, thumbNumber);
+    }
+
+    const offset: number = stepLength * numberOfSteps;
+    const position: number = parseFloat(activeThumb.style[leftOrTop]) + offset;
+    if (position <= maxPosition) {
+      if (position >= minPosition) {
+        activeThumb.style[leftOrTop] = `${position}px`;
+      } else {
+        activeThumb.style[leftOrTop] = `${minPosition}px`;
+      }
+    } else {
+      activeThumb.style[leftOrTop] = `${maxPosition}px`;
+    }
+    const thumbNumber: 0 | 1 = isActiveThumbFirst ? 0 : 1;
+    this.mainView.onThumbMove(numberOfSteps, thumbNumber);
+  }
+
+  private create(): Thumb {
+    const valuePosition = this.viewModel.getValuePosition();
+    const { thumbClass } = this.viewModel.getClasses();
+
+    if (typeof valuePosition === 'number') {
+      const thumb = document.createElement('div');
+
+      addClass(thumb, thumbClass);
+      thumb.style.position = 'absolute';
+
+      this.thumb = thumb;
+    } else {
+      const thumbElements: Array<HTMLElement> = [];
+      for (let i = 0; i < valuePosition.length; i += 1) {
+        const newThumbElement = document.createElement('div');
+        addClass(newThumbElement, thumbClass);
+        newThumbElement.style.position = 'absolute';
+        thumbElements.push(newThumbElement);
+      }
+
+      this.thumb = [thumbElements[0], thumbElements[1]];
+    }
+    this.addListener();
+    return this.thumb;
+  }
+
+  private updateClientCoordinates() {
+    const activeThumb = this.viewModel.getActiveThumb();
+    if (activeThumb) {
+      const clientX = activeThumb.getBoundingClientRect().left
+        + activeThumb.offsetWidth / 2;
+
+      const clientY = activeThumb.getBoundingClientRect().top
+        + activeThumb.offsetHeight / 2;
+
+      this.mainView.setClientCoordinates([clientX, clientY]);
     }
   }
 
@@ -323,7 +322,6 @@ class ThumbView implements IThumbView {
     // Если курсор выходит за бар, тогда к numberOfSteps добавить/убавить
     // число шагов, за которые вышел курсор
     const bar = this.mainView.getElement('bar');
-
     const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
     const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
     if (currentCoordinate >= barMaxCoordinate) {

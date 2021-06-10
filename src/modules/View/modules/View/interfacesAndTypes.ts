@@ -53,7 +53,7 @@ interface IView extends IObserver {
 
   setPresenter(presenter: IPresenter): IPresenter
   setModelData(newModelData: ModelDataPartial): IModelData | null
-  setActiveThumb(thumbNumber?: number | null): HTMLElement
+  setActiveThumb(thumbNumber?: 0 | 1 | null): HTMLElement
   setClientCoordinates(coordinates: [number, number]): [number, number]
   moveActiveThumb(numberOfSteps?: number): void
   onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1): void

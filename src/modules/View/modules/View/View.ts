@@ -330,9 +330,9 @@ class View extends Observer implements IView {
   // Обращается к viewModel для изменения active thumb
   setActiveThumb(thumbNumber: null): null
 
-  setActiveThumb(thumbNumber?: number): HTMLElement
+  setActiveThumb(thumbNumber?: 0 | 1): HTMLElement
 
-  setActiveThumb(thumbNumber: number | null = 1): HTMLElement | null {
+  setActiveThumb(thumbNumber: 0 | 1 | null = 1): HTMLElement | null {
     const thumb = this.thumbView.get();
     let newActiveThumb: HTMLElement | null;
     if (thumbNumber === null) {
