@@ -179,4 +179,55 @@ describe('View', () => {
       expect(view.getViewModel().getIsBarClickable()).toBe(false);
     });
   });
+
+  describe('getElementProperties', () => {
+    const whenIsVertical = {
+      leftOrTop: 'top',
+      rightOrBottom: 'bottom',
+      widthOrHeight: 'height',
+      offsetWidthOrHeight: 'offsetHeight',
+      clientXOrY: 'clientY',
+      opposites: null,
+    };
+    const whenIsNotVertical = {
+      leftOrTop: 'left',
+      rightOrBottom: 'right',
+      widthOrHeight: 'width',
+      offsetWidthOrHeight: 'offsetWidth',
+      clientXOrY: 'clientX',
+      opposites: null,
+    };
+    test('when isVertical is false getElementProperties should return object of horizontal properties with opposites', () => {
+      expect(view.getElementProperties()).toEqual({
+        ...whenIsNotVertical,
+        opposites: whenIsVertical,
+      });
+    });
+    test('when isVertical is true getElementProperties should return object of horizontal properties with opposites', () => {
+      view.changeOptions({ isVertical: true });
+      expect(view.getElementProperties()).toEqual({
+        ...whenIsVertical,
+        opposites: whenIsNotVertical,
+      });
+    });
+  });
+
+  describe('getThumbNumberThatCloserToPosition', () => {
+    beforeEach(() => {
+      view.getViewModel().setLengthInPx(100);
+      view.setModelData({
+        ...defaultModelOptions,
+        isRange: true,
+        value: [3, 6],
+      });
+    });
+
+    test('when position closer to first thumb should return 0', () => {
+      expect(view.getThumbNumberThatCloserToPosition(40)).toBe(0);
+    });
+
+    test('when position closer to second thumb should return 1', () => {
+      expect(view.getThumbNumberThatCloserToPosition(50)).toBe(1);
+    });
+  });
 });

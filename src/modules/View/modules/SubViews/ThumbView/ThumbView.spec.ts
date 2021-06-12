@@ -102,3 +102,43 @@ test('on click on document should remove active thumb', () => {
     expect(mockedSetActiveThumb.mock.calls[0][0]).toBeNull();
   }
 });
+
+test('when useKeyboard is true and pressing arrow keys should change value', () => {
+  const mockedMoveActiveThumb = jest.spyOn(thumbView, 'moveActiveThumb');
+  const rightArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+  const bottomArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowBottom' });
+  const leftArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+  const topArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowTop' });
+
+  document.dispatchEvent(rightArrowKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[0][0]).toBe(1);
+
+  document.dispatchEvent(bottomArrowKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[1][0]).toBe(1);
+
+  document.dispatchEvent(leftArrowKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[2][0]).toBe(-1);
+
+  document.dispatchEvent(topArrowKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[3][0]).toBe(-1);
+});
+
+test('when useKeyboard is true and pressing w, a, s, d keys should change value', () => {
+  const mockedMoveActiveThumb = jest.spyOn(thumbView, 'moveActiveThumb');
+  const dKeyDownEvent = new KeyboardEvent('keydown', { key: 'd' });
+  const sKeyDownEvent = new KeyboardEvent('keydown', { key: 's' });
+  const aKeyDownEvent = new KeyboardEvent('keydown', { key: 'a' });
+  const wKeyDownEvent = new KeyboardEvent('keydown', { key: 'w' });
+
+  document.dispatchEvent(dKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[0][0]).toBe(1);
+
+  document.dispatchEvent(sKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[1][0]).toBe(1);
+
+  document.dispatchEvent(aKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[2][0]).toBe(-1);
+
+  document.dispatchEvent(wKeyDownEvent);
+  expect(mockedMoveActiveThumb.mock.calls[3][0]).toBe(-1);
+});
