@@ -23,6 +23,7 @@ class ThumbView implements IThumbView {
     this.handleThumbMouseUp = this.handleThumbMouseUp.bind(this);
     this.handleThumbMouseMove = this.handleThumbMouseMove.bind(this);
     this.handleDocumentMouseUp = this.handleDocumentMouseUp.bind(this);
+    this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
 
     this.thumb = this.create();
     this.isMounted = false;
@@ -164,6 +165,15 @@ class ThumbView implements IThumbView {
     }
     const thumbNumber: 0 | 1 = isActiveThumbFirst ? 0 : 1;
     this.mainView.onThumbMove(numberOfSteps, thumbNumber);
+  }
+
+  removeKeyboardListener() {
+    document.removeEventListener('keydown', this.handleDocumentKeyDown);
+  }
+
+  addKeyboardListener() {
+    this.removeKeyboardListener();
+    document.addEventListener('keydown', this.handleDocumentKeyDown);
   }
 
   private create(): Thumb {
@@ -333,6 +343,24 @@ class ThumbView implements IThumbView {
     if (numberOfSteps !== 0) {
       this.moveActiveThumb(numberOfSteps);
       this.updateClientCoordinates();
+    }
+  }
+
+  // При нажатии клавиш wasd и стрелок вызывается moveActiveThumb(1/-1)
+  private handleDocumentKeyDown(event: KeyboardEvent) {
+    const isThisNextKey = event.key === 'ArrowRight'
+      || event.key === 'ArrowBottom'
+      || event.key === 'd'
+      || event.key === 's';
+    const isThisPrevKey = event.key === 'ArrowLeft'
+      || event.key === 'ArrowTop'
+      || event.key === 'a'
+      || event.key === 'w';
+
+    if (isThisNextKey) {
+      this.moveActiveThumb(1);
+    } else if (isThisPrevKey) {
+      this.moveActiveThumb(-1);
     }
   }
 }

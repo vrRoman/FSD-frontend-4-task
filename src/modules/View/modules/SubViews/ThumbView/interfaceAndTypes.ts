@@ -8,6 +8,8 @@ interface IThumbView {
   unmount(): void
   setActiveThumb(thumbNumber?: 0 | 1 | null): void
   moveActiveThumb(numberOfSteps?: number): void
+  addKeyboardListener(): void
+  removeKeyboardListener(): void
 }
 
 export { IThumbView, Thumb };

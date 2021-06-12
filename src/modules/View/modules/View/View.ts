@@ -2,7 +2,6 @@ import IView, {
   ElementName,
   ElementNamesNotArrays,
   ElementProperties,
-  IWindowListeners,
   Views,
 } from './interfacesAndTypes';
 import IPresenter from '../../../Presenter/interface';
@@ -31,7 +30,6 @@ import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
 import ValueInfoView from '../SubViews/ValueInfoView/ValueInfoView';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
 import Observer from '../../../../ObserverAndSubject/Observer';
-import WindowListeners from './WindowListeners';
 import { IModelData, ModelDataPartial } from '../../../Model/interfacesAndTypes';
 import isModelData from '../../../../utilities/isModelData';
 
@@ -39,8 +37,6 @@ class View extends Observer implements IView {
   private readonly parent: HTMLElement
 
   private readonly viewModel: IViewModel
-
-  private readonly windowListeners: IWindowListeners
 
   private readonly sliderContainerView: ISliderContainerView
 
@@ -53,6 +49,10 @@ class View extends Observer implements IView {
   private readonly valueInfoView: IValueInfoView
 
   private readonly tooltipView: ITooltipView
+
+  private readonly staticLengthUnits: ['px', 'mm', 'cm', 'pt', 'pc']
+
+  private readonly dynamicLengthUnits: ['em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax']
 
   private presenter: IPresenter | null
 
@@ -104,11 +104,10 @@ class View extends Observer implements IView {
     this.tooltipView = new TooltipView(this.thumbView.get(), this);
     this.valueInfoView = new ValueInfoView(this.sliderContainerView.get(), this);
 
-    this.windowListeners = new WindowListeners(this.viewModel, {
-      thumb: this.thumbView,
-      bar: this.barView,
-      scale: this.scaleView,
-    });
+    this.staticLengthUnits = ['px', 'mm', 'cm', 'pt', 'pc'];
+    this.dynamicLengthUnits = ['em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax'];
+
+    this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
   // Возвращает элемент, который указан в elementName
@@ -180,10 +179,6 @@ class View extends Observer implements IView {
     };
   }
 
-  getWindowListeners(): IWindowListeners {
-    return this.windowListeners;
-  }
-
   getViews(): Views {
     return {
       sliderContainer: this.sliderContainerView,
@@ -201,6 +196,9 @@ class View extends Observer implements IView {
     this.viewModel.setLengthInPx(this.barView.getOffsetLength());
     this.barView.mountProgressBar();
     this.thumbView.mount();
+    if (this.viewModel.getUseKeyboard()) {
+      this.thumbView.addKeyboardListener();
+    }
     if (this.viewModel.getHasTooltip()) {
       this.tooltipView.mount();
     }
@@ -210,10 +208,7 @@ class View extends Observer implements IView {
     if (this.viewModel.getHasValueInfo()) {
       this.valueInfoView.mount();
     }
-    if (this.viewModel.getUseKeyboard()) {
-      this.windowListeners.addKeyboardListener();
-    }
-    this.windowListeners.updateResponsive();
+    this.updateResponsive();
   }
 
   setPresenter(presenter: IPresenter): IPresenter {
@@ -224,14 +219,12 @@ class View extends Observer implements IView {
   // Меняет настройки в viewModel
   changeOptions(newOptions: ViewOptionsPartial) {
     if (newOptions.length !== undefined) {
-      const availableUnits = ['px', 'mm', 'cm', 'pt', 'pc', 'em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax'];
+      const availableUnits = [...this.staticLengthUnits, ...this.dynamicLengthUnits];
       const lengthWithoutMeasureUnit = String(parseFloat(newOptions.length));
       const measureUnit = newOptions.length.replace(lengthWithoutMeasureUnit, '');
       if (availableUnits.find((unit) => unit === measureUnit)) {
         this.viewModel.setLength(newOptions.length);
-        if (this.windowListeners) {
-          this.windowListeners.updateResponsive();
-        }
+        this.updateResponsive();
       }
     }
     if (newOptions.hasTooltip !== undefined) {
@@ -299,9 +292,9 @@ class View extends Observer implements IView {
         }
         break;
       case 'UPDATE_USE-KEYBOARD':
-        this.windowListeners.removeKeyboardListener();
+        this.thumbView.removeKeyboardListener();
         if (this.viewModel.getUseKeyboard()) {
-          this.windowListeners.addKeyboardListener();
+          this.thumbView.addKeyboardListener();
         }
         break;
       case 'UPDATE_IS-SCALE-CLICKABLE':
@@ -402,6 +395,21 @@ class View extends Observer implements IView {
     return this.viewModel.getClientCoordinates();
   }
 
+  // Если длина измеряется в статических единицах, то слушатель изменения размера окна убирается,
+  // и наоборот
+  updateResponsive() {
+    const lengthStyle = this.viewModel.getLength();
+    const lengthWithoutMeasureUnit = String(parseFloat(lengthStyle));
+    const measureUnit = lengthStyle.replace(lengthWithoutMeasureUnit, '');
+
+    if (this.staticLengthUnits.find((unit) => unit === measureUnit)) {
+      window.removeEventListener('resize', this.handleWindowResize);
+    } else {
+      window.removeEventListener('resize', this.handleWindowResize);
+      window.addEventListener('resize', this.handleWindowResize);
+    }
+  }
+
   getViewModel(): IViewModel {
     return this.viewModel;
   }
@@ -426,6 +434,20 @@ class View extends Observer implements IView {
     }
 
     return thumbNumber;
+  }
+
+  // Если длина бара не соответствует lengthInPx
+  // то передает новую lengthInPx и обновляет thumb, scale, progressBar
+  private handleWindowResize() {
+    const currentLength = this.barView.getOffsetLength();
+    if (currentLength === this.viewModel.getLengthInPx()) {
+      return;
+    }
+
+    this.viewModel.setLengthInPx(currentLength);
+    this.barView.updateProgressBar();
+    this.thumbView.update();
+    this.scaleView.update();
   }
 }
 export default View;

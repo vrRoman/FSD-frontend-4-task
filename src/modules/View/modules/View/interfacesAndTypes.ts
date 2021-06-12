@@ -22,8 +22,6 @@ type Views = {
   valueInfo: IValueInfoView
 }
 
-type ViewsPartial = Partial<Views>
-
 type ElementProperties<HasOpposites extends boolean = true> = {
   leftOrTop: 'left' | 'top',
   rightOrBottom: 'right' | 'bottom'
@@ -33,18 +31,11 @@ type ElementProperties<HasOpposites extends boolean = true> = {
   opposites: HasOpposites extends true ? ElementProperties<false> : null,
 }
 
-interface IWindowListeners {
-  addKeyboardListener(): void
-  removeKeyboardListener(): void
-  updateResponsive(): void
-}
-
 interface IView extends IObserver {
   renderSlider(): void
   changeOptions(newOptions: ViewOptionsPartial): void
 
   getElementProperties(): ElementProperties
-  getWindowListeners(): IWindowListeners
   getThumbNumberThatCloserToPosition(position: number): 0 | 1
   getViewModel(): IViewModel
   getElement(elementName: ElementNamesNotArrays): HTMLElement
@@ -64,7 +55,5 @@ export {
   ElementNamesNotArrays,
   ElementName,
   Views,
-  ViewsPartial,
-  IWindowListeners,
   ElementProperties,
 };
