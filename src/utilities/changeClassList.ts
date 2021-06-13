@@ -2,17 +2,17 @@ import areElementsDefined from './areElementsDefined';
 
 function changeClassList(
   action: 'add' | 'remove',
-): (element: HTMLElement, className: string | Array<string>) => HTMLElement;
+): (element: Element, className: string | Array<string>) => Element;
 function changeClassList(
   action: 'add' | 'remove',
-  element: HTMLElement,
+  element: Element,
   className: string | Array<string>,
-): HTMLElement;
+): Element;
 function changeClassList(
   action: 'add' | 'remove',
-  ...elementAndClassName: [HTMLElement, string | Array<string>] | []
+  ...elementAndClassName: [Element, string | Array<string>] | []
 ) {
-  const main = (element: HTMLElement, className: string | Array<string>) => {
+  const main = (element: Element, className: string | Array<string>) => {
     if (Array.isArray(className)) {
       element.classList[action](...className);
     } else {
