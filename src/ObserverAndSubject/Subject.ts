@@ -1,7 +1,7 @@
 import { IObserver, ISubject, SubjectAction } from './interfacesAndTypes';
 
 abstract class Subject implements ISubject {
-  private readonly observers: Array<IObserver>;
+  private observers: Array<IObserver>;
 
   protected constructor() {
     this.observers = [];
@@ -19,7 +19,9 @@ abstract class Subject implements ISubject {
   // Убирает подписку
   unsubscribe(...observersToRemove: Array<IObserver>) {
     observersToRemove.forEach((removableObserver) => {
-      this.observers.filter((currentObserver) => currentObserver !== removableObserver);
+      this.observers = this.observers.filter(
+        (currentObserver) => currentObserver !== removableObserver,
+      );
     });
   }
 
