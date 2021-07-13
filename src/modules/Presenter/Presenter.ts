@@ -1,4 +1,4 @@
-import IModel from '../Model/interfacesAndTypes';
+import IModel, { Value } from '../Model/interfacesAndTypes';
 import IView from '../View/modules/View/interfacesAndTypes';
 import IPresenter from './interface';
 import { SliderOptions, SliderOptionsPartial } from '../../options/options';
@@ -12,7 +12,7 @@ class Presenter extends Observer implements IPresenter {
 
   private view: IView;
 
-  onChange: Function | null
+  onChange: ((value: Value) => void) | null
 
   constructor(model: IModel, view: IView, presenterOptions: PresenterOptions | SliderOptions) {
     super(model);
@@ -56,7 +56,7 @@ class Presenter extends Observer implements IPresenter {
       default: break;
     }
     if (this.onChange) {
-      this.onChange();
+      this.onChange(this.model.getValue());
     }
   }
 
