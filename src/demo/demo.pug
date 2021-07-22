@@ -23,30 +23,37 @@ html(lang='en')
     link(rel='stylesheet' href='slider.min.css')
 
   body
-    +slider-container({
-      sliderName: 'slider1',
-      hasConfigOptionsDescription: true,
-    }, 'Default options')
+    article.slider-demo
+      h1.slider-demo__title Slider
 
-    +slider-container({ sliderName: 'slider2' }, 'Custom options', {
-      value: [2, 84],
-      isRange: true,
-      stepSize: 1,
-      max: 100,
-      min: -30,
-      length: '200px',
-      hasTooltip: true,
-      hasValueInfo: true,
-      hasScale: true,
-      scaleValue: ['start', 'half', 'end'],
-      isVertical: true,
-    })
+      section
+        +slider-container({
+          sliderName: 'slider1',
+          hasConfigOptionsDescription: true,
+        }, 'Default options')
 
-    +slider-container({ sliderName: 'slider3' }, {
-      title: 'On change',
-      description: 'onChange() { console.log($(\'.js-slider3\').slider(\'value\')) }',
-    })
+      section
+        +slider-container({ sliderName: 'slider2' }, 'Custom options', {
+          value: [2, 84],
+          isRange: true,
+          stepSize: 1,
+          max: 100,
+          min: -30,
+          length: '200px',
+          hasTooltip: true,
+          hasValueInfo: true,
+          hasScale: true,
+          scaleValue: ['start', 'half', 'end'],
+          isVertical: true,
+        })
 
-    +slider-container({ sliderName: 'slider4' })
+      section
+        +slider-container({ sliderName: 'slider3' }, {
+          title: 'On change',
+          description: 'onChange() { console.log($(\'.js-slider3\').slider(\'value\')) }',
+        })
+
+      section
+        +slider-container({ sliderName: 'slider4' }, 'Default options')
 
     script(src='slider.min.js')
