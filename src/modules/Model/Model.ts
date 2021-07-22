@@ -58,12 +58,6 @@ class Model extends Subject implements IModel {
     this.checkAndFixStepSize();
     this.notify({
       type: 'UPDATE_MIN-MAX',
-      updatedProperties: {
-        min: this.getMin(),
-        max: this.getMax(),
-        value: this.getValue(),
-        stepSize: this.getStepSize(),
-      },
     });
     return [this.data.min, this.data.max];
   }
@@ -88,9 +82,6 @@ class Model extends Subject implements IModel {
 
     this.notify({
       type: 'UPDATE_VALUE',
-      updatedProperties: {
-        value: this.getValue(),
-      },
     });
 
     return this.data.value;
@@ -103,10 +94,6 @@ class Model extends Subject implements IModel {
 
     this.notify({
       type: 'UPDATE_IS-RANGE',
-      updatedProperties: {
-        value: this.getValue(),
-        isRange: this.getIsRange(),
-      },
     });
 
     return this.data.isRange;
@@ -118,9 +105,6 @@ class Model extends Subject implements IModel {
     this.checkAndFixStepSize();
     this.notify({
       type: 'UPDATE_STEP-SIZE',
-      updatedProperties: {
-        stepSize: this.getStepSize(),
-      },
     });
 
     return this.data.stepSize;
@@ -152,9 +136,6 @@ class Model extends Subject implements IModel {
 
     this.notify({
       type: 'UPDATE_VALUE',
-      updatedProperties: {
-        value: this.getValue(),
-      },
     });
 
     return this.data.value;
