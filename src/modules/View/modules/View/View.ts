@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind';
+
 import IView, {
   ElementName,
   ElementNamesNotArrays,
@@ -92,6 +94,7 @@ class View extends Observer implements IView {
     });
 
     super(viewModel);
+    autoBind(this);
 
     this.viewModel = viewModel;
     this.presenter = null;
@@ -106,8 +109,6 @@ class View extends Observer implements IView {
 
     this.staticLengthUnits = ['px', 'mm', 'cm', 'pt', 'pc'];
     this.dynamicLengthUnits = ['em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax'];
-
-    this.handleWindowResize = this.handleWindowResize.bind(this);
   }
 
   // Возвращает элемент, который указан в elementName

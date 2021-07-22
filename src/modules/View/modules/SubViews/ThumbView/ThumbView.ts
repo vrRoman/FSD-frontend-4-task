@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind';
+
 import { IThumbView, Thumb } from './interfaceAndTypes';
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IView from '../../View/interfacesAndTypes';
@@ -15,17 +17,11 @@ class ThumbView implements IThumbView {
   private isMounted: boolean
 
   constructor(target: HTMLElement, mainView: IView) {
+    autoBind(this);
+
     this.target = target;
     this.mainView = mainView;
     this.viewModel = this.mainView.getViewModel();
-
-    this.handleThumbMouseDown = this.handleThumbMouseDown.bind(this);
-    this.handleThumbMouseUp = this.handleThumbMouseUp.bind(this);
-    this.handleThumbMouseMove = this.handleThumbMouseMove.bind(this);
-    this.handleDocumentMouseUp = this.handleDocumentMouseUp.bind(this);
-    this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
-    this.handleThumbFocusin = this.handleThumbFocusin.bind(this);
-    this.handleThumbFocusout = this.handleThumbFocusout.bind(this);
 
     this.thumb = this.create();
     this.isMounted = false;

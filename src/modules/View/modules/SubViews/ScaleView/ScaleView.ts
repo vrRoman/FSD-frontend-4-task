@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind';
+
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IScaleView from './interface';
 import IView from '../../View/interfacesAndTypes';
@@ -20,11 +22,11 @@ class ScaleView implements IScaleView {
   }>
 
   constructor(target: HTMLElement, mainView: IView) {
+    autoBind(this);
+
     this.target = target;
     this.mainView = mainView;
     this.viewModel = this.mainView.getViewModel();
-
-    this.handleStepElementMouseDown = this.handleStepElementMouseDown.bind(this);
 
     this.steps = [];
     this.scale = this.create();

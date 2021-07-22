@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind';
+
 import ISliderConfig, { optionNames } from './interfaceAndTypes';
 import { IObserver, SubjectAction } from '../../../ObserverAndSubject/interfacesAndTypes';
 import IModel, { Value } from '../../../modules/Model/interfacesAndTypes';
@@ -13,17 +15,12 @@ class SliderConfig implements IObserver, ISliderConfig {
   private inputElements: Array<HTMLElement>;
 
   constructor(configElement: HTMLElement, sliderElement: HTMLElement) {
+    autoBind(this);
+
     this.inputElSelector = '.js-option .js-option__input';
     this.element = configElement;
     this.$slider = $(sliderElement);
     this.inputElements = this.getInputElements();
-
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
-    this.handleValueInputFocusOut = this.handleValueInputFocusOut.bind(this);
-    this.handleMinMaxInputFocusOut = this.handleMinMaxInputFocusOut.bind(this);
-    this.handleStepSizeInputFocusOut = this.handleStepSizeInputFocusOut.bind(this);
-    this.handleLengthInputFocusOut = this.handleLengthInputFocusOut.bind(this);
-    this.handleScaleValueInputFocusOut = this.handleScaleValueInputFocusOut.bind(this);
 
     this.init();
   }

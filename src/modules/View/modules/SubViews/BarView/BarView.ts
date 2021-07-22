@@ -1,3 +1,5 @@
+import autoBind from 'auto-bind';
+
 import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IBarView from './interface';
 import IView from '../../View/interfacesAndTypes';
@@ -19,11 +21,11 @@ class BarView implements IBarView {
   private isProgressBarMounted: boolean
 
   constructor(target: HTMLElement, mainView: IView) {
+    autoBind(this);
+
     this.target = target;
     this.mainView = mainView;
     this.viewModel = this.mainView.getViewModel();
-
-    this.handleBarMouseDown = this.handleBarMouseDown.bind(this);
 
     this.bar = this.createBar();
     this.progressBar = this.createProgressBar();
