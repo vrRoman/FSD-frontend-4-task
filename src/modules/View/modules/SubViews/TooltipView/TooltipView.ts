@@ -34,13 +34,13 @@ class TooltipView implements ITooltipView {
     if (Array.isArray(this.tooltip)) {
       if (Array.isArray(value)) {
         for (let i = 0; i <= 1; i += 1) {
-          this.tooltip[i].innerHTML = `<div class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</div>`;
+          this.tooltip[i].innerHTML = `<span class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</span>`;
         }
       } else {
         throw new Error('this.tooltip is array, but modelData.value is number');
       }
     } else if (!Array.isArray(value)) {
-      this.tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
+      this.tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((value).toFixed(3))}</span>`;
     } else {
       throw new Error('this.tooltip is number, but modelData.value is array');
     }
@@ -100,11 +100,11 @@ class TooltipView implements ITooltipView {
       const tooltipElements: Array<HTMLElement> = [];
 
       for (let i = 0; i < this.target.length; i += 1) {
-        const tooltip = document.createElement('div');
+        const tooltip = document.createElement('span');
         addClass(tooltip, tooltipClass);
 
         if (Array.isArray(value)) {
-          tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</div>`;
+          tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</span>`;
         }
 
         tooltipElements.push(tooltip);
@@ -112,11 +112,11 @@ class TooltipView implements ITooltipView {
 
       this.tooltip = [tooltipElements[0], tooltipElements[1]];
     } else {
-      const tooltip = document.createElement('div');
+      const tooltip = document.createElement('span');
       addClass(tooltip, tooltipClass);
 
       if (!Array.isArray(value)) {
-        tooltip.innerHTML = `<div class="${tooltipValueClass}">${Number((value).toFixed(3))}</div>`;
+        tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((value).toFixed(3))}</span>`;
       }
 
       this.tooltip = tooltip;

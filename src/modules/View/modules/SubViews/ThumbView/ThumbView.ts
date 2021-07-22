@@ -24,6 +24,8 @@ class ThumbView implements IThumbView {
     this.handleThumbMouseMove = this.handleThumbMouseMove.bind(this);
     this.handleDocumentMouseUp = this.handleDocumentMouseUp.bind(this);
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
+    this.handleThumbFocusin = this.handleThumbFocusin.bind(this);
+    this.handleThumbFocusout = this.handleThumbFocusout.bind(this);
 
     this.thumb = this.create();
     this.isMounted = false;
@@ -181,7 +183,7 @@ class ThumbView implements IThumbView {
     const { thumbClass } = this.viewModel.getClasses();
 
     if (typeof valuePosition === 'number') {
-      const thumb = document.createElement('div');
+      const thumb = document.createElement('button');
 
       addClass(thumb, thumbClass);
       thumb.style.position = 'absolute';
@@ -190,7 +192,7 @@ class ThumbView implements IThumbView {
     } else {
       const thumbElements: Array<HTMLElement> = [];
       for (let i = 0; i < valuePosition.length; i += 1) {
-        const newThumbElement = document.createElement('div');
+        const newThumbElement = document.createElement('button');
         addClass(newThumbElement, thumbClass);
         newThumbElement.style.position = 'absolute';
         thumbElements.push(newThumbElement);
@@ -221,10 +223,14 @@ class ThumbView implements IThumbView {
       for (let i = 0; i <= 1; i += 1) {
         this.thumb[i].addEventListener('mousedown', this.handleThumbMouseDown);
         this.thumb[i].addEventListener('touchstart', this.handleThumbMouseDown);
+        this.thumb[i].addEventListener('focusin', this.handleThumbFocusin);
+        this.thumb[i].addEventListener('focusout', this.handleThumbFocusout);
       }
     } else if (this.thumb) {
       this.thumb.addEventListener('mousedown', this.handleThumbMouseDown);
       this.thumb.addEventListener('touchstart', this.handleThumbMouseDown);
+      this.thumb.addEventListener('focusin', this.handleThumbFocusin);
+      this.thumb.addEventListener('focusout', this.handleThumbFocusout);
     }
 
     document.addEventListener('mouseup', this.handleThumbMouseUp);
@@ -232,6 +238,22 @@ class ThumbView implements IThumbView {
   }
 
   private handleDocumentMouseUp() {
+    this.setActiveThumb(null);
+  }
+
+  private handleThumbFocusin(event: FocusEvent) {
+    if (Array.isArray(this.thumb)) {
+      const { target } = event;
+      if (target instanceof HTMLElement) {
+        const isFirstThumb = target.isSameNode(this.thumb[0]);
+        this.setActiveThumb(isFirstThumb ? 0 : 1);
+      }
+    } else {
+      this.setActiveThumb();
+    }
+  }
+
+  private handleThumbFocusout() {
     this.setActiveThumb(null);
   }
 
