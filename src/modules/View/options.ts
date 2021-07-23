@@ -1,4 +1,4 @@
-import { ViewClasses } from './modules/ViewModel/interfacesAndTypes';
+import { ViewClasses } from './modules/ViewModel';
 
 type ViewOptions = {
   // Длина слайдера(в любых единицах измерения)

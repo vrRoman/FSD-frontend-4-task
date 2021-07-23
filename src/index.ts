@@ -1,5 +1,5 @@
 import './slider';
-import './demo/demo';
+import './demo';
 
 // eslint-disable-next-line no-undef
 const importAll = (requireContext: __WebpackModuleApi.RequireContext) => {

@@ -1,8 +1,8 @@
-import { Value } from 'Model/interfacesAndTypes';
+import { OnChange } from './Presenter.model';
 
 type PresenterOptions = {
   // Будет выполняться при любом передвижении ползунка
-  onChange?: (value: Value) => void
+  onChange?: OnChange
 }
 
-export default PresenterOptions;
+export { PresenterOptions };

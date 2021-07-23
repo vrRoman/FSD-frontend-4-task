@@ -1,4 +1,5 @@
-import { ISubject } from 'ObserverAndSubject/interfacesAndTypes';
+import { ISubject } from 'ObserverAndSubject';
+
 import { ModelOptionsPartial } from './options';
 
 type Value = [number, number] | number
@@ -30,5 +31,9 @@ interface IModel extends ISubject {
   getMaxDiapason(): number
 }
 
-export default IModel;
-export { ModelDataPartial, Value, IModelData };
+export {
+  IModel,
+  ModelDataPartial,
+  Value,
+  IModelData,
+};

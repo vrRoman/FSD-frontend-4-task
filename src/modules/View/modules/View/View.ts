@@ -2,32 +2,25 @@ import autoBind from 'auto-bind';
 
 import { SliderOptions } from 'options/options';
 import { ViewOptions, ViewOptionsPartial, defaultClasses } from 'View/options';
-import IPresenter from 'Presenter/interface';
-import { SubjectAction } from 'ObserverAndSubject/interfacesAndTypes';
-import Observer from 'ObserverAndSubject/Observer';
-import { IModelData, ModelDataPartial } from 'Model/interfacesAndTypes';
+import { IPresenter } from 'Presenter';
+import { SubjectAction, Observer } from 'ObserverAndSubject';
+import { IModelData, ModelDataPartial } from 'Model';
 import isModelData from 'utilities/isModelData';
 
-import IView, {
+import {
+  IView,
   ElementName,
   ElementNamesNotArrays,
   ElementProperties,
   Views,
-} from './interfacesAndTypes';
-import ViewModel from '../ViewModel/ViewModel';
-import { IViewModel, ViewClasses } from '../ViewModel/interfacesAndTypes';
-import SliderContainerView from '../SubViews/SliderContainerView/SliderContainerView';
-import ISliderContainerView from '../SubViews/SliderContainerView/interface';
-import BarView from '../SubViews/BarView/BarView';
-import IBarView from '../SubViews/BarView/interface';
-import ScaleView from '../SubViews/ScaleView/ScaleView';
-import IScaleView from '../SubViews/ScaleView/interface';
-import ThumbView from '../SubViews/ThumbView/ThumbView';
-import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
-import TooltipView from '../SubViews/TooltipView/TooltipView';
-import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
-import ValueInfoView from '../SubViews/ValueInfoView/ValueInfoView';
-import IValueInfoView from '../SubViews/ValueInfoView/interface';
+} from './View.model';
+import ViewModel, { IViewModel, ViewClasses } from '../ViewModel';
+import SliderContainerView, { ISliderContainerView } from '../SubViews/SliderContainerView';
+import BarView, { IBarView } from '../SubViews/BarView';
+import ScaleView, { IScaleView } from '../SubViews/ScaleView';
+import ThumbView, { IThumbView } from '../SubViews/ThumbView';
+import TooltipView, { ITooltipView } from '../SubViews/TooltipView';
+import ValueInfoView, { IValueInfoView } from '../SubViews/ValueInfoView';
 
 class View extends Observer implements IView {
   private readonly parent: HTMLElement

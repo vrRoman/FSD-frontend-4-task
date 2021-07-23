@@ -1,5 +1,6 @@
-import isModelData from './isModelData';
 import { defaultModelOptions } from 'options/defaultOptions';
+
+import isModelData from './isModelData';
 
 test('it should return true if all elements defined', () => {
   expect(isModelData(defaultModelOptions)).toBe(true);

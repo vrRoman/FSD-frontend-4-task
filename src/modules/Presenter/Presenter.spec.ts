@@ -3,13 +3,11 @@ import {
   defaultPresenterOptions,
   defaultViewOptions,
 } from 'options/defaultOptions';
-import View from 'View/modules/View/View';
-import IView from 'View/modules/View/interfacesAndTypes';
-import Model from 'Model/Model';
-import IModel from 'Model/interfacesAndTypes';
+import View, { IView } from 'View/modules/View';
+import Model, { IModel } from 'Model';
 
 import Presenter from './Presenter';
-import IPresenter from './interface';
+import { IPresenter } from './Presenter.model';
 
 let model: IModel;
 let view: IView;

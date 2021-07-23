@@ -1,8 +1,7 @@
-import View from 'View/modules/View/View';
-import IView from 'View/modules/View/interfacesAndTypes';
+import View, { IView } from 'View/modules/View';
 import { defaultModelOptions, defaultViewOptions } from 'options/defaultOptions';
 
-import { IThumbView } from './interfaceAndTypes';
+import { IThumbView } from './ThumbView.model';
 
 let mainView: IView;
 let thumbView: IThumbView;

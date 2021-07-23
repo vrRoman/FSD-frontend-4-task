@@ -1,4 +1,4 @@
-import { Thumb } from '../ThumbView/interfaceAndTypes';
+import { Thumb } from '../ThumbView';
 
 type Tooltip = HTMLElement | [HTMLElement, HTMLElement]
 

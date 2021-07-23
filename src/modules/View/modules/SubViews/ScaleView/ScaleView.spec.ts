@@ -1,8 +1,7 @@
-import View from 'View/modules/View/View';
-import IView from 'View/modules/View/interfacesAndTypes';
+import View, { IView } from 'View/modules/View';
 import { defaultViewOptions, defaultModelOptions } from 'options/defaultOptions';
 
-import IScaleView from './interface';
+import IScaleView from './ScaleView.model';
 
 let mainView: IView;
 let scaleView: IScaleView;

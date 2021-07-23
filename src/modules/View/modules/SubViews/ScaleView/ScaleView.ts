@@ -1,10 +1,10 @@
 import autoBind from 'auto-bind';
 
-import { IViewModelGetMethods } from 'View/modules/ViewModel/interfacesAndTypes';
-import IView from 'View/modules/View/interfacesAndTypes';
+import { IViewModelGetMethods } from 'View/modules/ViewModel';
+import { IView } from 'View/modules/View';
 import { addClass, removeClass } from 'utilities/changeClassList';
 
-import IScaleView from './interface';
+import IScaleView from './ScaleView.model';
 
 class ScaleView implements IScaleView {
   private readonly target: HTMLElement

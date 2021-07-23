@@ -1,7 +1,4 @@
-import { Value } from 'Model/interfacesAndTypes';
-
-import './demo.pug';
-import './blocks/slider-container/init';
+import { Value } from 'Model';
 
 const $sliderWithOnChange = $('.js-slider3');
 $sliderWithOnChange.slider('changeOptions', {

@@ -1,11 +1,8 @@
-import Model from 'Model/Model';
-import IModel, { Value } from 'Model/interfacesAndTypes';
-import View from 'View/modules/View/View';
-import IView from 'View/modules/View/interfacesAndTypes';
-import { IViewModel } from 'View/modules/ViewModel/interfacesAndTypes';
-import { IObserver } from 'ObserverAndSubject/interfacesAndTypes';
-import Presenter from 'Presenter/Presenter';
-import IPresenter from 'Presenter/interface';
+import Model, { IModel, Value } from 'Model';
+import View, { IView } from 'View/modules/View';
+import { IViewModel } from 'View/modules/ViewModel';
+import Presenter, { IPresenter } from 'Presenter';
+import { IObserver } from 'ObserverAndSubject';
 import { SliderOptionsPartial } from 'options/options';
 import { defaultSliderOptions } from 'options/defaultOptions';
 

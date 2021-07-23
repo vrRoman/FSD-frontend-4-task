@@ -6,7 +6,7 @@
 
 import Observer from './Observer';
 import Subject from './Subject';
-import { IObserver, ISubject, SubjectAction } from './interfacesAndTypes';
+import { IObserver, ISubject, SubjectAction } from './ObserverAndSubject.model';
 
 const createObserver = (subject: ISubject) => new (class extends Observer {
   constructor(testingSubject: ISubject) {

@@ -1,9 +1,9 @@
-import { IModelData } from 'Model/interfacesAndTypes';
-import Subject from 'ObserverAndSubject/Subject';
+import { IModelData } from 'Model';
+import { Subject } from 'ObserverAndSubject';
 
 import {
   IViewModel, IViewModelData, IViewModelGetMethods, ViewClasses,
-} from './interfacesAndTypes';
+} from './ViewModel.model';
 
 class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   private data: IViewModelData

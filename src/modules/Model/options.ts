@@ -1,4 +1,4 @@
-import { Value } from './interfacesAndTypes';
+import { Value } from './Model.model';
 
 type ModelOptions = {
   value: Value

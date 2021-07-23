@@ -14,5 +14,4 @@ interface ISliderConfig {
   getTextInputValue(optionName: string): number | string | Array<string | number> | null
 }
 
-export default ISliderConfig;
-export { optionNames };
+export { ISliderConfig, optionNames };

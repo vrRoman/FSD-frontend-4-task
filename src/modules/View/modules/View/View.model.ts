@@ -1,15 +1,15 @@
-import { IModelData, ModelDataPartial } from 'Model/interfacesAndTypes';
+import { IModelData, ModelDataPartial } from 'Model';
 import { ViewOptionsPartial } from 'View/options';
-import IPresenter from 'Presenter/interface';
-import { IObserver } from 'ObserverAndSubject/interfacesAndTypes';
+import { IPresenter } from 'Presenter';
+import { IObserver } from 'ObserverAndSubject';
 
-import { IViewModel } from '../ViewModel/interfacesAndTypes';
-import IBarView from '../SubViews/BarView/interface';
-import ISliderContainerView from '../SubViews/SliderContainerView/interface';
-import IScaleView from '../SubViews/ScaleView/interface';
-import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
-import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
-import IValueInfoView from '../SubViews/ValueInfoView/interface';
+import { IViewModel } from '../ViewModel';
+import IBarView from '../SubViews/BarView/BarView.model';
+import ISliderContainerView from '../SubViews/SliderContainerView/SliderContainerView.model';
+import IScaleView from '../SubViews/ScaleView/ScaleView.model';
+import { IThumbView } from '../SubViews/ThumbView';
+import { ITooltipView } from '../SubViews/TooltipView';
+import IValueInfoView from '../SubViews/ValueInfoView/ValueInfoView.model';
 
 type ElementNamesNotArrays = 'parent' | 'slider' | 'bar' | 'progressBar' | 'scale' | 'valueInfo'
 type ElementName = ElementNamesNotArrays | 'thumb' | 'tooltip'
@@ -51,8 +51,8 @@ interface IView extends IObserver {
   onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1): void
 }
 
-export default IView;
 export {
+  IView,
   ElementNamesNotArrays,
   ElementName,
   Views,

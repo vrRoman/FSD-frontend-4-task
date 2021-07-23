@@ -1,5 +1,5 @@
-import { IModelData } from 'Model/interfacesAndTypes';
-import { ISubject } from 'ObserverAndSubject/interfacesAndTypes';
+import { IModelData } from 'Model';
+import { ISubject } from 'ObserverAndSubject';
 
 type elementClass = string | string[]
 

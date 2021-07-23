@@ -1,10 +1,10 @@
 import autoBind from 'auto-bind';
 
-import { IObserver, SubjectAction } from 'ObserverAndSubject/interfacesAndTypes';
-import IModel, { Value } from 'Model/interfacesAndTypes';
-import { IViewModel } from 'View/modules/ViewModel/interfacesAndTypes';
+import { IObserver, SubjectAction } from 'ObserverAndSubject';
+import { IModel, Value } from 'Model';
+import { IViewModel } from 'View/modules/ViewModel';
 
-import ISliderConfig, { optionNames } from './interfaceAndTypes';
+import { ISliderConfig, optionNames } from './SliderConfig.model';
 
 class SliderConfig implements IObserver, ISliderConfig {
   private readonly inputElSelector: string;

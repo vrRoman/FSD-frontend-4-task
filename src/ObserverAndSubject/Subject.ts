@@ -1,4 +1,4 @@
-import { IObserver, ISubject, SubjectAction } from './interfacesAndTypes';
+import { IObserver, ISubject, SubjectAction } from './ObserverAndSubject.model';
 
 abstract class Subject implements ISubject {
   private observers: Array<IObserver>;

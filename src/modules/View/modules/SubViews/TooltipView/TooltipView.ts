@@ -1,9 +1,9 @@
-import { IViewModelGetMethods } from 'View/modules/ViewModel/interfacesAndTypes';
+import { IViewModelGetMethods } from 'View/modules/ViewModel';
 import { addClass } from 'utilities/changeClassList';
-import IView from 'View/modules/View/interfacesAndTypes';
+import { IView } from 'View/modules/View';
 
-import { ITooltipView, Tooltip } from './interfaceAndTypes';
-import { Thumb } from '../ThumbView/interfaceAndTypes';
+import { ITooltipView, Tooltip } from './TooltipView.model';
+import { Thumb } from '../ThumbView';
 
 class TooltipView implements ITooltipView {
   private readonly viewModel: IViewModelGetMethods

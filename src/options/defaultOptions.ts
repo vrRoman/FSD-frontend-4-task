@@ -1,6 +1,6 @@
 import { ModelOptions } from 'Model/options';
 import { ViewOptions } from 'View/options';
-import PresenterOptions from 'Presenter/options';
+import { PresenterOptions } from 'Presenter/options';
 
 import { SliderOptions } from './options';
 

@@ -2,7 +2,7 @@ import { defaultModelOptions, defaultViewOptions } from 'options/defaultOptions'
 import { defaultClasses } from 'View/options';
 
 import View from './View';
-import IView from './interfacesAndTypes';
+import { IView } from './View.model';
 
 describe('View', () => {
   const { body } = document;

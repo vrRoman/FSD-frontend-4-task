@@ -1,9 +1,10 @@
 import autoBind from 'auto-bind';
-import { IViewModelGetMethods } from 'View/modules/ViewModel/interfacesAndTypes';
-import IView from 'View/modules/View/interfacesAndTypes';
+
+import { IViewModelGetMethods } from 'View/modules/ViewModel';
+import { IView } from 'View/modules/View';
 import { addClass, removeClass } from 'utilities/changeClassList';
 
-import IBarView from './interface';
+import IBarView from './BarView.model';
 
 class BarView implements IBarView {
   private readonly target: HTMLElement

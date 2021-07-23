@@ -1,7 +1,7 @@
 import { defaultModelOptions } from 'options/defaultOptions';
 
 import Model from './Model';
-import IModel from './interfacesAndTypes';
+import { IModel } from './Model.model';
 
 describe('Model', () => {
   let model: IModel;

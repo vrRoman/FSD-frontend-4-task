@@ -1,4 +1,4 @@
-import { IObserver, ISubject, SubjectAction } from './interfacesAndTypes';
+import { IObserver, ISubject, SubjectAction } from './ObserverAndSubject.model';
 
 abstract class Observer implements IObserver {
   protected constructor(subject: ISubject) {

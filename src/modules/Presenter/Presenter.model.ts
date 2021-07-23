@@ -1,10 +1,13 @@
 import { SliderOptionsPartial } from 'options/options';
+import { Value } from 'Model';
+
+type OnChange = (value: Value) => void;
 
 interface IPresenter {
-  onChange: Function | null
+  onChange: OnChange | null
 
   onThumbMove(numberOfSteps?: number, thumbNumber?: 0 | 1): void
   changeOptions(newOptions: SliderOptionsPartial): void
 }
 
-export default IPresenter;
+export { IPresenter, OnChange };
