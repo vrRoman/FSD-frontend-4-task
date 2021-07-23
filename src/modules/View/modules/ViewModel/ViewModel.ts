@@ -2,7 +2,10 @@ import { IModelData } from 'Model';
 import { Subject } from 'ObserverAndSubject';
 
 import {
-  IViewModel, IViewModelData, IViewModelGetMethods, ViewClasses,
+  IViewModel,
+  IViewModelData,
+  IViewModelGetMethods,
+  ViewClasses,
 } from './ViewModel.model';
 
 class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {

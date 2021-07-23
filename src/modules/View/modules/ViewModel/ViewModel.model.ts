@@ -1,7 +1,7 @@
 import { IModelData } from 'Model';
 import { ISubject } from 'ObserverAndSubject';
 
-type elementClass = string | string[]
+type elementClass = string | string[];
 
 type ViewClasses = {
   sliderClass: elementClass
@@ -17,7 +17,7 @@ type ViewClasses = {
   scaleElementClass: elementClass
   clickableScaleElementClass: elementClass
   valueInfoClass: elementClass
-}
+};
 
 interface IViewModelData {
   classes: ViewClasses

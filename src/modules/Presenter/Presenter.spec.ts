@@ -2,7 +2,7 @@ import {
   defaultModelOptions,
   defaultPresenterOptions,
   defaultViewOptions,
-} from 'options/defaultOptions';
+} from 'defaults/defaultOptions';
 import View, { IView } from 'View/modules/View';
 import Model, { IModel } from 'Model';
 

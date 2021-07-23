@@ -1,14 +1,18 @@
-import { SliderOptions } from 'options/options';
 import { Subject } from 'ObserverAndSubject';
 import areElementsDefined from 'utilities/areElementsDefined';
 
-import { ModelOptions, ModelOptionsPartial } from './options';
-import { IModel, IModelData, Value } from './Model.model';
+import type {
+  IModel,
+  IModelData,
+  Value,
+  ModelOptions,
+  ModelOptionsPartial,
+} from './Model.model';
 
 class Model extends Subject implements IModel {
   private data: IModelData
 
-  constructor(options: ModelOptions | SliderOptions) {
+  constructor(options: ModelOptions) {
     super();
 
     this.data = {

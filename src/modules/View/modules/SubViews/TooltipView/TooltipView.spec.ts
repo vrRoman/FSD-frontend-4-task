@@ -1,6 +1,6 @@
 import View, { IView } from 'View/modules/View';
-import { defaultViewOptions, defaultModelOptions } from 'options/defaultOptions';
-import { defaultClasses } from 'View/options';
+import { defaultViewOptions, defaultModelOptions } from 'defaults/defaultOptions';
+import defaultClasses from 'defaults/defaultClasses';
 
 import { ITooltipView } from './TooltipView.model';
 

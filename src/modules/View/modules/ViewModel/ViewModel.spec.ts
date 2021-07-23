@@ -1,4 +1,4 @@
-import { defaultModelOptions } from 'options/defaultOptions';
+import { defaultModelOptions } from 'defaults/defaultOptions';
 
 import ViewModel from './ViewModel';
 import { IViewModel, IViewModelData, ViewClasses } from './ViewModel.model';

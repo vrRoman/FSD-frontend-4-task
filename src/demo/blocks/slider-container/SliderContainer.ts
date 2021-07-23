@@ -1,4 +1,4 @@
-import { SliderOptionsPartial } from 'options/options';
+import { SliderOptionsPartial } from 'Presenter';
 
 import SliderConfig from '../slider-config';
 

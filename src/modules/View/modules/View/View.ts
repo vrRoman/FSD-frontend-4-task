@@ -1,18 +1,19 @@
 import autoBind from 'auto-bind';
 
-import { SliderOptions } from 'options/options';
-import { ViewOptions, ViewOptionsPartial, defaultClasses } from 'View/options';
+import defaultClasses from 'defaults/defaultClasses';
 import { IPresenter } from 'Presenter';
 import { SubjectAction, Observer } from 'ObserverAndSubject';
 import { IModelData, ModelDataPartial } from 'Model';
 import isModelData from 'utilities/isModelData';
 
-import {
+import type {
   IView,
   ElementName,
   ElementNamesNotArrays,
   ElementProperties,
   Views,
+  ViewOptions,
+  ViewOptionsPartial,
 } from './View.model';
 import ViewModel, { IViewModel, ViewClasses } from '../ViewModel';
 import SliderContainerView, { ISliderContainerView } from '../SubViews/SliderContainerView';
@@ -45,7 +46,7 @@ class View extends Observer implements IView {
 
   private presenter: IPresenter | null
 
-  constructor(viewOptions: ViewOptions | SliderOptions, parent: HTMLElement) {
+  constructor(viewOptions: ViewOptions, parent: HTMLElement) {
     const classes: ViewClasses = {
       sliderClass: viewOptions.sliderClass || defaultClasses.sliderClass,
       sliderVerticalClass: viewOptions.sliderVerticalClass || defaultClasses.sliderVerticalClass,

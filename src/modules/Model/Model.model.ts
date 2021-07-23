@@ -1,8 +1,16 @@
 import { ISubject } from 'ObserverAndSubject';
 
-import { ModelOptionsPartial } from './options';
-
 type Value = [number, number] | number
+
+type ModelOptions = {
+  value: Value
+  isRange: boolean
+  stepSize: number
+  max: number
+  min: number
+}
+
+type ModelOptionsPartial = Partial<ModelOptions>;
 
 interface IModelData {
   value: Value
@@ -31,9 +39,11 @@ interface IModel extends ISubject {
   getMaxDiapason(): number
 }
 
-export {
+export type {
   IModel,
   ModelDataPartial,
   Value,
   IModelData,
+  ModelOptions,
+  ModelOptionsPartial,
 };

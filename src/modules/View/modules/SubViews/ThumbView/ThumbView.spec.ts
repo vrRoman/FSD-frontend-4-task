@@ -1,5 +1,5 @@
 import View, { IView } from 'View/modules/View';
-import { defaultModelOptions, defaultViewOptions } from 'options/defaultOptions';
+import { defaultModelOptions, defaultViewOptions } from 'defaults/defaultOptions';
 
 import { IThumbView } from './ThumbView.model';
 

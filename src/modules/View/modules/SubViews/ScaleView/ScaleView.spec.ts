@@ -1,5 +1,5 @@
 import View, { IView } from 'View/modules/View';
-import { defaultViewOptions, defaultModelOptions } from 'options/defaultOptions';
+import { defaultViewOptions, defaultModelOptions } from 'defaults/defaultOptions';
 
 import IScaleView from './ScaleView.model';
 

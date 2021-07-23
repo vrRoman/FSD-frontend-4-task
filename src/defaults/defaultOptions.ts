@@ -1,8 +1,6 @@
-import { ModelOptions } from 'Model/options';
-import { ViewOptions } from 'View/options';
-import { PresenterOptions } from 'Presenter/options';
-
-import { SliderOptions } from './options';
+import type { ModelOptions } from 'Model';
+import type { ViewOptions } from 'View/modules/View';
+import type { PresenterOptions, SliderOptions } from 'Presenter';
 
 const defaultModelOptions: ModelOptions = {
   value: 0,

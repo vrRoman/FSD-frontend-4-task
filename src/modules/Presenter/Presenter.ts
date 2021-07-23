@@ -1,10 +1,13 @@
-import { SliderOptions, SliderOptionsPartial } from 'options/options';
 import { SubjectAction, Observer } from 'ObserverAndSubject';
 import { IModel } from 'Model';
 import { IView } from 'View/modules/View';
 
-import { IPresenter, OnChange } from './Presenter.model';
-import { PresenterOptions } from './options';
+import type {
+  IPresenter,
+  OnChange,
+  PresenterOptions,
+  SliderOptionsPartial,
+} from './Presenter.model';
 
 class Presenter extends Observer implements IPresenter {
   private model: IModel;
@@ -13,7 +16,7 @@ class Presenter extends Observer implements IPresenter {
 
   onChange: OnChange | null
 
-  constructor(model: IModel, view: IView, presenterOptions: PresenterOptions | SliderOptions) {
+  constructor(model: IModel, view: IView, presenterOptions: PresenterOptions) {
     super(model);
 
     this.model = model;

@@ -9,6 +9,7 @@ module.exports = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@styles': path.resolve(__dirname, 'src/styles'),
     },
     extensions: ['.ts', '.js'],
     plugins: [

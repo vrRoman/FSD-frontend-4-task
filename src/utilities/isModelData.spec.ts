@@ -1,4 +1,4 @@
-import { defaultModelOptions } from 'options/defaultOptions';
+import { defaultModelOptions } from 'defaults/defaultOptions';
 
 import isModelData from './isModelData';
 
