@@ -1,39 +1,33 @@
 import autoBind from 'auto-bind';
 
+import { SliderOptions } from 'options/options';
+import { ViewOptions, ViewOptionsPartial, defaultClasses } from 'View/options';
+import IPresenter from 'Presenter/interface';
+import { SubjectAction } from 'ObserverAndSubject/interfacesAndTypes';
+import Observer from 'ObserverAndSubject/Observer';
+import { IModelData, ModelDataPartial } from 'Model/interfacesAndTypes';
+import isModelData from 'utilities/isModelData';
+
 import IView, {
   ElementName,
   ElementNamesNotArrays,
   ElementProperties,
   Views,
 } from './interfacesAndTypes';
-import IPresenter from '../../../Presenter/interface';
 import ViewModel from '../ViewModel/ViewModel';
 import { IViewModel, ViewClasses } from '../ViewModel/interfacesAndTypes';
-
-import { SliderOptions } from '../../../../options/options';
-import { ViewOptions, ViewOptionsPartial, defaultClasses } from '../../options';
-import { SubjectAction } from '../../../../ObserverAndSubject/interfacesAndTypes';
-
 import SliderContainerView from '../SubViews/SliderContainerView/SliderContainerView';
 import ISliderContainerView from '../SubViews/SliderContainerView/interface';
-
 import BarView from '../SubViews/BarView/BarView';
 import IBarView from '../SubViews/BarView/interface';
-
 import ScaleView from '../SubViews/ScaleView/ScaleView';
 import IScaleView from '../SubViews/ScaleView/interface';
-
 import ThumbView from '../SubViews/ThumbView/ThumbView';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
-
 import TooltipView from '../SubViews/TooltipView/TooltipView';
 import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
-
 import ValueInfoView from '../SubViews/ValueInfoView/ValueInfoView';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
-import Observer from '../../../../ObserverAndSubject/Observer';
-import { IModelData, ModelDataPartial } from '../../../Model/interfacesAndTypes';
-import isModelData from '../../../../utilities/isModelData';
 
 class View extends Observer implements IView {
   private readonly parent: HTMLElement

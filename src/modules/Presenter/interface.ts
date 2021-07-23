@@ -1,4 +1,4 @@
-import { SliderOptionsPartial } from '../../options/options';
+import { SliderOptionsPartial } from 'options/options';
 
 interface IPresenter {
   onChange: Function | null

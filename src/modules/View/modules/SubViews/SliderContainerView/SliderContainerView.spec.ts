@@ -1,8 +1,9 @@
-import IView from '../../View/interfacesAndTypes';
-import View from '../../View/View';
-import { defaultViewOptions } from '../../../../../options/defaultOptions';
+import View from 'View/modules/View/View';
+import IView from 'View/modules/View/interfacesAndTypes';
+import { defaultViewOptions } from 'options/defaultOptions';
+import { defaultClasses } from 'View/options';
+
 import IScaleView from './interface';
-import { defaultClasses } from '../../../options';
 
 let mainView: IView;
 let sliderContainerView: IScaleView;

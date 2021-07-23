@@ -1,5 +1,6 @@
-import { IModelData } from '../../../Model/interfacesAndTypes';
-import Subject from '../../../../ObserverAndSubject/Subject';
+import { IModelData } from 'Model/interfacesAndTypes';
+import Subject from 'ObserverAndSubject/Subject';
+
 import {
   IViewModel, IViewModelData, IViewModelGetMethods, ViewClasses,
 } from './interfacesAndTypes';

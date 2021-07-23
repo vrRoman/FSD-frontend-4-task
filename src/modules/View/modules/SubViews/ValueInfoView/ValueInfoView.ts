@@ -1,7 +1,8 @@
+import { IViewModelGetMethods } from 'View/modules/ViewModel/interfacesAndTypes';
+import { addClass } from 'utilities/changeClassList';
+import IView from 'View/modules/View/interfacesAndTypes';
+
 import IValueInfoView from './interface';
-import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
-import { addClass } from '../../../../../utilities/changeClassList';
-import IView from '../../View/interfacesAndTypes';
 
 class ValueInfoView implements IValueInfoView {
   private readonly target: HTMLElement

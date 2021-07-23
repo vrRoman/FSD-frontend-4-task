@@ -1,4 +1,4 @@
-import { ModelDataPartial, IModelData } from '../modules/Model/interfacesAndTypes';
+import { ModelDataPartial, IModelData } from 'Model/interfacesAndTypes';
 
 function isModelData(
   modelData: ModelDataPartial | undefined | null,

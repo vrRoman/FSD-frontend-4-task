@@ -1,11 +1,11 @@
-import IModel, { Value } from '../Model/interfacesAndTypes';
-import IView from '../View/modules/View/interfacesAndTypes';
-import IPresenter from './interface';
-import { SliderOptions, SliderOptionsPartial } from '../../options/options';
-import PresenterOptions from './options';
+import { SliderOptions, SliderOptionsPartial } from 'options/options';
+import { SubjectAction } from 'ObserverAndSubject/interfacesAndTypes';
+import Observer from 'ObserverAndSubject/Observer';
+import IModel, { Value } from 'Model/interfacesAndTypes';
+import IView from 'View/modules/View/interfacesAndTypes';
 
-import { SubjectAction } from '../../ObserverAndSubject/interfacesAndTypes';
-import Observer from '../../ObserverAndSubject/Observer';
+import IPresenter from './interface';
+import PresenterOptions from './options';
 
 class Presenter extends Observer implements IPresenter {
   private model: IModel;

@@ -1,14 +1,15 @@
-import View from '../View/modules/View/View';
-import Model from '../Model/Model';
-import Presenter from './Presenter';
-import IView from '../View/modules/View/interfacesAndTypes';
-import IModel from '../Model/interfacesAndTypes';
-import IPresenter from './interface';
 import {
   defaultModelOptions,
   defaultPresenterOptions,
   defaultViewOptions,
-} from '../../options/defaultOptions';
+} from 'options/defaultOptions';
+import View from 'View/modules/View/View';
+import IView from 'View/modules/View/interfacesAndTypes';
+import Model from 'Model/Model';
+import IModel from 'Model/interfacesAndTypes';
+
+import Presenter from './Presenter';
+import IPresenter from './interface';
 
 let model: IModel;
 let view: IView;

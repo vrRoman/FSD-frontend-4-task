@@ -1,9 +1,9 @@
 import autoBind from 'auto-bind';
+import { IViewModelGetMethods } from 'View/modules/ViewModel/interfacesAndTypes';
+import IView from 'View/modules/View/interfacesAndTypes';
+import { addClass, removeClass } from 'utilities/changeClassList';
 
-import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
 import IBarView from './interface';
-import IView from '../../View/interfacesAndTypes';
-import { addClass, removeClass } from '../../../../../utilities/changeClassList';
 
 class BarView implements IBarView {
   private readonly target: HTMLElement
@@ -51,6 +51,7 @@ class BarView implements IBarView {
 
   mountBar() {
     if (!this.isBarMounted) {
+      this.isBarMounted = true;
       this.target.appendChild(this.bar);
       this.updateBar();
     }

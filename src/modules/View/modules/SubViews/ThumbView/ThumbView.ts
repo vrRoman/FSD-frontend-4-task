@@ -1,9 +1,10 @@
 import autoBind from 'auto-bind';
 
+import { IViewModelGetMethods } from 'View/modules/ViewModel/interfacesAndTypes';
+import IView from 'View/modules/View/interfacesAndTypes';
+import { addClass, removeClass } from 'utilities/changeClassList';
+
 import { IThumbView, Thumb } from './interfaceAndTypes';
-import { IViewModelGetMethods } from '../../ViewModel/interfacesAndTypes';
-import IView from '../../View/interfacesAndTypes';
-import { addClass, removeClass } from '../../../../../utilities/changeClassList';
 
 class ThumbView implements IThumbView {
   private readonly target: HTMLElement

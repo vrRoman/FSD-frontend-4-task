@@ -1,8 +1,9 @@
-import IView from '../../View/interfacesAndTypes';
-import View from '../../View/View';
+import View from 'View/modules/View/View';
+import IView from 'View/modules/View/interfacesAndTypes';
+import { defaultViewOptions, defaultModelOptions } from 'options/defaultOptions';
+import { defaultClasses } from 'View/options';
+
 import { ITooltipView } from './interfaceAndTypes';
-import { defaultViewOptions, defaultModelOptions } from '../../../../../options/defaultOptions';
-import { defaultClasses } from '../../../options';
 
 let mainView: IView;
 let tooltipView: ITooltipView;

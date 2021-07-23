@@ -1,6 +1,7 @@
+import { defaultModelOptions } from 'options/defaultOptions';
+
 import ViewModel from './ViewModel';
 import { IViewModel, IViewModelData, ViewClasses } from './interfacesAndTypes';
-import { defaultModelOptions } from '../../../../options/defaultOptions';
 
 describe('ViewModel', () => {
   const classes: ViewClasses = {

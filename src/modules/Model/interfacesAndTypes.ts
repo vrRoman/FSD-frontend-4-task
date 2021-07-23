@@ -1,4 +1,4 @@
-import { ISubject } from '../../ObserverAndSubject/interfacesAndTypes';
+import { ISubject } from 'ObserverAndSubject/interfacesAndTypes';
 import { ModelOptionsPartial } from './options';
 
 type Value = [number, number] | number

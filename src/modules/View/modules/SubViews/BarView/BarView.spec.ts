@@ -1,7 +1,8 @@
-import View from '../../View/View';
-import { defaultModelOptions, defaultViewOptions } from '../../../../../options/defaultOptions';
-import { defaultClasses } from '../../../options';
-import IView from '../../View/interfacesAndTypes';
+import View from 'View/modules/View/View';
+import IView from 'View/modules/View/interfacesAndTypes';
+import { defaultModelOptions, defaultViewOptions } from 'options/defaultOptions';
+import { defaultClasses } from 'View/options';
+
 import IBarView from './interface';
 
 let mainView: IView;

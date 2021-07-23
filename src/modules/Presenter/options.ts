@@ -1,4 +1,4 @@
-import { Value } from '../Model/interfacesAndTypes';
+import { Value } from 'Model/interfacesAndTypes';
 
 type PresenterOptions = {
   // Будет выполняться при любом передвижении ползунка

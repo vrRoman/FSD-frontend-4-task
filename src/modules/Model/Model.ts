@@ -1,8 +1,9 @@
-import { SliderOptions } from '../../options/options';
+import { SliderOptions } from 'options/options';
+import Subject from 'ObserverAndSubject/Subject';
+import areElementsDefined from 'utilities/areElementsDefined';
+
 import { ModelOptions, ModelOptionsPartial } from './options';
 import IModel, { IModelData, Value } from './interfacesAndTypes';
-import Subject from '../../ObserverAndSubject/Subject';
-import areElementsDefined from '../../utilities/areElementsDefined';
 
 class Model extends Subject implements IModel {
   private data: IModelData

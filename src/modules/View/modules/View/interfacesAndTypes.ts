@@ -1,6 +1,8 @@
-import { ViewOptionsPartial } from '../../options';
-import IPresenter from '../../../Presenter/interface';
-import { IObserver } from '../../../../ObserverAndSubject/interfacesAndTypes';
+import { IModelData, ModelDataPartial } from 'Model/interfacesAndTypes';
+import { ViewOptionsPartial } from 'View/options';
+import IPresenter from 'Presenter/interface';
+import { IObserver } from 'ObserverAndSubject/interfacesAndTypes';
+
 import { IViewModel } from '../ViewModel/interfacesAndTypes';
 import IBarView from '../SubViews/BarView/interface';
 import ISliderContainerView from '../SubViews/SliderContainerView/interface';
@@ -8,7 +10,6 @@ import IScaleView from '../SubViews/ScaleView/interface';
 import { IThumbView } from '../SubViews/ThumbView/interfaceAndTypes';
 import { ITooltipView } from '../SubViews/TooltipView/interfaceAndTypes';
 import IValueInfoView from '../SubViews/ValueInfoView/interface';
-import { IModelData, ModelDataPartial } from '../../../Model/interfacesAndTypes';
 
 type ElementNamesNotArrays = 'parent' | 'slider' | 'bar' | 'progressBar' | 'scale' | 'valueInfo'
 type ElementName = ElementNamesNotArrays | 'thumb' | 'tooltip'

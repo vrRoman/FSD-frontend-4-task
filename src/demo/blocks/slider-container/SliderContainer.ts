@@ -1,5 +1,6 @@
+import { SliderOptionsPartial } from 'options/options';
+
 import SliderConfig from '../slider-config/SliderConfig';
-import { SliderOptionsPartial } from '../../../options/options';
 
 class SliderContainer {
   private readonly sliderSelector: string;
