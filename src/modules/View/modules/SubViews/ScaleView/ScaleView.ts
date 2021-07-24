@@ -1,7 +1,7 @@
 import autoBind from 'auto-bind';
 
-import { IViewModelGetMethods } from 'View/modules/ViewModel';
-import { IView } from 'View/modules/View';
+import type { IViewModelGetMethods } from 'View/modules/ViewModel';
+import type { IView } from 'View/modules/View';
 import { addClass, removeClass } from 'utilities/changeClassList';
 
 import IScaleView from './ScaleView.model';

@@ -1,5 +1,5 @@
 import { IModelData, ModelDataPartial } from 'Model';
-import { IPresenter } from 'Presenter';
+import type { IPresenter } from 'Presenter';
 import { IObserver } from 'ObserverAndSubject';
 
 import { IViewModel, ViewClasses } from '../ViewModel';

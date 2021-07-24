@@ -1,6 +1,6 @@
 import { IViewModelGetMethods } from 'View/modules/ViewModel';
 import { addClass } from 'utilities/changeClassList';
-import { IView } from 'View/modules/View';
+import type { IView } from 'View/modules/View';
 
 import IValueInfoView from './ValueInfoView.model';
 

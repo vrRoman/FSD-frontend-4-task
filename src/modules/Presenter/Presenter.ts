@@ -1,6 +1,7 @@
-import { SubjectAction, Observer } from 'ObserverAndSubject';
-import { IModel } from 'Model';
-import { IView } from 'View/modules/View';
+import { Observer } from 'ObserverAndSubject';
+import type { SubjectAction } from 'ObserverAndSubject';
+import type { IModel } from 'Model';
+import type { IView } from 'View/modules/View';
 
 import type {
   IPresenter,

@@ -1,8 +1,8 @@
-import { IView } from 'View/modules/View';
-import { IViewModelGetMethods } from 'View/modules/ViewModel';
+import type { IView } from 'View/modules/View';
+import type { IViewModelGetMethods } from 'View/modules/ViewModel';
 import { addClass, removeClass } from 'utilities/changeClassList';
 
-import ISliderContainerView from './SliderContainerView.model';
+import type ISliderContainerView from './SliderContainerView.model';
 
 class SliderContainerView implements ISliderContainerView {
   private readonly target: HTMLElement;

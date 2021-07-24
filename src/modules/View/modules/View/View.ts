@@ -1,9 +1,10 @@
 import autoBind from 'auto-bind';
 
 import defaultClasses from 'defaults/defaultClasses';
-import { IPresenter } from 'Presenter';
-import { SubjectAction, Observer } from 'ObserverAndSubject';
-import { IModelData, ModelDataPartial } from 'Model';
+import type { IPresenter } from 'Presenter';
+import { Observer } from 'ObserverAndSubject';
+import type { SubjectAction } from 'ObserverAndSubject';
+import type { IModelData, ModelDataPartial } from 'Model';
 import isModelData from 'utilities/isModelData';
 
 import type {
@@ -15,13 +16,20 @@ import type {
   ViewOptions,
   ViewOptionsPartial,
 } from './View.model';
-import ViewModel, { IViewModel, ViewClasses } from '../ViewModel';
-import SliderContainerView, { ISliderContainerView } from '../SubViews/SliderContainerView';
-import BarView, { IBarView } from '../SubViews/BarView';
-import ScaleView, { IScaleView } from '../SubViews/ScaleView';
-import ThumbView, { IThumbView } from '../SubViews/ThumbView';
-import TooltipView, { ITooltipView } from '../SubViews/TooltipView';
-import ValueInfoView, { IValueInfoView } from '../SubViews/ValueInfoView';
+import ViewModel from '../ViewModel';
+import type { IViewModel, ViewClasses } from '../ViewModel';
+import SliderContainerView from '../SubViews/SliderContainerView';
+import type { ISliderContainerView } from '../SubViews/SliderContainerView';
+import BarView from '../SubViews/BarView';
+import type { IBarView } from '../SubViews/BarView';
+import ScaleView from '../SubViews/ScaleView';
+import type { IScaleView } from '../SubViews/ScaleView';
+import ThumbView from '../SubViews/ThumbView';
+import type { IThumbView } from '../SubViews/ThumbView';
+import TooltipView from '../SubViews/TooltipView';
+import type { ITooltipView } from '../SubViews/TooltipView';
+import ValueInfoView from '../SubViews/ValueInfoView';
+import type { IValueInfoView } from '../SubViews/ValueInfoView';
 
 class View extends Observer implements IView {
   private readonly parent: HTMLElement
