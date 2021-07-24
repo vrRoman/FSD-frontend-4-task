@@ -1,7 +1,7 @@
 import autoBind from 'auto-bind';
 
-import type { IViewModelGetMethods } from 'View/modules/ViewModel';
-import type { IView } from 'View/modules/View';
+import type { IViewModelGetMethods } from 'View/ViewModel';
+import type { IView } from 'View';
 import { addClass, removeClass } from 'utilities/changeClassList';
 
 import { IThumbView, Thumb } from './ThumbView.model';

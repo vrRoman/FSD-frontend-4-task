@@ -1,6 +1,6 @@
-import { IViewModelGetMethods } from 'View/modules/ViewModel';
+import { IViewModelGetMethods } from 'View/ViewModel';
 import { addClass } from 'utilities/changeClassList';
-import type { IView } from 'View/modules/View';
+import type { IView } from 'View';
 
 import type { ITooltipView, Tooltip } from './TooltipView.model';
 import type { Thumb } from '../ThumbView';

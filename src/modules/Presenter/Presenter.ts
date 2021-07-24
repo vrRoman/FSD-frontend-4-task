@@ -1,7 +1,7 @@
 import { Observer } from 'ObserverAndSubject';
 import type { SubjectAction } from 'ObserverAndSubject';
 import type { IModel } from 'Model';
-import type { IView } from 'View/modules/View';
+import type { IView } from 'View';
 
 import type {
   IPresenter,

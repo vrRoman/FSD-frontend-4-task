@@ -1,4 +1,4 @@
-import View, { IView } from 'View/modules/View';
+import View, { IView } from 'View';
 import { defaultViewOptions } from 'defaults/defaultOptions';
 import defaultClasses from 'defaults/defaultClasses';
 

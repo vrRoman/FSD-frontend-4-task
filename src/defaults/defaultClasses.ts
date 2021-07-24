@@ -1,4 +1,4 @@
-import { ViewClasses } from 'View/modules/ViewModel';
+import { ViewClasses } from 'View/ViewModel';
 
 const defaultClasses: ViewClasses = {
   sliderClass: 'slider',

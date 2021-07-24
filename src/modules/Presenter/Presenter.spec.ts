@@ -3,7 +3,7 @@ import {
   defaultPresenterOptions,
   defaultViewOptions,
 } from 'defaults/defaultOptions';
-import View, { IView } from 'View/modules/View';
+import View, { IView } from 'View';
 import Model, { IModel } from 'Model';
 
 import Presenter from './Presenter';

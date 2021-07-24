@@ -1,6 +1,6 @@
 import Model, { IModel, Value } from 'Model';
-import View, { IView } from 'View/modules/View';
-import { IViewModel } from 'View/modules/ViewModel';
+import View, { IView } from 'View';
+import { IViewModel } from 'View/ViewModel';
 import Presenter, { IPresenter } from 'Presenter';
 import type { SliderOptionsPartial } from 'Presenter';
 import { IObserver } from 'ObserverAndSubject';

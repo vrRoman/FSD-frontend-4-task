@@ -1,5 +1,5 @@
-import type { IView } from 'View/modules/View';
-import type { IViewModelGetMethods } from 'View/modules/ViewModel';
+import type { IView } from 'View';
+import type { IViewModelGetMethods } from 'View/ViewModel';
 import { addClass, removeClass } from 'utilities/changeClassList';
 
 import type ISliderContainerView from './SliderContainerView.model';

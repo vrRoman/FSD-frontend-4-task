@@ -2,7 +2,7 @@ import autoBind from 'auto-bind';
 
 import { IObserver, SubjectAction } from 'ObserverAndSubject';
 import { IModel, Value } from 'Model';
-import { IViewModel } from 'View/modules/ViewModel';
+import { IViewModel } from 'View/ViewModel';
 
 import { ISliderConfig, optionNames } from './SliderConfig.model';
 

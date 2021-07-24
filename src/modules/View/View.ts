@@ -16,20 +16,20 @@ import type {
   ViewOptions,
   ViewOptionsPartial,
 } from './View.model';
-import ViewModel from '../ViewModel';
-import type { IViewModel, ViewClasses } from '../ViewModel';
-import SliderContainerView from '../SubViews/SliderContainerView';
-import type { ISliderContainerView } from '../SubViews/SliderContainerView';
-import BarView from '../SubViews/BarView';
-import type { IBarView } from '../SubViews/BarView';
-import ScaleView from '../SubViews/ScaleView';
-import type { IScaleView } from '../SubViews/ScaleView';
-import ThumbView from '../SubViews/ThumbView';
-import type { IThumbView } from '../SubViews/ThumbView';
-import TooltipView from '../SubViews/TooltipView';
-import type { ITooltipView } from '../SubViews/TooltipView';
-import ValueInfoView from '../SubViews/ValueInfoView';
-import type { IValueInfoView } from '../SubViews/ValueInfoView';
+import ViewModel from './ViewModel';
+import type { IViewModel, ViewClasses } from './ViewModel';
+import SliderContainerView from './SubViews/SliderContainerView';
+import type { ISliderContainerView } from './SubViews/SliderContainerView';
+import BarView from './SubViews/BarView';
+import type { IBarView } from './SubViews/BarView';
+import ScaleView from './SubViews/ScaleView';
+import type { IScaleView } from './SubViews/ScaleView';
+import ThumbView from './SubViews/ThumbView';
+import type { IThumbView } from './SubViews/ThumbView';
+import TooltipView from './SubViews/TooltipView';
+import type { ITooltipView } from './SubViews/TooltipView';
+import ValueInfoView from './SubViews/ValueInfoView';
+import type { IValueInfoView } from './SubViews/ValueInfoView';
 
 class View extends Observer implements IView {
   private readonly parent: HTMLElement

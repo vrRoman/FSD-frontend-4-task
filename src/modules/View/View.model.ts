@@ -2,13 +2,13 @@ import { IModelData, ModelDataPartial } from 'Model';
 import type { IPresenter } from 'Presenter';
 import { IObserver } from 'ObserverAndSubject';
 
-import { IViewModel, ViewClasses } from '../ViewModel';
-import IBarView from '../SubViews/BarView/BarView.model';
-import ISliderContainerView from '../SubViews/SliderContainerView/SliderContainerView.model';
-import IScaleView from '../SubViews/ScaleView/ScaleView.model';
-import { IThumbView } from '../SubViews/ThumbView';
-import { ITooltipView } from '../SubViews/TooltipView';
-import IValueInfoView from '../SubViews/ValueInfoView/ValueInfoView.model';
+import { IViewModel, ViewClasses } from './ViewModel';
+import { IBarView } from './SubViews/BarView';
+import { ISliderContainerView } from './SubViews/SliderContainerView';
+import { IScaleView } from './SubViews/ScaleView';
+import { IThumbView } from './SubViews/ThumbView';
+import { ITooltipView } from './SubViews/TooltipView';
+import { IValueInfoView } from './SubViews/ValueInfoView';
 
 type ViewOptions = {
   // Длина слайдера(в любых единицах измерения)

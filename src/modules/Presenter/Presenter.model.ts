@@ -1,5 +1,5 @@
 import type { ModelOptions, Value } from 'Model';
-import type { ViewOptions } from 'View/modules/View';
+import type { ViewOptions } from 'View';
 
 type OnChange = (value: Value) => void;
 
