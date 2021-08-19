@@ -58,27 +58,20 @@ class Model extends Subject implements IModel {
   // Добавляет указанное количество шагов к нужному значению(если не
   // диапазон или нужно большее значение, то указывать не обязательно)
   addStepsToValue(numberOfSteps: number, valueNumber: 0 | 1 = 1): Value {
+    let newValue: Value;
     if (typeof this.data.value === 'number') {
-      this.data.value += numberOfSteps * this.data.stepSize;
+      newValue = this.data.value + numberOfSteps * this.data.stepSize;
     } else {
-      let newValue: Value = [...this.data.value];
+      newValue = [...this.data.value];
       newValue[valueNumber] += numberOfSteps * this.data.stepSize;
 
       if (newValue[0] > newValue[1]) {
         const oppositeIndex = Number(!valueNumber);
         newValue = [newValue[oppositeIndex], newValue[oppositeIndex]];
       }
-
-      this.data.value = newValue;
     }
 
-    this.checkAndFixValue();
-
-    this.notify({
-      type: 'CHANGE_OPTIONS',
-      payload: this.data,
-    });
-
+    this.changeOptions({ value: newValue });
     return this.data.value;
   }
 
@@ -114,41 +107,43 @@ class Model extends Subject implements IModel {
   // массивом с двумя одинаковыми значениями.
   // Если значение - массив и это не диапазон, то значением становится
   // первый элемент массива.
-  // Если это диапазон и первое значение больше второго, поменять их местами.
+  private fixValueByRange(): Value {
+    const isValueAndRangeMatch = this.data.isRange === Array.isArray(this.data.value);
+    if (!isValueAndRangeMatch) {
+      this.data.value = Array.isArray(this.data.value)
+        ? this.data.value[0]
+        : [this.data.value, this.data.value];
+    }
+    return this.data.value;
+  }
+
+  // Если это диапазон и первое значение больше второго, меняет их местами.
+  private fixValueOrder(): Value {
+    return Array.isArray(this.data.value)
+      ? this.data.value.sort((firstNumber, secondNumber) => firstNumber - secondNumber)
+      : this.data.value;
+  }
+
   // Если значения больше максимального, то
   // приравнять с максимальным, и наоборот для минимального.
+  private fixValueLimits(): Value {
+    const getValid = (number: number) => {
+      if (number > this.data.max) return this.data.max;
+      if (number < this.data.min) return this.data.min;
+      return number;
+    };
+
+    this.data.value = Array.isArray(this.data.value)
+      ? [getValid(this.data.value[0]), getValid(this.data.value[1])]
+      : getValid(this.data.value);
+
+    return this.data.value;
+  }
+
   private checkAndFixValue(): Value {
-    if (this.data.isRange) {
-      if (typeof this.data.value === 'number') {
-        this.data.value = [this.data.value, this.data.value];
-      }
-    } else if (Array.isArray(this.data.value)) {
-      [this.data.value] = this.data.value;
-    }
-
-    if (typeof this.data.value === 'number') {
-      if (this.data.value > this.data.max) {
-        this.data.value = this.data.max;
-      } else if (this.data.value < this.data.min) {
-        this.data.value = this.data.min;
-      }
-    } else {
-      if (this.data.value[0] > this.data.value[1]) {
-        this.data.value = [this.data.value[1], this.data.value[0]];
-      }
-
-      if (this.data.value[1] > this.data.max) {
-        this.data.value[1] = this.data.max;
-      } else if (this.data.value[1] < this.data.min) {
-        this.data.value[1] = this.data.min;
-      }
-      if (this.data.value[0] < this.data.min) {
-        this.data.value[0] = this.data.min;
-      } else if (this.data.value[0] > this.data.max) {
-        this.data.value[0] = this.data.max;
-      }
-    }
-
+    this.fixValueByRange();
+    this.fixValueOrder();
+    this.fixValueLimits();
     return this.data.value;
   }
 
