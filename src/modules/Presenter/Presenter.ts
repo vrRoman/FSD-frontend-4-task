@@ -30,34 +30,15 @@ class Presenter extends Observer implements IPresenter {
   }
 
   onThumbMove(numberOfSteps: number = 1, thumbNumber: 0 | 1 = 1) {
-    this.model.addStepsToValue(numberOfSteps, thumbNumber, true);
+    this.model.addStepsToValue(numberOfSteps, thumbNumber);
   }
 
   // Изменяет значения модели во view
   update(action: SubjectAction): void {
-    switch (action.type) {
-      case 'UPDATE_VALUE':
-        this.view.setModelData({ value: this.model.getValue() });
-        break;
-      case 'UPDATE_IS-RANGE':
-        this.view.setModelData({
-          value: this.model.getValue(),
-          isRange: this.model.getIsRange(),
-        });
-        break;
-      case 'UPDATE_MIN-MAX':
-        this.view.setModelData({
-          min: this.model.getMin(),
-          max: this.model.getMax(),
-          value: this.model.getValue(),
-          stepSize: this.model.getStepSize(),
-        });
-        break;
-      case 'UPDATE_STEP-SIZE':
-        this.view.setModelData({ stepSize: this.model.getStepSize() });
-        break;
-      default: break;
+    if (action.type === 'CHANGE_OPTIONS') {
+      this.view.setModelData(action.payload);
     }
+
     if (this.onChange) {
       this.onChange(this.model.getValue());
     }

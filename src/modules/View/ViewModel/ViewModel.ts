@@ -26,11 +26,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return this.data.activeThumb;
   }
 
-  setModelData(newModelData: null): null
-
-  setModelData(newModelData: IModelData): IModelData
-
-  setModelData(newModelData: IModelData | null): IModelData | null {
+  setModelData(newModelData: IModelData): IModelData {
     this.data.modelData = newModelData;
     this.notify({
       type: 'UPDATE_MODEL-DATA',

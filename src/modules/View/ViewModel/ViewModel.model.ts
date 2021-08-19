@@ -61,7 +61,6 @@ interface IViewModelGetMethods {
 interface IViewModel extends ISubject, IViewModelGetMethods {
   setActiveThumb(newActiveThumb: null): null
   setActiveThumb(newActiveThumb: HTMLElement): HTMLElement
-  setModelData(newModelData: null): null
   setModelData(newModelData: IModelData): IModelData
   setClientCoordinates(coordinates: [number, number]): [number, number]
   setLength(newLength: string): string

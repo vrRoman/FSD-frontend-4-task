@@ -28,10 +28,21 @@ class SliderConfig implements IObserver, ISliderConfig {
 
   update(action: SubjectAction) {
     switch (action.type) {
-      case 'UPDATE_IS-RANGE':
+      case 'CHANGE_OPTIONS':
         this.updateSecondValueInput();
         this.updateCheckbox('isRange');
+
+        this.updateTextInput('value1');
+        this.updateTextInput('value2');
+
+        this.updateTextInput('stepSize');
+
+        this.updateTextInput('min');
+        this.updateTextInput('max');
+        this.updateTextInput('value1');
+        this.updateTextInput('value2');
         break;
+
       case 'UPDATE_HAS-TOOLTIP':
         this.updateCheckbox('hasTooltip');
         break;
@@ -52,19 +63,6 @@ class SliderConfig implements IObserver, ISliderConfig {
         break;
       case 'UPDATE_USE-KEYBOARD':
         this.updateCheckbox('useKeyboard');
-        break;
-      case 'UPDATE_VALUE':
-        this.updateTextInput('value1');
-        this.updateTextInput('value2');
-        break;
-      case 'UPDATE_STEP-SIZE':
-        this.updateTextInput('stepSize');
-        break;
-      case 'UPDATE_MIN-MAX':
-        this.updateTextInput('min');
-        this.updateTextInput('max');
-        this.updateTextInput('value1');
-        this.updateTextInput('value2');
         break;
       case 'UPDATE_LENGTH':
         this.updateTextInput('length');

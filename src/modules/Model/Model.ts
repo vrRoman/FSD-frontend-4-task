@@ -1,5 +1,4 @@
 import { Subject } from 'ObserverAndSubject';
-import areElementsDefined from 'utilities/areElementsDefined';
 
 import type {
   IModel,
@@ -32,115 +31,60 @@ class Model extends Subject implements IModel {
 
   // Меняет настройки
   changeOptions(newOptions: ModelOptionsPartial) {
-    const minAndMax = [newOptions.min, newOptions.max];
-    if (areElementsDefined(minAndMax)) {
-      this.setMinAndMax(minAndMax[0], minAndMax[1]);
-    } else {
-      if (newOptions.min !== undefined) {
-        this.setMin(newOptions.min);
-      }
-      if (newOptions.max !== undefined) {
-        this.setMax(newOptions.max);
-      }
-    }
-    if (newOptions.isRange !== undefined) {
-      this.setIsRange(newOptions.isRange);
-    }
-    if (newOptions.value !== undefined) {
-      this.setValue(newOptions.value);
-    }
-    if (newOptions.stepSize !== undefined) {
-      this.setStepSize(newOptions.stepSize);
-    }
-  }
+    const {
+      min = this.data.min,
+      max = this.data.max,
+      value = this.data.value,
+      isRange = this.data.isRange,
+      stepSize = this.data.stepSize,
+    } = newOptions;
 
-  // Меняет и проверяет min и max, проверяет значение, размер шага
-  setMinAndMax(newMin: number, newMax: number): [number, number] {
-    this.data.min = newMin;
-    this.data.max = newMax;
+    this.data.min = min;
+    this.data.max = max;
+    this.data.isRange = isRange;
+    this.data.value = value;
+    this.data.stepSize = stepSize;
+
     this.checkAndFixMinMax();
     this.checkAndFixValue();
     this.checkAndFixStepSize();
-    this.notify({
-      type: 'UPDATE_MIN-MAX',
-    });
-    return [this.data.min, this.data.max];
-  }
-
-  // Вызывает this.setMinAndMax и возвращает новый min
-  setMin(newMin: number): number {
-    this.setMinAndMax(newMin, this.getMax());
-    return this.getMin();
-  }
-
-  // Вызывает this.setMinAndMax и возвращает новый max
-  setMax(newMax: number): number {
-    this.setMinAndMax(this.getMin(), newMax);
-    return this.getMax();
-  }
-
-  // Изменяет текущее значение и вызывает checkAndFixValue
-  setValue(newValue: Value, shouldRound: boolean = false): Value {
-    this.data.value = shouldRound ? this.roundValue(newValue) : newValue;
-
-    this.checkAndFixValue();
 
     this.notify({
-      type: 'UPDATE_VALUE',
+      type: 'CHANGE_OPTIONS',
+      payload: this.data,
     });
-
-    return this.data.value;
-  }
-
-  // Меняет isRange и вызывает checkAndFixValue
-  setIsRange(newIsRange: boolean): boolean {
-    this.data.isRange = newIsRange;
-    this.checkAndFixValue();
-
-    this.notify({
-      type: 'UPDATE_IS-RANGE',
-    });
-
-    return this.data.isRange;
-  }
-
-  // Меняет stepSize и вызывает checkAndFixStepSize
-  setStepSize(newStepSize: number): number {
-    this.data.stepSize = newStepSize;
-    this.checkAndFixStepSize();
-    this.notify({
-      type: 'UPDATE_STEP-SIZE',
-    });
-
-    return this.data.stepSize;
   }
 
   // Добавляет указанное количество шагов к нужному значению(если не
   // диапазон или нужно большее значение, то указывать не обязательно)
-  addStepsToValue(
-    numberOfSteps: number, valueNumber: 0 | 1 = 1, shouldRound: boolean = false,
-  ): Value {
+  addStepsToValue(numberOfSteps: number, valueNumber: 0 | 1 = 1): Value {
     if (typeof this.data.value === 'number') {
       this.data.value += numberOfSteps * this.data.stepSize;
     } else {
-      this.data.value[valueNumber] += numberOfSteps * this.data.stepSize;
+      const newValue: Value = [...this.data.value];
+      newValue[valueNumber] += numberOfSteps * this.data.stepSize;
+      this.data.value = newValue;
+
       if (valueNumber === 1) {
         if (this.data.value[valueNumber] < this.data.value[0]) {
           [this.data.value[valueNumber]] = this.data.value;
         }
-      } else if (this.data.value[valueNumber] > this.data.value[1]) {
-        [, this.data.value[valueNumber]] = this.data.value;
+      } else if (this.data.value[0] > this.data.value[1]) {
+        [, this.data.value[0]] = this.data.value;
       }
-    }
-
-    if (shouldRound) {
-      this.data.value = this.roundValue(this.data.value);
     }
 
     this.checkAndFixValue();
 
     this.notify({
-      type: 'UPDATE_VALUE',
+      type: 'CHANGE_OPTIONS',
+      payload: {
+        value: this.data.value,
+        min: this.data.min,
+        max: this.data.max,
+        isRange: this.data.isRange,
+        stepSize: this.data.stepSize,
+      },
     });
 
     return this.data.value;
@@ -172,23 +116,6 @@ class Model extends Subject implements IModel {
 
   getStepSize(): number {
     return this.data.stepSize;
-  }
-
-  // Округляет до количества знаков после запятой как у stepSize и возвращает новое значение
-  private roundValue(value: Value): Value {
-    const symbolsAfterCommaStepSize = this.getStepSize().toString().includes('.')
-      ? this.getStepSize().toString().split('.').pop()
-      : null;
-    const numberOfSymbolsAfterCommaStepSize = symbolsAfterCommaStepSize
-      ? symbolsAfterCommaStepSize.length
-      : 0;
-    if (Array.isArray(value)) {
-      return [
-        Number(value[0].toFixed(numberOfSymbolsAfterCommaStepSize)),
-        Number(value[1].toFixed(numberOfSymbolsAfterCommaStepSize)),
-      ];
-    }
-    return Number(value.toFixed(numberOfSymbolsAfterCommaStepSize));
   }
 
   // Если значение - одно число и это диапазон, то значение становится

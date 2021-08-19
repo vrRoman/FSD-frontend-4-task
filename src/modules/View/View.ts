@@ -335,34 +335,35 @@ class View extends Observer implements IView {
 
   // Обращается к viewModel
   setModelData(newModelData: ModelDataPartial): IModelData | null {
+    const oldModelData = this.viewModel.getModelData();
     const modelData: ModelDataPartial = {
-      ...this.viewModel.getModelData(),
+      ...oldModelData,
       ...newModelData,
     };
 
     if (isModelData(modelData)) {
       this.viewModel.setModelData(modelData);
 
-      if (newModelData.isRange !== undefined) {
+      if (newModelData.isRange !== oldModelData?.isRange) {
         this.thumbView.recreate();
         this.tooltipView.recreate(this.thumbView.get());
         this.barView.updateProgressBar();
         this.valueInfoView.update();
       }
-      if (newModelData.value !== undefined) {
+      if (newModelData.value !== oldModelData?.value) {
         this.barView.updateProgressBar();
         this.thumbView.update();
         this.tooltipView.update();
         this.valueInfoView.update();
       }
-      if (newModelData.max !== undefined) {
+      if (newModelData.max !== oldModelData?.max) {
         this.thumbView.update();
         this.scaleView.recreate();
         this.valueInfoView.update();
         this.barView.updateProgressBar();
         this.tooltipView.update();
       }
-      if (newModelData.min !== undefined) {
+      if (newModelData.min !== oldModelData?.min) {
         this.thumbView.update();
         this.scaleView.recreate();
         this.valueInfoView.update();

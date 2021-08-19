@@ -60,28 +60,28 @@ test('it should pass data from the View to the Model', () => {
 test('it should pass data from the View to the Model', () => {
   presenter.changeOptions({ hasScale: true });
 
+  model.changeOptions({ value: 3 });
   const thumb = view.getElement('thumb');
-  model.setValue(3);
   if (thumb instanceof HTMLElement) {
     expect(thumb.style.left).toBe('30px');
   }
 
-  model.setIsRange(true);
+  model.changeOptions({ isRange: true });
   expect(Array.isArray(view.getElement('thumb'))).toBe(true);
 
-  model.setMin(-2);
+  model.changeOptions({ min: -2 });
   const firstScaleElement = view.getElement('scale').children[0];
   if (firstScaleElement instanceof HTMLElement) {
     expect(firstScaleElement.innerText).toBe('-2');
   }
 
-  model.setMax(12);
+  model.changeOptions({ max: 12 });
   const scale = view.getElement('scale');
   const lastScaleElement = scale.children[scale.children.length - 1];
   if (lastScaleElement instanceof HTMLElement) {
     expect(lastScaleElement.innerText).toBe('12');
   }
 
-  model.setStepSize(3);
+  model.changeOptions({ stepSize: 3 });
   expect(view.getViewModel().getModelData()?.stepSize).toBe(3);
 });

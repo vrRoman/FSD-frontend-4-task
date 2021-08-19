@@ -121,10 +121,10 @@ describe('Model', () => {
     });
   });
 
-  describe('setValue', () => {
+  describe('change value', () => {
     describe('when range is false', () => {
       test('should change value', () => {
-        model.setValue(3);
+        model.changeOptions({ value: 3 });
         expect(model.getValue()).toBe(3);
       });
 
@@ -133,28 +133,28 @@ describe('Model', () => {
           ...defaultModelOptions,
           min: -63,
         });
-        model.setValue(-26);
+        model.changeOptions({ value: -26 });
         expect(model.getValue()).toBe(-26);
       });
 
       test('when value is less than min, value should equal to min', () => {
-        model.setValue(3);
-        model.setValue(-2);
+        model.changeOptions({ value: 3 });
+        model.changeOptions({ value: -2 });
         expect(model.getValue()).toBe(model.getMin());
       });
 
       test('when value is greater than max, value should equal to max', () => {
-        model.setValue(11);
+        model.changeOptions({ value: 11 });
         expect(model.getValue()).toBe(model.getMax());
       });
 
       test('when value is array, value should be first element', () => {
-        model.setValue([2, 4]);
+        model.changeOptions({ value: [2, 4] });
         expect(model.getValue()).toBe(2);
       });
 
       test('when value is array with incorrect values, value should be fixed first element', () => {
-        model.setValue([-2, 4]);
+        model.changeOptions({ value: [-2, 4] });
         expect(model.getValue()).toBe(model.getMin());
       });
     });
@@ -168,56 +168,56 @@ describe('Model', () => {
       });
 
       test('should change value', () => {
-        model.setValue([3, 5]);
+        model.changeOptions({ value: [3, 5] });
         expect(model.getValue()).toEqual([3, 5]);
       });
 
       test('when values is less than min or greater than max should change them to min or max', () => {
-        model.setValue([-2, 11]);
+        model.changeOptions({ value: [-2, 11] });
         expect(model.getValue()).toEqual([model.getMin(), model.getMax()]);
       });
 
       test('when value is not array, should be array with 2 equal values', () => {
-        model.setValue(2);
+        model.changeOptions({ value: 2 });
         expect(model.getValue()).toEqual([2, 2]);
       });
 
       test('when value is less than min and is not array should change to array of two min values', () => {
-        model.setValue(-3);
+        model.changeOptions({ value: -3 });
         expect(model.getValue()).toEqual([model.getMin(), model.getMin()]);
       });
 
       test('when value is greater than max and is not array should change to array of two max values', () => {
-        model.setValue(12);
+        model.changeOptions({ value: 12 });
         expect(model.getValue()).toEqual([model.getMax(), model.getMax()]);
       });
 
       test('when value[1] > value[0] should reverse', () => {
-        model.setValue([5, 2]);
+        model.changeOptions({ value: [5, 2] });
         expect(model.getValue()).toEqual([2, 5]);
       });
 
       test('when value[1] > value[0] and greater/less than max/min should change to array of min and max', () => {
-        model.setValue([14, -1]);
+        model.changeOptions({ value: [14, -1] });
         expect(model.getValue()).toEqual([model.getMin(), model.getMax()]);
       });
     });
   });
 
-  describe('setMin', () => {
+  describe('change min', () => {
     test('should change min', () => {
-      model.setMin(2);
+      model.changeOptions({ min: 2 });
       expect(model.getMin()).toBe(2);
     });
 
     test('when min > max should reverse them', () => {
-      model.setMin(15);
+      model.changeOptions({ min: 15 });
       expect(model.getMin()).toBe(10);
       expect(model.getMax()).toBe(15);
     });
 
     test('when not range and value < min should change value', () => {
-      model.setMin(3);
+      model.changeOptions({ min: 3 });
       expect(model.getValue()).toBe(3);
     });
 
@@ -227,12 +227,12 @@ describe('Model', () => {
         value: [0, 5],
         isRange: true,
       });
-      model.setMin(3);
+      model.changeOptions({ min: 3 });
       expect(model.getValue()).toEqual([3, 5]);
     });
 
     test('when given min > max should change values', () => {
-      model.setMin(15);
+      model.changeOptions({ min: 15 });
       expect(model.getValue()).toBe(10);
     });
 
@@ -242,7 +242,7 @@ describe('Model', () => {
         value: [0, 5],
         isRange: true,
       });
-      model.setMin(15);
+      model.changeOptions({ min: 15 });
       expect(model.getValue()).toEqual([10, 10]);
     });
 
@@ -251,19 +251,19 @@ describe('Model', () => {
         ...defaultModelOptions,
         stepSize: 8,
       });
-      model.setMin(5);
+      model.changeOptions({ min: 5 });
       expect(model.getStepSize()).toBe(model.getMaxDiapason());
     });
   });
 
-  describe('setMax', () => {
+  describe('change max', () => {
     test('should change max', () => {
-      model.setMax(12);
+      model.changeOptions({ max: 12 });
       expect(model.getMax()).toBe(12);
     });
 
     test('when max < min should reverse them', () => {
-      model.setMax(-16);
+      model.changeOptions({ max: -16 });
       expect(model.getMin()).toBe(-16);
       expect(model.getMax()).toBe(0);
     });
@@ -273,7 +273,7 @@ describe('Model', () => {
         ...defaultModelOptions,
         value: 10,
       });
-      model.setMax(8);
+      model.changeOptions({ max: 8 });
       expect(model.getValue()).toBe(8);
     });
 
@@ -283,7 +283,7 @@ describe('Model', () => {
         value: [2, 7],
         isRange: true,
       });
-      model.setMax(6);
+      model.changeOptions({ max: 6 });
       expect(model.getValue()).toEqual([2, 6]);
     });
 
@@ -292,7 +292,7 @@ describe('Model', () => {
         ...defaultModelOptions,
         value: 3,
       });
-      model.setMax(-15);
+      model.changeOptions({ max: -15 });
       expect(model.getValue()).toBe(0);
     });
 
@@ -302,7 +302,7 @@ describe('Model', () => {
         value: [2, 5],
         isRange: true,
       });
-      model.setMax(-100);
+      model.changeOptions({ max: -100 });
       expect(model.getValue()).toEqual([0, 0]);
     });
 
@@ -311,14 +311,14 @@ describe('Model', () => {
         ...defaultModelOptions,
         stepSize: 8,
       });
-      model.setMax(2);
+      model.changeOptions({ max: 2 });
       expect(model.getStepSize()).toBe(model.getMaxDiapason());
     });
   });
 
-  describe('setIsRange', () => {
+  describe('change isRange', () => {
     test('should change isRange', () => {
-      model.setIsRange(true);
+      model.changeOptions({ isRange: true });
       expect(model.getIsRange()).toBe(true);
     });
 
@@ -327,7 +327,7 @@ describe('Model', () => {
         ...defaultModelOptions,
         value: 3,
       });
-      model.setIsRange(true);
+      model.changeOptions({ isRange: true });
       expect(model.getValue()).toEqual([3, 3]);
     });
 
@@ -337,28 +337,28 @@ describe('Model', () => {
         value: [2, 7],
         isRange: true,
       });
-      model.setIsRange(false);
+      model.changeOptions({ isRange: false });
       expect(model.getValue()).toBe(2);
     });
   });
 
-  describe('setStepSize', () => {
+  describe('change stepSize', () => {
     test('should change stepSize', () => {
-      model.setStepSize(2);
+      model.changeOptions({ stepSize: 2 });
       expect(model.getStepSize()).toBe(2);
     });
 
     test('when stepSize < 1 should be 1', () => {
-      model.setStepSize(-4);
+      model.changeOptions({ stepSize: -4 });
       expect(model.getStepSize()).toBe(1);
-      model.setStepSize(0);
+      model.changeOptions({ stepSize: 0 });
       expect(model.getStepSize()).toBe(1);
     });
 
     test('when stepSize > (max - min) should change to (max - min)', () => {
-      model.setStepSize(11);
+      model.changeOptions({ stepSize: 11 });
       expect(model.getStepSize()).toBe(model.getMaxDiapason());
-      model.setStepSize(10.5);
+      model.changeOptions({ stepSize: 10.5 });
       expect(model.getStepSize()).toBe(model.getMaxDiapason());
     });
   });
@@ -459,96 +459,19 @@ describe('Model', () => {
       model.addStepsToValue(2.4);
       expect(model.getValue()).toBe(4.8);
     });
-
-    test('when shouldRound is true should work correct', () => {
-      model.addStepsToValue(4, 0, true);
-      expect(model.getValue()).toBe(4);
-      model.addStepsToValue(-2, 0, true);
-      expect(model.getValue()).toBe(2);
-    });
-
-    test('when shouldRound, numberOfSteps is float and stepSize is integer should round value', () => {
-      model.addStepsToValue(1.3, 0, true);
-      expect(model.getValue()).toBe(1);
-    });
-
-    test('when shouldRound true, stepSize is float, numberOfSteps is integer should round value depending on stepSize', () => {
-      model = new Model({
-        ...defaultModelOptions,
-        stepSize: 2.7,
-      });
-      model.addStepsToValue(2, 0, true);
-      expect(model.getValue()).toBe(5.4);
-    });
-
-    test('when shouldRound true, stepSize and numberOfSteps are float should round value depending on stepSize', () => {
-      model = new Model({
-        ...defaultModelOptions,
-        stepSize: 2.7,
-      });
-      model.addStepsToValue(2.4, 1, true);
-      expect(model.getValue()).toBe(6.5);
-    });
-
-    test('when shouldRound and range should work correct', () => {
-      model = new Model({
-        ...defaultModelOptions,
-        stepSize: 2.7,
-        isRange: true,
-      });
-      model.addStepsToValue(2.4, 1, true);
-      expect(model.getValue()).toEqual([0, 6.5]);
-    });
   });
 
-  describe('changeOptions', () => {
-    test('should change value', () => {
-      model.changeOptions({
-        value: 2,
-      });
-      expect(model.getValue()).toBe(2);
+  test('changeOptions when many incorrect values should change all of them', () => {
+    model.changeOptions({
+      value: 25,
+      isRange: true,
+      stepSize: -1,
+      min: 15,
+      max: -2,
     });
-
-    test('should change isRange', () => {
-      model.changeOptions({
-        isRange: true,
-      });
-      expect(model.getIsRange()).toBe(true);
-    });
-
-    test('should change stepSize', () => {
-      model.changeOptions({
-        stepSize: 4,
-      });
-      expect(model.getStepSize()).toBe(4);
-    });
-
-    test('should change min', () => {
-      model.changeOptions({
-        min: 4,
-      });
-      expect(model.getMin()).toBe(4);
-    });
-
-    test('should change max', () => {
-      model.changeOptions({
-        max: 4,
-      });
-      expect(model.getMax()).toBe(4);
-    });
-
-    test('when many incorrect values should change all of them', () => {
-      model.changeOptions({
-        value: 25,
-        isRange: true,
-        stepSize: -1,
-        min: 15,
-        max: -2,
-      });
-      expect(model.getMin()).toBe(-2);
-      expect(model.getMax()).toBe(15);
-      expect(model.getValue()).toEqual([15, 15]);
-      expect(model.getStepSize()).toBe(1);
-    });
+    expect(model.getMin()).toBe(-2);
+    expect(model.getMax()).toBe(15);
+    expect(model.getValue()).toEqual([15, 15]);
+    expect(model.getStepSize()).toBe(1);
   });
 });

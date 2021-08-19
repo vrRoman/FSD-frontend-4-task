@@ -133,8 +133,6 @@ describe('ViewModel', () => {
     test('setModelData should change modelData', () => {
       viewModel.setModelData(defaultModelOptions);
       expect(viewModel.getModelData()).toEqual(defaultModelOptions);
-      viewModel.setModelData(null);
-      expect(viewModel.getModelData()).toBeNull();
     });
 
     test('setClientCoordinates should change clientCoordinates', () => {

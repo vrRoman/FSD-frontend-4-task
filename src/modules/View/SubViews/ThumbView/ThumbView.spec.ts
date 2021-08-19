@@ -21,8 +21,8 @@ test('get should return HTMLElement', () => {
 });
 
 test('update should change position of thumb when isRange is false and value changed', () => {
-  const thumb = thumbView.get();
   mainView.setModelData({ value: 2 });
+  const thumb = thumbView.get();
   if (thumb instanceof HTMLElement) {
     expect(thumb.style.left).toBe('20px');
   }

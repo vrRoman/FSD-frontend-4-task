@@ -21,9 +21,9 @@ test('get should return HTMLElement', () => {
 });
 
 test('update should change text in tooltip', () => {
-  const tooltip = tooltipView.get();
   // View вызовет tooltipView.update
   mainView.setModelData({ value: 5 });
+  const tooltip = tooltipView.get();
   if (tooltip instanceof HTMLElement) {
     expect(tooltip.querySelector(`.${defaultClasses.tooltipValueClass}`)?.innerHTML).toBe('5');
   }
