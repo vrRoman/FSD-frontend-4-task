@@ -61,30 +61,22 @@ class Model extends Subject implements IModel {
     if (typeof this.data.value === 'number') {
       this.data.value += numberOfSteps * this.data.stepSize;
     } else {
-      const newValue: Value = [...this.data.value];
+      let newValue: Value = [...this.data.value];
       newValue[valueNumber] += numberOfSteps * this.data.stepSize;
-      this.data.value = newValue;
 
-      if (valueNumber === 1) {
-        if (this.data.value[valueNumber] < this.data.value[0]) {
-          [this.data.value[valueNumber]] = this.data.value;
-        }
-      } else if (this.data.value[0] > this.data.value[1]) {
-        [, this.data.value[0]] = this.data.value;
+      if (newValue[0] > newValue[1]) {
+        const oppositeIndex = Number(!valueNumber);
+        newValue = [newValue[oppositeIndex], newValue[oppositeIndex]];
       }
+
+      this.data.value = newValue;
     }
 
     this.checkAndFixValue();
 
     this.notify({
       type: 'CHANGE_OPTIONS',
-      payload: {
-        value: this.data.value,
-        min: this.data.min,
-        max: this.data.max,
-        isRange: this.data.isRange,
-        stepSize: this.data.stepSize,
-      },
+      payload: this.data,
     });
 
     return this.data.value;

@@ -439,6 +439,10 @@ describe('Model', () => {
       });
       model.addStepsToValue(7, 0);
       expect(model.getValue()).toEqual([5, 5]);
+
+      model.changeOptions({ value: [2, 7] });
+      model.addStepsToValue(-8, 1);
+      expect(model.getValue()).toEqual([2, 2]);
     });
 
     test('when stepSize is float should correct change value', () => {
