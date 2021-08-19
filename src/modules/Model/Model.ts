@@ -75,32 +75,8 @@ class Model extends Subject implements IModel {
     return this.data.value;
   }
 
-  getValue(): Value {
-    if (typeof this.data.value === 'number') {
-      return this.data.value;
-    }
-    return [...this.data.value];
-  }
-
-  getIsRange(): boolean {
-    return this.data.isRange;
-  }
-
-  getMin(): number {
-    return this.data.min;
-  }
-
-  getMax(): number {
-    return this.data.max;
-  }
-
-  // Возвращает max - min
-  getMaxDiapason(): number {
-    return this.data.max - this.data.min;
-  }
-
-  getStepSize(): number {
-    return this.data.stepSize;
+  getOption<Key extends keyof IModelData>(option: Key): IModelData[Key] {
+    return this.data[option];
   }
 
   // Если значение - одно число и это диапазон, то значение становится

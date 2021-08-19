@@ -116,7 +116,7 @@ class SliderConfig implements IObserver, ISliderConfig {
     switch (optionName) {
       case 'isRange':
         module = this.$slider.slider('model');
-        value = module.getIsRange();
+        value = module.getOption('isRange');
         break;
       case 'hasTooltip':
         module = this.$slider.slider('viewModel');
@@ -186,15 +186,15 @@ class SliderConfig implements IObserver, ISliderConfig {
         break;
       case 'stepSize':
         module = this.$slider.slider('model');
-        value = module.getStepSize();
+        value = module.getOption('stepSize');
         break;
       case 'min':
         module = this.$slider.slider('model');
-        value = module.getMin();
+        value = module.getOption('min');
         break;
       case 'max':
         module = this.$slider.slider('model');
-        value = module.getMax();
+        value = module.getOption('max');
         break;
       case 'length':
         module = this.$slider.slider('viewModel');

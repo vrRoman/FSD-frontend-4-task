@@ -24,7 +24,7 @@ test('changeOptions change options of model', () => {
   presenter.changeOptions({
     value: 1,
   });
-  expect(model.getValue()).toBe(1);
+  expect(model.getOption('value')).toBe(1);
 });
 
 test('changeOptions change options of view', () => {
@@ -47,14 +47,14 @@ test('changeOptions change options of model and view', () => {
     value: 1,
     isVertical: true,
   });
-  expect(model.getValue()).toBe(1);
+  expect(model.getOption('value')).toBe(1);
   expect(view.getViewModel().getIsVertical()).toBe(true);
 });
 
 test('it should pass data from the View to the Model', () => {
   view.setActiveThumb();
   view.getViews().thumb.moveActiveThumb(2);
-  expect(model.getValue()).toBe(2);
+  expect(model.getOption('value')).toBe(2);
 });
 
 test('it should pass data from the View to the Model', () => {

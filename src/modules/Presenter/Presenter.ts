@@ -40,7 +40,7 @@ class Presenter extends Observer implements IPresenter {
     }
 
     if (this.onChange) {
-      this.onChange(this.model.getValue());
+      this.onChange(this.model.getOption('value'));
     }
   }
 
@@ -89,11 +89,11 @@ class Presenter extends Observer implements IPresenter {
   // Передает во View modelProperties и Presenter
   private provideInfoToView() {
     this.view.setModelData({
-      value: this.model.getValue(),
-      min: this.model.getMin(),
-      max: this.model.getMax(),
-      isRange: this.model.getIsRange(),
-      stepSize: this.model.getStepSize(),
+      value: this.model.getOption('value'),
+      min: this.model.getOption('min'),
+      max: this.model.getOption('max'),
+      isRange: this.model.getOption('isRange'),
+      stepSize: this.model.getOption('stepSize'),
     });
 
     this.view.setPresenter(this);
