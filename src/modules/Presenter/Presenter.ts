@@ -35,12 +35,12 @@ class Presenter extends Observer implements IPresenter {
 
   // Изменяет значения модели во view
   update(action: SubjectAction): void {
-    if (action.type === 'CHANGE_OPTIONS') {
+    if (action.type === 'CHANGE_MODEL_DATA') {
       this.view.setModelData(action.payload);
     }
 
     if (this.onChange) {
-      this.onChange(this.model.getOption('value'));
+      this.onChange(this.model.getData('value'));
     }
   }
 
@@ -74,7 +74,7 @@ class Presenter extends Observer implements IPresenter {
 
     // Передача новых опций
     if (Object.keys(newModelOptions).length !== 0) {
-      this.model.changeOptions(newModelOptions);
+      this.model.changeData(newModelOptions);
     }
     if (Object.keys(newViewOptions).length !== 0) {
       this.view.changeOptions(newViewOptions);
@@ -89,11 +89,11 @@ class Presenter extends Observer implements IPresenter {
   // Передает во View modelProperties и Presenter
   private provideInfoToView() {
     this.view.setModelData({
-      value: this.model.getOption('value'),
-      min: this.model.getOption('min'),
-      max: this.model.getOption('max'),
-      isRange: this.model.getOption('isRange'),
-      stepSize: this.model.getOption('stepSize'),
+      value: this.model.getData('value'),
+      min: this.model.getData('min'),
+      max: this.model.getData('max'),
+      isRange: this.model.getData('isRange'),
+      stepSize: this.model.getData('stepSize'),
     });
 
     this.view.setPresenter(this);

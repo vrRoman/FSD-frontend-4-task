@@ -28,7 +28,7 @@ class SliderConfig implements IObserver, ISliderConfig {
 
   update(action: SubjectAction) {
     switch (action.type) {
-      case 'CHANGE_OPTIONS':
+      case 'CHANGE_MODEL_DATA':
         this.updateSecondValueInput();
         this.updateCheckbox('isRange');
 
@@ -116,7 +116,7 @@ class SliderConfig implements IObserver, ISliderConfig {
     switch (optionName) {
       case 'isRange':
         module = this.$slider.slider('model');
-        value = module.getOption('isRange');
+        value = module.getData('isRange');
         break;
       case 'hasTooltip':
         module = this.$slider.slider('viewModel');
@@ -186,15 +186,15 @@ class SliderConfig implements IObserver, ISliderConfig {
         break;
       case 'stepSize':
         module = this.$slider.slider('model');
-        value = module.getOption('stepSize');
+        value = module.getData('stepSize');
         break;
       case 'min':
         module = this.$slider.slider('model');
-        value = module.getOption('min');
+        value = module.getData('min');
         break;
       case 'max':
         module = this.$slider.slider('model');
-        value = module.getOption('max');
+        value = module.getData('max');
         break;
       case 'length':
         module = this.$slider.slider('viewModel');

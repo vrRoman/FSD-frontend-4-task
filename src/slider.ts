@@ -65,7 +65,7 @@ declare global {
       }
     }
     if (action === 'value') {
-      return this.data('model').getOption('value');
+      return this.data('model').getData('value');
     }
     if (action === 'model') {
       return this.data('model');

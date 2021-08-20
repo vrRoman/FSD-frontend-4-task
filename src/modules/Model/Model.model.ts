@@ -1,31 +1,23 @@
 import { ISubject } from 'ObserverAndSubject';
 
-type Value = [number, number] | number
-
-type ModelOptions = {
-  value: Value
-  isRange: boolean
-  stepSize: number
-  max: number
-  min: number
-}
-
-type ModelOptionsPartial = Partial<ModelOptions>;
+type Value = [number, number] | number;
 
 interface IModelData {
-  value: Value
-  isRange: boolean
-  stepSize: number
-  min: number
-  max: number
+  value: Value;
+  isRange: boolean;
+  stepSize: number;
+  min: number;
+  max: number;
 }
 
-type ModelDataPartial = Partial<IModelData>
+type ModelDataPartial = Partial<IModelData>;
+
+type ModelOptions = IModelData;
 
 interface IModel extends ISubject {
-  changeOptions(newOptions: ModelOptionsPartial): void
-  addStepsToValue(numberOfSteps: number, valueNumber?: 0 | 1, shouldRound?: boolean): Value
-  getOption<Key extends keyof IModelData>(option: Key): IModelData[Key]
+  changeData(newOptions: ModelDataPartial): void;
+  addStepsToValue(numberOfSteps: number, valueNumber?: 0 | 1, shouldRound?: boolean): Value;
+  getData<Key extends keyof IModelData>(option: Key): IModelData[Key];
 }
 
 export type {
@@ -34,5 +26,4 @@ export type {
   Value,
   IModelData,
   ModelOptions,
-  ModelOptionsPartial,
 };

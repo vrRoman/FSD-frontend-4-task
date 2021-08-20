@@ -4,9 +4,9 @@ import deepCopy from 'utilities/deepCopy';
 import type {
   IModel,
   IModelData,
-  Value,
   ModelOptions,
-  ModelOptionsPartial,
+  ModelDataPartial,
+  Value,
 } from './Model.model';
 
 class Model extends Subject implements IModel {
@@ -15,13 +15,7 @@ class Model extends Subject implements IModel {
   constructor(options: ModelOptions) {
     super();
 
-    this.data = {
-      min: options.min,
-      max: options.max,
-      value: options.value,
-      isRange: options.isRange,
-      stepSize: options.stepSize,
-    };
+    this.data = { ...options };
 
     this.checkAndFixMinMax();
 
@@ -31,14 +25,14 @@ class Model extends Subject implements IModel {
   }
 
   // Меняет настройки
-  changeOptions(newOptions: ModelOptionsPartial) {
+  changeData(newData: ModelDataPartial) {
     const {
       min = this.data.min,
       max = this.data.max,
       value = this.data.value,
       isRange = this.data.isRange,
       stepSize = this.data.stepSize,
-    } = newOptions;
+    } = newData;
 
     this.data.min = min;
     this.data.max = max;
@@ -51,7 +45,7 @@ class Model extends Subject implements IModel {
     this.checkAndFixStepSize();
 
     this.notify({
-      type: 'CHANGE_OPTIONS',
+      type: 'CHANGE_MODEL_DATA',
       payload: this.data,
     });
   }
@@ -72,11 +66,11 @@ class Model extends Subject implements IModel {
       }
     }
 
-    this.changeOptions({ value: newValue });
+    this.changeData({ value: newValue });
     return this.data.value;
   }
 
-  getOption<Key extends keyof IModelData>(option: Key): IModelData[Key] {
+  getData<Key extends keyof IModelData>(option: Key): IModelData[Key] {
     return deepCopy(this.data[option]);
   }
 
