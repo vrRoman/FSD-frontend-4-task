@@ -1,7 +1,7 @@
 import autoBind from 'auto-bind';
 
-import defaultClasses from 'defaults/defaultClasses';
-import { staticLengthUnits } from 'defaults/lengthUnits';
+import defaultClasses from 'constants/defaultClasses';
+import { staticLengthUnits } from 'constants/lengthUnits';
 import type { IPresenter } from 'Presenter';
 import { Observer } from 'ObserverAndSubject';
 import type { SubjectAction } from 'ObserverAndSubject';

@@ -1,5 +1,5 @@
-import { defaultModelOptions, defaultViewOptions } from 'defaults/defaultOptions';
-import defaultClasses from 'defaults/defaultClasses';
+import { defaultModelOptions, defaultViewOptions } from 'constants/defaultOptions';
+import defaultClasses from 'constants/defaultClasses';
 
 import View from './View';
 import { IView } from './View.model';

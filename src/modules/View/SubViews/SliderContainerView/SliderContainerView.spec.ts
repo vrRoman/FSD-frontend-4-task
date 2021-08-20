@@ -1,6 +1,6 @@
 import View, { IView } from 'View';
-import { defaultViewOptions } from 'defaults/defaultOptions';
-import defaultClasses from 'defaults/defaultClasses';
+import { defaultViewOptions } from 'constants/defaultOptions';
+import defaultClasses from 'constants/defaultClasses';
 
 import IScaleView from './SliderContainerView.model';
 

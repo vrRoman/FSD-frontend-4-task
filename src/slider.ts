@@ -4,7 +4,7 @@ import { IViewModel } from 'View/ViewModel';
 import Presenter, { IPresenter } from 'Presenter';
 import type { SliderOptionsPartial } from 'Presenter';
 import { IObserver } from 'ObserverAndSubject';
-import { defaultSliderOptions } from 'defaults/defaultOptions';
+import { defaultSliderOptions } from 'constants/defaultOptions';
 
 declare global {
   // eslint-disable-next-line

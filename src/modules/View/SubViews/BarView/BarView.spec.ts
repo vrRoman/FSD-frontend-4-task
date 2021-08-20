@@ -1,6 +1,6 @@
 import View, { IView } from 'View';
-import { defaultModelOptions, defaultViewOptions } from 'defaults/defaultOptions';
-import defaultClasses from 'defaults/defaultClasses';
+import { defaultModelOptions, defaultViewOptions } from 'constants/defaultOptions';
+import defaultClasses from 'constants/defaultClasses';
 
 import IBarView from './BarView.model';
 
