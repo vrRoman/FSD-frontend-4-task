@@ -1,4 +1,5 @@
 import { Subject } from 'ObserverAndSubject';
+import deepCopy from 'utilities/deepCopy';
 
 import type {
   IModel,
@@ -76,7 +77,7 @@ class Model extends Subject implements IModel {
   }
 
   getOption<Key extends keyof IModelData>(option: Key): IModelData[Key] {
-    return this.data[option];
+    return deepCopy(this.data[option]);
   }
 
   // Если значение - одно число и это диапазон, то значение становится
