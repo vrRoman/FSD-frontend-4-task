@@ -1,11 +1,13 @@
-import { IModelData } from 'Model';
 import { Subject } from 'ObserverAndSubject';
 import deepCopy from 'utilities/deepCopy';
+import differences from 'utilities/differences';
+import isLengthValid from 'utilities/isLengthValid';
 
-import {
+import type {
   IViewModel,
   IViewModelData,
   IViewModelGetMethods,
+  ViewModelDataPartial,
 } from './ViewModel.model';
 
 class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
@@ -17,106 +19,24 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     this.data = data;
   }
 
-  setActiveThumb(newActiveThumb: null): null
+  changeData(data: ViewModelDataPartial): IViewModelData {
+    const length = data.length || this.data.length;
+    const oldData = this.data;
+    this.data = {
+      ...oldData,
+      ...data,
+      length: isLengthValid(length) ? length : oldData.length,
+    };
 
-  setActiveThumb(newActiveThumb: HTMLElement): HTMLElement
-
-  setActiveThumb(newActiveThumb: HTMLElement | null): HTMLElement | null {
-    this.data.activeThumb = newActiveThumb;
-    return this.data.activeThumb;
-  }
-
-  setModelData(newModelData: IModelData): IModelData {
-    this.data.modelData = newModelData;
     this.notify({
-      type: 'UPDATE_MODEL-DATA',
+      type: 'CHANGE_VIEW_DATA',
+      payload: {
+        newData: deepCopy(this.data),
+        differences: differences(this.data, oldData),
+      },
     });
-    return this.data.modelData;
-  }
 
-  setClientCoordinates(coordinates: [number, number]): [number, number] {
-    [this.data.clientX, this.data.clientY] = coordinates;
-    return [this.data.clientX, this.data.clientY];
-  }
-
-  setLength(newLength: string): string {
-    this.data.length = newLength;
-    this.notify({
-      type: 'UPDATE_LENGTH',
-    });
-    return this.data.length;
-  }
-
-  setLengthInPx(newLength: number): number {
-    this.data.lengthInPx = newLength;
-    this.notify({
-      type: 'UPDATE_LENGTH-IN-PX',
-    });
-    return this.data.lengthInPx;
-  }
-
-  setIsVertical(newIsVertical: boolean): boolean {
-    this.data.isVertical = newIsVertical;
-    this.notify({
-      type: 'UPDATE_IS-VERTICAL',
-    });
-    return this.data.isVertical;
-  }
-
-  setHasScale(newHasScale: boolean): boolean {
-    this.data.hasScale = newHasScale;
-    this.notify({
-      type: 'UPDATE_HAS-SCALE',
-    });
-    return this.data.hasScale;
-  }
-
-  setScaleValue(newScaleValue: Array<number | string> | number): Array<number | string> | number {
-    this.data.scaleValue = newScaleValue;
-    this.notify({
-      type: 'UPDATE_SCALE-VALUE',
-    });
-    return this.data.scaleValue;
-  }
-
-  setHasTooltip(newHasTooltip: boolean): boolean {
-    this.data.hasTooltip = newHasTooltip;
-    this.notify({
-      type: 'UPDATE_HAS-TOOLTIP',
-    });
-    return this.data.hasTooltip;
-  }
-
-  setHasValueInfo(newHasValueInfo: boolean): boolean {
-    this.data.hasValueInfo = newHasValueInfo;
-    this.notify({
-      type: 'UPDATE_HAS-VALUE-INFO',
-    });
-    return this.data.hasValueInfo;
-  }
-
-  setUseKeyboard(newUseKeyboard: boolean): boolean {
-    this.data.useKeyboard = newUseKeyboard;
-    this.notify({
-      type: 'UPDATE_USE-KEYBOARD',
-    });
-    return this.data.useKeyboard;
-  }
-
-  setIsScaleClickable(newIsScaleClickable: boolean): boolean {
-    this.data.isScaleClickable = newIsScaleClickable;
-    this.notify({
-      type: 'UPDATE_IS-SCALE-CLICKABLE',
-    });
-    return this.data.isScaleClickable;
-  }
-
-  setIsBarClickable(newIsBarClickable: boolean): boolean {
-    this.data.isBarClickable = newIsBarClickable;
-    this.notify({
-      type: 'UPDATE_IS-BAR-CLICKABLE',
-    });
-    return this.data.isBarClickable;
+    return this.data;
   }
 
   getData(): IViewModelData

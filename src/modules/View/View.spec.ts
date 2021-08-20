@@ -215,7 +215,7 @@ describe('View', () => {
 
   describe('getThumbNumberThatCloserToPosition', () => {
     beforeEach(() => {
-      view.getViewModel().setLengthInPx(100);
+      view.getViewModel().changeData({ lengthInPx: 100 });
       view.setModelData({
         ...defaultModelOptions,
         isRange: true,

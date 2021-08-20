@@ -39,33 +39,23 @@ interface IViewModelData {
   clientY: number;
 }
 
+type ViewModelDataPartial = Partial<IViewModelData>;
+
 interface IViewModelGetMethods {
   getData(): IViewModelData;
   getData<Key extends keyof IViewModelData>(dataKey: Key): IViewModelData[Key];
-  getValuePosition(): number | [number, number]
-  getStepLength(): number
+  getValuePosition(): number | [number, number];
+  getStepLength(): number;
 }
 
 interface IViewModel extends ISubject, IViewModelGetMethods {
-  setActiveThumb(newActiveThumb: null): null;
-  setActiveThumb(newActiveThumb: HTMLElement): HTMLElement;
-  setModelData(newModelData: IModelData): IModelData;
-  setClientCoordinates(coordinates: [number, number]): [number, number];
-  setLength(newLength: string): string;
-  setLengthInPx(newLength: number): number;
-  setIsVertical(newIsVertical: boolean): boolean;
-  setHasScale(newHasScale: boolean): boolean;
-  setScaleValue(newScaleValue: Array<number | string> | number): Array<number | string> | number;
-  setHasTooltip(newHasTooltip: boolean): boolean;
-  setHasValueInfo(newHasValueInfo: boolean): boolean;
-  setUseKeyboard(newUseKeyboard: boolean): boolean;
-  setIsScaleClickable(newIsScaleClickable: boolean): boolean;
-  setIsBarClickable(newIsBarClickable: boolean): boolean;
+  changeData(data: ViewModelDataPartial): IViewModelData;
 }
 
 export {
   IViewModel,
   IViewModelGetMethods,
   IViewModelData,
+  ViewModelDataPartial,
   ViewClasses,
 };

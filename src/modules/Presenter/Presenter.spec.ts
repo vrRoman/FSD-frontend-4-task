@@ -17,7 +17,7 @@ beforeEach(() => {
   view = new View(defaultViewOptions, document.body);
   view.setModelData(defaultModelOptions);
   presenter = new Presenter(model, view, defaultPresenterOptions);
-  view.getViewModel().setLengthInPx(100);
+  view.getViewModel().changeData({ lengthInPx: 100 });
 });
 
 test('changeOptions change options of model', () => {

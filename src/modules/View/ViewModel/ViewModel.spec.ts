@@ -130,73 +130,77 @@ describe('ViewModel', () => {
     });
   });
 
-  describe('setters', () => {
-    test('setActiveThumb should change activeThumb', () => {
+  describe('changeData', () => {
+    test('change activeThumb should change activeThumb', () => {
       const element = document.createElement('div');
-      viewModel.setActiveThumb(element);
+      viewModel.changeData({ activeThumb: element });
       expect(viewModel.getData('activeThumb')).toEqual(element);
-      viewModel.setActiveThumb(null);
+      viewModel.changeData({ activeThumb: null });
       expect(viewModel.getData('activeThumb')).toBeNull();
     });
 
-    test('setModelData should change modelData', () => {
-      viewModel.setModelData(defaultModelOptions);
+    test('change modelData should change modelData', () => {
+      viewModel.changeData({ modelData: defaultModelOptions });
       expect(viewModel.getData('modelData')).toEqual(defaultModelOptions);
     });
 
-    test('setClientCoordinates should change clientX and clientY', () => {
-      viewModel.setClientCoordinates([23, 123]);
+    test('change clientX should change clientX', () => {
+      viewModel.changeData({ clientX: 23 });
       expect(viewModel.getData('clientX')).toEqual(23);
-      expect(viewModel.getData('clientY')).toEqual(123);
     });
 
-    test('setLength should change length', () => {
-      viewModel.setLength('200px');
+    test('change clientX should change clientX', () => {
+      viewModel.changeData({ clientX: 123 });
+      expect(viewModel.getData('clientX')).toEqual(123);
+    });
+
+    test('change length should change length', () => {
+      viewModel.changeData({ length: '200px' });
       expect(viewModel.getData('length')).toBe('200px');
     });
 
-    test('setLengthInPx should change lengthInPx', () => {
-      viewModel.setLengthInPx(200);
+    test('change lengthInPx should change lengthInPx', () => {
+      viewModel.changeData({ lengthInPx: 200 });
       expect(viewModel.getData('lengthInPx')).toBe(200);
     });
 
-    test('setIsVertical should change isVertical', () => {
-      viewModel.setIsVertical(true);
+    test('change isVertical should change isVertical', () => {
+      viewModel.changeData({ isVertical: true });
       expect(viewModel.getData('isVertical')).toBe(true);
     });
 
-    test('setHasScale should change hasScale', () => {
-      viewModel.setHasScale(true);
+    test('change hasScale should change hasScale', () => {
+      viewModel.changeData({ hasScale: true });
       expect(viewModel.getData('hasScale')).toBe(true);
     });
 
-    test('setScaleValue should change scaleValue', () => {
-      viewModel.setScaleValue(['start', 'half', 'end']);
+    test('change scaleValue should change scaleValue', () => {
+      viewModel.changeData({ scaleValue: ['start', 'half', 'end'] });
       expect(viewModel.getData('scaleValue')).toEqual(['start', 'half', 'end']);
     });
 
-    test('setHasTooltip should change hasTooltip', () => {
-      viewModel.setHasTooltip(true);
+    test('change hasTooltip should change hasTooltip', () => {
+      viewModel.changeData({ hasTooltip: true });
       expect(viewModel.getData('hasTooltip')).toBe(true);
     });
 
-    test('setHasValueInfo should change hasValueInfo', () => {
-      viewModel.setHasValueInfo(true);
+    test('change hasValueInfo should change hasValueInfo', () => {
+      viewModel.changeData({ hasValueInfo: true });
       expect(viewModel.getData('hasValueInfo')).toBe(true);
     });
 
-    test('setUseKeyboard should change useKeyboard', () => {
-      viewModel.setUseKeyboard(false);
+    test('change useKeyboard should change useKeyboard', () => {
+      viewModel.changeData({ useKeyboard: false });
       expect(viewModel.getData('useKeyboard')).toBe(false);
     });
 
-    test('setIsScaleClickable should change isScaleClickable', () => {
-      viewModel.setIsScaleClickable(false);
+    test('change isScaleClickable should change isScaleClickable', () => {
+      viewModel.changeData({ isScaleClickable: false });
       expect(viewModel.getData('isScaleClickable')).toBe(false);
     });
 
-    test('setIsBarClickable should change isBarClickable', () => {
-      viewModel.setIsBarClickable(false);
+    test('change isBarClickable should change isBarClickable', () => {
+      viewModel.changeData({ isBarClickable: false });
       expect(viewModel.getData('isBarClickable')).toBe(false);
     });
   });

@@ -10,7 +10,7 @@ beforeEach(() => {
   mainView.setModelData(defaultModelOptions);
   mainView.changeOptions({ length: '100px' });
   mainView.renderSlider();
-  mainView.getViewModel().setLengthInPx(100);
+  mainView.getViewModel().changeData({ lengthInPx: 100 });
   thumbView = mainView.getViews().thumb;
 });
 

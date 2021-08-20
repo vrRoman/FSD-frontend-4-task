@@ -52,7 +52,7 @@ test('when isBarClickable is true handleBarClick should call View.moveActiveThum
   mainView.renderSlider();
   mainView.setModelData({ ...defaultModelOptions });
   mainView.changeOptions({ length: '200px' });
-  mainView.getViewModel().setLengthInPx(200);
+  mainView.getViewModel().changeData({ lengthInPx: 200 });
   barView.addInteractivity();
 
   const mockedMoveActiveThumb = jest.spyOn(mainView, 'moveActiveThumb');
@@ -69,7 +69,7 @@ test('handleBarClick should round numberOfSteps', () => {
   mainView.renderSlider();
   mainView.setModelData({ ...defaultModelOptions });
   mainView.changeOptions({ length: '200px' });
-  mainView.getViewModel().setLengthInPx(200);
+  mainView.getViewModel().changeData({ lengthInPx: 200 });
   barView.addInteractivity();
 
   const mockedMoveActiveThumb = jest.spyOn(mainView, 'moveActiveThumb');

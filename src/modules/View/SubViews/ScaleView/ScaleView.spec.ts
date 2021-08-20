@@ -13,7 +13,7 @@ beforeEach(() => {
   }, document.body);
   mainView.renderSlider();
   mainView.setModelData({ ...defaultModelOptions });
-  mainView.getViewModel().setLengthInPx(200);
+  mainView.getViewModel().changeData({ lengthInPx: 200 });
   scaleView = mainView.getViews().scale;
 });
 
@@ -35,7 +35,7 @@ test('getStepValues should return steps from min to max', () => {
 
 test('update should change width or height when length changed', () => {
   mainView.changeOptions({ length: '300px' });
-  mainView.getViewModel().setLengthInPx(300);
+  mainView.getViewModel().changeData({ lengthInPx: 300 });
   scaleView.update();
   expect(scaleView.get().style.width).toBe('300px');
   expect(scaleView.get().style.height).toBe('');
@@ -43,7 +43,7 @@ test('update should change width or height when length changed', () => {
 
 test('update should position scale elements according to their values', () => {
   mainView.changeOptions({ length: '100px', scaleValue: 3 });
-  mainView.getViewModel().setLengthInPx(100);
+  mainView.getViewModel().changeData({ lengthInPx: 100 });
   // значения шагов будут -5, -2, 1, 4, 7, 10, 12
   mainView.setModelData({ min: -5, max: 12 });
   scaleView.update();
@@ -68,7 +68,7 @@ test('update should position scale elements according to their values', () => {
 
 test('update should change width and height, step elements positions when isVertical changed', () => {
   mainView.changeOptions({ isVertical: true });
-  mainView.getViewModel().setLengthInPx(200);
+  mainView.getViewModel().changeData({ lengthInPx: 200 });
   scaleView.update();
   expect(scaleView.get().style.height).toBe('200px');
   expect(scaleView.get().style.width).toBe('');

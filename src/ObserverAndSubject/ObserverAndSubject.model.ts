@@ -1,17 +1,20 @@
-import type { ModelOptions } from 'Model';
+import type { IModelData } from 'Model';
+import type { IViewModelData } from 'View/ViewModel';
 
 type actionModelType = 'CHANGE_MODEL_DATA';
-type actionViewType = 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_HAS-TOOLTIP'
-  | 'UPDATE_HAS-SCALE' | 'UPDATE_SCALE-VALUE' | 'UPDATE_IS-SCALE-CLICKABLE' | 'UPDATE_IS-BAR-CLICKABLE'
-  | 'UPDATE_HAS-VALUE-INFO' | 'UPDATE_USE-KEYBOARD' | 'UPDATE_MODEL-DATA' | 'UPDATE_LENGTH-IN-PX';
+type actionViewType = 'CHANGE_VIEW_DATA';
 
 type ModelSubjectAction = {
   type: actionModelType;
-  payload: ModelOptions;
+  payload: IModelData;
 }
 
 type ViewSubjectAction = {
   type: actionViewType;
+  payload: {
+    newData: IViewModelData;
+    differences: Array<keyof IViewModelData>;
+  };
 }
 
 type SubjectAction = ModelSubjectAction | ViewSubjectAction;

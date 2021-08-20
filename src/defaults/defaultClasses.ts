@@ -14,6 +14,6 @@ const defaultClasses: ViewClasses = {
   scaleElementClass: 'slider__scale-element',
   clickableScaleElementClass: 'slider__scale-element_clickable',
   valueInfoClass: 'slider__value-info',
-};
+} as const;
 
 export default defaultClasses;

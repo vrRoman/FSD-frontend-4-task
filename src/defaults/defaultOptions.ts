@@ -8,7 +8,7 @@ const defaultModelOptions: ModelOptions = {
   stepSize: 1,
   min: 0,
   max: 10,
-};
+} as const;
 
 const defaultViewOptions: ViewOptions = {
   length: '100%',
@@ -20,15 +20,15 @@ const defaultViewOptions: ViewOptions = {
   useKeyboard: true,
   isScaleClickable: true,
   isBarClickable: true,
-};
+} as const;
 
-const defaultPresenterOptions: PresenterOptions = {};
+const defaultPresenterOptions: PresenterOptions = {} as const;
 
 const defaultSliderOptions: SliderOptions = {
   ...defaultModelOptions,
   ...defaultViewOptions,
   ...defaultPresenterOptions,
-};
+} as const;
 
 export {
   defaultModelOptions,

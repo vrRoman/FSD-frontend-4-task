@@ -1,6 +1,7 @@
 import autoBind from 'auto-bind';
 
 import defaultClasses from 'defaults/defaultClasses';
+import { staticLengthUnits } from 'defaults/lengthUnits';
 import type { IPresenter } from 'Presenter';
 import { Observer } from 'ObserverAndSubject';
 import type { SubjectAction } from 'ObserverAndSubject';
@@ -47,10 +48,6 @@ class View extends Observer implements IView {
   private readonly valueInfoView: IValueInfoView
 
   private readonly tooltipView: ITooltipView
-
-  private readonly staticLengthUnits: ['px', 'mm', 'cm', 'pt', 'pc']
-
-  private readonly dynamicLengthUnits: ['em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax']
 
   private presenter: IPresenter | null
 
@@ -102,9 +99,6 @@ class View extends Observer implements IView {
     this.thumbView = new ThumbView(this.barView.getBar(), this);
     this.tooltipView = new TooltipView(this.thumbView.get(), this);
     this.valueInfoView = new ValueInfoView(this.sliderContainerView.get(), this);
-
-    this.staticLengthUnits = ['px', 'mm', 'cm', 'pt', 'pc'];
-    this.dynamicLengthUnits = ['em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax'];
   }
 
   // Возвращает элемент, который указан в elementName
@@ -190,7 +184,7 @@ class View extends Observer implements IView {
   renderSlider() {
     this.sliderContainerView.mount();
     this.barView.mountBar();
-    this.viewModel.setLengthInPx(this.barView.getOffsetLength());
+    this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
     this.barView.mountProgressBar();
     this.thumbView.mount();
     if (this.viewModel.getData('useKeyboard')) {
@@ -215,103 +209,70 @@ class View extends Observer implements IView {
 
   // Меняет настройки в viewModel
   changeOptions(newOptions: ViewOptionsPartial) {
-    if (newOptions.length !== undefined) {
-      const availableUnits = [...this.staticLengthUnits, ...this.dynamicLengthUnits];
-      const lengthWithoutMeasureUnit = String(parseFloat(newOptions.length));
-      const measureUnit = newOptions.length.replace(lengthWithoutMeasureUnit, '');
-      if (availableUnits.find((unit) => unit === measureUnit)) {
-        this.viewModel.setLength(newOptions.length);
-        this.updateResponsive();
-      }
-    }
-    if (newOptions.hasTooltip !== undefined) {
-      this.viewModel.setHasTooltip(newOptions.hasTooltip);
-    }
-    if (newOptions.hasScale !== undefined) {
-      this.viewModel.setHasScale(newOptions.hasScale);
-    }
-    if (newOptions.scaleValue !== undefined) {
-      this.viewModel.setScaleValue(newOptions.scaleValue);
-    }
-    if (newOptions.hasValueInfo !== undefined) {
-      this.viewModel.setHasValueInfo(newOptions.hasValueInfo);
-    }
-    if (newOptions.isVertical !== undefined) {
-      this.viewModel.setIsVertical(newOptions.isVertical);
-    }
-    if (newOptions.useKeyboard !== undefined) {
-      this.viewModel.setUseKeyboard(newOptions.useKeyboard);
-    }
-    if (newOptions.isScaleClickable !== undefined) {
-      this.viewModel.setIsScaleClickable(newOptions.isScaleClickable);
-    }
-    if (newOptions.isBarClickable !== undefined) {
-      this.viewModel.setIsBarClickable(newOptions.isBarClickable);
-    }
+    this.viewModel.changeData(newOptions);
   }
 
   update(action: SubjectAction) {
-    switch (action.type) {
-      case 'UPDATE_LENGTH':
-        this.barView.updateBar();
-        this.viewModel.setLengthInPx(this.barView.getOffsetLength());
-        this.barView.updateProgressBar();
-        this.thumbView.update();
-        this.scaleView.update();
-        break;
-      case 'UPDATE_IS-VERTICAL':
-        this.sliderContainerView.update();
-        this.barView.updateBar();
-        this.viewModel.setLengthInPx(this.barView.getOffsetLength());
-        this.barView.updateProgressBar();
-        this.thumbView.update();
-        this.scaleView.update();
-        break;
-      case 'UPDATE_HAS-TOOLTIP':
-        this.tooltipView.unmount();
-        if (this.viewModel.getData('hasTooltip')) {
-          this.tooltipView.mount();
+    if (action.type === 'CHANGE_VIEW_DATA') {
+      action.payload.differences.forEach((dataKey) => {
+        switch (dataKey) {
+          case 'length':
+            this.barView.updateBar();
+            this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+            break;
+          case 'isVertical':
+            this.sliderContainerView.update();
+            this.barView.updateBar();
+            this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+            break;
+          case 'hasTooltip':
+            this.tooltipView.unmount();
+            if (this.viewModel.getData('hasTooltip')) {
+              this.tooltipView.mount();
+            }
+            break;
+          case 'hasScale':
+            this.scaleView.unmount();
+            if (this.viewModel.getData('hasScale')) {
+              this.scaleView.mount();
+            }
+            break;
+          case 'hasValueInfo':
+            this.valueInfoView.unmount();
+            if (this.viewModel.getData('hasValueInfo')) {
+              this.valueInfoView.mount();
+            }
+            break;
+          case 'scaleValue':
+            this.scaleView.recreate();
+            break;
+          case 'useKeyboard':
+            this.thumbView.removeKeyboardListener();
+            if (this.viewModel.getData('useKeyboard')) {
+              this.thumbView.addKeyboardListener();
+            }
+            break;
+          case 'isScaleClickable':
+            this.scaleView.removeInteractivity();
+            if (this.viewModel.getData('isScaleClickable')) {
+              this.scaleView.addInteractivity();
+            }
+            break;
+          case 'isBarClickable':
+            if (this.viewModel.getData('isBarClickable')) {
+              this.barView.addInteractivity();
+            } else {
+              this.barView.removeInteractivity();
+            }
+            break;
+          case 'lengthInPx':
+            this.barView.updateProgressBar();
+            this.scaleView.update();
+            this.thumbView.update();
+            break;
+          default: break;
         }
-        break;
-      case 'UPDATE_HAS-SCALE':
-        this.scaleView.unmount();
-        if (this.viewModel.getData('hasScale')) {
-          this.scaleView.mount();
-        }
-        break;
-      case 'UPDATE_SCALE-VALUE':
-        this.scaleView.recreate();
-        break;
-      case 'UPDATE_HAS-VALUE-INFO':
-        this.valueInfoView.unmount();
-        if (this.viewModel.getData('hasValueInfo')) {
-          this.valueInfoView.mount();
-        }
-        break;
-      case 'UPDATE_USE-KEYBOARD':
-        this.thumbView.removeKeyboardListener();
-        if (this.viewModel.getData('useKeyboard')) {
-          this.thumbView.addKeyboardListener();
-        }
-        break;
-      case 'UPDATE_IS-SCALE-CLICKABLE':
-        this.scaleView.removeInteractivity();
-        if (this.viewModel.getData('isScaleClickable')) {
-          this.scaleView.addInteractivity();
-        }
-        break;
-      case 'UPDATE_IS-BAR-CLICKABLE':
-        if (this.viewModel.getData('isBarClickable')) {
-          this.barView.addInteractivity();
-        } else {
-          this.barView.removeInteractivity();
-        }
-        break;
-      case 'UPDATE_LENGTH-IN-PX':
-        this.scaleView.update();
-        this.thumbView.update();
-        break;
-      default: break;
+      });
     }
   }
 
@@ -324,11 +285,11 @@ class View extends Observer implements IView {
     const thumb = this.thumbView.get();
     let newActiveThumb: HTMLElement | null;
     if (thumbNumber === null) {
-      newActiveThumb = this.viewModel.setActiveThumb(null);
+      newActiveThumb = this.viewModel.changeData({ activeThumb: null }).activeThumb;
     } else if (Array.isArray(thumb)) {
-      newActiveThumb = this.viewModel.setActiveThumb(thumb[thumbNumber]);
+      newActiveThumb = this.viewModel.changeData({ activeThumb: thumb[thumbNumber] }).activeThumb;
     } else {
-      newActiveThumb = this.viewModel.setActiveThumb(thumb);
+      newActiveThumb = this.viewModel.changeData({ activeThumb: thumb }).activeThumb;
     }
     return newActiveThumb;
   }
@@ -336,13 +297,13 @@ class View extends Observer implements IView {
   // Обращается к viewModel
   setModelData(newModelData: ModelDataPartial): IModelData | null {
     const oldModelData = this.viewModel.getData('modelData');
-    const modelData: ModelDataPartial = {
+    const modelData = {
       ...oldModelData,
       ...newModelData,
     };
 
     if (isModelData(modelData)) {
-      this.viewModel.setModelData(modelData);
+      this.viewModel.changeData({ modelData });
 
       if (newModelData.isRange !== oldModelData?.isRange) {
         this.thumbView.recreate();
@@ -389,8 +350,11 @@ class View extends Observer implements IView {
 
   // Передает значение в viewModel
   setClientCoordinates(coordinates: [number, number]): [number, number] {
-    this.viewModel.setClientCoordinates(coordinates);
-    return [this.viewModel.getData('clientX'), this.viewModel.getData('clientY')];
+    const { clientX, clientY } = this.viewModel.changeData({
+      clientX: coordinates[0],
+      clientY: coordinates[1],
+    });
+    return [clientX, clientY];
   }
 
   // Если длина измеряется в статических единицах, то слушатель изменения размера окна убирается,
@@ -400,7 +364,7 @@ class View extends Observer implements IView {
     const lengthWithoutMeasureUnit = String(parseFloat(lengthStyle));
     const measureUnit = lengthStyle.replace(lengthWithoutMeasureUnit, '');
 
-    if (this.staticLengthUnits.find((unit) => unit === measureUnit)) {
+    if (staticLengthUnits.find((unit) => unit === measureUnit)) {
       window.removeEventListener('resize', this.handleWindowResize);
     } else {
       window.removeEventListener('resize', this.handleWindowResize);
@@ -442,7 +406,7 @@ class View extends Observer implements IView {
       return;
     }
 
-    this.viewModel.setLengthInPx(currentLength);
+    this.viewModel.changeData({ lengthInPx: currentLength });
     this.barView.updateProgressBar();
     this.thumbView.update();
     this.scaleView.update();

@@ -31,43 +31,21 @@ class SliderConfig implements IObserver, ISliderConfig {
       case 'CHANGE_MODEL_DATA':
         this.updateSecondValueInput();
         this.updateCheckbox('isRange');
-
         this.updateTextInput('value1');
         this.updateTextInput('value2');
-
         this.updateTextInput('stepSize');
-
         this.updateTextInput('min');
         this.updateTextInput('max');
-        this.updateTextInput('value1');
-        this.updateTextInput('value2');
         break;
-
-      case 'UPDATE_HAS-TOOLTIP':
+      case 'CHANGE_VIEW_DATA':
         this.updateCheckbox('hasTooltip');
-        break;
-      case 'UPDATE_HAS-SCALE':
         this.updateCheckbox('hasScale');
-        break;
-      case 'UPDATE_HAS-VALUE-INFO':
         this.updateCheckbox('hasValueInfo');
-        break;
-      case 'UPDATE_IS-VERTICAL':
         this.updateCheckbox('isVertical');
-        break;
-      case 'UPDATE_IS-SCALE-CLICKABLE':
         this.updateCheckbox('isScaleClickable');
-        break;
-      case 'UPDATE_IS-BAR-CLICKABLE':
         this.updateCheckbox('isBarClickable');
-        break;
-      case 'UPDATE_USE-KEYBOARD':
         this.updateCheckbox('useKeyboard');
-        break;
-      case 'UPDATE_LENGTH':
         this.updateTextInput('length');
-        break;
-      case 'UPDATE_SCALE-VALUE':
         this.updateTextInput('scaleValue');
         break;
       default: break;

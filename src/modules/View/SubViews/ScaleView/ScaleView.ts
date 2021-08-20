@@ -204,7 +204,7 @@ class ScaleView implements IScaleView {
     const thumbValue = (
       parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeight] / 2
     ) / (stepLength / stepSize);
-    this.mainView.moveActiveThumb((stepValue - thumbValue) / stepSize);
+    this.mainView.moveActiveThumb(Math.round((stepValue - thumbValue) / stepSize));
   }
 }
 
