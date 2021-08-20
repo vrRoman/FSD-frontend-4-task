@@ -23,8 +23,8 @@ class SliderContainerView implements ISliderContainerView {
 
   // Обновляет классы контейнера
   update() {
-    const { sliderVerticalClass } = this.viewModel.getClasses();
-    if (this.viewModel.getIsVertical()) {
+    const { sliderVerticalClass } = this.viewModel.getData('classes');
+    if (this.viewModel.getData('isVertical')) {
       addClass(this.slider, sliderVerticalClass);
     } else {
       removeClass(this.slider, sliderVerticalClass);
@@ -37,7 +37,7 @@ class SliderContainerView implements ISliderContainerView {
 
   private create(): HTMLElement {
     const slider = document.createElement('div');
-    const { sliderClass } = this.viewModel.getClasses();
+    const { sliderClass } = this.viewModel.getData('classes');
     addClass(slider, sliderClass);
     this.slider = slider;
     this.update();

@@ -86,7 +86,7 @@ describe('View', () => {
         isRange: true,
         min: -10,
       });
-      expect(view.getViewModel().getModelData()).toEqual({
+      expect(view.getViewModel().getData('modelData')).toEqual({
         ...defaultModelOptions,
         value: [1, 2],
         isRange: true,
@@ -106,7 +106,7 @@ describe('View', () => {
     test('change length', () => {
       view.changeOptions({ length: '200px' });
       expect(view.getElement('bar').style.width).toBe('200px');
-      expect(view.getViewModel().getLength()).toBe('200px');
+      expect(view.getViewModel().getData('length')).toBe('200px');
     });
 
     test('change length with incorrect value', () => {
@@ -114,13 +114,13 @@ describe('View', () => {
       expect(view.getElement('bar').style.width).toBe('100%');
       view.changeOptions({ length: '200' });
       expect(view.getElement('bar').style.width).toBe('100%');
-      expect(view.getViewModel().getLength()).toBe('100%');
+      expect(view.getViewModel().getData('length')).toBe('100%');
     });
 
     test('change hasTooltip', () => {
       view.changeOptions({ hasTooltip: true });
       expect(target.querySelectorAll(`.${defaultClasses.tooltipClass}`)).not.toHaveLength(0);
-      expect(view.getViewModel().getHasTooltip()).toBe(true);
+      expect(view.getViewModel().getData('hasTooltip')).toBe(true);
 
       view.changeOptions({ hasTooltip: false });
       expect(target.querySelectorAll(`.${defaultClasses.tooltipClass}`)).toHaveLength(0);
@@ -129,7 +129,7 @@ describe('View', () => {
     test('change hasScale', () => {
       view.changeOptions({ hasScale: true });
       expect(target.querySelectorAll(`.${defaultClasses.scaleClass}`)).not.toHaveLength(0);
-      expect(view.getViewModel().getHasScale()).toBe(true);
+      expect(view.getViewModel().getData('hasScale')).toBe(true);
 
       view.changeOptions({ hasScale: false });
       expect(target.querySelectorAll(`.${defaultClasses.scaleClass}`)).toHaveLength(0);
@@ -139,13 +139,13 @@ describe('View', () => {
       view.changeOptions({ hasScale: true });
       view.changeOptions({ scaleValue: 1 });
       expect(target.querySelectorAll(`.${defaultClasses.scaleElementClass}`)).toHaveLength(11);
-      expect(view.getViewModel().getScaleValue()).toBe(1);
+      expect(view.getViewModel().getData('scaleValue')).toBe(1);
     });
 
     test('change hasValueInfo', () => {
       view.changeOptions({ hasValueInfo: true });
       expect(target.querySelectorAll(`.${defaultClasses.valueInfoClass}`)).not.toHaveLength(0);
-      expect(view.getViewModel().getHasValueInfo()).toBe(true);
+      expect(view.getViewModel().getData('hasValueInfo')).toBe(true);
 
       view.changeOptions({ hasValueInfo: false });
       expect(target.querySelectorAll(`.${defaultClasses.valueInfoClass}`)).toHaveLength(0);
@@ -154,7 +154,7 @@ describe('View', () => {
     test('change isVertical', () => {
       view.changeOptions({ isVertical: true });
       expect(view.getElement('bar').style.height).toBe('100%');
-      expect(view.getViewModel().getIsVertical()).toBe(true);
+      expect(view.getViewModel().getData('isVertical')).toBe(true);
     });
 
     test('many options', () => {
@@ -169,15 +169,15 @@ describe('View', () => {
         isScaleClickable: false,
         isBarClickable: false,
       });
-      expect(view.getViewModel().getLength()).toBe('200px');
-      expect(view.getViewModel().getHasTooltip()).toBe(true);
-      expect(view.getViewModel().getHasScale()).toBe(true);
-      expect(view.getViewModel().getScaleValue()).toBe(5);
-      expect(view.getViewModel().getHasValueInfo()).toBe(true);
-      expect(view.getViewModel().getIsVertical()).toBe(true);
-      expect(view.getViewModel().getUseKeyboard()).toBe(false);
-      expect(view.getViewModel().getIsScaleClickable()).toBe(false);
-      expect(view.getViewModel().getIsBarClickable()).toBe(false);
+      expect(view.getViewModel().getData('length')).toBe('200px');
+      expect(view.getViewModel().getData('hasTooltip')).toBe(true);
+      expect(view.getViewModel().getData('hasScale')).toBe(true);
+      expect(view.getViewModel().getData('scaleValue')).toBe(5);
+      expect(view.getViewModel().getData('hasValueInfo')).toBe(true);
+      expect(view.getViewModel().getData('isVertical')).toBe(true);
+      expect(view.getViewModel().getData('useKeyboard')).toBe(false);
+      expect(view.getViewModel().getData('isScaleClickable')).toBe(false);
+      expect(view.getViewModel().getData('isBarClickable')).toBe(false);
     });
   });
 

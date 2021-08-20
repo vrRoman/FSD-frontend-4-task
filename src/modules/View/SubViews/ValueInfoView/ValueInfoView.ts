@@ -28,10 +28,10 @@ class ValueInfoView implements IValueInfoView {
   // По умолчанию, если isRange = false, то
   // указывается просто model.value, иначе записывается в виде value[0] - value[1]
   create(): HTMLElement {
-    const modelProperties = this.viewModel.getModelData() || { value: 0 };
+    const modelProperties = this.viewModel.getData('modelData') || { value: 0 };
     const valueInfo = document.createElement('div');
     const { value } = modelProperties;
-    const { valueInfoClass } = this.viewModel.getClasses();
+    const { valueInfoClass } = this.viewModel.getData('classes');
 
     addClass(valueInfo, valueInfoClass);
 
@@ -47,7 +47,7 @@ class ValueInfoView implements IValueInfoView {
 
   // Обновляет значение в valueInfo
   update() {
-    const modelProperties = this.viewModel.getModelData() || { value: 0 };
+    const modelProperties = this.viewModel.getData('modelData') || { value: 0 };
     const { value } = modelProperties;
     if (typeof value === 'number') {
       this.valueInfo.innerText = `${value}`;

@@ -164,7 +164,7 @@ class View extends Observer implements IView {
       clientXOrY: 'clientX',
       opposites: null,
     };
-    if (this.viewModel.getIsVertical()) {
+    if (this.viewModel.getData('isVertical')) {
       return {
         ...whenIsVertical,
         opposites: whenIsNotVertical,
@@ -193,16 +193,16 @@ class View extends Observer implements IView {
     this.viewModel.setLengthInPx(this.barView.getOffsetLength());
     this.barView.mountProgressBar();
     this.thumbView.mount();
-    if (this.viewModel.getUseKeyboard()) {
+    if (this.viewModel.getData('useKeyboard')) {
       this.thumbView.addKeyboardListener();
     }
-    if (this.viewModel.getHasTooltip()) {
+    if (this.viewModel.getData('hasTooltip')) {
       this.tooltipView.mount();
     }
-    if (this.viewModel.getHasScale()) {
+    if (this.viewModel.getData('hasScale')) {
       this.scaleView.mount();
     }
-    if (this.viewModel.getHasValueInfo()) {
+    if (this.viewModel.getData('hasValueInfo')) {
       this.valueInfoView.mount();
     }
     this.updateResponsive();
@@ -269,13 +269,13 @@ class View extends Observer implements IView {
         break;
       case 'UPDATE_HAS-TOOLTIP':
         this.tooltipView.unmount();
-        if (this.viewModel.getHasTooltip()) {
+        if (this.viewModel.getData('hasTooltip')) {
           this.tooltipView.mount();
         }
         break;
       case 'UPDATE_HAS-SCALE':
         this.scaleView.unmount();
-        if (this.viewModel.getHasScale()) {
+        if (this.viewModel.getData('hasScale')) {
           this.scaleView.mount();
         }
         break;
@@ -284,24 +284,24 @@ class View extends Observer implements IView {
         break;
       case 'UPDATE_HAS-VALUE-INFO':
         this.valueInfoView.unmount();
-        if (this.viewModel.getHasValueInfo()) {
+        if (this.viewModel.getData('hasValueInfo')) {
           this.valueInfoView.mount();
         }
         break;
       case 'UPDATE_USE-KEYBOARD':
         this.thumbView.removeKeyboardListener();
-        if (this.viewModel.getUseKeyboard()) {
+        if (this.viewModel.getData('useKeyboard')) {
           this.thumbView.addKeyboardListener();
         }
         break;
       case 'UPDATE_IS-SCALE-CLICKABLE':
         this.scaleView.removeInteractivity();
-        if (this.viewModel.getIsScaleClickable()) {
+        if (this.viewModel.getData('isScaleClickable')) {
           this.scaleView.addInteractivity();
         }
         break;
       case 'UPDATE_IS-BAR-CLICKABLE':
-        if (this.viewModel.getIsBarClickable()) {
+        if (this.viewModel.getData('isBarClickable')) {
           this.barView.addInteractivity();
         } else {
           this.barView.removeInteractivity();
@@ -335,7 +335,7 @@ class View extends Observer implements IView {
 
   // Обращается к viewModel
   setModelData(newModelData: ModelDataPartial): IModelData | null {
-    const oldModelData = this.viewModel.getModelData();
+    const oldModelData = this.viewModel.getData('modelData');
     const modelData: ModelDataPartial = {
       ...oldModelData,
       ...newModelData,
@@ -372,7 +372,7 @@ class View extends Observer implements IView {
       }
     }
 
-    return this.viewModel.getModelData();
+    return this.viewModel.getData('modelData');
   }
 
   // Обращается к thumbView
@@ -390,13 +390,13 @@ class View extends Observer implements IView {
   // Передает значение в viewModel
   setClientCoordinates(coordinates: [number, number]): [number, number] {
     this.viewModel.setClientCoordinates(coordinates);
-    return this.viewModel.getClientCoordinates();
+    return [this.viewModel.getData('clientX'), this.viewModel.getData('clientY')];
   }
 
   // Если длина измеряется в статических единицах, то слушатель изменения размера окна убирается,
   // и наоборот
   updateResponsive() {
-    const lengthStyle = this.viewModel.getLength();
+    const lengthStyle = this.viewModel.getData('length');
     const lengthWithoutMeasureUnit = String(parseFloat(lengthStyle));
     const measureUnit = lengthStyle.replace(lengthWithoutMeasureUnit, '');
 
@@ -415,7 +415,7 @@ class View extends Observer implements IView {
   getThumbNumberThatCloserToPosition(position: number): 0 | 1 {
     let thumbNumber: 0 | 1 = 1;
     const thumbPosition = this.viewModel.getValuePosition();
-    const length = this.viewModel.getLengthInPx();
+    const length = this.viewModel.getData('lengthInPx');
 
     if (!Array.isArray(thumbPosition)) {
       return 0;
@@ -438,7 +438,7 @@ class View extends Observer implements IView {
   // то передает новую lengthInPx и обновляет thumb, scale, progressBar
   private handleWindowResize() {
     const currentLength = this.barView.getOffsetLength();
-    if (currentLength === this.viewModel.getLengthInPx()) {
+    if (currentLength === this.viewModel.getData('lengthInPx')) {
       return;
     }
 

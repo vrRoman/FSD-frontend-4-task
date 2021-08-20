@@ -1,11 +1,11 @@
 import { IModelData } from 'Model';
 import { Subject } from 'ObserverAndSubject';
+import deepCopy from 'utilities/deepCopy';
 
 import {
   IViewModel,
   IViewModelData,
   IViewModelGetMethods,
-  ViewClasses,
 } from './ViewModel.model';
 
 class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
@@ -119,70 +119,15 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return this.data.isBarClickable;
   }
 
-  getClientCoordinates(): [number, number] {
-    return [this.data.clientX, this.data.clientY];
-  }
+  getData(): IViewModelData
 
-  getModelData(): IModelData | null {
-    if (this.data.modelData) {
-      return {
-        ...this.data.modelData,
-      };
+  getData<Key extends keyof IViewModelData>(dataKey: Key): IViewModelData[Key]
+
+  getData<Key extends keyof IViewModelData>(dataKey?: Key): IViewModelData | IViewModelData[Key] {
+    if (dataKey) {
+      return deepCopy(this.data[dataKey]);
     }
-    return null;
-  }
-
-  getActiveThumb(): HTMLElement | null {
-    return this.data.activeThumb;
-  }
-
-  getClasses(): ViewClasses {
-    return {
-      ...this.data.classes,
-    };
-  }
-
-  getLength(): string {
-    return this.data.length;
-  }
-
-  getLengthInPx(): number {
-    return this.data.lengthInPx;
-  }
-
-  getIsVertical(): boolean {
-    return this.data.isVertical;
-  }
-
-  getHasTooltip(): boolean {
-    return this.data.hasTooltip;
-  }
-
-  getHasValueInfo(): boolean {
-    return this.data.hasValueInfo;
-  }
-
-  getHasScale(): boolean {
-    return this.data.hasScale;
-  }
-
-  getScaleValue(): Array<number | string> | number {
-    if (Array.isArray(this.data.scaleValue)) {
-      return [...this.data.scaleValue];
-    }
-    return this.data.scaleValue;
-  }
-
-  getUseKeyboard(): boolean {
-    return this.data.useKeyboard;
-  }
-
-  getIsScaleClickable(): boolean {
-    return this.data.isScaleClickable;
-  }
-
-  getIsBarClickable(): boolean {
-    return this.data.isBarClickable;
+    return deepCopy(this.data);
   }
 
   getValuePosition(): number | [number, number] {
@@ -208,7 +153,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     if (this.data.modelData) {
       const { min, max, stepSize } = this.data.modelData;
       const numberOfSteps = (max - min) / stepSize;
-      return this.getLengthInPx() / numberOfSteps;
+      return this.getData('lengthInPx') / numberOfSteps;
     }
     return 0;
   }

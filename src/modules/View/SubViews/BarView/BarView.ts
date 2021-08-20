@@ -44,10 +44,8 @@ class BarView implements IBarView {
 
   // Возвращает длину всего бара
   getOffsetLength(): number {
-    if (this.viewModel.getIsVertical()) {
-      return this.bar.offsetHeight;
-    }
-    return this.bar.offsetWidth;
+    const { offsetWidthOrHeight } = this.mainView.getElementProperties();
+    return this.bar[offsetWidthOrHeight];
   }
 
   mountBar() {
@@ -86,34 +84,34 @@ class BarView implements IBarView {
   // Обновляет длину и направление бара
   updateBar() {
     const { widthOrHeight, opposites } = this.mainView.getElementProperties();
-    this.bar.style[widthOrHeight] = this.viewModel.getLength();
+    this.bar.style[widthOrHeight] = this.viewModel.getData('length');
     this.bar.style[opposites.widthOrHeight] = '';
   }
 
   // При нажатии на бар будет меняться значение
   addInteractivity() {
     this.removeInteractivity();
-    const { clickableBarClass } = this.viewModel.getClasses();
+    const { clickableBarClass } = this.viewModel.getData('classes');
     addClass(this.bar, clickableBarClass);
     this.bar.addEventListener('mousedown', this.handleBarMouseDown);
   }
 
   removeInteractivity() {
-    const { clickableBarClass } = this.viewModel.getClasses();
+    const { clickableBarClass } = this.viewModel.getData('classes');
     removeClass(this.bar, clickableBarClass);
     this.bar.removeEventListener('mousedown', this.handleBarMouseDown);
   }
 
   private createBar(): HTMLElement {
     const bar: HTMLElement = document.createElement('div');
-    const { barClass } = this.viewModel.getClasses();
+    const { barClass } = this.viewModel.getData('classes');
 
     addClass(bar, barClass);
     bar.style.position = 'relative';
 
     this.bar = bar;
 
-    if (this.viewModel.getIsBarClickable()) {
+    if (this.viewModel.getData('isBarClickable')) {
       this.addInteractivity();
     }
 
@@ -122,7 +120,7 @@ class BarView implements IBarView {
 
   private createProgressBar(): HTMLElement {
     const progressBar: HTMLElement = document.createElement('div');
-    const { progressBarClass } = this.viewModel.getClasses();
+    const { progressBarClass } = this.viewModel.getData('classes');
 
     addClass(progressBar, progressBarClass);
     progressBar.style.position = 'absolute';
@@ -140,12 +138,12 @@ class BarView implements IBarView {
     const { clientXOrY, leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
     const clickPosition = event[clientXOrY] - this.bar.getBoundingClientRect()[leftOrTop];
 
-    if (!this.viewModel.getActiveThumb()) {
+    if (!this.viewModel.getData('activeThumb')) {
       this.mainView.setActiveThumb(
         this.mainView.getThumbNumberThatCloserToPosition(clickPosition),
       );
     }
-    const activeThumb = this.viewModel.getActiveThumb();
+    const activeThumb = this.viewModel.getData('activeThumb');
     if (activeThumb === null) {
       throw new Error('activeThumb is null');
     }

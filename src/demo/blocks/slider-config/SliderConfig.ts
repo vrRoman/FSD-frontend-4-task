@@ -120,31 +120,31 @@ class SliderConfig implements IObserver, ISliderConfig {
         break;
       case 'hasTooltip':
         module = this.$slider.slider('viewModel');
-        value = module.getHasTooltip();
+        value = module.getData('hasTooltip');
         break;
       case 'hasScale':
         module = this.$slider.slider('viewModel');
-        value = module.getHasScale();
+        value = module.getData('hasScale');
         break;
       case 'hasValueInfo':
         module = this.$slider.slider('viewModel');
-        value = module.getHasValueInfo();
+        value = module.getData('hasValueInfo');
         break;
       case 'isVertical':
         module = this.$slider.slider('viewModel');
-        value = module.getIsVertical();
+        value = module.getData('isVertical');
         break;
       case 'isScaleClickable':
         module = this.$slider.slider('viewModel');
-        value = module.getIsScaleClickable();
+        value = module.getData('isScaleClickable');
         break;
       case 'isBarClickable':
         module = this.$slider.slider('viewModel');
-        value = module.getIsBarClickable();
+        value = module.getData('isBarClickable');
         break;
       case 'useKeyboard':
         module = this.$slider.slider('viewModel');
-        value = module.getUseKeyboard();
+        value = module.getData('useKeyboard');
         break;
       default: break;
     }
@@ -198,11 +198,11 @@ class SliderConfig implements IObserver, ISliderConfig {
         break;
       case 'length':
         module = this.$slider.slider('viewModel');
-        value = module.getLength();
+        value = module.getData('length');
         break;
       case 'scaleValue':
         module = this.$slider.slider('viewModel');
-        value = module.getScaleValue();
+        value = module.getData('scaleValue');
         break;
       default: break;
     }

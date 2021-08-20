@@ -1,5 +1,8 @@
 const deepCopy = <T>(source: T): T => {
-  if (typeof source !== 'object') return source;
+  const shouldReturnInitialSource = !source
+    || typeof source !== 'object'
+    || source instanceof Node;
+  if (shouldReturnInitialSource) return source;
 
   const newObject: T = Object.assign(Array.isArray(source) ? [] : {}, source);
 

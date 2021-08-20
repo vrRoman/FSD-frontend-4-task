@@ -31,7 +31,7 @@ test('changeOptions change options of view', () => {
   presenter.changeOptions({
     isVertical: true,
   });
-  expect(view.getViewModel().getIsVertical()).toBe(true);
+  expect(view.getViewModel().getData('isVertical')).toBe(true);
 });
 
 test('changeOptions change options of presenter', () => {
@@ -48,7 +48,7 @@ test('changeOptions change options of model and view', () => {
     isVertical: true,
   });
   expect(model.getOption('value')).toBe(1);
-  expect(view.getViewModel().getIsVertical()).toBe(true);
+  expect(view.getViewModel().getData('isVertical')).toBe(true);
 });
 
 test('it should pass data from the View to the Model', () => {
@@ -83,5 +83,5 @@ test('it should pass data from the View to the Model', () => {
   }
 
   model.changeOptions({ stepSize: 3 });
-  expect(view.getViewModel().getModelData()?.stepSize).toBe(3);
+  expect(view.getViewModel().getData('modelData')?.stepSize).toBe(3);
 });

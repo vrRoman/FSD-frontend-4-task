@@ -28,9 +28,9 @@ class TooltipView implements ITooltipView {
 
   // Обновляет значение в подсказках
   update() {
-    const modelData = this.viewModel.getModelData() || { value: 0 };
+    const modelData = this.viewModel.getData('modelData') || { value: 0 };
     const { value } = modelData;
-    const { tooltipValueClass } = this.viewModel.getClasses();
+    const { tooltipValueClass } = this.viewModel.getData('classes');
 
     if (Array.isArray(this.tooltip)) {
       if (Array.isArray(value)) {
@@ -93,9 +93,9 @@ class TooltipView implements ITooltipView {
   }
 
   private create(): Tooltip {
-    const modelProperties = this.viewModel.getModelData() || { value: 0 };
+    const modelProperties = this.viewModel.getData('modelData') || { value: 0 };
     const { value } = modelProperties;
-    const { tooltipClass, tooltipValueClass } = this.viewModel.getClasses();
+    const { tooltipClass, tooltipValueClass } = this.viewModel.getData('classes');
 
     if (Array.isArray(this.target)) {
       const tooltipElements: Array<HTMLElement> = [];

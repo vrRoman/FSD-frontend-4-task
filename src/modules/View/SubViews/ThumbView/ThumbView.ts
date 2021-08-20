@@ -98,8 +98,8 @@ class ThumbView implements IThumbView {
   // Убирает текущий активный ползунок, добавляет класс новому activeThumb, увеличивает z-index
   // нового активного ползунка, обращается к mainView
   setActiveThumb(thumbNumber: 0 | 1 | null = 1) {
-    const { activeThumbClass } = this.viewModel.getClasses();
-    const oldActiveThumb = this.viewModel.getActiveThumb();
+    const { activeThumbClass } = this.viewModel.getData('classes');
+    const oldActiveThumb = this.viewModel.getData('activeThumb');
     if (oldActiveThumb) {
       removeClass(oldActiveThumb, activeThumbClass);
     }
@@ -126,12 +126,12 @@ class ThumbView implements IThumbView {
   // Перемещает активный ползунок на numberOfSteps шагов
   moveActiveThumb(numberOfSteps: number = 1) {
     const stepLength = this.viewModel.getStepLength();
-    const activeThumb = this.viewModel.getActiveThumb();
+    const activeThumb = this.viewModel.getData('activeThumb');
     if (activeThumb === null) {
       return;
     }
 
-    const length = this.viewModel.getLengthInPx();
+    const length = this.viewModel.getData('lengthInPx');
     const { offsetWidthOrHeight, leftOrTop } = this.mainView.getElementProperties();
 
     let isActiveThumbFirst: boolean = false;
@@ -177,7 +177,7 @@ class ThumbView implements IThumbView {
 
   private create(): Thumb {
     const valuePosition = this.viewModel.getValuePosition();
-    const { thumbClass } = this.viewModel.getClasses();
+    const { thumbClass } = this.viewModel.getData('classes');
 
     if (typeof valuePosition === 'number') {
       const thumb = document.createElement('button');
@@ -202,7 +202,7 @@ class ThumbView implements IThumbView {
   }
 
   private updateClientCoordinates() {
-    const activeThumb = this.viewModel.getActiveThumb();
+    const activeThumb = this.viewModel.getData('activeThumb');
     if (activeThumb) {
       const clientX = activeThumb.getBoundingClientRect().left
         + activeThumb.offsetWidth / 2;
@@ -259,7 +259,7 @@ class ThumbView implements IThumbView {
   // обработчики handleThumbMouseMove, handleThumbMouseUp и убирает слушатель
   // handleDocumentMouseUp
   private handleThumbMouseDown(event: MouseEvent | TouchEvent) {
-    const activeThumb = this.viewModel.getActiveThumb();
+    const activeThumb = this.viewModel.getData('activeThumb');
     event.preventDefault();
     event.stopPropagation();
 
@@ -275,7 +275,7 @@ class ThumbView implements IThumbView {
       if (Array.isArray(this.thumb)) {
         const firstThumbPosition = this.thumb[0].style[leftOrTop];
         if (firstThumbPosition === this.thumb[1].style[leftOrTop]) {
-          const length = this.viewModel.getLengthInPx();
+          const length = this.viewModel.getData('lengthInPx');
           const shouldBeSecondThumb = (
             parseFloat(firstThumbPosition) + this.thumb[0][offsetWidthOrHeight]
           ) < length / 2;
@@ -319,7 +319,7 @@ class ThumbView implements IThumbView {
   // При перемещении мыши вызывается moveActiveThumb с numberOfSteps,
   // зависящим от смещения мыши, обращается к mainView для смены coordinates
   private handleThumbMouseMove(event: MouseEvent | TouchEvent) {
-    const activeThumb = this.viewModel.getActiveThumb();
+    const activeThumb = this.viewModel.getData('activeThumb');
     if (activeThumb === null) {
       throw new Error('activeThumb is null');
     }
@@ -335,10 +335,10 @@ class ThumbView implements IThumbView {
       clientY = event.touches[0].clientY;
     }
 
-    const isVertical = this.viewModel.getIsVertical();
+    const isVertical = this.viewModel.getData('isVertical');
     const oldCoordinate = isVertical
-      ? this.viewModel.getClientCoordinates()[1]
-      : this.viewModel.getClientCoordinates()[0];
+      ? this.viewModel.getData('clientY')
+      : this.viewModel.getData('clientX');
     const currentCoordinate = isVertical ? clientY : clientX;
     const { leftOrTop, rightOrBottom } = this.mainView.getElementProperties();
 

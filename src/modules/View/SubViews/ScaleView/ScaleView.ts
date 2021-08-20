@@ -40,12 +40,12 @@ class ScaleView implements IScaleView {
 
   // Возвращает номера/названия шагов
   getStepsValues(): Array<number | string> {
-    const modelData = this.viewModel.getModelData();
+    const modelData = this.viewModel.getData('modelData');
     if (modelData === null) {
       return [];
     }
 
-    const scaleValue = this.viewModel.getScaleValue();
+    const scaleValue = this.viewModel.getData('scaleValue');
     const { min, max } = modelData;
     let stepValues: Array<number | string> = [];
 
@@ -78,12 +78,12 @@ class ScaleView implements IScaleView {
 
   // Обновляет положение и длину шкалы и ее элементов
   update() {
-    const modelData = this.viewModel.getModelData();
+    const modelData = this.viewModel.getData('modelData');
     if (modelData === null) return;
 
     const { min, max } = modelData;
-    const length = this.viewModel.getLengthInPx();
-    const scaleValue = this.viewModel.getScaleValue();
+    const length = this.viewModel.getData('lengthInPx');
+    const scaleValue = this.viewModel.getData('scaleValue');
     const {
       widthOrHeight,
       offsetWidthOrHeight,
@@ -124,7 +124,7 @@ class ScaleView implements IScaleView {
 
   // При клике на элементы шкалы будет двигаться ползунок
   addInteractivity() {
-    const { clickableScaleElementClass } = this.viewModel.getClasses();
+    const { clickableScaleElementClass } = this.viewModel.getData('classes');
     for (let i = 0; i < this.steps.length; i += 1) {
       const { element } = this.steps[i];
       addClass(element, clickableScaleElementClass);
@@ -134,7 +134,7 @@ class ScaleView implements IScaleView {
 
   // Убирает слушатель клика у элементов шкалы
   removeInteractivity() {
-    const { clickableScaleElementClass } = this.viewModel.getClasses();
+    const { clickableScaleElementClass } = this.viewModel.getData('classes');
     for (let i = 0; i < this.steps.length; i += 1) {
       const { element } = this.steps[i];
       removeClass(element, clickableScaleElementClass);
@@ -145,9 +145,9 @@ class ScaleView implements IScaleView {
   private create(): HTMLElement {
     const scale = document.createElement('div');
     const stepsValues = this.getStepsValues();
-    const { scaleClass, scaleElementClass } = this.viewModel.getClasses();
+    const { scaleClass, scaleElementClass } = this.viewModel.getData('classes');
     const { widthOrHeight } = this.mainView.getElementProperties();
-    const length = this.viewModel.getLengthInPx();
+    const length = this.viewModel.getData('lengthInPx');
 
     addClass(scale, scaleClass);
     scale.style[widthOrHeight] = `${length}px`;
@@ -165,7 +165,7 @@ class ScaleView implements IScaleView {
     }
 
     this.scale = scale;
-    if (this.viewModel.getIsScaleClickable()) {
+    if (this.viewModel.getData('isScaleClickable')) {
       this.addInteractivity();
     }
 
@@ -182,13 +182,13 @@ class ScaleView implements IScaleView {
       return;
     }
 
-    const modelProperties = this.viewModel.getModelData();
+    const modelProperties = this.viewModel.getData('modelData');
     if (modelProperties === null) return;
 
     const stepLength = this.viewModel.getStepLength();
     const { leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
     const { stepSize } = modelProperties;
-    let activeThumb = this.viewModel.getActiveThumb();
+    let activeThumb = this.viewModel.getData('activeThumb');
 
     if (!activeThumb) {
       const stepElementPosition = parseFloat(stepElement.style[leftOrTop])
