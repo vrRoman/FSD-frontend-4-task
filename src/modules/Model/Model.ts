@@ -70,8 +70,15 @@ class Model extends Subject implements IModel {
     return this.data.value;
   }
 
-  getData<Key extends keyof IModelData>(option: Key): IModelData[Key] {
-    return deepCopy(this.data[option]);
+  getData(): IModelData
+
+  getData<Key extends keyof IModelData>(option: Key): IModelData[Key]
+
+  getData<Key extends keyof IModelData>(option?: Key): IModelData[Key] | IModelData {
+    if (option) {
+      return deepCopy(this.data[option]);
+    }
+    return deepCopy(this.data);
   }
 
   // Если значение - одно число и это диапазон, то значение становится

@@ -27,17 +27,15 @@ class SliderContainer {
   private init() {
     const configElement = this.getHTMLElement(this.configSelector);
     const sliderElement = this.getHTMLElement(this.sliderSelector);
-    if (configElement !== null) {
-      if (sliderElement !== null) {
-        $(sliderElement).slider(this.sliderOptions);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-        const sliderConfig = new SliderConfig(configElement, sliderElement);
-      } else {
-        throw new Error('sliderElement is null');
-      }
-    } else {
+    if (!configElement) {
       throw new Error('configElement is null');
     }
+    if (!sliderElement) {
+      throw new Error('sliderElement is null');
+    }
+    $(sliderElement).slider(this.sliderOptions);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    const sliderConfig = new SliderConfig(configElement, sliderElement);
   }
 }
 

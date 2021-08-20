@@ -206,13 +206,13 @@ class SliderConfig implements IObserver, ISliderConfig {
   private initCheckboxes() {
     this.inputElements.forEach((element) => {
       const { name } = element.dataset;
-      if (name) {
-        const currentValue = this.getCheckboxValue(name);
-        if (currentValue !== null) {
-          $(element).prop('checked', currentValue);
+      if (!name) return;
 
-          $(element).on('change', this.handleCheckboxChange);
-        }
+      const currentValue = this.getCheckboxValue(name);
+      if (currentValue !== null) {
+        $(element).prop('checked', currentValue);
+
+        $(element).on('change', this.handleCheckboxChange);
       }
     });
   }
@@ -275,11 +275,9 @@ class SliderConfig implements IObserver, ISliderConfig {
     let newSliderValue: Value;
 
     if (Array.isArray(sliderValue)) {
-      if (optionName === 'value1') {
-        newSliderValue = [value, sliderValue[1]];
-      } else {
-        newSliderValue = [sliderValue[0], value];
-      }
+      newSliderValue = optionName === 'value1'
+        ? [value, sliderValue[1]]
+        : [sliderValue[0], value];
     } else {
       newSliderValue = value;
     }
@@ -329,28 +327,20 @@ class SliderConfig implements IObserver, ISliderConfig {
 
   private handleScaleValueInputFocusOut(event: JQuery.FocusOutEvent) {
     const value = String($(event.target).val());
-    let newScaleValue: number | Array<string | number>;
+    let newScaleValue: number | Array<string | number> = this.getTextInputValue('scaleValue');
     if (value !== '') {
       const isValueArray = value.indexOf(',') !== -1;
       if (isValueArray) {
         newScaleValue = value.split(',');
       } else {
         const isValueNumber = !Number.isNaN(Number(value));
-        if (isValueNumber) {
-          newScaleValue = Number(value);
-        } else {
-          newScaleValue = [value];
-        }
+        newScaleValue = isValueNumber ? Number(value) : [value];
       }
-
-      this.$slider.slider('changeOptions', {
-        scaleValue: newScaleValue,
-      });
-    } else {
-      this.$slider.slider('changeOptions', {
-        scaleValue: this.getTextInputValue('scaleValue'),
-      });
     }
+
+    this.$slider.slider('changeOptions', {
+      scaleValue: newScaleValue,
+    });
 
     const currentValue = this.getTextInputValue('scaleValue');
     const convertedValue = Array.isArray(currentValue)

@@ -219,6 +219,7 @@ class View extends Observer implements IView {
           case 'length':
             this.barView.updateBar();
             this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+            this.updateResponsive();
             break;
           case 'isVertical':
             this.sliderContainerView.update();

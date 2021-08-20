@@ -37,52 +37,20 @@ class Presenter extends Observer implements IPresenter {
   update(action: SubjectAction): void {
     if (action.type === 'CHANGE_MODEL_DATA') {
       this.view.setModelData(action.payload);
-    }
 
-    if (this.onChange) {
-      this.onChange(this.model.getData('value'));
+      if (this.onChange) {
+        this.onChange(this.model.getData('value'));
+      }
     }
   }
 
   // Меняет настройки слайдера
   changeOptions(newOptions: SliderOptionsPartial): void {
-    // Распределение настроек по модулям
-    const modelOptions = ['value', 'isRange', 'stepSize', 'max', 'min'] as const;
-    const viewOptions = ['length', 'isVertical', 'hasTooltip',
-      'hasScale', 'scaleValue', 'hasValueInfo',
-      'useKeyboard', 'isScaleClickable', 'isBarClickable'] as const;
-    const presenterOptions = ['onChange'] as const;
+    this.model.changeData(newOptions);
+    this.view.changeOptions(newOptions);
 
-    const newModelOptions: { [key: string]: any } = {};
-    modelOptions.forEach((property) => {
-      if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
-        newModelOptions[property] = newOptions[property];
-      }
-    });
-    const newViewOptions: { [key: string]: any } = {};
-    viewOptions.forEach((property) => {
-      if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
-        newViewOptions[property] = newOptions[property];
-      }
-    });
-    const newPresenterOptions: { [key: string]: any } = {};
-    presenterOptions.forEach((property) => {
-      if (Object.prototype.hasOwnProperty.call(newOptions, property)) {
-        newPresenterOptions[property] = newOptions[property];
-      }
-    });
-
-    // Передача новых опций
-    if (Object.keys(newModelOptions).length !== 0) {
-      this.model.changeData(newModelOptions);
-    }
-    if (Object.keys(newViewOptions).length !== 0) {
-      this.view.changeOptions(newViewOptions);
-    }
-    if (Object.keys(newPresenterOptions).length !== 0) {
-      if (newPresenterOptions.onChange) {
-        this.onChange = newPresenterOptions.onChange;
-      }
+    if (newOptions.onChange) {
+      this.onChange = newOptions.onChange;
     }
   }
 

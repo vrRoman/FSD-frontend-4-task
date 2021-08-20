@@ -1,4 +1,4 @@
-function areElementsDefined<T extends any[]>(
+function areElementsDefined<T extends unknown[]>(
   array: Partial<T> | [],
 ): array is T {
   if (array.length === 0) {
@@ -7,7 +7,7 @@ function areElementsDefined<T extends any[]>(
 
   let areAllDefined = true;
 
-  array.forEach((element: T | undefined | null) => {
+  array.forEach((element: unknown) => {
     const isUndefined = element === undefined || element === null;
     if (isUndefined) {
       areAllDefined = false;
