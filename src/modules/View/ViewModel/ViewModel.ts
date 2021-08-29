@@ -51,22 +51,19 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   }
 
   getValuePosition(): number | [number, number] {
-    let valuePosition: number | [number, number] = 0;
+    if (!this.data.modelData) return 0;
 
-    if (this.data.modelData) {
-      const { min, max, value } = this.data.modelData;
-      const maxDiapason: number = max - min;
+    const { min, max, value } = this.data.modelData;
+    const maxDiapason: number = max - min;
 
-      if (typeof value === 'number') {
-        valuePosition = (this.data.lengthInPx / maxDiapason) * (value - this.data.modelData.min);
-      } else {
-        valuePosition = [
-          (this.data.lengthInPx / maxDiapason) * (value[0] - min),
-          (this.data.lengthInPx / maxDiapason) * (value[1] - min),
-        ];
-      }
+    if (typeof value === 'number') {
+      return (this.data.lengthInPx / maxDiapason) * (value - this.data.modelData.min);
     }
-    return valuePosition;
+
+    const valuePosition = value.map(
+      (valueElement) => (this.data.lengthInPx / maxDiapason) * (valueElement - min),
+    );
+    return [valuePosition[0], valuePosition[1]];
   }
 
   getStepLength(): number {
