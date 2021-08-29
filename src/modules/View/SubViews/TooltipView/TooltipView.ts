@@ -28,52 +28,34 @@ class TooltipView implements ITooltipView {
 
   // Обновляет значение в подсказках
   update() {
-    const modelData = this.viewModel.getData('modelData') || { value: 0 };
-    const { value } = modelData;
+    const { value = 0 } = this.viewModel.getData('modelData') || {};
     const { tooltipValueClass } = this.viewModel.getData('classes');
 
-    if (Array.isArray(this.tooltip)) {
-      if (Array.isArray(value)) {
-        for (let i = 0; i <= 1; i += 1) {
-          this.tooltip[i].innerHTML = `<span class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</span>`;
-        }
+    const valueArray = Array.isArray(value) ? value : [value];
+    valueArray.forEach((currentValue, index) => {
+      const text = `<span class="${tooltipValueClass}">${Number((currentValue).toFixed(3))}</span>`;
+      if (Array.isArray(this.tooltip)) {
+        this.tooltip[index].innerHTML = text;
       } else {
-        throw new Error('this.tooltip is array, but modelData.value is number');
+        this.tooltip.innerHTML = text;
       }
-    } else if (!Array.isArray(value)) {
-      this.tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((value).toFixed(3))}</span>`;
-    } else {
-      throw new Error('this.tooltip is number, but modelData.value is array');
-    }
+    });
   }
 
   mount() {
     if (this.isMounted) return;
     this.isMounted = true;
-    if (Array.isArray(this.target)) {
-      this.target.forEach((target, index) => {
-        if (Array.isArray(this.tooltip)) {
-          target.appendChild(this.tooltip[index]);
-        } else {
-          throw new Error('this.target is array, but this.tooltip is not array');
-        }
-      });
-    } else if (!Array.isArray(this.tooltip)) {
-      this.target.appendChild(this.tooltip);
-    } else {
-      throw new Error('this.target is not array, but this.tooltip is array');
-    }
+    const targetArray = Array.isArray(this.target) ? this.target : [this.target];
+    const tooltipArray = Array.isArray(this.tooltip) ? this.tooltip : [this.tooltip];
+    targetArray.forEach((target, index) => {
+      target.appendChild(tooltipArray[index]);
+    });
   }
 
   unmount() {
     this.isMounted = false;
-    if (Array.isArray(this.tooltip)) {
-      this.tooltip.forEach((element) => {
-        element.remove();
-      });
-    } else {
-      this.tooltip.remove();
-    }
+    const tooltipArray = Array.isArray(this.tooltip) ? this.tooltip : [this.tooltip];
+    tooltipArray.forEach((tooltip) => tooltip.remove());
   }
 
   recreate(newTarget?: Thumb): Tooltip {
@@ -93,35 +75,18 @@ class TooltipView implements ITooltipView {
   }
 
   private create(): Tooltip {
-    const modelProperties = this.viewModel.getData('modelData') || { value: 0 };
-    const { value } = modelProperties;
+    const { value = 0 } = this.viewModel.getData('modelData') || {};
     const { tooltipClass, tooltipValueClass } = this.viewModel.getData('classes');
 
-    if (Array.isArray(this.target)) {
-      const tooltipElements: Array<HTMLElement> = [];
-
-      for (let i = 0; i < this.target.length; i += 1) {
-        const tooltip = document.createElement('span');
-        addClass(tooltip, tooltipClass);
-
-        if (Array.isArray(value)) {
-          tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((value[i]).toFixed(3))}</span>`;
-        }
-
-        tooltipElements.push(tooltip);
-      }
-
-      this.tooltip = [tooltipElements[0], tooltipElements[1]];
-    } else {
+    const valueArray = Array.isArray(value) ? value : [value];
+    const tooltips = valueArray.map((currentValue) => {
       const tooltip = document.createElement('span');
       addClass(tooltip, tooltipClass);
+      tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((currentValue).toFixed(3))}</span>`;
+      return tooltip;
+    });
 
-      if (!Array.isArray(value)) {
-        tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((value).toFixed(3))}</span>`;
-      }
-
-      this.tooltip = tooltip;
-    }
+    this.tooltip = Array.isArray(value) ? [tooltips[0], tooltips[1]] : tooltips[0];
     return this.tooltip;
   }
 }
