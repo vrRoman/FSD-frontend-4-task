@@ -1,6 +1,6 @@
 import { Subject } from 'ObserverAndSubject';
 import deepCopy from 'utilities/deepCopy';
-import differences from 'utilities/differences';
+import getDifferences from 'utilities/getDifferences';
 import isLengthValid from 'utilities/isLengthValid';
 
 import type {
@@ -32,7 +32,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       type: 'CHANGE_VIEW_DATA',
       payload: {
         newData: deepCopy(this.data),
-        differences: differences(this.data, oldData),
+        differences: getDifferences(this.data, oldData),
       },
     });
 

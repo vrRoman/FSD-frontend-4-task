@@ -1,4 +1,4 @@
-const differences = <T>(firstObject: T, secondObject: T): Array<keyof T> => {
+const getDifferences = <T>(firstObject: T, secondObject: T): Array<keyof T> => {
   const differencesArray: Array<keyof T> = [];
 
   (Object.keys(secondObject) as Array<keyof typeof secondObject>).forEach((key) => {
@@ -10,4 +10,4 @@ const differences = <T>(firstObject: T, secondObject: T): Array<keyof T> => {
   return differencesArray;
 };
 
-export default differences;
+export default getDifferences;
