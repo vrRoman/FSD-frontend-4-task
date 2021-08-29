@@ -106,9 +106,9 @@ test('on click on document should remove active thumb', () => {
 test('when useKeyboard is true and pressing arrow keys should change value', () => {
   const mockedMoveActiveThumb = jest.spyOn(thumbView, 'moveActiveThumb');
   const rightArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-  const bottomArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowBottom' });
+  const bottomArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
   const leftArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
-  const topArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowTop' });
+  const topArrowKeyDownEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
 
   document.dispatchEvent(rightArrowKeyDownEvent);
   expect(mockedMoveActiveThumb.mock.calls[0][0]).toBe(1);

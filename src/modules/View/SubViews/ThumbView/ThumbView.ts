@@ -45,26 +45,16 @@ class ThumbView implements IThumbView {
 
   // Обновляет положение ползунков
   update() {
-    const currentValuePosition = this.viewModel.getValuePosition();
+    const valuePosition = this.viewModel.getValuePosition();
     const { leftOrTop, offsetWidthOrHeight, opposites } = this.mainView.getElementProperties();
-    let valuePositionArray: number[];
-    let thumbArray: HTMLElement[];
+    const valuePositionArray: number[] = Array.isArray(valuePosition)
+      ? valuePosition
+      : [valuePosition];
+    const thumbArray: HTMLElement[] = Array.isArray(this.thumb)
+      ? this.thumb
+      : [this.thumb];
 
-    if (typeof currentValuePosition === 'number') {
-      if (!Array.isArray(this.thumb)) {
-        valuePositionArray = [currentValuePosition];
-        thumbArray = [this.thumb];
-      } else {
-        throw new Error('valuePosition is number, but thumb is array.');
-      }
-    } else if (Array.isArray(this.thumb)) {
-      valuePositionArray = currentValuePosition;
-      thumbArray = this.thumb;
-    } else {
-      throw new Error('valuePosition is array, but thumb is not array.');
-    }
-
-    thumbArray.forEach((element, index) => {
+    thumbArray.forEach((_, index) => {
       thumbArray[index].style[leftOrTop] = `${valuePositionArray[index] - thumbArray[index][offsetWidthOrHeight] / 2}px`;
       thumbArray[index].style[opposites.leftOrTop] = '';
     });
@@ -95,75 +85,48 @@ class ThumbView implements IThumbView {
     }
   }
 
-  // Убирает текущий активный ползунок, добавляет класс новому activeThumb, увеличивает z-index
-  // нового активного ползунка, обращается к mainView
-  setActiveThumb(thumbNumber: 0 | 1 | null = 1) {
+  // Изменяет текущий активный ползунок и z-index
+  setActiveThumb(thumbNumber: 0 | 1 | null = 1): HTMLElement | null {
     const { activeThumbClass } = this.viewModel.getData('classes');
     const oldActiveThumb = this.viewModel.getData('activeThumb');
     if (oldActiveThumb) {
+      oldActiveThumb.style.zIndex = '';
       removeClass(oldActiveThumb, activeThumbClass);
     }
-    this.mainView.setActiveThumb(null);
-
-    if (thumbNumber !== null) {
-      const activeThumb = Array.isArray(this.thumb) ? this.thumb[thumbNumber] : this.thumb;
-
-      addClass(activeThumb, activeThumbClass);
-
-      if (Array.isArray(this.thumb)) {
-        if (oldActiveThumb) {
-          const zIndex: number = window.getComputedStyle(oldActiveThumb).zIndex === 'auto'
-            ? 0
-            : Number(window.getComputedStyle(oldActiveThumb).zIndex);
-          activeThumb.style.zIndex = String(zIndex + 1);
-        }
-      }
-
-      this.mainView.setActiveThumb(thumbNumber);
+    if (thumbNumber === null) {
+      return this.mainView.setActiveThumb(null);
     }
+
+    const activeThumb = Array.isArray(this.thumb) ? this.thumb[thumbNumber] : this.thumb;
+    addClass(activeThumb, activeThumbClass);
+
+    if (Array.isArray(this.thumb)) {
+      const inactiveThumb = this.thumb[Number(!thumbNumber)];
+      const zIndex: number = window.getComputedStyle(inactiveThumb).zIndex === 'auto'
+        ? 0
+        : Number(window.getComputedStyle(inactiveThumb).zIndex);
+      activeThumb.style.zIndex = String(zIndex + 1);
+    }
+
+    return this.mainView.setActiveThumb(thumbNumber);
   }
 
   // Перемещает активный ползунок на numberOfSteps шагов
   moveActiveThumb(numberOfSteps: number = 1) {
     const stepLength = this.viewModel.getStepLength();
     const activeThumb = this.viewModel.getData('activeThumb');
-    if (activeThumb === null) {
-      return;
-    }
+    const { leftOrTop } = this.mainView.getElementProperties();
+    if (activeThumb === null) return;
 
-    const length = this.viewModel.getData('lengthInPx');
-    const { offsetWidthOrHeight, leftOrTop } = this.mainView.getElementProperties();
-
-    let isActiveThumbFirst: boolean = false;
+    let activeThumbIndex: 0 | 1 = 0;
     if (Array.isArray(this.thumb)) {
-      if (this.thumb[0].isSameNode(activeThumb)) {
-        isActiveThumbFirst = true;
-      }
-    }
-
-    let maxPosition: number = length - activeThumb[offsetWidthOrHeight] / 2;
-    let minPosition: number = -activeThumb[offsetWidthOrHeight] / 2;
-    if (Array.isArray(this.thumb)) {
-      if (isActiveThumbFirst) {
-        maxPosition = parseFloat(this.thumb[1].style[leftOrTop]);
-      } else {
-        minPosition = parseFloat(this.thumb[0].style[leftOrTop]);
-      }
+      activeThumbIndex = this.thumb[0].isSameNode(activeThumb) ? 0 : 1;
     }
 
     const offset: number = stepLength * numberOfSteps;
     const position: number = parseFloat(activeThumb.style[leftOrTop]) + offset;
-    if (position <= maxPosition) {
-      if (position >= minPosition) {
-        activeThumb.style[leftOrTop] = `${position}px`;
-      } else {
-        activeThumb.style[leftOrTop] = `${minPosition}px`;
-      }
-    } else {
-      activeThumb.style[leftOrTop] = `${maxPosition}px`;
-    }
-    const thumbNumber: 0 | 1 = isActiveThumbFirst ? 0 : 1;
-    this.mainView.onThumbMove(numberOfSteps, thumbNumber);
+    activeThumb.style[leftOrTop] = `${this.getValidPosition(position, activeThumbIndex)}px`;
+    this.mainView.onThumbMove(numberOfSteps, activeThumbIndex);
   }
 
   removeKeyboardListener() {
@@ -177,28 +140,62 @@ class ThumbView implements IThumbView {
 
   private create(): Thumb {
     const valuePosition = this.viewModel.getValuePosition();
+    const valuePositionArray = Array.isArray(valuePosition) ? valuePosition : [valuePosition];
     const { thumbClass } = this.viewModel.getData('classes');
 
-    if (typeof valuePosition === 'number') {
-      const thumb = document.createElement('button');
+    const thumbElements = valuePositionArray.map(() => {
+      const newThumbElement = document.createElement('button');
+      addClass(newThumbElement, thumbClass);
+      newThumbElement.style.position = 'absolute';
+      return newThumbElement;
+    });
 
-      addClass(thumb, thumbClass);
-      thumb.style.position = 'absolute';
+    this.thumb = Array.isArray(valuePosition)
+      ? [thumbElements[0], thumbElements[1]]
+      : thumbElements[0];
 
-      this.thumb = thumb;
-    } else {
-      const thumbElements: Array<HTMLElement> = [];
-      for (let i = 0; i < valuePosition.length; i += 1) {
-        const newThumbElement = document.createElement('button');
-        addClass(newThumbElement, thumbClass);
-        newThumbElement.style.position = 'absolute';
-        thumbElements.push(newThumbElement);
-      }
-
-      this.thumb = [thumbElements[0], thumbElements[1]];
-    }
     this.addListener();
     return this.thumb;
+  }
+
+  private getValidPosition(position: number, thumbIndex: 0 | 1 = 0): number {
+    const length = this.viewModel.getData('lengthInPx');
+    const { offsetWidthOrHeight, leftOrTop } = this.mainView.getElementProperties();
+    const currentThumb = Array.isArray(this.thumb) ? this.thumb[thumbIndex] : this.thumb;
+
+    let maxPosition: number = length - currentThumb[offsetWidthOrHeight] / 2;
+    let minPosition: number = -currentThumb[offsetWidthOrHeight] / 2;
+    if (Array.isArray(this.thumb)) {
+      if (thumbIndex) {
+        minPosition = parseFloat(this.thumb[0].style[leftOrTop]);
+      } else {
+        maxPosition = parseFloat(this.thumb[1].style[leftOrTop]);
+      }
+    }
+
+    if (position > maxPosition) return maxPosition;
+    if (position < minPosition) return minPosition;
+    return position;
+  }
+
+  private getActiveThumbIndex(thumb: HTMLElement): 0 | 1 {
+    const { leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
+    let shouldBeSecondThumb = false;
+
+    if (Array.isArray(this.thumb)) {
+      const firstThumbPosition = this.thumb[0].style[leftOrTop]
+        + this.thumb[0][offsetWidthOrHeight];
+      const secondThumbPosition = this.thumb[1].style[leftOrTop]
+        + this.thumb[1][offsetWidthOrHeight];
+
+      if (firstThumbPosition === secondThumbPosition) {
+        const length = this.viewModel.getData('lengthInPx');
+        shouldBeSecondThumb = parseFloat(firstThumbPosition) < length / 2;
+      } else if (thumb.isSameNode(this.thumb[1])) {
+        shouldBeSecondThumb = true;
+      }
+    }
+    return shouldBeSecondThumb ? 1 : 0;
   }
 
   private updateClientCoordinates() {
@@ -216,19 +213,13 @@ class ThumbView implements IThumbView {
 
   // Добавляет слушатель thumb onMouseDown к ползунку(ам)
   private addListener() {
-    if (Array.isArray(this.thumb)) {
-      for (let i = 0; i <= 1; i += 1) {
-        this.thumb[i].addEventListener('mousedown', this.handleThumbMouseDown);
-        this.thumb[i].addEventListener('touchstart', this.handleThumbMouseDown);
-        this.thumb[i].addEventListener('focusin', this.handleThumbFocusin);
-        this.thumb[i].addEventListener('focusout', this.handleThumbFocusout);
-      }
-    } else if (this.thumb) {
-      this.thumb.addEventListener('mousedown', this.handleThumbMouseDown);
-      this.thumb.addEventListener('touchstart', this.handleThumbMouseDown);
-      this.thumb.addEventListener('focusin', this.handleThumbFocusin);
-      this.thumb.addEventListener('focusout', this.handleThumbFocusout);
-    }
+    const thumbArray = Array.isArray(this.thumb) ? this.thumb : [this.thumb];
+    thumbArray.forEach((thumbElement) => {
+      thumbElement.addEventListener('mousedown', this.handleThumbMouseDown);
+      thumbElement.addEventListener('touchstart', this.handleThumbMouseDown);
+      thumbElement.addEventListener('focusin', this.handleThumbFocusin);
+      thumbElement.addEventListener('focusout', this.handleThumbFocusout);
+    });
 
     document.addEventListener('mouseup', this.handleThumbMouseUp);
     document.addEventListener('touchend', this.handleThumbMouseUp);
@@ -238,13 +229,12 @@ class ThumbView implements IThumbView {
     this.setActiveThumb(null);
   }
 
-  private handleThumbFocusin(event: FocusEvent) {
+  private handleThumbFocusin({ target }: FocusEvent) {
+    if (!(target instanceof HTMLElement)) return;
+
     if (Array.isArray(this.thumb)) {
-      const { target } = event;
-      if (target instanceof HTMLElement) {
-        const isFirstThumb = target.isSameNode(this.thumb[0]);
-        this.setActiveThumb(isFirstThumb ? 0 : 1);
-      }
+      const isFirstThumb = target.isSameNode(this.thumb[0]);
+      this.setActiveThumb(isFirstThumb ? 0 : 1);
     } else {
       this.setActiveThumb();
     }
@@ -254,54 +244,23 @@ class ThumbView implements IThumbView {
     this.setActiveThumb(null);
   }
 
-  // При нажатии на ползунок убирает z-index предыдущего активного ползунка,
-  // вызывает this.setActiveThumb, обращается к mainView для изменения clientX/Y, добавляет
-  // обработчики handleThumbMouseMove, handleThumbMouseUp и убирает слушатель
-  // handleDocumentMouseUp
+  // Изменяет активный ползунок, clientX/Y, обновляет слушатели
   private handleThumbMouseDown(event: MouseEvent | TouchEvent) {
-    const activeThumb = this.viewModel.getData('activeThumb');
     event.preventDefault();
     event.stopPropagation();
 
     const { target } = event;
-    if (target instanceof HTMLElement) {
-      const { leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
-      let thumbNumber: 0 | 1 | undefined;
+    if (!(target instanceof HTMLElement)) return;
 
-      if (activeThumb) {
-        activeThumb.style.zIndex = '';
-      }
+    this.setActiveThumb(this.getActiveThumbIndex(target));
+    this.updateClientCoordinates();
 
-      if (Array.isArray(this.thumb)) {
-        const firstThumbPosition = this.thumb[0].style[leftOrTop];
-        if (firstThumbPosition === this.thumb[1].style[leftOrTop]) {
-          const length = this.viewModel.getData('lengthInPx');
-          const shouldBeSecondThumb = (
-            parseFloat(firstThumbPosition) + this.thumb[0][offsetWidthOrHeight]
-          ) < length / 2;
-          if (shouldBeSecondThumb) {
-            thumbNumber = 1;
-          } else {
-            thumbNumber = 0;
-          }
-        } else if (target.isSameNode(this.thumb[0])) {
-          thumbNumber = 0;
-        } else {
-          thumbNumber = 1;
-        }
-      }
-
-      this.setActiveThumb(thumbNumber);
-
-      this.updateClientCoordinates();
-
-      document.addEventListener('mouseup', this.handleThumbMouseUp);
-      document.addEventListener('touchend', this.handleThumbMouseUp);
-      document.addEventListener('mousemove', this.handleThumbMouseMove);
-      document.addEventListener('touchmove', this.handleThumbMouseMove);
-      document.removeEventListener('mouseup', this.handleDocumentMouseUp);
-      document.removeEventListener('touchend', this.handleDocumentMouseUp);
-    }
+    document.addEventListener('mouseup', this.handleThumbMouseUp);
+    document.addEventListener('touchend', this.handleThumbMouseUp);
+    document.addEventListener('mousemove', this.handleThumbMouseMove);
+    document.addEventListener('touchmove', this.handleThumbMouseMove);
+    document.removeEventListener('mouseup', this.handleDocumentMouseUp);
+    document.removeEventListener('touchend', this.handleDocumentMouseUp);
   }
 
   // При отжатии кнопки после ползунка убирает обработчики handleThumbMouseMove и
@@ -316,65 +275,42 @@ class ThumbView implements IThumbView {
     document.addEventListener('touchend', this.handleDocumentMouseUp);
   }
 
-  // При перемещении мыши вызывается moveActiveThumb с numberOfSteps,
-  // зависящим от смещения мыши, обращается к mainView для смены coordinates
+  // Вызывается moveActiveThumb с numberOfSteps,
+  // зависящим от смещения мыши, изменяет clientX/Y
   private handleThumbMouseMove(event: MouseEvent | TouchEvent) {
-    const activeThumb = this.viewModel.getData('activeThumb');
-    if (activeThumb === null) {
-      throw new Error('activeThumb is null');
-    }
-
+    const { clientXOrY } = this.mainView.getElementProperties();
     const stepLength = this.viewModel.getStepLength();
-    let clientX: number;
-    let clientY: number;
-    if ('clientX' in event) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-    } else {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
+    const oldCoordinate = this.viewModel.getData(clientXOrY);
+    const currentCoordinate = 'clientX' in event ? event[clientXOrY] : event.touches[0][clientXOrY];
 
-    const isVertical = this.viewModel.getData('isVertical');
-    const oldCoordinate = isVertical
-      ? this.viewModel.getData('clientY')
-      : this.viewModel.getData('clientX');
-    const currentCoordinate = isVertical ? clientY : clientX;
-    const { leftOrTop, rightOrBottom } = this.mainView.getElementProperties();
-
-    // Math.round - если дробная часть numberOfSteps >= его половины, то округляется к большему
-    // Т.е. если пройдена половина пути, то тамб передвигается
-    let numberOfSteps = Math.round(
+    // Если пройдена половина пути, то тамб передвигается
+    const numberOfSteps = Math.round(
       (currentCoordinate - Math.round(oldCoordinate)) / stepLength,
     );
+    if (!numberOfSteps) return;
 
-    // Если курсор выходит за бар, тогда к numberOfSteps добавить/убавить
-    // число шагов, за которые вышел курсор
-    const bar = this.mainView.getElement('bar');
-    const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
-    const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
-    if (currentCoordinate >= barMaxCoordinate) {
-      numberOfSteps += Math.ceil((currentCoordinate - barMaxCoordinate) / stepLength);
-    } else if (currentCoordinate <= barMinCoordinate) {
-      numberOfSteps -= Math.ceil((barMinCoordinate - currentCoordinate) / stepLength);
-    }
-
-    if (numberOfSteps !== 0) {
-      this.moveActiveThumb(numberOfSteps);
-      this.updateClientCoordinates();
-    }
+    this.moveActiveThumb(numberOfSteps);
+    this.updateClientCoordinates();
   }
 
   // При нажатии клавиш wasd и стрелок вызывается moveActiveThumb(1/-1)
   private handleDocumentKeyDown(event: KeyboardEvent) {
     const isThisNextKey = event.key === 'ArrowRight'
-      || event.key === 'ArrowBottom'
+      || event.key === 'ArrowDown'
       || event.key === 'd'
       || event.key === 's';
     const isThisPrevKey = event.key === 'ArrowLeft'
-      || event.key === 'ArrowTop'
+      || event.key === 'ArrowUp'
       || event.key === 'a'
       || event.key === 'w';
+
+    const shouldPreventScrolling = (
+      event.key === 'ArrowDown' || event.key === 'ArrowUp'
+    ) && this.viewModel.getData('activeThumb');
+
+    if (shouldPreventScrolling) {
+      event.preventDefault();
+    }
 
     if (isThisNextKey) {
       this.moveActiveThumb(1);

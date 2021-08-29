@@ -26,7 +26,7 @@ import type { IBarView } from './SubViews/BarView';
 import ScaleView from './SubViews/ScaleView';
 import type { IScaleView } from './SubViews/ScaleView';
 import ThumbView from './SubViews/ThumbView';
-import type { IThumbView, Thumb } from './SubViews/ThumbView';
+import type { IThumbView } from './SubViews/ThumbView';
 import TooltipView from './SubViews/TooltipView';
 import type { ITooltipView } from './SubViews/TooltipView';
 import ValueInfoView from './SubViews/ValueInfoView';
