@@ -6,7 +6,6 @@ import type { IPresenter } from 'Presenter';
 import { Observer } from 'ObserverAndSubject';
 import type { SubjectAction } from 'ObserverAndSubject';
 import type { IModelData, ModelDataPartial } from 'Model';
-import { log } from 'util';
 import getDifferences from 'utilities/getDifferences';
 import isModelData from 'utilities/isModelData';
 
@@ -20,7 +19,7 @@ import type {
   ViewOptionsPartial,
 } from './View.model';
 import ViewModel from './ViewModel';
-import type { IViewModel, ViewClasses } from './ViewModel';
+import type { IViewModelData, IViewModel, ViewClasses } from './ViewModel';
 import SliderContainerView from './SubViews/SliderContainerView';
 import type { ISliderContainerView } from './SubViews/SliderContainerView';
 import BarView from './SubViews/BarView';
@@ -198,67 +197,8 @@ class View extends Observer implements IView {
   update(action: SubjectAction) {
     if (action.type !== 'CHANGE_VIEW_DATA') return;
 
-    const dataChangeHandlers: Record<string, () => void> & { default: () => void } = {
-      length: () => {
-        this.barView.updateBar();
-        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
-        this.updateResponsive();
-      },
-      isVertical: () => {
-        this.sliderContainerView.update();
-        this.barView.updateBar();
-        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
-      },
-      hasTooltip: () => {
-        this.tooltipView.unmount();
-        if (this.viewModel.getData('hasTooltip')) {
-          this.tooltipView.mount();
-        }
-      },
-      hasScale: () => {
-        this.scaleView.unmount();
-        if (this.viewModel.getData('hasScale')) {
-          this.scaleView.mount();
-        }
-      },
-      hasValueInfo: () => {
-        this.valueInfoView.unmount();
-        if (this.viewModel.getData('hasValueInfo')) {
-          this.valueInfoView.mount();
-        }
-      },
-      scaleValue: () => {
-        this.scaleView.recreate();
-      },
-      useKeyboard: () => {
-        this.thumbView.removeKeyboardListener();
-        if (this.viewModel.getData('useKeyboard')) {
-          this.thumbView.addKeyboardListener();
-        }
-      },
-      isScaleClickable: () => {
-        this.scaleView.removeInteractivity();
-        if (this.viewModel.getData('isScaleClickable')) {
-          this.scaleView.addInteractivity();
-        }
-      },
-      isBarClickable: () => {
-        if (this.viewModel.getData('isBarClickable')) {
-          this.barView.addInteractivity();
-        } else {
-          this.barView.removeInteractivity();
-        }
-      },
-      lengthInPx: () => {
-        this.barView.updateProgressBar();
-        this.scaleView.update();
-        this.thumbView.update();
-      },
-      default: () => {},
-    };
-
     action.payload.differences.forEach((dataKey) => {
-      (dataChangeHandlers[dataKey] || dataChangeHandlers.default)();
+      this.handleViewDataChange(dataKey);
     });
   }
 
@@ -291,33 +231,8 @@ class View extends Observer implements IView {
     if (!isModelData(modelData)) return null;
     this.viewModel.changeData({ modelData });
 
-    const handleMinMaxChange = () => {
-      this.thumbView.update();
-      this.scaleView.recreate();
-      this.valueInfoView.update();
-      this.barView.updateProgressBar();
-      this.tooltipView.update();
-    };
-    const changeModelDataHandlers: Record<string, () => void> & { default: () => void } = {
-      isRange: () => {
-        this.thumbView.recreate();
-        this.tooltipView.recreate(this.thumbView.get());
-        this.barView.updateProgressBar();
-        this.valueInfoView.update();
-      },
-      value: () => {
-        this.barView.updateProgressBar();
-        this.thumbView.update();
-        this.tooltipView.update();
-        this.valueInfoView.update();
-      },
-      max: handleMinMaxChange,
-      min: handleMinMaxChange,
-      default: () => {},
-    };
-
     getDifferences(oldModelData, modelData).forEach(
-      (key) => (changeModelDataHandlers[key] || changeModelDataHandlers.default)(),
+      (dataKey) => this.handleModelDataChange(dataKey),
     );
 
     return this.viewModel.getData('modelData');
@@ -396,6 +311,96 @@ class View extends Observer implements IView {
     }
 
     return thumbNumber;
+  }
+
+  private handleViewDataChange(key: keyof IViewModelData) {
+    const handlers: Record<string, () => void> & { default: () => void } = {
+      length: () => {
+        this.barView.updateBar();
+        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+        this.updateResponsive();
+      },
+      isVertical: () => {
+        this.sliderContainerView.update();
+        this.barView.updateBar();
+        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+      },
+      hasTooltip: () => {
+        this.tooltipView.unmount();
+        if (this.viewModel.getData('hasTooltip')) {
+          this.tooltipView.mount();
+        }
+      },
+      hasScale: () => {
+        this.scaleView.unmount();
+        if (this.viewModel.getData('hasScale')) {
+          this.scaleView.mount();
+        }
+      },
+      hasValueInfo: () => {
+        this.valueInfoView.unmount();
+        if (this.viewModel.getData('hasValueInfo')) {
+          this.valueInfoView.mount();
+        }
+      },
+      scaleValue: () => {
+        this.scaleView.recreate();
+      },
+      useKeyboard: () => {
+        this.thumbView.removeKeyboardListener();
+        if (this.viewModel.getData('useKeyboard')) {
+          this.thumbView.addKeyboardListener();
+        }
+      },
+      isScaleClickable: () => {
+        this.scaleView.removeInteractivity();
+        if (this.viewModel.getData('isScaleClickable')) {
+          this.scaleView.addInteractivity();
+        }
+      },
+      isBarClickable: () => {
+        if (this.viewModel.getData('isBarClickable')) {
+          this.barView.addInteractivity();
+        } else {
+          this.barView.removeInteractivity();
+        }
+      },
+      lengthInPx: () => {
+        this.barView.updateProgressBar();
+        this.scaleView.update();
+        this.thumbView.update();
+      },
+      default: () => {},
+    };
+    (handlers[key] || handlers.default)();
+  }
+
+  private handleModelDataChange(key: keyof IModelData) {
+    const handleMinMaxChange = () => {
+      this.thumbView.update();
+      this.scaleView.recreate();
+      this.valueInfoView.update();
+      this.barView.updateProgressBar();
+      this.tooltipView.update();
+    };
+    const handlers: Record<string, () => void> & { default: () => void } = {
+      isRange: () => {
+        this.thumbView.recreate();
+        this.tooltipView.recreate(this.thumbView.get());
+        this.barView.updateProgressBar();
+        this.valueInfoView.update();
+      },
+      value: () => {
+        this.barView.updateProgressBar();
+        this.thumbView.update();
+        this.tooltipView.update();
+        this.valueInfoView.update();
+      },
+      max: handleMinMaxChange,
+      min: handleMinMaxChange,
+      default: () => {},
+    };
+    (handlers[key] || handlers.default)();
   }
 
   // Если длина бара не соответствует lengthInPx
