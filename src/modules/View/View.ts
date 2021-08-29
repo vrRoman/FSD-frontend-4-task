@@ -6,6 +6,8 @@ import type { IPresenter } from 'Presenter';
 import { Observer } from 'ObserverAndSubject';
 import type { SubjectAction } from 'ObserverAndSubject';
 import type { IModelData, ModelDataPartial } from 'Model';
+import { log } from 'util';
+import getDifferences from 'utilities/getDifferences';
 import isModelData from 'utilities/isModelData';
 
 import type {
@@ -109,36 +111,17 @@ class View extends Observer implements IView {
 
   // eslint-disable-next-line no-dupe-class-members
   getElement(elementName: ElementName): HTMLElement | [HTMLElement, HTMLElement] {
-    let element: HTMLElement | [HTMLElement, HTMLElement];
-    switch (elementName) {
-      case 'parent':
-        element = this.parent;
-        break;
-      case 'slider':
-        element = this.sliderContainerView.get();
-        break;
-      case 'bar':
-        element = this.barView.getBar();
-        break;
-      case 'progressBar':
-        element = this.barView.getProgressBar();
-        break;
-      case 'thumb':
-        element = this.thumbView.get();
-        break;
-      case 'tooltip':
-        element = this.tooltipView.get();
-        break;
-      case 'scale':
-        element = this.scaleView.get();
-        break;
-      case 'valueInfo':
-        element = this.valueInfoView.get();
-        break;
-      default:
-        element = this.sliderContainerView.get();
-    }
-    return element;
+    const elements = {
+      parent: this.parent,
+      slider: this.sliderContainerView.get(),
+      bar: this.barView.getBar(),
+      progressBar: this.barView.getProgressBar(),
+      thumb: this.thumbView.get(),
+      tooltip: this.tooltipView.get(),
+      scale: this.scaleView.get(),
+      valueInfo: this.valueInfoView.get(),
+    };
+    return elements[elementName];
   }
 
   getElementProperties(): ElementProperties {
@@ -213,68 +196,70 @@ class View extends Observer implements IView {
   }
 
   update(action: SubjectAction) {
-    if (action.type === 'CHANGE_VIEW_DATA') {
-      action.payload.differences.forEach((dataKey) => {
-        switch (dataKey) {
-          case 'length':
-            this.barView.updateBar();
-            this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
-            this.updateResponsive();
-            break;
-          case 'isVertical':
-            this.sliderContainerView.update();
-            this.barView.updateBar();
-            this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
-            break;
-          case 'hasTooltip':
-            this.tooltipView.unmount();
-            if (this.viewModel.getData('hasTooltip')) {
-              this.tooltipView.mount();
-            }
-            break;
-          case 'hasScale':
-            this.scaleView.unmount();
-            if (this.viewModel.getData('hasScale')) {
-              this.scaleView.mount();
-            }
-            break;
-          case 'hasValueInfo':
-            this.valueInfoView.unmount();
-            if (this.viewModel.getData('hasValueInfo')) {
-              this.valueInfoView.mount();
-            }
-            break;
-          case 'scaleValue':
-            this.scaleView.recreate();
-            break;
-          case 'useKeyboard':
-            this.thumbView.removeKeyboardListener();
-            if (this.viewModel.getData('useKeyboard')) {
-              this.thumbView.addKeyboardListener();
-            }
-            break;
-          case 'isScaleClickable':
-            this.scaleView.removeInteractivity();
-            if (this.viewModel.getData('isScaleClickable')) {
-              this.scaleView.addInteractivity();
-            }
-            break;
-          case 'isBarClickable':
-            if (this.viewModel.getData('isBarClickable')) {
-              this.barView.addInteractivity();
-            } else {
-              this.barView.removeInteractivity();
-            }
-            break;
-          case 'lengthInPx':
-            this.barView.updateProgressBar();
-            this.scaleView.update();
-            this.thumbView.update();
-            break;
-          default: break;
+    if (action.type !== 'CHANGE_VIEW_DATA') return;
+
+    const dataChangeHandlers: Record<string, () => void> & { default: () => void } = {
+      length: () => {
+        this.barView.updateBar();
+        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+        this.updateResponsive();
+      },
+      isVertical: () => {
+        this.sliderContainerView.update();
+        this.barView.updateBar();
+        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+      },
+      hasTooltip: () => {
+        this.tooltipView.unmount();
+        if (this.viewModel.getData('hasTooltip')) {
+          this.tooltipView.mount();
         }
-      });
-    }
+      },
+      hasScale: () => {
+        this.scaleView.unmount();
+        if (this.viewModel.getData('hasScale')) {
+          this.scaleView.mount();
+        }
+      },
+      hasValueInfo: () => {
+        this.valueInfoView.unmount();
+        if (this.viewModel.getData('hasValueInfo')) {
+          this.valueInfoView.mount();
+        }
+      },
+      scaleValue: () => {
+        this.scaleView.recreate();
+      },
+      useKeyboard: () => {
+        this.thumbView.removeKeyboardListener();
+        if (this.viewModel.getData('useKeyboard')) {
+          this.thumbView.addKeyboardListener();
+        }
+      },
+      isScaleClickable: () => {
+        this.scaleView.removeInteractivity();
+        if (this.viewModel.getData('isScaleClickable')) {
+          this.scaleView.addInteractivity();
+        }
+      },
+      isBarClickable: () => {
+        if (this.viewModel.getData('isBarClickable')) {
+          this.barView.addInteractivity();
+        } else {
+          this.barView.removeInteractivity();
+        }
+      },
+      lengthInPx: () => {
+        this.barView.updateProgressBar();
+        this.scaleView.update();
+        this.thumbView.update();
+      },
+      default: () => {},
+    };
+
+    action.payload.differences.forEach((dataKey) => {
+      (dataChangeHandlers[dataKey] || dataChangeHandlers.default)();
+    });
   }
 
   // Обращается к viewModel для изменения active thumb
@@ -297,42 +282,43 @@ class View extends Observer implements IView {
 
   // Обращается к viewModel
   setModelData(newModelData: ModelDataPartial): IModelData | null {
-    const oldModelData = this.viewModel.getData('modelData');
+    const oldModelData = this.viewModel.getData('modelData') || {};
     const modelData = {
       ...oldModelData,
       ...newModelData,
     };
 
-    if (isModelData(modelData)) {
-      this.viewModel.changeData({ modelData });
+    if (!isModelData(modelData)) return null;
+    this.viewModel.changeData({ modelData });
 
-      if (newModelData.isRange !== oldModelData?.isRange) {
+    const handleMinMaxChange = () => {
+      this.thumbView.update();
+      this.scaleView.recreate();
+      this.valueInfoView.update();
+      this.barView.updateProgressBar();
+      this.tooltipView.update();
+    };
+    const changeModelDataHandlers: Record<string, () => void> & { default: () => void } = {
+      isRange: () => {
         this.thumbView.recreate();
         this.tooltipView.recreate(this.thumbView.get());
         this.barView.updateProgressBar();
         this.valueInfoView.update();
-      }
-      if (newModelData.value !== oldModelData?.value) {
+      },
+      value: () => {
         this.barView.updateProgressBar();
         this.thumbView.update();
         this.tooltipView.update();
         this.valueInfoView.update();
-      }
-      if (newModelData.max !== oldModelData?.max) {
-        this.thumbView.update();
-        this.scaleView.recreate();
-        this.valueInfoView.update();
-        this.barView.updateProgressBar();
-        this.tooltipView.update();
-      }
-      if (newModelData.min !== oldModelData?.min) {
-        this.thumbView.update();
-        this.scaleView.recreate();
-        this.valueInfoView.update();
-        this.barView.updateProgressBar();
-        this.tooltipView.update();
-      }
-    }
+      },
+      max: handleMinMaxChange,
+      min: handleMinMaxChange,
+      default: () => {},
+    };
+
+    getDifferences(oldModelData, modelData).forEach(
+      (key) => (changeModelDataHandlers[key] || changeModelDataHandlers.default)(),
+    );
 
     return this.viewModel.getData('modelData');
   }
