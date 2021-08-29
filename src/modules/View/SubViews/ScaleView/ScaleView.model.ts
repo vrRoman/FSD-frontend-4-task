@@ -3,6 +3,7 @@ interface IScaleView {
   getStepsValues(): Array<number | string> | null
   recreate(): HTMLElement
   update(): void
+  updateElementsPosition(): void
   mount(): void
   unmount(): void
   addInteractivity(): void

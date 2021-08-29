@@ -41,31 +41,26 @@ class ScaleView implements IScaleView {
   // Возвращает номера/названия шагов
   getStepsValues(): Array<number | string> {
     const modelData = this.viewModel.getData('modelData');
-    if (modelData === null) {
+    if (!modelData) {
       return [];
     }
 
     const scaleValue = this.viewModel.getData('scaleValue');
     const { min, max } = modelData;
-    let stepValues: Array<number | string> = [];
 
     if (Array.isArray(scaleValue)) {
-      stepValues = scaleValue;
-    } else {
-      let stepNumber = min;
-      stepValues.push(stepNumber);
-      while (stepNumber < max - scaleValue) {
-        stepNumber += scaleValue;
-        stepValues.push(Number(stepNumber.toFixed(3)));
-      }
-      stepValues.push(max);
+      return scaleValue;
     }
-    return stepValues;
+
+    const stepsAmount = Math.ceil((max - min) / scaleValue) + 1;
+    return [...Array(stepsAmount)].map((_, index) => {
+      const step = min + scaleValue * index;
+      return step > max ? max : Number(step.toFixed(3));
+    });
   }
 
   // Пересоздает шкалу, если она уже в DOM, то убирает ее и заново добавляет
   recreate(): HTMLElement {
-    this.steps = [];
     if (this.isMounted) {
       this.unmount();
       this.scale = this.create();
@@ -78,35 +73,40 @@ class ScaleView implements IScaleView {
 
   // Обновляет положение и длину шкалы и ее элементов
   update() {
-    const modelData = this.viewModel.getData('modelData');
-    if (modelData === null) return;
-
-    const { min, max } = modelData;
     const length = this.viewModel.getData('lengthInPx');
-    const scaleValue = this.viewModel.getData('scaleValue');
     const {
       widthOrHeight,
-      offsetWidthOrHeight,
-      leftOrTop,
       opposites,
     } = this.mainView.getElementProperties();
 
     this.scale.style[widthOrHeight] = `${length}px`;
     this.scale.style[opposites.widthOrHeight] = '';
 
-    for (let i = 0; i < this.steps.length; i += 1) {
-      const { element, value } = this.steps[i];
+    this.updateElementsPosition();
+  }
+
+  updateElementsPosition() {
+    const { min = 0, max = 0 } = this.viewModel.getData('modelData') || {};
+    const length = this.viewModel.getData('lengthInPx');
+    const scaleValue = this.viewModel.getData('scaleValue');
+    const {
+      offsetWidthOrHeight,
+      leftOrTop,
+      opposites,
+    } = this.mainView.getElementProperties();
+
+    this.steps.forEach((step, index) => {
+      const { element, value } = step;
       const oneValueLength = length / (max - min);
-      let position: number;
+      let newPosition: number;
       if (Array.isArray(scaleValue)) {
-        position = (length / (this.steps.length - 1)) * i;
+        newPosition = (length / (this.steps.length - 1)) * index;
       } else {
-        position = (Number(value) * oneValueLength)
-          - (Number(this.steps[0].value) * oneValueLength);
+        newPosition = (Number(value) - min) * oneValueLength;
       }
-      element.style[leftOrTop] = `${position - element[offsetWidthOrHeight] / 2}px`;
+      element.style[leftOrTop] = `${newPosition - element[offsetWidthOrHeight] / 2}px`;
       element.style[opposites.leftOrTop] = '';
-    }
+    });
   }
 
   mount() {
@@ -125,50 +125,47 @@ class ScaleView implements IScaleView {
   // При клике на элементы шкалы будет двигаться ползунок
   addInteractivity() {
     const { clickableScaleElementClass } = this.viewModel.getData('classes');
-    for (let i = 0; i < this.steps.length; i += 1) {
-      const { element } = this.steps[i];
+    this.steps.forEach((step) => {
+      const { element } = step;
       addClass(element, clickableScaleElementClass);
       element.addEventListener('mousedown', this.handleStepElementMouseDown);
-    }
+    });
   }
 
   // Убирает слушатель клика у элементов шкалы
   removeInteractivity() {
     const { clickableScaleElementClass } = this.viewModel.getData('classes');
-    for (let i = 0; i < this.steps.length; i += 1) {
-      const { element } = this.steps[i];
+    this.steps.forEach((step) => {
+      const { element } = step;
       removeClass(element, clickableScaleElementClass);
       element.removeEventListener('mousedown', this.handleStepElementMouseDown);
-    }
+    });
   }
 
   private create(): HTMLElement {
-    const scale = document.createElement('div');
-    const stepsValues = this.getStepsValues();
     const { scaleClass, scaleElementClass } = this.viewModel.getData('classes');
     const { widthOrHeight } = this.mainView.getElementProperties();
     const length = this.viewModel.getData('lengthInPx');
 
-    addClass(scale, scaleClass);
-    scale.style[widthOrHeight] = `${length}px`;
+    this.scale = document.createElement('div');
+    this.scale.style[widthOrHeight] = `${length}px`;
+    addClass(this.scale, scaleClass);
 
-    for (let i = 0; i < stepsValues.length; i += 1) {
-      const stepElement = document.createElement('div');
-      addClass(stepElement, scaleElementClass);
-      stepElement.style.position = 'absolute';
-      this.steps.push({
-        element: stepElement,
-        value: stepsValues[i],
-      });
-      stepElement.innerText = String(stepsValues[i]);
-      scale.appendChild(stepElement);
-    }
+    this.steps = this.getStepsValues().map((value) => {
+      const element = document.createElement('div');
+      addClass(element, scaleElementClass);
+      element.style.position = 'absolute';
+      element.innerText = String(value);
+      this.scale.appendChild(element);
+      return {
+        element,
+        value,
+      };
+    });
 
-    this.scale = scale;
     if (this.viewModel.getData('isScaleClickable')) {
       this.addInteractivity();
     }
-
     return this.scale;
   }
 
@@ -178,33 +175,24 @@ class ScaleView implements IScaleView {
     event.stopPropagation();
 
     const stepElement = event.currentTarget;
-    if (!(stepElement instanceof HTMLElement)) {
-      return;
-    }
+    if (!(stepElement instanceof HTMLElement)) return;
 
-    const modelProperties = this.viewModel.getData('modelData');
-    if (modelProperties === null) return;
-
-    const stepLength = this.viewModel.getStepLength();
+    const { stepSize = 0 } = this.viewModel.getData('modelData') || {};
     const { leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
-    const { stepSize } = modelProperties;
-    let activeThumb = this.viewModel.getData('activeThumb');
+    const stepLength = this.viewModel.getStepLength();
 
-    if (!activeThumb) {
-      const stepElementPosition = parseFloat(stepElement.style[leftOrTop])
-        + stepElement[offsetWidthOrHeight] / 2;
-      activeThumb = this.mainView.setActiveThumb(
-        this.mainView.getThumbNumberThatCloserToPosition(stepElementPosition),
-      );
-    }
+    const stepElementPosition = parseFloat(stepElement.style[leftOrTop])
+      + stepElement[offsetWidthOrHeight] / 2;
+    const activeThumb = this.mainView.updateActiveThumb(stepElementPosition);
 
     const stepValue = (
       parseFloat(stepElement.style[leftOrTop]) + stepElement[offsetWidthOrHeight] / 2
     ) / (stepLength / stepSize);
-    const thumbValue = (
+    const currentValue = (
       parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeight] / 2
     ) / (stepLength / stepSize);
-    this.mainView.moveActiveThumb(Math.round((stepValue - thumbValue) / stepSize));
+
+    this.mainView.moveActiveThumb(Math.round((stepValue - currentValue) / stepSize));
   }
 }
 
