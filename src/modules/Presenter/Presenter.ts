@@ -34,7 +34,7 @@ class Presenter extends Observer implements IPresenter {
   }
 
   // Изменяет значения модели во view
-  update(action: SubjectAction): void {
+  update(action: SubjectAction) {
     if (action.type === 'CHANGE_MODEL_DATA') {
       this.view.setModelData(action.payload);
 
@@ -45,7 +45,7 @@ class Presenter extends Observer implements IPresenter {
   }
 
   // Меняет настройки слайдера
-  changeOptions(newOptions: SliderOptionsPartial): void {
+  changeOptions(newOptions: SliderOptionsPartial) {
     this.model.changeData(newOptions);
     this.view.changeOptions(newOptions);
 
