@@ -26,7 +26,7 @@ import type { IBarView } from './SubViews/BarView';
 import ScaleView from './SubViews/ScaleView';
 import type { IScaleView } from './SubViews/ScaleView';
 import ThumbView from './SubViews/ThumbView';
-import type { IThumbView } from './SubViews/ThumbView';
+import type { IThumbView, Thumb } from './SubViews/ThumbView';
 import TooltipView from './SubViews/TooltipView';
 import type { ITooltipView } from './SubViews/TooltipView';
 import ValueInfoView from './SubViews/ValueInfoView';
@@ -371,6 +371,19 @@ class View extends Observer implements IView {
       window.removeEventListener('resize', this.handleWindowResize);
       window.addEventListener('resize', this.handleWindowResize);
     }
+  }
+
+  // Если в данный момент нет активного ползунка,
+  // то сделать активным тот, который ближе к позиции.
+  // Если позиция не задана, то вернется первый ползунок
+  updateActiveThumb(clickPosition: number = 0): HTMLElement {
+    const currentThumb = this.viewModel.getData('activeThumb');
+    if (!currentThumb) {
+      return this.setActiveThumb(
+        this.getThumbNumberThatCloserToPosition(clickPosition),
+      );
+    }
+    return currentThumb;
   }
 
   getViewModel(): IViewModel {

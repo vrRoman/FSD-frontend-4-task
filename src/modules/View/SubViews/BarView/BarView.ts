@@ -138,15 +138,7 @@ class BarView implements IBarView {
     const { clientXOrY, leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
     const clickPosition = event[clientXOrY] - this.bar.getBoundingClientRect()[leftOrTop];
 
-    if (!this.viewModel.getData('activeThumb')) {
-      this.mainView.setActiveThumb(
-        this.mainView.getThumbNumberThatCloserToPosition(clickPosition),
-      );
-    }
-    const activeThumb = this.viewModel.getData('activeThumb');
-    if (activeThumb === null) {
-      throw new Error('activeThumb is null');
-    }
+    const activeThumb = this.mainView.updateActiveThumb(clickPosition);
 
     const activeThumbPosition = parseFloat(activeThumb.style[leftOrTop])
       + activeThumb[offsetWidthOrHeight] / 2;

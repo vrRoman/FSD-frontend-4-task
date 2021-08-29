@@ -6,7 +6,7 @@ import { IViewModel, ViewClasses } from './ViewModel';
 import { IBarView } from './SubViews/BarView';
 import { ISliderContainerView } from './SubViews/SliderContainerView';
 import { IScaleView } from './SubViews/ScaleView';
-import { IThumbView } from './SubViews/ThumbView';
+import { IThumbView, Thumb } from './SubViews/ThumbView';
 import { ITooltipView } from './SubViews/TooltipView';
 import { IValueInfoView } from './SubViews/ValueInfoView';
 
@@ -68,6 +68,8 @@ interface IView extends IObserver {
   getElement(elementName: 'thumb' | 'tooltip'): HTMLElement | [HTMLElement, HTMLElement]
   getViews(): Views
 
+  updateActiveThumb(clickPosition?: number): HTMLElement
+  updateResponsive(): void
   setPresenter(presenter: IPresenter): IPresenter
   setModelData(newModelData: ModelDataPartial): IModelData | null
   setActiveThumb(thumbNumber?: 0 | 1 | null): HTMLElement
