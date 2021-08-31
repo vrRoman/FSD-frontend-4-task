@@ -10,7 +10,8 @@
     "build:prod": "webpack --mode production",
     "start": "webpack-dev-server",
     "test": "jest --coverage",
-    "lint": "npx eslint \"**/*.ts\" ; npx eslint \"**/*.js\" ; npx stylelint \"**/*.scss\" ; npx pug-lint ./"
+    "lint": "npx eslint \"**/*.ts\" && npx eslint \"**/*.js\" && npx stylelint \"**/*.scss\" && npx pug-lint ./",
+    "lint:fix": "npx eslint --fix \"**/*.ts\" && npx eslint --fix \"**/*.js\" && npx stylelint --fix \"**/*.scss\" && npx pug-lint ./"
   },
   "repository": {
     "type": "git",
