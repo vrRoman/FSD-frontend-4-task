@@ -280,10 +280,24 @@ class ThumbView implements IThumbView {
   // Вызывается moveActiveThumb с numberOfSteps,
   // зависящим от смещения мыши, изменяет clientX/Y
   private handleThumbMouseMove(event: MouseEvent | TouchEvent) {
-    const { clientXOrY } = this.mainView.getElementProperties();
+    const { clientXOrY, rightOrBottom, leftOrTop } = this.mainView.getElementProperties();
+    const bar = this.mainView.getElement('bar');
+    const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
+    const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
     const stepLength = this.viewModel.getStepLength();
     const oldCoordinate = this.viewModel.getData(clientXOrY);
     const currentCoordinate = 'clientX' in event ? event[clientXOrY] : event.touches[0][clientXOrY];
+
+    // Если курсор выходит за бар, тогда к numberOfSteps добавить/убавить
+    // число шагов, за которые вышел курсор
+    if (currentCoordinate >= barMaxCoordinate) {
+      this.moveActiveThumb(Math.ceil((currentCoordinate - barMaxCoordinate) / stepLength));
+      return;
+    }
+    if (currentCoordinate <= barMinCoordinate) {
+      this.moveActiveThumb(-Math.ceil((barMinCoordinate - currentCoordinate) / stepLength));
+      return;
+    }
 
     // Если пройдена половина пути, то тамб передвигается
     const numberOfSteps = Math.round(
