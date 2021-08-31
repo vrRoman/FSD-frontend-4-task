@@ -50,6 +50,7 @@ interface IViewModelGetMethods {
 
 interface IViewModel extends ISubject, IViewModelGetMethods {
   changeData(data: ViewModelDataPartial): IViewModelData;
+  onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1): void;
 }
 
 export {

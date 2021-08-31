@@ -1,5 +1,4 @@
 import { IModelData, ModelDataPartial } from 'Model';
-import type { IPresenter } from 'Presenter';
 import { IObserver } from 'ObserverAndSubject';
 
 import { IViewModel, ViewClasses } from './ViewModel';
@@ -70,7 +69,7 @@ interface IView extends IObserver {
 
   updateActiveThumb(clickPosition?: number): HTMLElement
   updateResponsive(): void
-  setPresenter(presenter: IPresenter): IPresenter
+  subscribe(observer: IObserver): void
   setModelData(newModelData: ModelDataPartial): IModelData | null
   setActiveThumb(thumbNumber?: 0 | 1 | null): HTMLElement | null
   setClientCoordinates(coordinates: [number, number]): [number, number]

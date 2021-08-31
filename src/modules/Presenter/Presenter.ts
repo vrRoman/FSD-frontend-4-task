@@ -15,7 +15,7 @@ class Presenter extends Observer implements IPresenter {
 
   private view: IView;
 
-  onChange: OnChange | null
+  onChange: OnChange | null;
 
   constructor(model: IModel, view: IView, presenterOptions: PresenterOptions) {
     super(model);
@@ -29,10 +29,6 @@ class Presenter extends Observer implements IPresenter {
     this.view.renderSlider();
   }
 
-  onThumbMove(numberOfSteps: number = 1, thumbNumber: 0 | 1 = 1) {
-    this.model.addStepsToValue(numberOfSteps, thumbNumber);
-  }
-
   // Изменяет значения модели во view
   update(action: SubjectAction) {
     if (action.type === 'CHANGE_MODEL_DATA') {
@@ -41,6 +37,10 @@ class Presenter extends Observer implements IPresenter {
       if (this.onChange) {
         this.onChange(this.model.getData('value'));
       }
+    }
+    if (action.type === 'THUMB_MOVED') {
+      const { numberOfSteps, thumbNumber } = action.payload;
+      this.model.addStepsToValue(numberOfSteps, thumbNumber);
     }
   }
 
@@ -64,7 +64,7 @@ class Presenter extends Observer implements IPresenter {
       stepSize: this.model.getData('stepSize'),
     });
 
-    this.view.setPresenter(this);
+    this.view.subscribe(this);
   }
 }
 

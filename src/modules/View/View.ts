@@ -2,8 +2,7 @@ import autoBind from 'auto-bind';
 
 import defaultClasses from 'constants/defaultClasses';
 import { staticLengthUnits } from 'constants/lengthUnits';
-import type { IPresenter } from 'Presenter';
-import { Observer } from 'ObserverAndSubject';
+import { IObserver, Observer } from 'ObserverAndSubject';
 import type { SubjectAction } from 'ObserverAndSubject';
 import type { IModelData, ModelDataPartial } from 'Model';
 import getDifferences from 'utilities/getDifferences';
@@ -50,8 +49,6 @@ class View extends Observer implements IView {
 
   private readonly tooltipView: ITooltipView
 
-  private presenter: IPresenter | null
-
   constructor(viewOptions: ViewOptions, parent: HTMLElement) {
     const classes: ViewClasses = {
       sliderClass: viewOptions.sliderClass || defaultClasses.sliderClass,
@@ -91,7 +88,6 @@ class View extends Observer implements IView {
     autoBind(this);
 
     this.viewModel = viewModel;
-    this.presenter = null;
     this.parent = parent;
 
     this.sliderContainerView = new SliderContainerView(this.parent, this);
@@ -184,11 +180,6 @@ class View extends Observer implements IView {
     this.updateResponsive();
   }
 
-  setPresenter(presenter: IPresenter): IPresenter {
-    this.presenter = presenter;
-    return this.presenter;
-  }
-
   // Меняет настройки в viewModel
   changeOptions(newOptions: ViewOptionsPartial) {
     this.viewModel.changeData(newOptions);
@@ -243,11 +234,13 @@ class View extends Observer implements IView {
     this.thumbView.moveActiveThumb(steps);
   }
 
+  subscribe(observer: IObserver) {
+    this.viewModel.subscribe(observer);
+  }
+
   // Передает вызов в presenter
   onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1) {
-    if (this.presenter) {
-      this.presenter.onThumbMove(numberOfSteps, thumbNumber);
-    }
+    this.viewModel.onThumbMove(numberOfSteps, thumbNumber);
   }
 
   // Передает значение в viewModel

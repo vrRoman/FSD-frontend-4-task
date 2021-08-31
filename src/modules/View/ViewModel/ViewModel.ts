@@ -39,6 +39,16 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     return this.data;
   }
 
+  onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1) {
+    this.notify({
+      type: 'THUMB_MOVED',
+      payload: {
+        numberOfSteps,
+        thumbNumber,
+      },
+    });
+  }
+
   getData(): IViewModelData
 
   getData<Key extends keyof IViewModelData>(dataKey: Key): IViewModelData[Key]

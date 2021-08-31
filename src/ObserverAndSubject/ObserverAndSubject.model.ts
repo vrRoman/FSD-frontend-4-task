@@ -1,23 +1,28 @@
 import type { IModelData } from 'Model';
 import type { IViewModelData } from 'View/ViewModel';
 
-type actionModelType = 'CHANGE_MODEL_DATA';
-type actionViewType = 'CHANGE_VIEW_DATA';
-
 type ModelSubjectAction = {
-  type: actionModelType;
+  type: 'CHANGE_MODEL_DATA';
   payload: IModelData;
 }
 
 type ViewSubjectAction = {
-  type: actionViewType;
+  type: 'CHANGE_VIEW_DATA';
   payload: {
     newData: IViewModelData;
     differences: Array<keyof IViewModelData>;
   };
 }
 
-type SubjectAction = ModelSubjectAction | ViewSubjectAction;
+type ThumbMoveAction = {
+  type: 'THUMB_MOVED';
+  payload: {
+    thumbNumber: 0 | 1;
+    numberOfSteps: number;
+  }
+}
+
+type SubjectAction = ModelSubjectAction | ViewSubjectAction | ThumbMoveAction;
 
 interface IObserver {
   update(action: SubjectAction): void;
