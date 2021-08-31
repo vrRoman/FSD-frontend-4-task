@@ -308,16 +308,23 @@ class View extends Observer implements IView {
   }
 
   private handleViewDataChange(key: keyof IViewModelData) {
+    const updateLengthInPx = () => {
+      this.barView.updateProgressBar();
+      this.scaleView.update();
+      this.thumbView.update();
+    };
     const handlers: Record<string, () => void> & { default: () => void } = {
       length: () => {
         this.barView.updateBar();
         this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+        updateLengthInPx();
         this.updateResponsive();
       },
       isVertical: () => {
         this.sliderContainerView.update();
         this.barView.updateBar();
         this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+        updateLengthInPx();
       },
       hasTooltip: () => {
         this.tooltipView.unmount();
@@ -360,9 +367,7 @@ class View extends Observer implements IView {
         }
       },
       lengthInPx: () => {
-        this.barView.updateProgressBar();
-        this.scaleView.update();
-        this.thumbView.update();
+        updateLengthInPx();
       },
       default: () => {},
     };
