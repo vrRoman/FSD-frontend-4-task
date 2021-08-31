@@ -6,7 +6,7 @@ import { IViewModel, ViewClasses } from './ViewModel';
 import { IBarView } from './SubViews/BarView';
 import { ISliderContainerView } from './SubViews/SliderContainerView';
 import { IScaleView } from './SubViews/ScaleView';
-import { IThumbView, Thumb } from './SubViews/ThumbView';
+import { IThumbView } from './SubViews/ThumbView';
 import { ITooltipView } from './SubViews/TooltipView';
 import { IValueInfoView } from './SubViews/ValueInfoView';
 
