@@ -79,14 +79,14 @@ class TooltipView implements ITooltipView {
     const { tooltipClass, tooltipValueClass } = this.viewModel.getData('classes');
 
     const valueArray = Array.isArray(value) ? value : [value];
-    const tooltips = valueArray.map((currentValue) => {
+    const [firstTooltip, secondTooltip] = valueArray.map((currentValue) => {
       const tooltip = document.createElement('span');
       addClass(tooltip, tooltipClass);
       tooltip.innerHTML = `<span class="${tooltipValueClass}">${Number((currentValue).toFixed(3))}</span>`;
       return tooltip;
     });
 
-    this.tooltip = Array.isArray(value) ? [tooltips[0], tooltips[1]] : tooltips[0];
+    this.tooltip = Array.isArray(value) ? [firstTooltip, secondTooltip] : firstTooltip;
     return this.tooltip;
   }
 }

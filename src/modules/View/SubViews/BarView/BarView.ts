@@ -76,8 +76,9 @@ class BarView implements IBarView {
       this.progressBar.style[widthOrHeight] = `${valuePosition}px`;
       this.progressBar.style[leftOrTop] = '0';
     } else {
-      this.progressBar.style[widthOrHeight] = `${valuePosition[1] - valuePosition[0]}px`;
-      this.progressBar.style[leftOrTop] = `${valuePosition[0]}px`;
+      const [firstPosition, secondPosition] = valuePosition;
+      this.progressBar.style[widthOrHeight] = `${secondPosition - firstPosition}px`;
+      this.progressBar.style[leftOrTop] = `${firstPosition}px`;
     }
   }
 

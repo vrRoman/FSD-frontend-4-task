@@ -26,7 +26,7 @@ class ValueInfoView implements IValueInfoView {
   }
 
   // По умолчанию, если isRange = false, то
-  // указывается просто model.value, иначе записывается в виде value[0] - value[1]
+  // указывается просто `value`, иначе записывается в виде `firstValue - secondValue`
   create(): HTMLElement {
     const modelProperties = this.viewModel.getData('modelData') || { value: 0 };
     const valueInfo = document.createElement('div');
@@ -38,7 +38,8 @@ class ValueInfoView implements IValueInfoView {
     if (typeof value === 'number') {
       valueInfo.innerText = `${value}`;
     } else {
-      valueInfo.innerText = `${value[0]} - ${value[1]}`;
+      const [firstValue, secondValue] = value;
+      valueInfo.innerText = `${firstValue} - ${secondValue}`;
     }
 
     this.valueInfo = valueInfo;
@@ -52,7 +53,8 @@ class ValueInfoView implements IValueInfoView {
     if (typeof value === 'number') {
       this.valueInfo.innerText = `${value}`;
     } else {
-      this.valueInfo.innerText = `${value[0]} - ${value[1]}`;
+      const [firstValue, secondValue] = value;
+      this.valueInfo.innerText = `${firstValue} - ${secondValue}`;
     }
   }
 

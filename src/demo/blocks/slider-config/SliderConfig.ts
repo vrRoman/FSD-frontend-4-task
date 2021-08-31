@@ -275,9 +275,10 @@ class SliderConfig implements IObserver, ISliderConfig {
     let newSliderValue: Value;
 
     if (Array.isArray(sliderValue)) {
+      const [firstValue, secondValue] = sliderValue;
       newSliderValue = optionName === 'value1'
-        ? [value, sliderValue[1]]
-        : [sliderValue[0], value];
+        ? [value, secondValue]
+        : [firstValue, value];
     } else {
       newSliderValue = value;
     }

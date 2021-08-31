@@ -60,10 +60,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       return (this.data.lengthInPx / maxDiapason) * (value - this.data.modelData.min);
     }
 
-    const valuePosition = value.map(
+    const [firstPosition, secondPosition] = value.map(
       (valueElement) => (this.data.lengthInPx / maxDiapason) * (valueElement - min),
     );
-    return [valuePosition[0], valuePosition[1]];
+    return [firstPosition, secondPosition];
   }
 
   getStepLength(): number {

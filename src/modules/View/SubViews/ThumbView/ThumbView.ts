@@ -143,7 +143,7 @@ class ThumbView implements IThumbView {
     const valuePositionArray = Array.isArray(valuePosition) ? valuePosition : [valuePosition];
     const { thumbClass } = this.viewModel.getData('classes');
 
-    const thumbElements = valuePositionArray.map(() => {
+    const [firstThumb, secondThumb] = valuePositionArray.map(() => {
       const newThumbElement = document.createElement('button');
       addClass(newThumbElement, thumbClass);
       newThumbElement.style.position = 'absolute';
@@ -151,8 +151,8 @@ class ThumbView implements IThumbView {
     });
 
     this.thumb = Array.isArray(valuePosition)
-      ? [thumbElements[0], thumbElements[1]]
-      : thumbElements[0];
+      ? [firstThumb, secondThumb]
+      : firstThumb;
 
     this.addListener();
     return this.thumb;
@@ -166,10 +166,11 @@ class ThumbView implements IThumbView {
     let maxPosition: number = length - currentThumb[offsetWidthOrHeight] / 2;
     let minPosition: number = -currentThumb[offsetWidthOrHeight] / 2;
     if (Array.isArray(this.thumb)) {
+      const [firstThumb, secondThumb] = this.thumb;
       if (thumbIndex) {
-        minPosition = parseFloat(this.thumb[0].style[leftOrTop]);
+        minPosition = parseFloat(firstThumb.style[leftOrTop]);
       } else {
-        maxPosition = parseFloat(this.thumb[1].style[leftOrTop]);
+        maxPosition = parseFloat(secondThumb.style[leftOrTop]);
       }
     }
 
@@ -183,15 +184,16 @@ class ThumbView implements IThumbView {
     let shouldBeSecondThumb = false;
 
     if (Array.isArray(this.thumb)) {
-      const firstThumbPosition = this.thumb[0].style[leftOrTop]
-        + this.thumb[0][offsetWidthOrHeight];
-      const secondThumbPosition = this.thumb[1].style[leftOrTop]
-        + this.thumb[1][offsetWidthOrHeight];
+      const [firstThumb, secondThumb] = this.thumb;
+      const firstThumbPosition = firstThumb.style[leftOrTop]
+        + firstThumb[offsetWidthOrHeight];
+      const secondThumbPosition = secondThumb.style[leftOrTop]
+        + secondThumb[offsetWidthOrHeight];
 
       if (firstThumbPosition === secondThumbPosition) {
         const length = this.viewModel.getData('lengthInPx');
         shouldBeSecondThumb = parseFloat(firstThumbPosition) < length / 2;
-      } else if (thumb.isSameNode(this.thumb[1])) {
+      } else if (thumb.isSameNode(secondThumb)) {
         shouldBeSecondThumb = true;
       }
     }

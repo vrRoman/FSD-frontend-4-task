@@ -251,10 +251,10 @@ class View extends Observer implements IView {
   }
 
   // Передает значение в viewModel
-  setClientCoordinates(coordinates: [number, number]): [number, number] {
+  setClientCoordinates([coordinateX, coordinateY]: [number, number]): [number, number] {
     const { clientX, clientY } = this.viewModel.changeData({
-      clientX: coordinates[0],
-      clientY: coordinates[1],
+      clientX: coordinateX,
+      clientY: coordinateY,
     });
     return [clientX, clientY];
   }
@@ -300,13 +300,14 @@ class View extends Observer implements IView {
       return 0;
     }
 
-    if (thumbPosition[0] === thumbPosition[1]) {
+    const [firstThumbPosition, secondThumbPosition] = thumbPosition;
+    if (firstThumbPosition === secondThumbPosition) {
       if (position < length / 2) {
         thumbNumber = 0;
       }
-    } else if (thumbPosition[1] === position) {
+    } else if (secondThumbPosition === position) {
       thumbNumber = 0;
-    } else if (Math.abs(thumbPosition[0] - position) < Math.abs(thumbPosition[1] - position)) {
+    } else if (Math.abs(firstThumbPosition - position) < Math.abs(secondThumbPosition - position)) {
       thumbNumber = 0;
     }
 
