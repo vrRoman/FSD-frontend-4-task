@@ -86,9 +86,6 @@ class ScaleView implements IScaleView {
   }
 
   updateElementsPosition() {
-    const { min = 0, max = 0 } = this.viewModel.getData('modelData') || {};
-    const length = this.viewModel.getData('lengthInPx');
-    const scaleValue = this.viewModel.getData('scaleValue');
     const {
       offsetWidthOrHeight,
       leftOrTop,
@@ -96,14 +93,9 @@ class ScaleView implements IScaleView {
     } = this.mainView.getElementProperties();
 
     this.steps.forEach((step, index) => {
-      const { element, value } = step;
-      const oneValueLength = length / (max - min);
-      let newPosition: number;
-      if (Array.isArray(scaleValue)) {
-        newPosition = (length / (this.steps.length - 1)) * index;
-      } else {
-        newPosition = (Number(value) - min) * oneValueLength;
-      }
+      const { element } = step;
+      const newPosition = this.getStepPositionByIndex(index);
+
       element.style[leftOrTop] = `${newPosition - element[offsetWidthOrHeight] / 2}px`;
       element.style[opposites.leftOrTop] = '';
     });
@@ -168,6 +160,56 @@ class ScaleView implements IScaleView {
     }
     return this.scale;
   }
+
+  private getStepPositionByIndex(index: number): number {
+    const { min = 0, max = 0 } = this.viewModel.getData('modelData') || {};
+    const length = this.viewModel.getData('lengthInPx');
+    const { value } = this.steps[index];
+    const oneValueLength = length / (max - min);
+
+    if (!Number.isNaN(Number(value))) {
+      return (Number(value) - min) * oneValueLength;
+    }
+
+    // Если значение шага - строка. то разместить ее между крайними числовыми шагами
+    const nextNumericIndex = this.getNextNumericStepIndex(index);
+    const prevNumericIndex = this.getPrevNumericStepIndex(index);
+    const nextNumericValue = nextNumericIndex
+      ? Number(this.steps[nextNumericIndex].value)
+      : max;
+    const prevNumericValue = prevNumericIndex
+      ? Number(this.steps[prevNumericIndex].value)
+      : min;
+    const prevNumericStepPosition = (Number(prevNumericValue) - min) * oneValueLength;
+    const lengthBetweenPrevAndNextNumericSteps = (nextNumericValue - prevNumericValue)
+      * oneValueLength;
+    const numericIndexesDifference = (nextNumericIndex || this.steps.length - 1)
+      - (prevNumericIndex || 0);
+
+    return prevNumericStepPosition + (
+      lengthBetweenPrevAndNextNumericSteps / numericIndexesDifference
+    ) * (index - (prevNumericIndex || 0));
+  }
+
+  private getNextNumericStepIndex(currentIndex: number = 0): number | null {
+    if (currentIndex + 1 >= this.steps.length) return null;
+
+    const isNextString = Number.isNaN(Number(this.steps[currentIndex + 1].value));
+    if (isNextString) {
+      return this.getNextNumericStepIndex(currentIndex + 1);
+    }
+    return currentIndex + 1;
+  }
+
+  private getPrevNumericStepIndex = (currentIndex: number = 0): number | null => {
+    if (currentIndex - 1 < 0) return 0;
+
+    const isPrevString = Number.isNaN(Number(this.steps[currentIndex - 1].value));
+    if (isPrevString) {
+      return this.getPrevNumericStepIndex(currentIndex - 1);
+    }
+    return currentIndex - 1;
+  };
 
   // Передвигает либо активный ползунок, либо тот, который ближе к элементу
   private handleStepElementMouseDown(event: MouseEvent) {

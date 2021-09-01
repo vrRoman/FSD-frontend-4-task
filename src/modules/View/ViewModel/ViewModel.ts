@@ -17,6 +17,7 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     super();
 
     this.data = data;
+    this.validateScaleValue();
   }
 
   changeData(data: ViewModelDataPartial): IViewModelData {
@@ -27,6 +28,9 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       ...data,
       length: isLengthValid(length) ? length : oldData.length,
     };
+    if (oldData.scaleValue !== data.scaleValue) {
+      this.validateScaleValue();
+    }
 
     this.notify({
       type: 'CHANGE_VIEW_DATA',
@@ -83,6 +87,35 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       return this.getData('lengthInPx') / numberOfSteps;
     }
     return 0;
+  }
+
+  private validateScaleValue() {
+    const { min = 0, max = 0 } = this.data.modelData || {};
+    const { scaleValue } = this.data;
+
+    if (!Array.isArray(scaleValue)) return;
+
+    const stringSteps: Array<{ index: number, value: string }> = [];
+    const newScaleValue = scaleValue
+      .map((step) => {
+        if (step > max) return max;
+        if (step < min) return min;
+        return step;
+      })
+      .filter((step, index) => {
+        if (Number.isNaN(Number(step))) {
+          stringSteps.push({ index, value: String(step) });
+          return false;
+        }
+        return true;
+      })
+      .sort((first, second) => Number(first) - Number(second));
+
+    stringSteps.forEach(({ index, value }) => {
+      newScaleValue.splice(index, 0, value);
+    });
+
+    this.data.scaleValue = newScaleValue;
   }
 }
 
