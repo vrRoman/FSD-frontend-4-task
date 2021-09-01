@@ -93,21 +93,15 @@ npm run lint
 ## Описание архитектуры
 #### Model
 Управляет данными слайдера(работа без пользовательского интерфейса). 
-При изменении значений вызывает у всех подписчиков метод update 
-с входящим параметром action. В action.type может храниться: 'UPDATE_VALUE' 
-| 'UPDATE_IS-RANGE' | 'UPDATE_MIN-MAX' | 'UPDATE_STEP-SIZE'.
+При изменении значений уведомляет подписчиков.
 #### View
 Имеет свою внутреннюю структуру: ViewModel, SubViews, View. Внутренний View
  является "точкой входа" в этот модуль, управляет и предоставляет данные SubViews и ViewModel,
- подписывается на ViewModel и обновляет SubViews. При движении ползунка уведомляет Presenter.
+ подписывается на ViewModel и обновляет SubViews. При движении ползунка, изменении данных уведомляет подписчиков.
  SubViews отвечают за отрисовку элементов слайдера, берут значения из ViewModel,
- который предоставляет View. ViewModel
- управляет данными отображения. При изменении данных, уведомляет подписчиков. В action.type ViewModel'а
- может храниться 'UPDATE_LENGTH' | 'UPDATE_IS-VERTICAL' | 'UPDATE_IS-RESPONSIVE' | 'UPDATE_HAS-TOOLTIP'
- | 'UPDATE_HAS-SCALE' | 'UPDATE_SCALE-VALUE' | 'UPDATE_HAS-VALUE-INFO' | 'UPDATE_USE-KEYBOARD'
- | 'UPDATE_IS-SCALE-CLICKABLE'. 
+ который предоставляет View.
 #### Presenter
-Реализует взаимодействие отображения и модели. Подписывается на model. 
+Реализует взаимодействие отображения и модели. Подписывается на model и на viewModel. 
 При изменении модели обновляет view, при движении ползунка обращается к модели.
 
 ### ![Diagram](https://github.com/vrRoman/FSD-frontend-4-task/blob/master/slider-uml.png)
