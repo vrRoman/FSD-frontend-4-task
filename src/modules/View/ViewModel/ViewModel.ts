@@ -32,6 +32,11 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       this.validateScaleValue();
     }
 
+    if (oldData.modelData) {
+      const { min, max } = oldData.modelData;
+      this.updateScaleValueByMinMaxDifference(min, max);
+    }
+
     this.notify({
       type: 'CHANGE_VIEW_DATA',
       payload: {
@@ -116,6 +121,21 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     });
 
     this.data.scaleValue = newScaleValue;
+  }
+
+  // Изменить scaleValue в соответствии с новыми min, max
+  private updateScaleValueByMinMaxDifference(oldMin: number, oldMax: number) {
+    if (!this.data.modelData) return;
+
+    const { modelData: { min, max }, scaleValue } = this.data;
+    const oldMinMaxDifference = oldMax - oldMin;
+    const newMinMaxDifference = max - min;
+
+    if (Array.isArray(scaleValue)) return;
+    if (oldMinMaxDifference === newMinMaxDifference) return;
+
+    const oldStepsAmount = oldMinMaxDifference / scaleValue;
+    this.data.scaleValue = Math.round(newMinMaxDifference / oldStepsAmount);
   }
 }
 

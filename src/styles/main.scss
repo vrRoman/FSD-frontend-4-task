@@ -59,6 +59,8 @@
     color: $sl-secondary-text-color;
 
     &-element {
+      background-color: rgb(255, 255, 255);
+
       &_clickable {
         cursor: pointer;
       }
