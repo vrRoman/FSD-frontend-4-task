@@ -125,14 +125,14 @@
 
     #{$selector}__tooltip {
       top: unset;
-      right: -20px;
+      left: -15px;
       align-items: center;
+      justify-content: flex-end;
     }
 
     #{$selector}__thumb_active {
       #{$selector}__tooltip {
         top: unset;
-        right: -21px;
       }
     }
 
