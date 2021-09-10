@@ -251,12 +251,21 @@ class ThumbView implements IThumbView {
     event.preventDefault();
     event.stopPropagation();
 
-    const { target } = event;
+    const { thumbClass } = this.viewModel.getData('classes');
+    const thumb = event.composedPath().find((element) => {
+      if (element instanceof HTMLElement) {
+        if (typeof thumbClass === 'string') {
+          return element.classList.contains(thumbClass);
+        }
+        return element.classList.contains(thumbClass[0]);
+      }
+      return false;
+    });
     const { clientXOrY } = this.mainView.getElementProperties();
     const coordinate = 'clientX' in event ? event[clientXOrY] : event.touches[0][clientXOrY];
-    if (!(target instanceof HTMLElement)) return;
+    if (!(thumb instanceof HTMLElement)) return;
 
-    this.setActiveThumb(this.getActiveThumbIndex(target));
+    this.setActiveThumb(this.getActiveThumbIndex(thumb));
     this.updateClientCoordinates();
 
     this.mainView.setThumbOffset(coordinate - this.viewModel.getData(clientXOrY));
