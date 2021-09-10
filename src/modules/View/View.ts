@@ -276,7 +276,10 @@ class View extends Observer implements IView {
   // Сделать активным ползунком тот, который ближе к позиции.
   // Если позиция не задана, то вернется первый ползунок
   updateActiveThumb(clickPosition: number = 0): HTMLElement {
-    const newActiveThumbNumber = this.getThumbNumberThatCloserToPosition(clickPosition);
+    const stepLength = this.viewModel.getStepLength();
+    const value = Math.round(clickPosition / stepLength);
+
+    const newActiveThumbNumber = this.getThumbNumberThatCloserToPosition(value * stepLength);
     this.thumbView.setActiveThumb(newActiveThumbNumber);
     return this.setActiveThumb(newActiveThumbNumber);
   }
@@ -289,22 +292,19 @@ class View extends Observer implements IView {
     const thumbPosition = this.viewModel.getValuePosition();
     if (!Array.isArray(thumbPosition)) return 0;
 
-    const [firstThumbPosition, secondThumbPosition] = thumbPosition.map(
-      (value) => Math.round(value),
-    );
-    const roundedPosition = Math.round(position);
+    const [firstThumbPosition, secondThumbPosition] = thumbPosition;
 
     if (firstThumbPosition === secondThumbPosition) {
-      return roundedPosition > firstThumbPosition ? 1 : 0;
+      return position > firstThumbPosition ? 1 : 0;
     }
 
-    if (roundedPosition > secondThumbPosition) return 1;
-    if (roundedPosition < firstThumbPosition) return 0;
+    if (position > secondThumbPosition) return 1;
+    if (position < firstThumbPosition) return 0;
 
-    if (roundedPosition === firstThumbPosition) return 1;
-    if (roundedPosition === secondThumbPosition) return 0;
+    if (position === firstThumbPosition) return 1;
+    if (position === secondThumbPosition) return 0;
 
-    if (roundedPosition - firstThumbPosition < (secondThumbPosition - firstThumbPosition) / 2) {
+    if (position - firstThumbPosition < (secondThumbPosition - firstThumbPosition) / 2) {
       return 0;
     }
     return 1;
