@@ -421,11 +421,11 @@ describe('Model', () => {
       model = new Model({
         ...defaultModelOptions,
         isRange: true,
-        value: [1, 5],
+        value: [1, 6],
         stepSize: 2,
       });
       model.addStepsToValue(7, 0);
-      expect(model.getData('value')).toEqual([5, 5]);
+      expect(model.getData('value')).toEqual([6, 6]);
 
       model.changeData({ value: [2, 7] });
       model.addStepsToValue(-8, 1);
@@ -448,7 +448,7 @@ describe('Model', () => {
         stepSize: 2,
       });
       model.addStepsToValue(2.4);
-      expect(model.getData('value')).toBe(4.8);
+      expect(model.getData('value')).toBe(4);
     });
   });
 

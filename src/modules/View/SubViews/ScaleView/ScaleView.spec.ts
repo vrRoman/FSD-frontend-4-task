@@ -42,10 +42,11 @@ test('update should change width or height when length changed', () => {
 });
 
 test('update should position scale elements according to their values', () => {
-  mainView.changeOptions({ length: '100px', scaleValue: 3 });
+  mainView.changeOptions({ length: '100px' });
   mainView.getViewModel().changeData({ lengthInPx: 100 });
   // значения шагов будут -5, -2, 1, 4, 7, 10, 12
   mainView.setModelData({ min: -5, max: 12 });
+  mainView.changeOptions({ scaleValue: 3 });
   scaleView.update();
 
   const firstElement = scaleView.get().children[0];
