@@ -286,26 +286,28 @@ class View extends Observer implements IView {
   }
 
   getThumbNumberThatCloserToPosition(position: number): 0 | 1 {
-    let thumbNumber: 0 | 1 = 1;
     const thumbPosition = this.viewModel.getValuePosition();
-    const length = this.viewModel.getData('lengthInPx');
+    if (!Array.isArray(thumbPosition)) return 0;
 
-    if (!Array.isArray(thumbPosition)) {
+    const [firstThumbPosition, secondThumbPosition] = thumbPosition.map(
+      (value) => Math.round(value),
+    );
+    const roundedPosition = Math.round(position);
+
+    if (firstThumbPosition === secondThumbPosition) {
+      return roundedPosition > firstThumbPosition ? 1 : 0;
+    }
+
+    if (roundedPosition > secondThumbPosition) return 1;
+    if (roundedPosition < firstThumbPosition) return 0;
+
+    if (roundedPosition === firstThumbPosition) return 1;
+    if (roundedPosition === secondThumbPosition) return 0;
+
+    if (roundedPosition - firstThumbPosition < (secondThumbPosition - firstThumbPosition) / 2) {
       return 0;
     }
-
-    const [firstThumbPosition, secondThumbPosition] = thumbPosition;
-    if (firstThumbPosition === secondThumbPosition) {
-      if (position < length / 2) {
-        thumbNumber = 0;
-      }
-    } else if (secondThumbPosition === position) {
-      thumbNumber = 0;
-    } else if (Math.abs(firstThumbPosition - position) < Math.abs(secondThumbPosition - position)) {
-      thumbNumber = 0;
-    }
-
-    return thumbNumber;
+    return 1;
   }
 
   private handleViewDataChange(key: keyof IViewModelData) {
