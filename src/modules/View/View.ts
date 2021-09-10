@@ -273,17 +273,12 @@ class View extends Observer implements IView {
     }
   }
 
-  // Если в данный момент нет активного ползунка,
-  // то сделать активным тот, который ближе к позиции.
+  // Сделать активным ползунком тот, который ближе к позиции.
   // Если позиция не задана, то вернется первый ползунок
   updateActiveThumb(clickPosition: number = 0): HTMLElement {
-    const currentThumb = this.viewModel.getData('activeThumb');
-    if (!currentThumb) {
-      return this.setActiveThumb(
-        this.getThumbNumberThatCloserToPosition(clickPosition),
-      );
-    }
-    return currentThumb;
+    const newActiveThumbNumber = this.getThumbNumberThatCloserToPosition(clickPosition);
+    this.thumbView.setActiveThumb(newActiveThumbNumber);
+    return this.setActiveThumb(newActiveThumbNumber);
   }
 
   getViewModel(): IViewModel {
