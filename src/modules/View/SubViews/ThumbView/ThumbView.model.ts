@@ -7,7 +7,7 @@ interface IThumbView {
   mount(): void
   unmount(): void
   setActiveThumb(thumbNumber?: 0 | 1 | null): HTMLElement | null
-  moveActiveThumb(numberOfSteps?: number): void
+  moveActiveThumb(numberOfSteps?: number, offset?: number): void
   addKeyboardListener(): void
   removeKeyboardListener(): void
 }

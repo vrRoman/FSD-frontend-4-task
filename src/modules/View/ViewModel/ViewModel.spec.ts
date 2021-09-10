@@ -33,6 +33,7 @@ describe('ViewModel', () => {
     isBarClickable: true,
     modelData: null,
     activeThumb: null,
+    thumbOffset: 0,
     clientX: 0,
     clientY: 0,
   };

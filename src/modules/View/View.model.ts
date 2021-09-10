@@ -72,6 +72,7 @@ interface IView extends IObserver {
   subscribe(observer: IObserver): void
   setModelData(newModelData: ModelDataPartial): IModelData | null
   setActiveThumb(thumbNumber?: 0 | 1 | null): HTMLElement | null
+  setThumbOffset(offset: number): number
   setClientCoordinates(coordinates: [number, number]): [number, number]
   moveActiveThumb(numberOfSteps?: number): void
   onThumbMove(numberOfSteps: number, thumbNumber: 0 | 1): void

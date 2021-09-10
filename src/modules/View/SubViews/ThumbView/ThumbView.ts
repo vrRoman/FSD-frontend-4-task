@@ -203,15 +203,14 @@ class ThumbView implements IThumbView {
 
   private updateClientCoordinates() {
     const activeThumb = this.viewModel.getData('activeThumb');
-    if (activeThumb) {
-      const clientX = activeThumb.getBoundingClientRect().left
-        + activeThumb.offsetWidth / 2;
+    if (!activeThumb) return;
 
-      const clientY = activeThumb.getBoundingClientRect().top
-        + activeThumb.offsetHeight / 2;
+    const clientX = activeThumb.getBoundingClientRect().left
+      + activeThumb.offsetWidth / 2;
+    const clientY = activeThumb.getBoundingClientRect().top
+      + activeThumb.offsetHeight / 2;
 
-      this.mainView.setClientCoordinates([clientX, clientY]);
-    }
+    this.mainView.setClientCoordinates([clientX, clientY]);
   }
 
   // Добавляет слушатель thumb onMouseDown к ползунку(ам)
@@ -253,10 +252,14 @@ class ThumbView implements IThumbView {
     event.stopPropagation();
 
     const { target } = event;
+    const { clientXOrY } = this.mainView.getElementProperties();
+    const coordinate = 'clientX' in event ? event[clientXOrY] : event.touches[0][clientXOrY];
     if (!(target instanceof HTMLElement)) return;
 
     this.setActiveThumb(this.getActiveThumbIndex(target));
     this.updateClientCoordinates();
+
+    this.mainView.setThumbOffset(coordinate - this.viewModel.getData(clientXOrY));
 
     document.addEventListener('mouseup', this.handleThumbMouseUp);
     document.addEventListener('touchend', this.handleThumbMouseUp);
@@ -287,6 +290,7 @@ class ThumbView implements IThumbView {
     const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
     const stepLength = this.viewModel.getStepLength();
     const oldCoordinate = this.viewModel.getData(clientXOrY);
+    const thumbOffset = this.viewModel.getData('thumbOffset');
     const currentCoordinate = 'clientX' in event ? event[clientXOrY] : event.touches[0][clientXOrY];
 
     // Если курсор выходит за бар, тогда к numberOfSteps добавить/убавить
@@ -301,7 +305,9 @@ class ThumbView implements IThumbView {
     }
 
     // Если пройдена половина пути, то тамб передвигается
-    const numberOfSteps = Math.round((currentCoordinate - oldCoordinate) / stepLength);
+    const numberOfSteps = Math.round(
+      (currentCoordinate - oldCoordinate - thumbOffset) / stepLength,
+    );
     if (!numberOfSteps) return;
 
     this.moveActiveThumb(numberOfSteps);

@@ -80,6 +80,7 @@ class View extends Observer implements IView {
       isScaleClickable: viewOptions.isScaleClickable,
       isBarClickable: viewOptions.isBarClickable,
       activeThumb: null,
+      thumbOffset: 0,
       clientX: 0,
       clientY: 0,
     });
@@ -250,6 +251,11 @@ class View extends Observer implements IView {
       clientY: coordinateY,
     });
     return [clientX, clientY];
+  }
+
+  setThumbOffset(offset: number): number {
+    const { thumbOffset } = this.viewModel.changeData({ thumbOffset: offset });
+    return thumbOffset;
   }
 
   // Если длина измеряется в статических единицах, то слушатель изменения размера окна убирается,

@@ -35,6 +35,7 @@ interface IViewModelData {
   modelData: IModelData | null;
 
   activeThumb: HTMLElement | null;
+  thumbOffset: number;
   clientX: number;
   clientY: number;
 }
