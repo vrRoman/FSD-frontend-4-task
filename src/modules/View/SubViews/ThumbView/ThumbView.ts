@@ -127,6 +127,7 @@ class ThumbView implements IThumbView {
     const position: number = parseFloat(activeThumb.style[leftOrTop]) + offset;
     activeThumb.style[leftOrTop] = `${this.getValidPosition(position, activeThumbIndex)}px`;
     this.mainView.onThumbMove(numberOfSteps, activeThumbIndex);
+    this.updateClientCoordinates();
   }
 
   removeKeyboardListener() {
@@ -300,13 +301,10 @@ class ThumbView implements IThumbView {
     }
 
     // Если пройдена половина пути, то тамб передвигается
-    const numberOfSteps = Math.round(
-      (currentCoordinate - Math.round(oldCoordinate)) / stepLength,
-    );
+    const numberOfSteps = Math.round((currentCoordinate - oldCoordinate) / stepLength);
     if (!numberOfSteps) return;
 
     this.moveActiveThumb(numberOfSteps);
-    this.updateClientCoordinates();
   }
 
   // При нажатии клавиш wasd и стрелок вызывается moveActiveThumb(1/-1)

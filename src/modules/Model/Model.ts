@@ -53,21 +53,24 @@ class Model extends Subject implements IModel {
   // Добавляет указанное количество шагов к нужному значению(если не
   // диапазон или нужно большее значение, то указывать не обязательно)
   addStepsToValue(numberOfSteps: number, valueNumber: 0 | 1 = 1): Value {
+    const { value, stepSize, min } = this.data;
+
     let newValue: Value;
-    if (typeof this.data.value === 'number') {
-      newValue = this.data.value + numberOfSteps * this.data.stepSize;
+    if (typeof value === 'number') {
+      const currentStep = Math.ceil((value - min) / stepSize);
+      newValue = min + ((currentStep + numberOfSteps) * stepSize);
     } else {
-      newValue = [...this.data.value];
-      newValue[valueNumber] += numberOfSteps * this.data.stepSize;
+      newValue = [...value];
+      const currentStep = Math.ceil((value[valueNumber] - min) / stepSize);
+      newValue[valueNumber] = min + ((currentStep + numberOfSteps) * stepSize);
 
       if (newValue[0] > newValue[1]) {
         const oppositeIndex = Number(!valueNumber);
         newValue = [newValue[oppositeIndex], newValue[oppositeIndex]];
       }
     }
-
     this.changeData({ value: newValue });
-    return this.data.value;
+    return value;
   }
 
   getData(): IModelData
@@ -95,6 +98,25 @@ class Model extends Subject implements IModel {
     return this.data.value;
   }
 
+  private fixValueByStepSize(): Value {
+    const {
+      min,
+      max,
+      stepSize,
+      value,
+    } = this.data;
+
+    const getValid = (number: number) => {
+      if (number === max) return number;
+      return (Math.round((number - min) / stepSize) * stepSize) + min;
+    };
+
+    this.data.value = Array.isArray(value)
+      ? [getValid(value[0]), getValid(value[1])]
+      : getValid(value);
+    return this.data.value;
+  }
+
   // Если это диапазон и первое значение больше второго, меняет их местами.
   private fixValueOrder(): Value {
     return Array.isArray(this.data.value)
@@ -119,6 +141,7 @@ class Model extends Subject implements IModel {
   }
 
   private checkAndFixValue(): Value {
+    this.fixValueByStepSize();
     this.fixValueByRange();
     this.fixValueOrder();
     this.fixValueLimits();
