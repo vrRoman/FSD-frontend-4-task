@@ -201,6 +201,33 @@ class ThumbView implements IThumbView {
     return shouldBeSecondThumb ? 1 : 0;
   }
 
+  private getNumberOfSteps(newCoordinate: number): number {
+    const { clientXOrY, rightOrBottom, leftOrTop } = this.mainView.getElementProperties();
+    const bar = this.mainView.getElement('bar');
+    const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
+    const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
+    const stepLength = this.viewModel.getStepLength();
+    const oldCoordinate = this.viewModel.getData(clientXOrY);
+
+    const oldStep = Math.ceil((oldCoordinate - barMinCoordinate) / stepLength);
+    const newStepNotRounded = (newCoordinate - barMinCoordinate) / stepLength;
+    const newStep = newCoordinate - oldCoordinate > 0
+      ? Math.ceil(newStepNotRounded)
+      : Math.floor(newStepNotRounded);
+
+    const newStepCoordinateNotChecked = newStep * stepLength + barMinCoordinate;
+    const newStepCoordinate = newStepCoordinateNotChecked >= barMaxCoordinate
+      ? barMaxCoordinate
+      : newStepCoordinateNotChecked;
+    if (
+      Math.abs((oldCoordinate - newCoordinate) * 2) >= Math.abs(oldCoordinate - newStepCoordinate)
+    ) {
+      return newStep - oldStep;
+    }
+
+    return 0;
+  }
+
   private updateClientCoordinates() {
     const activeThumb = this.viewModel.getData('activeThumb');
     if (!activeThumb) return;
@@ -293,33 +320,14 @@ class ThumbView implements IThumbView {
   // Вызывается moveActiveThumb с numberOfSteps,
   // зависящим от смещения мыши, изменяет clientX/Y
   private handleThumbMouseMove(event: MouseEvent | TouchEvent) {
-    const { clientXOrY, rightOrBottom, leftOrTop } = this.mainView.getElementProperties();
-    const bar = this.mainView.getElement('bar');
-    const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
-    const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
-    const stepLength = this.viewModel.getStepLength();
-    const oldCoordinate = this.viewModel.getData(clientXOrY);
-    const thumbOffset = this.viewModel.getData('thumbOffset');
+    const { clientXOrY } = this.mainView.getElementProperties();
     const currentCoordinate = 'clientX' in event ? event[clientXOrY] : event.touches[0][clientXOrY];
+    const thumbOffset = this.viewModel.getData('thumbOffset');
 
-    // Если курсор выходит за бар, тогда к numberOfSteps добавить/убавить
-    // число шагов, за которые вышел курсор
-    if (currentCoordinate >= barMaxCoordinate) {
-      this.moveActiveThumb(Math.ceil((currentCoordinate - barMaxCoordinate) / stepLength));
-      return;
+    const numberOfSteps = this.getNumberOfSteps(currentCoordinate - thumbOffset);
+    if (numberOfSteps) {
+      this.moveActiveThumb(numberOfSteps);
     }
-    if (currentCoordinate <= barMinCoordinate) {
-      this.moveActiveThumb(-Math.ceil((barMinCoordinate - currentCoordinate) / stepLength));
-      return;
-    }
-
-    // Если пройдена половина пути, то тамб передвигается
-    const numberOfSteps = Math.round(
-      (currentCoordinate - oldCoordinate - thumbOffset) / stepLength,
-    );
-    if (!numberOfSteps) return;
-
-    this.moveActiveThumb(numberOfSteps);
   }
 
   // При нажатии клавиш wasd и стрелок вызывается moveActiveThumb(1/-1)
