@@ -30,7 +30,7 @@ test('mountBar and mountProgressBar should add bar and progressBar to the DOM', 
 });
 
 test('getOffsetLength should return bar length', () => {
-  expect(barView.getOffsetLength()).toBe(0);
+  expect(barView.getLength()).toBe(0);
 });
 
 test('addInteractivity should add special class', () => {
@@ -55,6 +55,17 @@ test('when isBarClickable is true handleBarClick should call View.moveActiveThum
   mainView.getViewModel().changeData({ lengthInPx: 200 });
   barView.addInteractivity();
 
+  barView.getBar().getBoundingClientRect = jest.fn(() => ({
+    width: 200,
+    right: 200,
+    left: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+    bottom: 0,
+    top: 0,
+    toJSON: () => {},
+  }));
   const mockedMoveActiveThumb = jest.spyOn(mainView, 'moveActiveThumb');
   const mouseDownEvent = new MouseEvent('mousedown', {
     // Прибавить к координате расстояние от края до бара
@@ -71,6 +82,17 @@ test('handleBarClick should round numberOfSteps', () => {
   mainView.changeOptions({ length: '200px' });
   mainView.getViewModel().changeData({ lengthInPx: 200 });
   barView.addInteractivity();
+  barView.getBar().getBoundingClientRect = jest.fn(() => ({
+    width: 200,
+    right: 200,
+    left: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+    bottom: 0,
+    top: 0,
+    toJSON: () => {},
+  }));
 
   const mockedMoveActiveThumb = jest.spyOn(mainView, 'moveActiveThumb');
   let mouseDownEvent = new MouseEvent('mousedown', {

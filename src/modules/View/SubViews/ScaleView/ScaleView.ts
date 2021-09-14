@@ -87,7 +87,7 @@ class ScaleView implements IScaleView {
 
   updateElementsPosition() {
     const {
-      offsetWidthOrHeight,
+      widthOrHeight,
       leftOrTop,
       opposites,
     } = this.mainView.getElementProperties();
@@ -96,7 +96,7 @@ class ScaleView implements IScaleView {
       const { element } = step;
       const newPosition = this.getStepPositionByIndex(index);
 
-      element.style[leftOrTop] = `${newPosition - element[offsetWidthOrHeight] / 2}px`;
+      element.style[leftOrTop] = `${newPosition - element.getBoundingClientRect()[widthOrHeight] / 2}px`;
       element.style[opposites.leftOrTop] = '';
     });
   }
@@ -219,20 +219,28 @@ class ScaleView implements IScaleView {
     const stepElement = event.currentTarget;
     if (!(stepElement instanceof HTMLElement)) return;
 
-    const { stepSize = 0 } = this.viewModel.getData('modelData') || {};
-    const { leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
+    const { leftOrTop, widthOrHeight, rightOrBottom } = this.mainView.getElementProperties();
     const stepLength = this.viewModel.getStepLength();
+    const bar = this.mainView.getElement('bar');
+    const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
+    const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
 
     const stepElementPosition = parseFloat(stepElement.style[leftOrTop])
-      + stepElement[offsetWidthOrHeight] / 2;
+      + stepElement.getBoundingClientRect()[widthOrHeight] / 2;
+    const isLastStep = Math.round(stepElementPosition)
+      === Math.round(barMaxCoordinate - barMinCoordinate);
+
     const activeThumb = this.mainView.updateActiveThumb(stepElementPosition);
 
-    const stepValue = stepElementPosition / (stepLength / stepSize);
-    const currentValue = (
-      parseFloat(activeThumb.style[leftOrTop]) + activeThumb[offsetWidthOrHeight] / 2
-    ) / (stepLength / stepSize);
-
-    this.mainView.moveActiveThumb(Math.round((stepValue - currentValue) / stepSize));
+    const notRoundedCurrentStep = stepElementPosition / stepLength;
+    const newStep = isLastStep
+      ? Math.ceil(notRoundedCurrentStep)
+      : Math.round(notRoundedCurrentStep);
+    const oldStep = Math.ceil((
+      parseFloat(activeThumb.style[leftOrTop])
+      + activeThumb.getBoundingClientRect()[widthOrHeight] / 2
+    ) / stepLength);
+    this.mainView.moveActiveThumb(newStep - oldStep);
   }
 }
 

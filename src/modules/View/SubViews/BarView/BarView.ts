@@ -43,9 +43,9 @@ class BarView implements IBarView {
   }
 
   // Возвращает длину всего бара
-  getOffsetLength(): number {
-    const { offsetWidthOrHeight } = this.mainView.getElementProperties();
-    return this.bar[offsetWidthOrHeight];
+  getLength(): number {
+    const { widthOrHeight } = this.mainView.getElementProperties();
+    return this.bar.getBoundingClientRect()[widthOrHeight];
   }
 
   mountBar() {
@@ -136,17 +136,30 @@ class BarView implements IBarView {
     event.stopPropagation();
 
     const stepLength = this.viewModel.getStepLength();
-    const { clientXOrY, leftOrTop, offsetWidthOrHeight } = this.mainView.getElementProperties();
+    const {
+      clientXOrY,
+      leftOrTop,
+      widthOrHeight,
+      rightOrBottom,
+    } = this.mainView.getElementProperties();
     const clickPosition = event[clientXOrY] - this.bar.getBoundingClientRect()[leftOrTop];
+    const bar = this.mainView.getElement('bar');
+    const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
+    const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
 
     const activeThumb = this.mainView.updateActiveThumb(clickPosition);
-
     const activeThumbPosition = parseFloat(activeThumb.style[leftOrTop])
-      + activeThumb[offsetWidthOrHeight] / 2;
-    const numberOfSteps = stepLength === 0
-      ? 0
-      : Math.round((clickPosition - activeThumbPosition) / stepLength);
-    this.mainView.moveActiveThumb(numberOfSteps);
+      + activeThumb.getBoundingClientRect()[widthOrHeight] / 2;
+
+    const lastStepPosition = barMaxCoordinate - barMinCoordinate;
+    const lastStep = Math.ceil(lastStepPosition / stepLength);
+    const secondToLastStepPosition = (lastStep - 1) * stepLength;
+    const isLastStep = clickPosition
+      > (lastStepPosition - secondToLastStepPosition) / 2 + secondToLastStepPosition;
+    const currentStep = Math.ceil(activeThumbPosition / stepLength);
+
+    const newStep = isLastStep ? lastStep : Math.round(clickPosition / stepLength);
+    this.mainView.moveActiveThumb(newStep - currentStep);
   }
 }
 

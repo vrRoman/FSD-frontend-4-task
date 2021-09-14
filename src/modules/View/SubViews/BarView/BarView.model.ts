@@ -1,7 +1,7 @@
 interface IBarView {
   getBar(): HTMLElement
   getProgressBar(): HTMLElement
-  getOffsetLength(): number
+  getLength(): number
 
   updateProgressBar(): void
   updateBar(): void

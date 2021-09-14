@@ -163,7 +163,7 @@ class View extends Observer implements IView {
   renderSlider() {
     this.sliderContainerView.mount();
     this.barView.mountBar();
-    this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+    this.viewModel.changeData({ lengthInPx: this.barView.getLength() });
     this.barView.mountProgressBar();
     this.thumbView.mount();
     if (this.viewModel.getData('useKeyboard')) {
@@ -276,10 +276,22 @@ class View extends Observer implements IView {
   // Сделать активным ползунком тот, который ближе к позиции.
   // Если позиция не задана, то вернется первый ползунок
   updateActiveThumb(clickPosition: number = 0): HTMLElement {
+    const { rightOrBottom, leftOrTop } = this.getElementProperties();
+    const bar = this.getElement('bar');
+    const barMinCoordinate = bar.getBoundingClientRect()[leftOrTop];
+    const barMaxCoordinate = bar.getBoundingClientRect()[rightOrBottom];
     const stepLength = this.viewModel.getStepLength();
-    const value = Math.round(clickPosition / stepLength);
 
-    const newActiveThumbNumber = this.getThumbNumberThatCloserToPosition(value * stepLength);
+    const value = Math.round(clickPosition / stepLength);
+    const lastStepPosition = barMaxCoordinate - barMinCoordinate;
+    const lastStep = Math.ceil(lastStepPosition / stepLength);
+    const secondToLastStepPosition = (lastStep - 1) * stepLength;
+
+    const isLastStep = clickPosition
+      > (lastStepPosition - secondToLastStepPosition) / 2 + secondToLastStepPosition;
+    const newActiveThumbNumber = this.getThumbNumberThatCloserToPosition(
+      isLastStep ? lastStepPosition : value * stepLength,
+    );
     this.thumbView.setActiveThumb(newActiveThumbNumber);
     return this.setActiveThumb(newActiveThumbNumber);
   }
@@ -292,19 +304,22 @@ class View extends Observer implements IView {
     const thumbPosition = this.viewModel.getValuePosition();
     if (!Array.isArray(thumbPosition)) return 0;
 
-    const [firstThumbPosition, secondThumbPosition] = thumbPosition;
+    const [firstThumbPosition, secondThumbPosition] = thumbPosition.map(
+      (value) => Math.round(value),
+    );
+    const roundedPosition = Math.round(position);
 
     if (firstThumbPosition === secondThumbPosition) {
-      return position > firstThumbPosition ? 1 : 0;
+      return roundedPosition > firstThumbPosition ? 1 : 0;
     }
 
-    if (position > secondThumbPosition) return 1;
-    if (position < firstThumbPosition) return 0;
+    if (roundedPosition > secondThumbPosition) return 1;
+    if (roundedPosition < firstThumbPosition) return 0;
 
-    if (position === firstThumbPosition) return 1;
-    if (position === secondThumbPosition) return 0;
+    if (roundedPosition === firstThumbPosition) return 1;
+    if (roundedPosition === secondThumbPosition) return 0;
 
-    if (position - firstThumbPosition < (secondThumbPosition - firstThumbPosition) / 2) {
+    if (roundedPosition - firstThumbPosition < (secondThumbPosition - firstThumbPosition) / 2) {
       return 0;
     }
     return 1;
@@ -319,14 +334,14 @@ class View extends Observer implements IView {
     const handlers: Record<string, () => void> & { default: () => void } = {
       length: () => {
         this.barView.updateBar();
-        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+        this.viewModel.changeData({ lengthInPx: this.barView.getLength() });
         updateLengthInPx();
         this.updateResponsive();
       },
       isVertical: () => {
         this.sliderContainerView.update();
         this.barView.updateBar();
-        this.viewModel.changeData({ lengthInPx: this.barView.getOffsetLength() });
+        this.viewModel.changeData({ lengthInPx: this.barView.getLength() });
         updateLengthInPx();
       },
       hasTooltip: () => {
@@ -408,7 +423,7 @@ class View extends Observer implements IView {
   // Если длина бара не соответствует lengthInPx
   // то передает новую lengthInPx и обновляет thumb, scale, progressBar
   private handleWindowResize() {
-    const currentLength = this.barView.getOffsetLength();
+    const currentLength = this.barView.getLength();
     if (currentLength === this.viewModel.getData('lengthInPx')) {
       return;
     }
