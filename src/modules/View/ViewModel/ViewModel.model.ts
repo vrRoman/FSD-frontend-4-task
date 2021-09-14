@@ -6,6 +6,7 @@ type elementClass = string | string[];
 type ViewClasses = {
   sliderClass: elementClass;
   sliderVerticalClass: elementClass;
+  sliderRangeClass: elementClass;
   barClass: elementClass;
   clickableBarClass: elementClass;
   progressBarClass: elementClass;

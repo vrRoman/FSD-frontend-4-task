@@ -278,7 +278,7 @@ class ThumbView implements IThumbView {
     event.preventDefault();
     event.stopPropagation();
 
-    const { thumbClass } = this.viewModel.getData('classes');
+    const { thumbClass, tooltipClass } = this.viewModel.getData('classes');
     const thumb = event.composedPath().find((element) => {
       if (element instanceof HTMLElement) {
         if (typeof thumbClass === 'string') {
@@ -288,11 +288,29 @@ class ThumbView implements IThumbView {
       }
       return false;
     });
+    const tooltip = event.composedPath().find((element) => {
+      if (element instanceof HTMLElement) {
+        if (typeof tooltipClass === 'string') {
+          return element.classList.contains(tooltipClass);
+        }
+        return element.classList.contains(tooltipClass[0]);
+      }
+      return false;
+    });
     const { clientXOrY } = this.mainView.getElementProperties();
     const coordinate = 'clientX' in event ? event[clientXOrY] : event.touches[0][clientXOrY];
     if (!(thumb instanceof HTMLElement)) return;
 
-    this.setActiveThumb(this.getActiveThumbIndex(thumb));
+    if (tooltip instanceof HTMLElement) {
+      if (Array.isArray(this.thumb)) {
+        const isFirstThumb = this.thumb[0].isSameNode(thumb);
+        this.setActiveThumb(isFirstThumb ? 0 : 1);
+      } else {
+        this.setActiveThumb();
+      }
+    } else {
+      this.setActiveThumb(this.getActiveThumbIndex(thumb));
+    }
     this.updateClientCoordinates();
 
     this.mainView.setThumbOffset(coordinate - this.viewModel.getData(clientXOrY));

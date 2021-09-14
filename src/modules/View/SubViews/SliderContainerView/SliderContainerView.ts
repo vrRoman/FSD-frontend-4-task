@@ -24,10 +24,16 @@ class SliderContainerView implements ISliderContainerView {
   // Обновляет классы контейнера
   update() {
     const { sliderVerticalClass } = this.viewModel.getData('classes');
+    const { sliderRangeClass } = this.viewModel.getData('classes');
     if (this.viewModel.getData('isVertical')) {
       addClass(this.slider, sliderVerticalClass);
     } else {
       removeClass(this.slider, sliderVerticalClass);
+    }
+    if (this.viewModel.getData('modelData')?.isRange) {
+      addClass(this.slider, sliderRangeClass);
+    } else {
+      removeClass(this.slider, sliderRangeClass);
     }
   }
 

@@ -3,6 +3,7 @@ import { ViewClasses } from 'View/ViewModel';
 const defaultClasses: ViewClasses = {
   sliderClass: 'slider',
   sliderVerticalClass: 'slider_vertical',
+  sliderRangeClass: 'slider_range',
   barClass: 'slider__bar',
   clickableBarClass: 'slider__bar_clickable',
   progressBarClass: 'slider__progress-bar',

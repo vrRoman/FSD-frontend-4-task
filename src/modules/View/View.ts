@@ -52,6 +52,7 @@ class View extends Observer implements IView {
   constructor(viewOptions: ViewOptions, parent: HTMLElement) {
     const classes: ViewClasses = {
       sliderClass: viewOptions.sliderClass || defaultClasses.sliderClass,
+      sliderRangeClass: viewOptions.sliderRangeClass || defaultClasses.sliderRangeClass,
       sliderVerticalClass: viewOptions.sliderVerticalClass || defaultClasses.sliderVerticalClass,
       barClass: viewOptions.barClass || defaultClasses.barClass,
       clickableBarClass: viewOptions.clickableBarClass || defaultClasses.clickableBarClass,
@@ -402,6 +403,7 @@ class View extends Observer implements IView {
     };
     const handlers: Record<string, () => void> & { default: () => void } = {
       isRange: () => {
+        this.sliderContainerView.update();
         this.thumbView.recreate();
         this.tooltipView.recreate(this.thumbView.get());
         this.barView.updateProgressBar();

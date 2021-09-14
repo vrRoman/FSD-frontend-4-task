@@ -6,6 +6,7 @@ import { IViewModel, IViewModelData, ViewClasses } from './ViewModel.model';
 describe('ViewModel', () => {
   const classes: ViewClasses = {
     sliderClass: 'slider',
+    sliderRangeClass: 'slider_range',
     sliderVerticalClass: 'slider_vertical',
     barClass: 'slider__bar',
     clickableBarClass: 'slider__bar_clickable',
