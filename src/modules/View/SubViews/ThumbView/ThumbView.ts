@@ -1,4 +1,5 @@
 import autoBind from 'auto-bind';
+import { log } from 'util';
 
 import type { IViewModelGetMethods } from 'View/ViewModel';
 import type { IView } from 'View';

@@ -28,13 +28,14 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
       ...data,
       length: isLengthValid(length) ? length : oldData.length,
     };
-    if (oldData.scaleValue !== data.scaleValue) {
-      this.validateScaleValue();
-    }
 
     if (oldData.modelData) {
       const { min, max } = oldData.modelData;
       this.updateScaleValueByMinMaxDifference(min, max);
+    }
+
+    if (oldData.scaleValue !== data.scaleValue) {
+      this.validateScaleValue();
     }
 
     this.notify({
@@ -75,6 +76,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     const { min, max, value } = this.data.modelData;
     const maxDiapason: number = max - min;
 
+    if (maxDiapason === 0) {
+      return typeof value === 'number' ? 0 : [0, 0];
+    }
+
     if (typeof value === 'number') {
       return (this.data.lengthInPx / maxDiapason) * (value - this.data.modelData.min);
     }
@@ -97,6 +102,10 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
   private validateScaleValue() {
     const { min = 0, max = 0 } = this.data.modelData || {};
     const { scaleValue } = this.data;
+
+    if (scaleValue === 0) {
+      this.data.scaleValue = 1;
+    }
 
     if (!Array.isArray(scaleValue)) return;
 
@@ -128,8 +137,8 @@ class ViewModel extends Subject implements IViewModel, IViewModelGetMethods {
     if (!this.data.modelData) return;
 
     const { modelData: { min, max }, scaleValue } = this.data;
-    const oldMinMaxDifference = oldMax - oldMin;
-    const newMinMaxDifference = max - min;
+    const oldMinMaxDifference = (oldMax - oldMin) || 1;
+    const newMinMaxDifference = (max - min) || 1;
 
     if (Array.isArray(scaleValue)) return;
     if (oldMinMaxDifference === newMinMaxDifference) return;

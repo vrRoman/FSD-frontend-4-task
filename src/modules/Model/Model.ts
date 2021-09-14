@@ -41,8 +41,8 @@ class Model extends Subject implements IModel {
     this.data.stepSize = stepSize;
 
     this.checkAndFixMinMax();
-    this.checkAndFixValue();
     this.checkAndFixStepSize();
+    this.checkAndFixValue();
 
     this.notify({
       type: 'CHANGE_MODEL_DATA',
@@ -152,13 +152,12 @@ class Model extends Subject implements IModel {
   // Если размер шага > наибольшего диапазона значений, то он равняется
   // разнице максимального значения и минимального.
   private checkAndFixStepSize(): number {
-    if (this.data.stepSize < 1) {
-      this.data.stepSize = 1;
-    }
     if (this.data.stepSize > this.data.max - this.data.min) {
       this.data.stepSize = this.data.max - this.data.min;
     }
-
+    if (this.data.stepSize < 1) {
+      this.data.stepSize = 1;
+    }
     return this.data.stepSize;
   }
 
