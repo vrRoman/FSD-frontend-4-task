@@ -156,7 +156,9 @@ class BarView implements IBarView {
     const secondToLastStepPosition = (lastStep - 1) * stepLength;
     const isLastStep = clickPosition
       > (lastStepPosition - secondToLastStepPosition) / 2 + secondToLastStepPosition;
-    const currentStep = Math.ceil(activeThumbPosition / stepLength);
+    const currentStep = activeThumbPosition >= lastStepPosition
+      ? lastStep
+      : Math.round(activeThumbPosition / stepLength);
 
     const newStep = isLastStep ? lastStep : Math.round(clickPosition / stepLength);
     this.mainView.moveActiveThumb(newStep - currentStep);

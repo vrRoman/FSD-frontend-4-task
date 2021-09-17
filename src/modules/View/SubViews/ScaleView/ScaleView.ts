@@ -238,7 +238,7 @@ class ScaleView implements IScaleView {
       : Math.round(notRoundedCurrentStep);
     const oldStep = Math.ceil((
       parseFloat(activeThumb.style[leftOrTop])
-      + activeThumb.getBoundingClientRect()[widthOrHeight] / 2
+      + stepElement.getBoundingClientRect()[widthOrHeight] / 2
     ) / stepLength);
     this.mainView.moveActiveThumb(newStep - oldStep);
   }
